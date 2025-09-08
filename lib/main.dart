@@ -11,6 +11,7 @@ import 'package:flutter_age/flutter_age.dart';
 import 'package:mail/blocs/app/app.bloc.dart';
 import 'package:ab_shared/blocs/auth/auth.bloc.dart';
 import 'package:ab_shared/i18n/strings.g.dart' as ab_shared_translations;
+import 'package:mail/blocs/mail/mail_bloc.dart';
 import 'package:mail/i18n/strings.g.dart';
 import 'package:mail/services/notifications/background_notification_processor.dart';
 import 'package:mail/services/notifications/fcm_service.dart';
@@ -150,6 +151,7 @@ FutureOr<void> main() async {
                 globalApiClient: globalApiClient!,
                 encryptionService: encryptionService,
               )),
+              BlocProvider(create: (context) => MailBloc()),
             ],
             child: ab_shared_translations.TranslationProvider(
               child: TranslationProvider(

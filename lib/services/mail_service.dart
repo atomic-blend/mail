@@ -5,7 +5,7 @@ class MailService {
   MailService();
 
   Future<List<Mail>> getAllMails({int page = 1, int size = 10}) async {
-    final result = await globalApiClient?.get('/mails/?page=$page&size=$size');
+    final result = await globalApiClient?.get('/mail/?page=$page&size=$size');
     if (result != null && result.statusCode == 200) {
       final List<Mail> mails = [];
 
