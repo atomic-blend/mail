@@ -96,5 +96,6 @@ class MailBloc extends HydratedBloc<MailEvent, MailState> {
     } catch (e) {
       emit(MailLoadingError(prevState.mails ?? [], e.toString()));
     }
+    add(const LoadMails());
   }
 }
