@@ -37,8 +37,8 @@ class MailBloc extends HydratedBloc<MailEvent, MailState> {
   void _onLoadMails(LoadMails event, Emitter<MailState> emit) async {
     final prevState = state;
     emit(MailLoading(prevState.mails ?? [],
-        readMails: prevState.readMails ?? [],
-        unreadMails: prevState.unreadMails ?? [],
+        readMails: prevState.readMails,
+        unreadMails: prevState.unreadMails,
         latestSync: prevState.latestSync));
     try {
       final mails = await _mailService.getAllMails();
@@ -69,7 +69,6 @@ class MailBloc extends HydratedBloc<MailEvent, MailState> {
     }
     prevState.readMails.remove(event.mailId);
     prevState.unreadMails.add(event.mailId);
-    print('Marking mail ${event.mailId} as unread');
     emit(MailMarkAsUnreadSuccess(prevState.mails,
         latestSync: prevState.latestSync,
         unreadMails: prevState.unreadMails,
@@ -82,12 +81,12 @@ class MailBloc extends HydratedBloc<MailEvent, MailState> {
     final prevState = state;
     try {
       final MailSyncResult result = await _mailService.syncMailActions(
-        readMailIds: state.readMails ?? [],
-        unreadMailIds: state.unreadMails ?? [],
+        readMailIds: state.readMails,
+        unreadMailIds: state.unreadMails,
       );
       if (result.success) {
-        state.readMails?.clear();
-        state.unreadMails?.clear();
+        state.readMails.clear();
+        state.unreadMails.clear();
         emit(MailLoaded(prevState.mails ?? [], latestSync: DateTime.now()));
       } else {
         emit(MailLoadingError(

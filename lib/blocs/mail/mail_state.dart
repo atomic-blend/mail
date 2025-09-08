@@ -20,26 +20,20 @@ class MailInitial extends MailState {
 
 class MailLoading extends MailState {
   MailLoading(List<Mail> super.mails,
-      {List<String>? super.readMails,
-      List<String>? super.unreadMails,
-      DateTime? super.latestSync});
+      {super.readMails, super.unreadMails, super.latestSync});
 }
 
 class MailLoaded extends MailState {
   MailLoaded(List<Mail> super.mails,
-      {List<String>? super.readMails,
-      List<String>? super.unreadMails,
-      DateTime? super.latestSync});
+      {super.readMails, super.unreadMails, super.latestSync});
 
   @override
   List<Object?> get props => [mails, latestSync];
 }
 
 class MailLoadingError extends MailState {
-  MailLoadingError(List<Mail>? super.mails, this.message,
-      {List<String>? super.readMails,
-      List<String>? super.unreadMails,
-      DateTime? super.latestSync});
+  MailLoadingError(super.mails, this.message,
+      {super.readMails, super.unreadMails, super.latestSync});
   final String message;
 
   @override
@@ -47,18 +41,16 @@ class MailLoadingError extends MailState {
 }
 
 class MailMarkAsReadSuccess extends MailState {
-  MailMarkAsReadSuccess(List<Mail>? super.mails,
-      {DateTime? super.latestSync,
-      List<String>? super.readMails,
-      List<String>? super.unreadMails});
+  MailMarkAsReadSuccess(super.mails,
+      {super.latestSync, super.readMails, super.unreadMails});
 
   @override
   List<Object?> get props => [mails, latestSync, readMails, unreadMails];
 }
 
 class MailMarkAsReadError extends MailState {
-  MailMarkAsReadError(List<Mail>? super.mails, this.message,
-      {DateTime? super.latestSync, List<String>? super.readMails});
+  MailMarkAsReadError(super.mails, this.message,
+      {super.latestSync, super.readMails});
   final String message;
 
   @override
@@ -66,18 +58,16 @@ class MailMarkAsReadError extends MailState {
 }
 
 class MailMarkAsUnreadSuccess extends MailState {
-  MailMarkAsUnreadSuccess(List<Mail>? super.mails,
-      {DateTime? super.latestSync,
-      List<String>? super.unreadMails,
-      List<String>? super.readMails});
+  MailMarkAsUnreadSuccess(super.mails,
+      {super.latestSync, super.unreadMails, super.readMails});
 
   @override
   List<Object?> get props => [mails, latestSync, unreadMails];
 }
 
 class MailMarkAsUnreadError extends MailState {
-  MailMarkAsUnreadError(List<Mail>? super.mails, this.message,
-      {DateTime? super.latestSync, List<String>? super.unreadMails});
+  MailMarkAsUnreadError(super.mails, this.message,
+      {super.latestSync, super.unreadMails});
   final String message;
 
   @override
