@@ -1,6 +1,7 @@
 import 'package:ab_shared/blocs/auth/auth.bloc.dart';
 import 'package:ab_shared/components/app/ab_navbar.dart';
 import 'package:mail/i18n/strings.g.dart';
+import 'package:mail/pages/mails/mail.dart';
 import 'package:mail/pages/more/more.dart';
 import 'package:mail/services/sync.service.dart';
 import 'package:ab_shared/utils/shortcuts.dart';
@@ -42,17 +43,17 @@ class NavConstants {
   // on desktop: the more apps page is moved at the end of the menu
   List<NavigationItem> primaryMenuItems(BuildContext context) => [
         NavigationItem(
-          key: const Key("mail"),
+          key: const Key("inbox"),
           icon: LineAwesome.envelope,
           cupertinoIcon: CupertinoIcons.envelope,
-          label: "Mails",
-          body: Container(),
+          label: "Inbox",
+          body: MailScreen(),
           appBar: AppBar(
-            key: const Key("mail"),
-            backgroundColor: getTheme(context).surface,
+            key: const Key("inbox"),
+            backgroundColor: getTheme(context).surfaceContainer,
             leading: Container(),
             title: Text(
-              "Mails",
+              "Inbox",
               style: getTextTheme(context).headlineSmall!.copyWith(
                     fontWeight: FontWeight.bold,
                   ),
@@ -62,6 +63,12 @@ class NavConstants {
                 return Container();
               }),
             ],
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.only(
+                bottomLeft: Radius.circular(16.0),
+                bottomRight: Radius.circular(16.0),
+              ),
+            ),
           ),
         ),
         NavigationItem(
