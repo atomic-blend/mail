@@ -1,0 +1,23 @@
+import 'package:mail/main.dart';
+import 'package:mail/models/mail/mail.dart';
+
+class MailService {
+  MailService();
+
+  Future<List<Mail>> getAllMails({int page = 1, int size = 10}) async {
+    final result = await globalApiClient?.get('/mail/?page=$page&size=$size');
+    if (result != null && result.statusCode == 200) {
+      final List<Mail> decryptedMails = [];
+      final mails = result.data["mails"];
+
+      for (var mail in (mails ?? [])) {
+        final decryptedMail = await Mail.decrypt(
+            mail as Map<String, dynamic>, encryptionService!);
+        decryptedMails.add(decryptedMail);
+      }
+      return decryptedMails;
+    } else {
+      throw Exception('Failed to load mails');
+    }
+  }
+}

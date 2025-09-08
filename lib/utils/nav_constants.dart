@@ -1,6 +1,7 @@
 import 'package:ab_shared/blocs/auth/auth.bloc.dart';
 import 'package:ab_shared/components/app/ab_navbar.dart';
 import 'package:mail/i18n/strings.g.dart';
+import 'package:mail/pages/mails/mail.dart';
 import 'package:mail/pages/more/more.dart';
 import 'package:mail/services/sync.service.dart';
 import 'package:ab_shared/utils/shortcuts.dart';
@@ -16,19 +17,19 @@ final $navConstants = NavConstants();
 class NavConstants {
   List<NavigationSection> secondaryMenuSections(BuildContext context) => [
         const NavigationSection(
-          key: Key("notes"),
+          key: Key("mails"),
           items: [],
         ),
         const NavigationSection(
-          key: Key("calendar"),
+          key: Key("organize"),
           items: [],
         ),
         const NavigationSection(
-          key: Key("add_task"),
+          key: Key("new_mail"),
           items: [],
         ),
         const NavigationSection(
-          key: Key("habits"),
+          key: Key("search"),
           items: [],
         ),
         const NavigationSection(
@@ -42,17 +43,17 @@ class NavConstants {
   // on desktop: the more apps page is moved at the end of the menu
   List<NavigationItem> primaryMenuItems(BuildContext context) => [
         NavigationItem(
-          key: const Key("page_1"),
-          icon: LineAwesome.file,
-          cupertinoIcon: CupertinoIcons.doc,
-          label: "Page 1",
-          body: Container(),
+          key: const Key("inbox"),
+          icon: LineAwesome.envelope,
+          cupertinoIcon: CupertinoIcons.envelope,
+          label: "Inbox",
+          body: MailScreen(),
           appBar: AppBar(
-            key: const Key("page_1"),
-            backgroundColor: getTheme(context).surface,
+            key: const Key("inbox"),
+            backgroundColor: getTheme(context).surfaceContainer,
             leading: Container(),
             title: Text(
-              "Page 1",
+              "Inbox",
               style: getTextTheme(context).headlineSmall!.copyWith(
                     fontWeight: FontWeight.bold,
                   ),
@@ -62,21 +63,27 @@ class NavConstants {
                 return Container();
               }),
             ],
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.only(
+                bottomLeft: Radius.circular(16.0),
+                bottomRight: Radius.circular(16.0),
+              ),
+            ),
           ),
         ),
         NavigationItem(
-          key: const Key("page_2"),
-          icon: LineAwesome.search_solid,
-          cupertinoIcon: CupertinoIcons.search,
-          label: "Page 2",
+          key: const Key("organize"),
+          icon: LineAwesome.filter_solid,
+          cupertinoIcon: CupertinoIcons.square_fill_line_vertical_square,
+          label: "Organize",
           body: Container(),
           appBar: AppBar(
-              key: const Key("page_2"),
+              key: const Key("organize"),
               backgroundColor: getTheme(context).surface,
               surfaceTintColor: getTheme(context).surface,
               leading: Container(),
               title: Text(
-                "Page 2",
+                "Organize",
                 style: getTextTheme(context).headlineSmall!.copyWith(
                       fontWeight: FontWeight.bold,
                     ),
@@ -88,10 +95,10 @@ class NavConstants {
               ]),
         ),
         NavigationItem(
-          key: const Key("page_3"),
+          key: const Key("new_mail"),
           icon: LineAwesome.plus_solid,
           cupertinoIcon: CupertinoIcons.plus_circle_fill,
-          label: "Page 3",
+          label: "Compose",
           color: getTheme(context).secondary,
           onTap: (index) {
             if (isDesktop(context)) {
@@ -116,17 +123,17 @@ class NavConstants {
           },
         ),
         NavigationItem(
-          key: const Key("page_4"),
-          icon: LineAwesome.filter_solid,
-          cupertinoIcon: CupertinoIcons.square_fill_line_vertical_square,
-          label: "Page 4",
+          key: const Key("search"),
+          icon: LineAwesome.search_solid,
+          cupertinoIcon: CupertinoIcons.search,
+          label: "Search",
           body: Container(),
           appBar: AppBar(
-              key: const Key("page_4"),
+              key: const Key("search"),
               backgroundColor: getTheme(context).surfaceContainer,
               leading: Container(),
               title: Text(
-                "Page 4",
+                "Search",
                 style: getTextTheme(context).headlineSmall!.copyWith(
                       fontWeight: FontWeight.bold,
                     ),
