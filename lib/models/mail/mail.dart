@@ -33,6 +33,7 @@ class Mail with _$Mail {
     'userId',
     'attachments',
     'archived',
+    'read',
     'trashed',
     'greylisted',
     'rejected',

@@ -33,8 +33,8 @@ class MailService {
       required List<String> unreadMailIds}) async {
     try {
       await globalApiClient?.put('/mail/actions', data: {
-        'readMailIds': readMailIds,
-        'unreadMailIds': unreadMailIds,
+        'read': readMailIds,
+        'unread': unreadMailIds,
       });
       return MailSyncResult(success: true);
     } catch (e) {

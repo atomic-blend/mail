@@ -5,7 +5,9 @@ import 'package:ab_shared/utils/shortcuts.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:jiffy/jiffy.dart';
+import 'package:mail/blocs/mail/mail_bloc.dart';
 import 'package:mail/components/avatars/mail_user_avatar.dart';
 import 'package:mail/models/mail/mail.dart';
 
@@ -18,6 +20,12 @@ class MailDetailScreen extends ResponsiveStatefulWidget {
 }
 
 class MailDetailScreenState extends ResponsiveState<MailDetailScreen> {
+  @override
+  void initState() {
+    context.read<MailBloc>().add(MarkAsRead(widget.mail.id!));
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

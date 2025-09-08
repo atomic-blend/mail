@@ -1,4 +1,3 @@
-import 'package:ab_shared/entities/sync/sync_result/sync_result.dart';
 import 'package:equatable/equatable.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:mail/models/mail/mail.dart';
@@ -10,7 +9,7 @@ part 'mail_state.dart';
 class MailBloc extends HydratedBloc<MailEvent, MailState> {
   final MailService _mailService = MailService();
 
-  MailBloc() : super(const MailInitial()) {
+  MailBloc() : super(MailInitial()) {
     on<LoadMails>(_onLoadMails);
     on<MarkAsRead>(_onMarkAsRead);
     on<MarkAsUnread>(_onMarkAsUnread);
@@ -24,7 +23,7 @@ class MailBloc extends HydratedBloc<MailEvent, MailState> {
         (json["mails"] as List).map((e) => Mail.fromJson(e)).toList(),
       );
     }
-    return const MailInitial();
+    return MailInitial();
   }
 
   @override
@@ -37,7 +36,9 @@ class MailBloc extends HydratedBloc<MailEvent, MailState> {
 
   void _onLoadMails(LoadMails event, Emitter<MailState> emit) async {
     final prevState = state;
-    emit(const MailLoading());
+    emit(MailLoading(
+        prevState.mails ?? [], readMails: prevState.readMails ?? [], unreadMails: prevState.unreadMails ?? [], latestSync: prevState.latestSync
+    ));
     try {
       final mails = await _mailService.getAllMails();
       emit(MailLoaded(mails));
@@ -48,26 +49,35 @@ class MailBloc extends HydratedBloc<MailEvent, MailState> {
 
   void _onMarkAsRead(MarkAsRead event, Emitter<MailState> emit) async {
     final prevState = state;
-    if (state.readMails != null && state.readMails!.contains(event.mailId)) {
+    if (prevState.readMails != null &&
+        prevState.readMails!.contains(event.mailId)) {
       return;
     }
-    state.readMails?.add(event.mailId);
-    emit(MailMarkAsReadSuccess(prevState.mails, latestSync: prevState.latestSync, readMails: state.readMails));
+    prevState.readMails?.add(event.mailId);
+    emit(MailMarkAsReadSuccess(prevState.mails,
+        latestSync: prevState.latestSync,
+        readMails: state.readMails,
+        unreadMails: state.unreadMails));
     add(SyncMailActions());
   }
 
   void _onMarkAsUnread(MarkAsUnread event, Emitter<MailState> emit) async {
     final prevState = state;
-    if (state.readMails == null || !state.readMails!.contains(event.mailId)) {
+    if (prevState.readMails == null ||
+        !prevState.readMails!.contains(event.mailId)) {
       return;
     }
-    state.readMails?.remove(event.mailId);
-    state.unreadMails?.add(event.mailId);
-    emit(MailMarkAsUnreadSuccess(prevState.mails, latestSync: prevState.latestSync, unreadMails: state.unreadMails));
+    prevState.readMails?.remove(event.mailId);
+    prevState.unreadMails?.add(event.mailId);
+    emit(MailMarkAsUnreadSuccess(prevState.mails,
+        latestSync: prevState.latestSync,
+        unreadMails: prevState.unreadMails,
+        readMails: prevState.readMails));
     add(SyncMailActions());
   }
 
-  void _onSyncMailActions(SyncMailActions event, Emitter<MailState> emit) async {
+  void _onSyncMailActions(
+      SyncMailActions event, Emitter<MailState> emit) async {
     final prevState = state;
     try {
       final MailSyncResult result = await _mailService.syncMailActions(
@@ -79,7 +89,8 @@ class MailBloc extends HydratedBloc<MailEvent, MailState> {
         state.readMails?.clear();
         state.unreadMails?.clear();
       } else {
-        emit(MailLoadingError(prevState.mails ?? [], result.message ?? "Unknown error"));
+        emit(MailLoadingError(
+            prevState.mails ?? [], result.message ?? "Unknown error"));
       }
     } catch (e) {
       emit(MailLoadingError(prevState.mails ?? [], e.toString()));
