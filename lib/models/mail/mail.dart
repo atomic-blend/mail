@@ -21,6 +21,7 @@ class Mail with _$Mail {
     bool? greylisted,
     bool? rejected,
     bool? rewriteSubject,
+    bool? read,
     DateTime? createdAt,
     DateTime? updatedAt,
   }) = _Mail;

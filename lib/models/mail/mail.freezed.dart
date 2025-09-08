@@ -44,6 +44,8 @@ mixin _$Mail {
   set rejected(bool? value) => throw _privateConstructorUsedError;
   bool? get rewriteSubject => throw _privateConstructorUsedError;
   set rewriteSubject(bool? value) => throw _privateConstructorUsedError;
+  bool? get read => throw _privateConstructorUsedError;
+  set read(bool? value) => throw _privateConstructorUsedError;
   DateTime? get createdAt => throw _privateConstructorUsedError;
   set createdAt(DateTime? value) => throw _privateConstructorUsedError;
   DateTime? get updatedAt => throw _privateConstructorUsedError;
@@ -75,6 +77,7 @@ abstract class $MailCopyWith<$Res> {
       bool? greylisted,
       bool? rejected,
       bool? rewriteSubject,
+      bool? read,
       DateTime? createdAt,
       DateTime? updatedAt});
 }
@@ -105,6 +108,7 @@ class _$MailCopyWithImpl<$Res, $Val extends Mail>
     Object? greylisted = freezed,
     Object? rejected = freezed,
     Object? rewriteSubject = freezed,
+    Object? read = freezed,
     Object? createdAt = freezed,
     Object? updatedAt = freezed,
   }) {
@@ -153,6 +157,10 @@ class _$MailCopyWithImpl<$Res, $Val extends Mail>
           ? _value.rewriteSubject
           : rewriteSubject // ignore: cast_nullable_to_non_nullable
               as bool?,
+      read: freezed == read
+          ? _value.read
+          : read // ignore: cast_nullable_to_non_nullable
+              as bool?,
       createdAt: freezed == createdAt
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
@@ -184,6 +192,7 @@ abstract class _$$MailImplCopyWith<$Res> implements $MailCopyWith<$Res> {
       bool? greylisted,
       bool? rejected,
       bool? rewriteSubject,
+      bool? read,
       DateTime? createdAt,
       DateTime? updatedAt});
 }
@@ -211,6 +220,7 @@ class __$$MailImplCopyWithImpl<$Res>
     Object? greylisted = freezed,
     Object? rejected = freezed,
     Object? rewriteSubject = freezed,
+    Object? read = freezed,
     Object? createdAt = freezed,
     Object? updatedAt = freezed,
   }) {
@@ -259,6 +269,10 @@ class __$$MailImplCopyWithImpl<$Res>
           ? _value.rewriteSubject
           : rewriteSubject // ignore: cast_nullable_to_non_nullable
               as bool?,
+      read: freezed == read
+          ? _value.read
+          : read // ignore: cast_nullable_to_non_nullable
+              as bool?,
       createdAt: freezed == createdAt
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
@@ -286,6 +300,7 @@ class _$MailImpl extends _Mail {
       this.greylisted,
       this.rejected,
       this.rewriteSubject,
+      this.read,
       this.createdAt,
       this.updatedAt})
       : super._();
@@ -315,6 +330,8 @@ class _$MailImpl extends _Mail {
   bool? rejected;
   @override
   bool? rewriteSubject;
+  @override
+  bool? read;
   @override
   DateTime? createdAt;
   @override
@@ -349,6 +366,7 @@ abstract class _Mail extends Mail {
       bool? greylisted,
       bool? rejected,
       bool? rewriteSubject,
+      bool? read,
       DateTime? createdAt,
       DateTime? updatedAt}) = _$MailImpl;
   _Mail._() : super._();
@@ -388,6 +406,9 @@ abstract class _Mail extends Mail {
   @override
   bool? get rewriteSubject;
   set rewriteSubject(bool? value);
+  @override
+  bool? get read;
+  set read(bool? value);
   @override
   DateTime? get createdAt;
   set createdAt(DateTime? value);

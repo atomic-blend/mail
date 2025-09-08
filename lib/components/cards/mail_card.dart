@@ -25,9 +25,9 @@ class MailCard extends StatelessWidget {
             child: Center(
               child: Text(
                 getInitials(mail.getHeader("From")),
-                style: getTextTheme(context)
-                    .bodyLarge!
-                    .copyWith(fontWeight: FontWeight.bold),
+                style: getTextTheme(context).bodyLarge!.copyWith(
+                      fontWeight: mail.read != true ? FontWeight.bold : null,
+                    ),
               ),
             ),
           ),
@@ -35,16 +35,35 @@ class MailCard extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                mail.getHeader("Subject"),
-                style: getTextTheme(context).headlineSmall!.copyWith(
-                      fontWeight: FontWeight.bold,
+              Row(
+                children: [
+                  Text(
+                    mail.getHeader("Subject"),
+                    style: getTextTheme(context).headlineSmall!.copyWith(
+                          fontWeight:
+                              mail.read != true ? FontWeight.bold : null,
+                        ),
+                  ),
+                  if (mail.read != true) ...[
+                    SizedBox(width: $constants.insets.sm),
+                    Container(
+                      width: 8,
+                      height: 8,
+                      decoration: BoxDecoration(
+                        color: Colors.blue,
+                        borderRadius:
+                            BorderRadius.circular($constants.corners.full),
+                      ),
                     ),
+                  ]
+                ],
               ),
               SizedBox(height: $constants.insets.xxs),
               Text(
                 mail.textContent ?? mail.htmlContent ?? "No content",
-                style: getTextTheme(context).bodyMedium,
+                style: getTextTheme(context).bodyMedium!.copyWith(
+                      fontWeight: mail.read != true ? FontWeight.bold : null,
+                    ),
                 overflow: TextOverflow.ellipsis,
                 textAlign: TextAlign.left,
                 maxLines: 1,
