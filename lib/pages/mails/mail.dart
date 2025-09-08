@@ -79,7 +79,9 @@ class _MailScreenState extends State<MailScreen> {
         );
       } else {
         return RefreshIndicator.adaptive(
-          onRefresh: () async {},
+          onRefresh: () async {
+            SyncService.sync(context);
+          },
           child: ListView(
             padding: EdgeInsets.symmetric(horizontal: $constants.insets.xs),
             children: [
