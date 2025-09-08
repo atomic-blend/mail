@@ -1,6 +1,13 @@
 import 'package:mail/main.dart';
 import 'package:mail/models/mail/mail.dart';
 
+class MailSyncResult {
+  final bool success;
+  final String? message;
+
+  MailSyncResult({required this.success, this.message});
+}
+
 class MailService {
   MailService();
 
@@ -18,6 +25,20 @@ class MailService {
       return decryptedMails;
     } else {
       throw Exception('Failed to load mails');
+    }
+  }
+
+  Future<MailSyncResult> syncMailActions(
+      {required List<String> readMailIds,
+      required List<String> unreadMailIds}) async {
+    try {
+      await globalApiClient?.put('/mail/actions', data: {
+        'readMailIds': readMailIds,
+        'unreadMailIds': unreadMailIds,
+      });
+      return MailSyncResult(success: true);
+    } catch (e) {
+      return MailSyncResult(success: false, message: e.toString());
     }
   }
 }
