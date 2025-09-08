@@ -12,7 +12,7 @@ class Mail with _$Mail {
   factory Mail({
     String? id,
     required String userId,
-    Map<String, dynamic>? headers,
+    List<Map<String, dynamic>>? headers,
     String? textContent,
     String? htmlContent,
     List<MailAttachment>? attachments,
@@ -58,8 +58,8 @@ class Mail with _$Mail {
       'attachments': attachments != null
           ? await Future.wait(
               attachments!.map((attachment) => attachment.encrypt(
-                encryptionService: encryptionService,
-              )),
+                    encryptionService: encryptionService,
+                  )),
             )
           : null,
       'archived': archived,
@@ -93,9 +93,9 @@ class Mail with _$Mail {
       final attachmentsData = decryptedData['attachments'] as List;
       decryptedData['attachments'] = await Future.wait(
         attachmentsData.map((attachmentData) => MailAttachment.decrypt(
-          attachmentData,
-          encryptionService,
-        )),
+              attachmentData,
+              encryptionService,
+            )),
       );
     }
 
