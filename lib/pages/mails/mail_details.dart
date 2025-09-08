@@ -53,7 +53,8 @@ class MailDetailScreenState extends ResponsiveState<MailDetailScreen> {
                     widget.mail.getHeader("Subject"),
                     overflow: TextOverflow.ellipsis,
                     style: getTextTheme(context).displaySmall!.copyWith(
-                          fontWeight: FontWeight.bold,
+                          fontWeight:
+                              widget.mail.read != true ? FontWeight.bold : null,
                         ),
                   ),
                 ),
@@ -162,9 +163,8 @@ class MailDetailScreenState extends ResponsiveState<MailDetailScreen> {
         SizedBox(width: $constants.insets.xs),
         Text(
           value,
-          style: getTextTheme(context)
-              .bodyMedium!
-              .copyWith(fontWeight: FontWeight.bold),
+          style: getTextTheme(context).bodyMedium!.copyWith(
+              fontWeight: widget.mail.read != true ? FontWeight.bold : null),
         ),
       ],
     );
