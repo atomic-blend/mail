@@ -103,4 +103,17 @@ class Mail with _$Mail {
 
     return mail;
   }
+
+  String getHeader(String key) {
+    if (headers == null) return '';
+    try {
+      final header = headers!.firstWhere(
+        (header) => header['Key'].toString().toLowerCase() == key.toLowerCase(),
+        orElse: () => {},
+      );
+      return header['Value'] ?? '';
+    } catch (e) {
+      return '';
+    }
+  }
 }

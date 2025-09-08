@@ -6,6 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mail/blocs/mail/mail_bloc.dart';
+import 'package:mail/components/cards/mail_card.dart';
 import 'package:mail/services/sync.service.dart';
 
 class MailScreen extends StatefulWidget {
@@ -20,7 +21,7 @@ class _MailScreenState extends State<MailScreen> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<MailBloc, MailState>(builder: (context, mailState) {
-      if (true) {
+      if (mailState.mails != null && mailState.mails!.isEmpty) {
         return RefreshIndicator.adaptive(
           onRefresh: () async {
             SyncService.sync(context);
@@ -73,6 +74,25 @@ class _MailScreenState extends State<MailScreen> {
                   ],
                 ),
               ),
+            ],
+          ),
+        );
+      } else {
+        return RefreshIndicator.adaptive(
+          onRefresh: () async {},
+          child: ListView(
+            padding: EdgeInsets.symmetric(horizontal: $constants.insets.xs),
+            children: [
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: $constants.insets.xs),
+                child: ElevatedContainer(
+                  child: ABSearchBar(controller: searchController),
+                ),
+              ),
+              SizedBox(height: $constants.insets.xxs),
+              ...?mailState.mails?.map((mail) => MailCard(
+                    mail: mail,
+                  ))
             ],
           ),
         );
