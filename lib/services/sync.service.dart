@@ -8,6 +8,7 @@ class SyncService {
     if (context.read<AuthBloc>().state is! LoggedIn) return;
 
     // Sync data
+    context.read<MailBloc>().add(const SyncMailActions());
     context.read<MailBloc>().add(const LoadMails());
   }
 

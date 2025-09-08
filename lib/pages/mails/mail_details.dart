@@ -22,7 +22,9 @@ class MailDetailScreen extends ResponsiveStatefulWidget {
 class MailDetailScreenState extends ResponsiveState<MailDetailScreen> {
   @override
   void initState() {
-    context.read<MailBloc>().add(MarkAsRead(widget.mail.id!));
+    if (widget.mail.read != true) {
+      context.read<MailBloc>().add(MarkAsRead(widget.mail.id!));
+    }
     super.initState();
   }
 
@@ -135,7 +137,37 @@ class MailDetailScreenState extends ResponsiveState<MailDetailScreen> {
               ),
             ),
           ),
-          SizedBox(height: $constants.insets.lg),
+          SizedBox(height: $constants.insets.sm),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: $constants.insets.xs),
+            child: ElevatedContainer(
+                padding: EdgeInsets.symmetric(
+                  horizontal: $constants.insets.sm,
+                ),
+                height: 50,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    IconButton(
+                      onPressed: () {
+                        if (widget.mail.read == true) {
+                          context
+                              .read<MailBloc>()
+                              .add(MarkAsUnread(widget.mail.id!));
+                        } else {
+                          context
+                              .read<MailBloc>()
+                              .add(MarkAsRead(widget.mail.id!));
+                        }
+                      },
+                      icon: widget.mail.read == true
+                          ? Icon(CupertinoIcons.envelope_open)
+                          : Icon(CupertinoIcons.envelope),
+                    ),
+                  ],
+                )),
+          ),
+          SizedBox(height: $constants.insets.xl),
         ],
       ),
     );

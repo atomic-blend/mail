@@ -36,9 +36,10 @@ class MailBloc extends HydratedBloc<MailEvent, MailState> {
 
   void _onLoadMails(LoadMails event, Emitter<MailState> emit) async {
     final prevState = state;
-    emit(MailLoading(
-        prevState.mails ?? [], readMails: prevState.readMails ?? [], unreadMails: prevState.unreadMails ?? [], latestSync: prevState.latestSync
-    ));
+    emit(MailLoading(prevState.mails ?? [],
+        readMails: prevState.readMails ?? [],
+        unreadMails: prevState.unreadMails ?? [],
+        latestSync: prevState.latestSync));
     try {
       final mails = await _mailService.getAllMails();
       emit(MailLoaded(mails));
@@ -49,11 +50,11 @@ class MailBloc extends HydratedBloc<MailEvent, MailState> {
 
   void _onMarkAsRead(MarkAsRead event, Emitter<MailState> emit) async {
     final prevState = state;
-    if (prevState.readMails != null &&
-        prevState.readMails!.contains(event.mailId)) {
+    if (prevState.readMails.contains(event.mailId)) {
       return;
     }
-    prevState.readMails?.add(event.mailId);
+    prevState.unreadMails.remove(event.mailId);
+    prevState.readMails.add(event.mailId);
     emit(MailMarkAsReadSuccess(prevState.mails,
         latestSync: prevState.latestSync,
         readMails: state.readMails,
@@ -63,12 +64,12 @@ class MailBloc extends HydratedBloc<MailEvent, MailState> {
 
   void _onMarkAsUnread(MarkAsUnread event, Emitter<MailState> emit) async {
     final prevState = state;
-    if (prevState.readMails == null ||
-        !prevState.readMails!.contains(event.mailId)) {
+    if (prevState.unreadMails.contains(event.mailId)) {
       return;
     }
-    prevState.readMails?.remove(event.mailId);
-    prevState.unreadMails?.add(event.mailId);
+    prevState.readMails.remove(event.mailId);
+    prevState.unreadMails.add(event.mailId);
+    print('Marking mail ${event.mailId} as unread');
     emit(MailMarkAsUnreadSuccess(prevState.mails,
         latestSync: prevState.latestSync,
         unreadMails: prevState.unreadMails,
@@ -85,9 +86,9 @@ class MailBloc extends HydratedBloc<MailEvent, MailState> {
         unreadMailIds: state.unreadMails ?? [],
       );
       if (result.success) {
-        emit(MailLoaded(prevState.mails ?? [], latestSync: DateTime.now()));
         state.readMails?.clear();
         state.unreadMails?.clear();
+        emit(MailLoaded(prevState.mails ?? [], latestSync: DateTime.now()));
       } else {
         emit(MailLoadingError(
             prevState.mails ?? [], result.message ?? "Unknown error"));
