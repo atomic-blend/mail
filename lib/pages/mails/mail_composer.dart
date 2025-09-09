@@ -37,54 +37,66 @@ class _MailComposerState extends ResponsiveState<MailComposer> {
         //TODO: ask the user if they want to save the draft when the body content is not filled but there is a subject / from / to
         //TODO: save the draft if there's a mail content automatically
       },
-      child: ElevatedContainer(
-          padding: EdgeInsets.only(top: $constants.insets.xs,),
-          width: double.infinity,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              IconButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                icon: Icon(CupertinoIcons.chevron_back),
-              ),
-              SizedBox(height: $constants.insets.xs),
-              // TODO: Add email fields (To, Subject, etc.) here
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: $constants.insets.sm),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text("New Mail", style: getTextTheme(context).displaySmall!.copyWith(fontWeight: FontWeight.bold),),
-                    IconButton(onPressed: (){
-                      _sendMail();
-                    }, icon: Icon(CupertinoIcons.arrow_up_circle_fill, size: 30,color: getTheme(context).primary,),), 
-                  ],
+      child: MobileToolbarV2(
+        editorState: editorState,
+        toolbarItems: [
+ textDecorationMobileToolbarItemV2,
+        buildTextAndBackgroundColorMobileToolbarItem(),
+        blocksMobileToolbarItem,
+        linkMobileToolbarItem,
+        dividerMobileToolbarItem, 
+        
+        ],
+        child: ElevatedContainer(
+            padding: EdgeInsets.only(top: $constants.insets.xs,),
+            width: double.infinity,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                IconButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  icon: Icon(CupertinoIcons.chevron_back),
                 ),
-              ),
-              SizedBox(height: $constants.insets.xs),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: $constants.insets.sm),
-                child: Divider(),
-              ),  
-              SizedBox(height: $constants.insets.xs),
-              //TODO: Add email fields (To, Subject, etc.) here
-              //TODO: Add email content editor here
-              _buildPaddedDivider(),
-              SizedBox(
-                width: double.infinity,
-                height: 500,
-                child: AppFlowyEditor(
-                  editorStyle: EditorStyle.mobile(), 
-                      editorState: editorState,
-                    ),
-              ),
-
-            ],
+                SizedBox(height: $constants.insets.xs),
+                // TODO: Add email fields (To, Subject, etc.) here
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: $constants.insets.sm),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text("New Mail", style: getTextTheme(context).displaySmall!.copyWith(fontWeight: FontWeight.bold),),
+                      IconButton(onPressed: (){
+                        _sendMail();
+                      }, icon: Icon(CupertinoIcons.arrow_up_circle_fill, size: 30,color: getTheme(context).primary,),), 
+                    ],
+                  ),
+                ),
+                SizedBox(height: $constants.insets.xs),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: $constants.insets.sm),
+                  child: Divider(),
+                ),  
+                SizedBox(height: $constants.insets.xs),
+                //TODO: Add email fields (To, Subject, etc.) here
+                //TODO: Add email content editor here
+                _buildPaddedDivider(),
+                SizedBox(
+                  width: double.infinity,
+                  height: 500,
+                  child: AppFlowyEditor(
+                    editorStyle: EditorStyle.mobile(
+                    ), 
+                        editorState: editorState,
+                      ),
+                ),
+        
+              ],
+            ),
           ),
-        ),
+      ),
       ) ;
   }
 
