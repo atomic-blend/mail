@@ -1,5 +1,6 @@
 import 'package:ab_shared/components/responsive_stateful_widget.dart';
 import 'package:ab_shared/components/widgets/elevated_container.dart';
+import 'package:ab_shared/utils/constants.dart';
 import 'package:ab_shared/utils/shortcuts.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +13,16 @@ class MailComposer extends ResponsiveStatefulWidget {
 }
 
 class _MailComposerState extends ResponsiveState<MailComposer> {
+
+  @override
+  void initState() {
+    super.initState();
+    _initializeEditor();
+  }
+
+  void _initializeEditor() {
+  }
+
   @override
   Widget buildDesktop(BuildContext context) {
     return const Placeholder();
@@ -22,27 +33,45 @@ class _MailComposerState extends ResponsiveState<MailComposer> {
     return PopScope(
       canPop: false,
       onPopInvokedWithResult: (didPop, result) {
+        //TODO: close the composer if empty
+        //TODO: ask the user if they want to save the draft when the body content is not filled but there is a subject / from / to
+        //TODO: save the draft if there's a mail content automatically
       },
       child: Scaffold(
-        body: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            ElevatedContainer(
-              padding: EdgeInsets.only(top: getSize(context).height * 0.055),
-            height: getSize(context).height * 0.2,
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  IconButton(onPressed: () {
-                  //TODO: close the composer if empty
-                  //TODO: ask the user if they want to save the draft when the body content is not filled but there is a subject / from / to
-                  //TODO: save the draft if there's a mail content automatically
+        body: ElevatedContainer(
+          padding: EdgeInsets.only(top: getSize(context).height * 0.055),
+          width: double.infinity,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              IconButton(
+                onPressed: () {
                   Navigator.pop(context);
-                }, icon: Icon(CupertinoIcons.chevron_back),), 
-              ],),
-            )
-          ],
+                },
+                icon: Icon(CupertinoIcons.chevron_back),
+              ),
+              // TODO: Add email fields (To, Subject, etc.) here
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: $constants.insets.sm),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text("New Mail", style: getTextTheme(context).displaySmall!.copyWith(fontWeight: FontWeight.bold),),
+                    IconButton(onPressed: (){}, icon: Icon(CupertinoIcons.arrow_up_circle_fill, size: 30,color: getTheme(context).primary,),), 
+                  ],
+                ),
+              ),
+              SizedBox(height: $constants.insets.xs),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: $constants.insets.sm),
+                child: Divider(),
+              ),  
+              SizedBox(height: $constants.insets.xs),
+              //TODO: Add email fields (To, Subject, etc.) here
+              //TODO: Add email content editor here
+            ],
+          ),
         ),
       ),
     );
