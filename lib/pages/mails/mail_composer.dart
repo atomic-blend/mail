@@ -177,7 +177,22 @@ return mdContent.replaceAll(regex, '');
       return;
     }
     // ask the user if they want to save the draft when the body content is not filled but there is a subject / from / to
-    //TODO: save the draft if there's a mail content automatically
+    bool saveDraft = false;
+    if (editorState.document.isEmpty && (subjectController.text.isNotEmpty || toController.text.isNotEmpty || from != null)) {
+      //TODO: show modal
+      saveDraft = true;
+    }
+
+    if (!editorState.document.isEmpty) {
+      //TODO: save the draft
+      saveDraft = true;
+    }
+
+    if (saveDraft) {
+      //TODO: save the draft
+      Navigator.pop(context);
+      return;
+    }
   } 
 }
 
