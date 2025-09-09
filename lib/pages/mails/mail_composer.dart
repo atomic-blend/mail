@@ -1,3 +1,5 @@
+import 'package:ab_shared/blocs/auth/auth.bloc.dart';
+import 'package:ab_shared/components/forms/app_text_form_field.dart';
 import 'package:ab_shared/components/responsive_stateful_widget.dart';
 import 'package:ab_shared/components/widgets/elevated_container.dart';
 import 'package:ab_shared/utils/constants.dart';
@@ -5,6 +7,8 @@ import 'package:ab_shared/utils/shortcuts.dart';
 import 'package:appflowy_editor/appflowy_editor.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mail/models/mail/mail.dart';
 
 class MailComposer extends ResponsiveStatefulWidget {
   const MailComposer({super.key});
@@ -15,6 +19,13 @@ class MailComposer extends ResponsiveStatefulWidget {
 
 class _MailComposerState extends ResponsiveState<MailComposer> {
   EditorState editorState = EditorState.blank(withInitialText: true);
+  TextEditingController subjectController = TextEditingController();
+  TextEditingController toController = TextEditingController();
+
+  String? subject;
+  String? from;
+  List<String> availableFrom = [];
+  List<String>? to = [];
 
   @override
   void initState() {
@@ -28,76 +39,82 @@ class _MailComposerState extends ResponsiveState<MailComposer> {
 
   @override
   Widget buildMobile(BuildContext context) {
-    return PopScope(
-      canPop: false,
-      onPopInvokedWithResult: (didPop, result) {
-        print("didPop: $didPop");
-        print("result: $result");
-        //TODO: close the composer if empty
-        //TODO: ask the user if they want to save the draft when the body content is not filled but there is a subject / from / to
-        //TODO: save the draft if there's a mail content automatically
-      },
-      child: MobileToolbarV2(
-        editorState: editorState,
-        toolbarItems: [
- textDecorationMobileToolbarItemV2,
-        buildTextAndBackgroundColorMobileToolbarItem(),
-        blocksMobileToolbarItem,
-        linkMobileToolbarItem,
-        dividerMobileToolbarItem, 
+    return BlocBuilder<AuthBloc, AuthState>(
+      builder: (context, authState) {
+        availableFrom ??= [];
+        if (authState.user != null && !availableFrom.contains(authState.user!.email!)) {
+          availableFrom.add(authState.user!.email!);
+          from = availableFrom.first;
+        }
+        return MobileToolbarV2(
+          editorState: editorState,
+          toolbarItems: [
+         textDecorationMobileToolbarItemV2,
+          buildTextAndBackgroundColorMobileToolbarItem(),
+          blocksMobileToolbarItem,
+          linkMobileToolbarItem,
+          dividerMobileToolbarItem, 
         
-        ],
-        child: ElevatedContainer(
-            padding: EdgeInsets.only(top: $constants.insets.xs,),
-            width: double.infinity,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                IconButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  icon: Icon(CupertinoIcons.chevron_back),
-                ),
-                SizedBox(height: $constants.insets.xs),
-                // TODO: Add email fields (To, Subject, etc.) here
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: $constants.insets.sm),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text("New Mail", style: getTextTheme(context).displaySmall!.copyWith(fontWeight: FontWeight.bold),),
-                      IconButton(onPressed: (){
-                        _sendMail();
-                      }, icon: Icon(CupertinoIcons.arrow_up_circle_fill, size: 30,color: getTheme(context).primary,),), 
-                    ],
+          ],
+          child: ElevatedContainer(
+              padding: EdgeInsets.only(top: $constants.insets.xs,),
+              width: double.infinity,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  IconButton(
+                    onPressed: () {
+                      _draftAndPop(context);
+                    },
+                    icon: Icon(CupertinoIcons.chevron_back),
                   ),
-                ),
-                SizedBox(height: $constants.insets.xs),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: $constants.insets.sm),
-                  child: Divider(),
-                ),  
-                SizedBox(height: $constants.insets.xs),
-                //TODO: Add email fields (To, Subject, etc.) here
-                //TODO: Add email content editor here
-                _buildPaddedDivider(),
-                SizedBox(
-                  width: double.infinity,
-                  height: 500,
-                  child: AppFlowyEditor(
-                    editorStyle: EditorStyle.mobile(
-                    ), 
-                        editorState: editorState,
-                      ),
-                ),
-        
-              ],
+                  SizedBox(height: $constants.insets.xs),
+                  // TODO: Add email fields (To, Subject, etc.) here
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: $constants.insets.sm),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text("New Mail", style: getTextTheme(context).displaySmall!.copyWith(fontWeight: FontWeight.bold),),
+                        IconButton(onPressed: (){
+                          _sendMail();
+                        }, icon: Icon(CupertinoIcons.arrow_up_circle_fill, size: 30,color: getTheme(context).primary,),), 
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: $constants.insets.xs),
+                  _buildPaddedDivider(),
+                  SizedBox(height: $constants.insets.xs),
+                  _buildEmailFields("To", toController),
+                  SizedBox(height: $constants.insets.xs),
+                  _buildPaddedDivider(),
+                  _buildEmailFields("From", null, enabled: false, value: from, onTap: () {
+                    print("show from selector");
+                    // _showFromSelector();
+                  },),
+                  _buildPaddedDivider(),
+                  _buildEmailFields("Subject", subjectController),
+                  //TODO: Add email fields (To, Subject, etc.) here
+                  //TODO: Add email content editor here
+                  _buildPaddedDivider(),
+                  SizedBox(height: $constants.insets.xs),
+                  SizedBox(
+                    width: double.infinity,
+                    height: getSize(context).height * 0.42,
+                    child: AppFlowyEditor(
+                      editorStyle: EditorStyle.mobile(
+                      ), 
+                          editorState: editorState,
+                        ),
+                  ),
+          
+                ],
+              ),
             ),
-          ),
-      ),
-      ) ;
+        );
+      }
+    ) ;
   }
 
   Widget _buildPaddedDivider() {
@@ -107,6 +124,26 @@ class _MailComposerState extends ResponsiveState<MailComposer> {
               );
   }
 
+  Widget _buildEmailFields(String label, TextEditingController? controller, {String? value, bool? enabled = true, VoidCallback? onTap,}) {
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: $constants.insets.sm),
+      child: 
+      GestureDetector(
+        onTap: () {
+          if (onTap != null && enabled == false) {
+            onTap();
+          }
+        },
+        child: AppTextFormField(
+          labelText: label,
+          controller: controller,
+          value: value,
+          backgroundColor: getTheme(context).surface,
+          ),
+      ),
+    );
+  }
+
   void _sendMail() {
     final htmlContent = documentToHTML(editorState.document);
     final mdContent = documentToMarkdown(editorState.document);
@@ -114,6 +151,17 @@ class _MailComposerState extends ResponsiveState<MailComposer> {
     print("HTML Content: $htmlContent");
     print("Markdown Content: $mdContent");
     print("Plain Text Content: $plainTextContent");
+
+  //TODO: add attachements and create a raw mail entity like it's done in the backend
+    final Map<String, dynamic> rawMail = {
+      "textContent": plainTextContent,
+      "htmlContent": htmlContent,
+      "to": toController.text,
+      "from": from,
+      "subject": subjectController.text,
+    };
+
+    print("Raw Mail: $rawMail");
   }
   
   String _plainTextFromMarkdown(String mdContent) {
@@ -121,6 +169,15 @@ class _MailComposerState extends ResponsiveState<MailComposer> {
 RegExp regex = RegExp(r'[*_~`#]');
 // Replace Markdown symbols with an empty string
 return mdContent.replaceAll(regex, '');
+  }
+  
+  void _draftAndPop(BuildContext context) {
+    if (editorState.document.isEmpty) {
+      Navigator.pop(context);
+      return;
+    }
+    // ask the user if they want to save the draft when the body content is not filled but there is a subject / from / to
+    //TODO: save the draft if there's a mail content automatically
   } 
 }
 
