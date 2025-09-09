@@ -117,8 +117,14 @@ class NavConstants {
                         ),
                       ));
             } else {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => MailComposer()));
+              showModalBottomSheet(
+                isScrollControlled: true,
+                context: context,
+                isDismissible: false,
+                enableDrag: false,
+                backgroundColor: Colors.transparent,
+                builder: (context) => SizedBox(height: getSize(context).height * 0.92, child: MailComposer()),
+              );
             }
             SyncService.sync(context);
           },

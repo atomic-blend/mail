@@ -33,13 +33,14 @@ class _MailComposerState extends ResponsiveState<MailComposer> {
     return PopScope(
       canPop: false,
       onPopInvokedWithResult: (didPop, result) {
+        print("didPop: $didPop");
+        print("result: $result");
         //TODO: close the composer if empty
         //TODO: ask the user if they want to save the draft when the body content is not filled but there is a subject / from / to
         //TODO: save the draft if there's a mail content automatically
       },
-      child: Scaffold(
-        body: ElevatedContainer(
-          padding: EdgeInsets.only(top: getSize(context).height * 0.055),
+      child: ElevatedContainer(
+          padding: EdgeInsets.only(top: $constants.insets.xs,),
           width: double.infinity,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -51,6 +52,7 @@ class _MailComposerState extends ResponsiveState<MailComposer> {
                 },
                 icon: Icon(CupertinoIcons.chevron_back),
               ),
+              SizedBox(height: $constants.insets.xs),
               // TODO: Add email fields (To, Subject, etc.) here
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: $constants.insets.sm),
@@ -73,7 +75,6 @@ class _MailComposerState extends ResponsiveState<MailComposer> {
             ],
           ),
         ),
-      ),
-    );
+      ) ;
   }
 }
