@@ -8,6 +8,7 @@ import 'package:appflowy_editor/appflowy_editor.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mail/blocs/mail/mail_bloc.dart';
 import 'package:mail/models/mail/mail.dart';
 
 class MailComposer extends ResponsiveStatefulWidget {
@@ -153,18 +154,18 @@ class _MailComposerState extends ResponsiveState<MailComposer> {
     print("Plain Text Content: $plainTextContent");
 
   //TODO: add attachements and create a raw mail entity like it's done in the backend
-    final Map<String, dynamic> rawMail = {
-      "textContent": plainTextContent,
-      "htmlContent": htmlContent,
-      "to": toController.text,
-      "from": from,
-      "subject": subjectController.text,
-      "createdAt": DateTime.now(),
-    };
+    final mail = Mail();
+    mail.headers = [
+      {"Key": "To", "Value": [toController.text]},
+      {"Key": "From", "Value": from},
+      {"Key": "Subject", "Value": subjectController.text},
+    ];
+    mail.textContent = plainTextContent;
+    mail.htmlContent = htmlContent;
+    mail.createdAt = DateTime.now();
+    print("Mail: ${mail.toRawMail()}");
 
-    final mail = Mail.fromRawMail(rawMail);
-
-    print("Mail: $mail");
+    //context.read<MailBloc>().add(SendMail(mail));
   }
   
   String _plainTextFromMarkdown(String mdContent) {

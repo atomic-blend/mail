@@ -21,3 +21,8 @@ final class MarkAsUnread extends MailEvent {
 final class SyncMailActions extends MailEvent {
   const SyncMailActions();
 }
+
+final class SendMail extends MailEvent {
+  const SendMail(this.mail);
+  final Mail mail;
+}

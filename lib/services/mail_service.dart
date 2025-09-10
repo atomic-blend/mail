@@ -41,4 +41,13 @@ class MailService {
       return MailSyncResult(success: false, message: e.toString());
     }
   }
+
+  Future<bool> sendMail(Mail mail) async {
+    final result = await globalApiClient?.post('/mail/send', data: mail.toRawMail());
+    if (result != null && result.statusCode == 200) {
+      return true;
+    } else {
+      throw Exception('Failed to send mail');
+    }
+  }
 }

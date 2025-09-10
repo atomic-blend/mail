@@ -9,32 +9,17 @@ part 'mail.freezed.dart';
 class Mail with _$Mail {
   Mail._();
 
-  factory Mail.fromRawMail(Map<String, dynamic> rawMail) {
-    if (rawMail['textContent'] == null && rawMail['htmlContent'] == null) {
-      throw Exception('textContent or htmlContent is required');
-    }
-
-    // check headers
-    final to = rawMail['to'];
-    final from = rawMail['from'];
-    final subject = rawMail['subject'];
-
-    if (to == null || from == null || subject == null) {
-      throw Exception('to, from and subject are required');
-    }
-
-    final headers = [
-      {'Key': 'To', 'Value': to},
-      {'Key': 'From', 'Value': from},
-      {'Key': 'Subject', 'Value': subject},
-    ];
-
-    return Mail(
-      headers: headers,
-      textContent: rawMail['textContent'],
-      htmlContent: rawMail['htmlContent'],
-      createdAt: rawMail['createdAt'],
+  Map<String, dynamic> toRawMail() {
+    // convert headers from list of maps to a single map where Key is the key and Value is the value
+    final Map<String, dynamic> headersMap = Map.fromEntries(
+      headers!.map((header) => MapEntry(header["Key"], header["Value"]))
     );
+    return {
+      "textContent": textContent,
+      "htmlContent": htmlContent,
+      "headers": headersMap, 
+      "createdAt": createdAt?.toIso8601String(),
+    };
   }
 
   factory Mail({

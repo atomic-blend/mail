@@ -14,6 +14,7 @@ class MailBloc extends HydratedBloc<MailEvent, MailState> {
     on<MarkAsRead>(_onMarkAsRead);
     on<MarkAsUnread>(_onMarkAsUnread);
     on<SyncMailActions>(_onSyncMailActions);
+    on<SendMail>(_onSendMail);
   }
 
   @override
@@ -96,5 +97,16 @@ class MailBloc extends HydratedBloc<MailEvent, MailState> {
       emit(MailLoadingError(prevState.mails ?? [], e.toString()));
     }
     add(const LoadMails());
+  }
+
+  void _onSendMail(SendMail event, Emitter<MailState> emit) async {
+    final prevState = state;
+    try {
+      await _mailService.sendMail(event.mail);
+      emit(MailSendSuccess(prevState.mails ?? [], latestSync: prevState.latestSync));
+      add(const LoadMails());
+    } catch (e) {
+      emit(MailSendError(prevState.mails ?? [], e.toString()));
+    }
   }
 }
