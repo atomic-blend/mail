@@ -42,7 +42,6 @@ class _MailComposerState extends ResponsiveState<MailComposer> {
   Widget buildMobile(BuildContext context) {
     return BlocBuilder<AuthBloc, AuthState>(
       builder: (context, authState) {
-        availableFrom ??= [];
         if (authState.user != null && !availableFrom.contains(authState.user!.email!)) {
           availableFrom.add(authState.user!.email!);
           from = availableFrom.first;
@@ -91,7 +90,6 @@ class _MailComposerState extends ResponsiveState<MailComposer> {
                   SizedBox(height: $constants.insets.xs),
                   _buildPaddedDivider(),
                   _buildEmailFields("From", null, enabled: false, value: from, onTap: () {
-                    print("show from selector");
                     // _showFromSelector();
                   },),
                   _buildPaddedDivider(),
@@ -149,9 +147,6 @@ class _MailComposerState extends ResponsiveState<MailComposer> {
     final htmlContent = documentToHTML(editorState.document);
     final mdContent = documentToMarkdown(editorState.document);
     final plainTextContent = _plainTextFromMarkdown(mdContent);
-    print("HTML Content: $htmlContent");
-    print("Markdown Content: $mdContent");
-    print("Plain Text Content: $plainTextContent");
 
   //TODO: add attachements and create a raw mail entity like it's done in the backend
     final mail = Mail();
