@@ -163,9 +163,10 @@ class _MailComposerState extends ResponsiveState<MailComposer> {
     mail.textContent = plainTextContent;
     mail.htmlContent = htmlContent;
     mail.createdAt = DateTime.now();
-    print("Mail: ${mail.toRawMail()}");
 
-    //context.read<MailBloc>().add(SendMail(mail));
+    context.read<MailBloc>().add(SendMail(mail));
+
+    Navigator.pop(context);
   }
   
   String _plainTextFromMarkdown(String mdContent) {
