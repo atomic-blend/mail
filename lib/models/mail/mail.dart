@@ -9,9 +9,22 @@ part 'mail.freezed.dart';
 class Mail with _$Mail {
   Mail._();
 
+  Map<String, dynamic> toRawMail() {
+    // convert headers from list of maps to a single map where Key is the key and Value is the value
+    final Map<String, dynamic> headersMap = Map.fromEntries(
+      headers!.map((header) => MapEntry(header["Key"], header["Value"]))
+    );
+    return {
+      "textContent": textContent,
+      "htmlContent": htmlContent,
+      "headers": headersMap, 
+      "createdAt": createdAt?.toIso8601String(),
+    };
+  }
+
   factory Mail({
     String? id,
-    required String userId,
+    String? userId,
     List<Map<String, dynamic>>? headers,
     String? textContent,
     String? htmlContent,

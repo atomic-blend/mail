@@ -22,8 +22,8 @@ Mail _$MailFromJson(Map<String, dynamic> json) {
 mixin _$Mail {
   String? get id => throw _privateConstructorUsedError;
   set id(String? value) => throw _privateConstructorUsedError;
-  String get userId => throw _privateConstructorUsedError;
-  set userId(String value) => throw _privateConstructorUsedError;
+  String? get userId => throw _privateConstructorUsedError;
+  set userId(String? value) => throw _privateConstructorUsedError;
   List<Map<String, dynamic>>? get headers => throw _privateConstructorUsedError;
   set headers(List<Map<String, dynamic>>? value) =>
       throw _privateConstructorUsedError;
@@ -67,7 +67,7 @@ abstract class $MailCopyWith<$Res> {
   @useResult
   $Res call(
       {String? id,
-      String userId,
+      String? userId,
       List<Map<String, dynamic>>? headers,
       String? textContent,
       String? htmlContent,
@@ -98,7 +98,7 @@ class _$MailCopyWithImpl<$Res, $Val extends Mail>
   @override
   $Res call({
     Object? id = freezed,
-    Object? userId = null,
+    Object? userId = freezed,
     Object? headers = freezed,
     Object? textContent = freezed,
     Object? htmlContent = freezed,
@@ -117,10 +117,10 @@ class _$MailCopyWithImpl<$Res, $Val extends Mail>
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as String?,
-      userId: null == userId
+      userId: freezed == userId
           ? _value.userId
           : userId // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       headers: freezed == headers
           ? _value.headers
           : headers // ignore: cast_nullable_to_non_nullable
@@ -182,7 +182,7 @@ abstract class _$$MailImplCopyWith<$Res> implements $MailCopyWith<$Res> {
   @useResult
   $Res call(
       {String? id,
-      String userId,
+      String? userId,
       List<Map<String, dynamic>>? headers,
       String? textContent,
       String? htmlContent,
@@ -210,7 +210,7 @@ class __$$MailImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? id = freezed,
-    Object? userId = null,
+    Object? userId = freezed,
     Object? headers = freezed,
     Object? textContent = freezed,
     Object? htmlContent = freezed,
@@ -229,10 +229,10 @@ class __$$MailImplCopyWithImpl<$Res>
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as String?,
-      userId: null == userId
+      userId: freezed == userId
           ? _value.userId
           : userId // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       headers: freezed == headers
           ? _value.headers
           : headers // ignore: cast_nullable_to_non_nullable
@@ -290,7 +290,7 @@ class __$$MailImplCopyWithImpl<$Res>
 class _$MailImpl extends _Mail {
   _$MailImpl(
       {this.id,
-      required this.userId,
+      this.userId,
       this.headers,
       this.textContent,
       this.htmlContent,
@@ -311,7 +311,7 @@ class _$MailImpl extends _Mail {
   @override
   String? id;
   @override
-  String userId;
+  String? userId;
   @override
   List<Map<String, dynamic>>? headers;
   @override
@@ -356,7 +356,7 @@ class _$MailImpl extends _Mail {
 abstract class _Mail extends Mail {
   factory _Mail(
       {String? id,
-      required String userId,
+      String? userId,
       List<Map<String, dynamic>>? headers,
       String? textContent,
       String? htmlContent,
@@ -377,8 +377,8 @@ abstract class _Mail extends Mail {
   String? get id;
   set id(String? value);
   @override
-  String get userId;
-  set userId(String value);
+  String? get userId;
+  set userId(String? value);
   @override
   List<Map<String, dynamic>>? get headers;
   set headers(List<Map<String, dynamic>>? value);

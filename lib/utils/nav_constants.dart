@@ -2,6 +2,7 @@ import 'package:ab_shared/blocs/auth/auth.bloc.dart';
 import 'package:ab_shared/components/app/ab_navbar.dart';
 import 'package:mail/i18n/strings.g.dart';
 import 'package:mail/pages/mails/mail.dart';
+import 'package:mail/pages/mails/mail_composer.dart';
 import 'package:mail/pages/more/more.dart';
 import 'package:mail/services/sync.service.dart';
 import 'package:ab_shared/utils/shortcuts.dart';
@@ -111,13 +112,19 @@ class NavConstants {
                           child: ClipRRect(
                             borderRadius:
                                 BorderRadius.circular($constants.corners.md),
-                            child: Container(),
+                            child: MailComposer(),
                           ),
                         ),
                       ));
             } else {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => Container()));
+              showModalBottomSheet(
+                isScrollControlled: true,
+                context: context,
+                isDismissible: false,
+                enableDrag: false,
+                backgroundColor: Colors.transparent,
+                builder: (context) => SizedBox(height: getSize(context).height * 0.92, child: MailComposer()),
+              );
             }
             SyncService.sync(context);
           },
