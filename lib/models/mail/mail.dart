@@ -9,9 +9,37 @@ part 'mail.freezed.dart';
 class Mail with _$Mail {
   Mail._();
 
+  factory Mail.fromRawMail(Map<String, dynamic> rawMail) {
+    if (rawMail['textContent'] == null && rawMail['htmlContent'] == null) {
+      throw Exception('textContent or htmlContent is required');
+    }
+
+    // check headers
+    final to = rawMail['to'];
+    final from = rawMail['from'];
+    final subject = rawMail['subject'];
+
+    if (to == null || from == null || subject == null) {
+      throw Exception('to, from and subject are required');
+    }
+
+    final headers = [
+      {'Key': 'To', 'Value': to},
+      {'Key': 'From', 'Value': from},
+      {'Key': 'Subject', 'Value': subject},
+    ];
+
+    return Mail(
+      headers: headers,
+      textContent: rawMail['textContent'],
+      htmlContent: rawMail['htmlContent'],
+      createdAt: rawMail['createdAt'],
+    );
+  }
+
   factory Mail({
     String? id,
-    required String userId,
+    String? userId,
     List<Map<String, dynamic>>? headers,
     String? textContent,
     String? htmlContent,

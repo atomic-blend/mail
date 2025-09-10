@@ -159,9 +159,12 @@ class _MailComposerState extends ResponsiveState<MailComposer> {
       "to": toController.text,
       "from": from,
       "subject": subjectController.text,
+      "createdAt": DateTime.now(),
     };
 
-    print("Raw Mail: $rawMail");
+    final mail = Mail.fromRawMail(rawMail);
+
+    print("Mail: $mail");
   }
   
   String _plainTextFromMarkdown(String mdContent) {
