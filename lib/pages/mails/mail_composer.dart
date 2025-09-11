@@ -33,7 +33,7 @@ class _MailComposerState extends ResponsiveState<MailComposer> {
 
   @override
   void initState() {
-    if (widget.mail != null) {
+    if (widget.mail?.mail != null) {
       subjectController.text = widget.mail!.mail!.getHeader("Subject") ?? "";
       to = List<String>.from(widget.mail!.mail!.getHeader("To") ?? []);
       toController.text = to?.join(", ") ?? "";
@@ -209,12 +209,13 @@ final htmlContent = documentToHTML(editorState.document);
     }
 
     if (saveDraft) {
-      //TODO: save the draft
+      print("saveDraft");
+      print(widget.mail);
+      // save the draft
       final mail = _generateMailEntity();
       if (widget.mail != null) {
-        // TODO: update the draft
-        //TODO: add the draft id to the mail
-        // context.read<MailBloc>().add(UpdateDraft(mail));
+        // update the draft
+        context.read<MailBloc>().add(UpdateDraft(mail, widget.mail!.id!));
       } else  {
         context.read<MailBloc>().add(SaveDraft(mail));
       }

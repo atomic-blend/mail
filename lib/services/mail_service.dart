@@ -89,8 +89,8 @@ class MailService {
     }
   }
 
-  Future<bool> updateDraft(Mail mail) async {
-    final result = await globalApiClient?.put('/mail/draft/${mail.id}', data: mail.toRawMail());
+  Future<bool> updateDraft(Mail mail, String draftId) async {
+    final result = await globalApiClient?.put('/mail/draft/$draftId', data: mail.toRawMail());
     if (result != null && result.statusCode == 200) {
       return true;
     } else {

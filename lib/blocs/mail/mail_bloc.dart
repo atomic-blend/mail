@@ -55,7 +55,7 @@ class MailBloc extends HydratedBloc<MailEvent, MailState> {
       final mails = await _mailService.getAllMails();
       emit(MailLoaded(mails, drafts: prevState.drafts, latestSync: prevState.latestSync, readMails: prevState.readMails, unreadMails: prevState.unreadMails,));
     } catch (e) {
-      emit(MailLoadingError(prevState.mails ?? [], e.toString()));
+      emit(MailLoadingError(prevState.mails ?? [], e.toString(), latestSync: prevState.latestSync, readMails: prevState.readMails, unreadMails: prevState.unreadMails, drafts: prevState.drafts,));
     }
   }
 
@@ -105,10 +105,10 @@ class MailBloc extends HydratedBloc<MailEvent, MailState> {
         emit(MailLoaded(prevState.mails ?? [], latestSync: DateTime.now(), readMails: state.readMails, unreadMails: state.unreadMails, drafts: state.drafts,));
       } else {
         emit(MailLoadingError(
-            prevState.mails ?? [], result.message ?? "Unknown error"));
+            prevState.mails ?? [], result.message ?? "Unknown error", latestSync: prevState.latestSync, readMails: prevState.readMails, unreadMails: prevState.unreadMails, drafts: prevState.drafts,));
       }
     } catch (e) {
-      emit(MailLoadingError(prevState.mails ?? [], e.toString()));
+      emit(MailLoadingError(prevState.mails ?? [], e.toString(), latestSync: prevState.latestSync, readMails: prevState.readMails, unreadMails: prevState.unreadMails, drafts: prevState.drafts,));
     }
     add(const LoadMails());
   }
@@ -120,7 +120,7 @@ class MailBloc extends HydratedBloc<MailEvent, MailState> {
       emit(MailSendSuccess(prevState.mails ?? [], latestSync: prevState.latestSync, readMails: prevState.readMails, unreadMails: prevState.unreadMails, drafts: prevState.drafts,));
       add(const LoadMails());
     } catch (e) {
-      emit(MailSendError(prevState.mails ?? [], e.toString()));
+      emit(MailSendError(prevState.mails ?? [], e.toString(), latestSync: prevState.latestSync, readMails: prevState.readMails, unreadMails: prevState.unreadMails, drafts: prevState.drafts,));
     }
   }
 
@@ -130,7 +130,7 @@ class MailBloc extends HydratedBloc<MailEvent, MailState> {
       final drafts = await _mailService.getDrafts();
       emit(MailLoaded(prevState.mails ?? [], drafts: drafts, latestSync: prevState.latestSync, readMails: prevState.readMails, unreadMails: prevState.unreadMails,),);
     } catch (e) {
-      emit(MailLoadingError(prevState.mails ?? [], e.toString()));
+      emit(MailLoadingError(prevState.mails ?? [], e.toString(), latestSync: prevState.latestSync, readMails: prevState.readMails, unreadMails: prevState.unreadMails, drafts: prevState.drafts,));
     }
   }
 
@@ -140,7 +140,7 @@ class MailBloc extends HydratedBloc<MailEvent, MailState> {
       await _mailService.saveDraft(event.mail);
       emit(MailSaveDraftSuccess(prevState.mails ?? [], latestSync: prevState.latestSync, readMails: prevState.readMails, unreadMails: prevState.unreadMails, drafts: prevState.drafts,),);
     } catch (e) {
-      emit(MailSaveDraftError(prevState.mails ?? [], e.toString()));
+      emit(MailSaveDraftError(prevState.mails ?? [], e.toString(), latestSync: prevState.latestSync, readMails: prevState.readMails, unreadMails: prevState.unreadMails, drafts: prevState.drafts,));
     }
   }
 
@@ -150,17 +150,17 @@ class MailBloc extends HydratedBloc<MailEvent, MailState> {
       await _mailService.deleteDraft(event.draftId);
       emit(MailDeleteDraftSuccess(prevState.mails ?? [], latestSync: prevState.latestSync, readMails: prevState.readMails, unreadMails: prevState.unreadMails, drafts: prevState.drafts,),);
     } catch (e) {
-      emit(MailDeleteDraftError(prevState.mails ?? [], e.toString()));
+      emit(MailDeleteDraftError(prevState.mails ?? [], e.toString(), latestSync: prevState.latestSync, readMails: prevState.readMails, unreadMails: prevState.unreadMails, drafts: prevState.drafts,));
     }
   }
 
   FutureOr<void> _onUpdateDraft(UpdateDraft event, Emitter<MailState> emit) async {
     final prevState = state;
     try {
-      await _mailService.updateDraft(event.mail);
+      await _mailService.updateDraft(event.mail, event.draftId);
       emit(MailUpdateDraftSuccess(prevState.mails ?? [], latestSync: prevState.latestSync, readMails: prevState.readMails, unreadMails: prevState.unreadMails, drafts: prevState.drafts,),);
     } catch (e) {
-      emit(MailUpdateDraftError(prevState.mails ?? [], e.toString()));
+      emit(MailUpdateDraftError(prevState.mails ?? [], e.toString(), latestSync: prevState.latestSync, readMails: prevState.readMails, unreadMails: prevState.unreadMails, drafts: prevState.drafts,));
     }
   }
 }
