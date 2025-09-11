@@ -1,4 +1,3 @@
-import 'package:mail/blocs/mail/mail_bloc.dart';
 import 'package:mail/main.dart';
 import 'package:mail/models/mail/mail.dart';
 import 'package:mail/models/send_mail/send_mail.dart' as send_mail;

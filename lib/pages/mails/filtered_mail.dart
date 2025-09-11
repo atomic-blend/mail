@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mail/blocs/mail/mail_bloc.dart';
 import 'package:mail/components/cards/mail_card.dart';
-import 'package:mail/models/mail/mail.dart';
 import 'package:mail/services/sync.service.dart';
 
 class FilteredMailScreen extends StatefulWidget {

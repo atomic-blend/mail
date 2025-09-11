@@ -49,7 +49,6 @@ class MailCard extends StatelessWidget {
                                           warning:
                                               "This action cannot be undone.",
                                           onConfirm: () {
-                                            print(mail);
                                             if (draft != null) {
                                               onDelete?.call(draft!.id!);
                                             } else {
@@ -86,7 +85,7 @@ class MailCard extends StatelessWidget {
               vertical: $constants.insets.xs + 4),
           child: Row(
             children: [
-              MailUserAvatar(value: mail?.getHeader("From"), read: mail!.read),
+              MailUserAvatar(value: mail.getHeader("From"), read: mail.read),
               SizedBox(width: $constants.insets.sm),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -94,10 +93,10 @@ class MailCard extends StatelessWidget {
                   Row(
                     children: [
                       Text(
-                        mail!.getHeader("Subject"),
+                        mail.getHeader("Subject"),
                         style: getTextTheme(context).headlineSmall!.copyWith(
                               fontWeight:
-                                  mail!.read != true ? FontWeight.bold : null,
+                                  mail.read != true ? FontWeight.bold : null,
                             ),
                       ),
                       if (mail.read != true) ...[

@@ -2,7 +2,6 @@ import 'package:ab_shared/blocs/auth/auth.bloc.dart';
 import 'package:ab_shared/components/app/ab_navbar.dart';
 import 'package:mail/blocs/app/app.bloc.dart';
 import 'package:mail/i18n/strings.g.dart';
-import 'package:mail/pages/mails/filtered_mail.dart';
 import 'package:mail/pages/mails/mail_composer.dart';
 import 'package:mail/pages/mails/views/all_mail.dart';
 import 'package:mail/pages/mails/views/drafts.dart';

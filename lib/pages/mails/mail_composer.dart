@@ -80,7 +80,6 @@ class _MailComposerState extends ResponsiveState<MailComposer> {
                     icon: Icon(CupertinoIcons.chevron_back),
                   ),
                   SizedBox(height: $constants.insets.xs),
-                  // TODO: Add email fields (To, Subject, etc.) here
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: $constants.insets.sm),
                     child: Row(
@@ -104,8 +103,6 @@ class _MailComposerState extends ResponsiveState<MailComposer> {
                   },),
                   _buildPaddedDivider(),
                   _buildEmailFields("Subject", subjectController),
-                  //TODO: Add email fields (To, Subject, etc.) here
-                  //TODO: Add email content editor here
                   _buildPaddedDivider(),
                   SizedBox(height: $constants.insets.xs),
                   SizedBox(
@@ -195,7 +192,6 @@ final htmlContent = documentToHTML(editorState.document);
     // ask the user if they want to save the draft when the body content is not filled but there is a subject / from / to
     bool saveDraft = false;
     if (editorState.document.isEmpty && (subjectController.text.isNotEmpty || toController.text.isNotEmpty || from != null)) {
-      //TODO: show modal
       showDialog(context: context, builder: (context) => ABModal(title: "Save Draft", description: "Do you want to save the draft?", onConfirm: () {
         saveDraft = true;
         Navigator.pop(context);
@@ -204,13 +200,10 @@ final htmlContent = documentToHTML(editorState.document);
     }
 
     if (!editorState.document.isEmpty) {
-      //TODO: save the draft
       saveDraft = true;
     }
 
     if (saveDraft) {
-      print("saveDraft");
-      print(widget.mail);
       // save the draft
       final mail = _generateMailEntity();
       if (widget.mail != null) {
