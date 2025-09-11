@@ -34,7 +34,7 @@ class NavConstants {
             NavigationItem(
               key: Key("drafts"),
               icon: LineAwesome.envelope,
-              cupertinoIcon: CupertinoIcons.envelope,
+              cupertinoIcon: CupertinoIcons.square_pencil,
               label: "Drafts",
               body: DraftScreen(),
             ),
