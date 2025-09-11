@@ -20,6 +20,9 @@ class _DraftScreenState extends State<DraftScreen> {
   Widget build(BuildContext context) {
     return FilteredMailScreen(
       drafts: true,
+      onDelete: (draftId) {
+        context.read<MailBloc>().add(DeleteDraft(draftId));
+      },
       filterFunction: (mails) {
         return mails ?? [];
       },

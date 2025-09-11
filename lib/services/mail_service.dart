@@ -82,7 +82,7 @@ class MailService {
 
   Future<bool> deleteDraft(String draftId) async {
     final result = await globalApiClient?.delete('/mail/draft/$draftId');
-    if (result != null && result.statusCode == 200) {
+    if (result != null && result.statusCode == 204) {
       return true;
     } else {
       throw Exception('Failed to delete draft');

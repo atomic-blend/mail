@@ -13,11 +13,13 @@ import 'package:mail/services/sync.service.dart';
 class FilteredMailScreen extends StatefulWidget {
   final List<dynamic> Function(List<dynamic>? mails) filterFunction;
   final bool? drafts;
+  final Function(String)? onDelete;
 
   const FilteredMailScreen({
     super.key,
     required this.filterFunction,
     this.drafts = false,
+    this.onDelete,
   });
 
   @override
@@ -111,6 +113,7 @@ class _FilteredMailScreenState extends State<FilteredMailScreen> {
                 child: MailCard(
                   draft: widget.drafts == true ? mail  : null,
                       mail: widget.drafts != true ? mail  : null,
+                      onDelete: widget.onDelete,
                     ),
               ))
             ],
