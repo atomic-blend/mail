@@ -119,7 +119,7 @@ class Mail with _$Mail {
     return mail;
   }
 
-  String getHeader(String key) {
+  dynamic getHeader(String key) {
     if (headers == null) return '';
     try {
       final header = headers!.firstWhere(

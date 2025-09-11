@@ -107,6 +107,7 @@ class _FilteredMailScreenState extends State<FilteredMailScreen> {
               ),
               SizedBox(height: $constants.insets.xxs),
               ...filteredMails.map((mail) => MailCard(
+                draft: widget.drafts ?? false,
                     mail: mail,
                   ))
             ],

@@ -12,7 +12,8 @@ import 'package:mail/blocs/mail/mail_bloc.dart';
 import 'package:mail/models/mail/mail.dart';
 
 class MailComposer extends ResponsiveStatefulWidget {
-  const MailComposer({super.key});
+  final Mail? mail;
+  const MailComposer({super.key, this.mail});
 
   @override
   ResponsiveState<MailComposer> createState() => _MailComposerState();
@@ -30,6 +31,13 @@ class _MailComposerState extends ResponsiveState<MailComposer> {
 
   @override
   void initState() {
+    if (widget.mail != null) {
+      subjectController.text = widget.mail!.getHeader("Subject") ?? "";
+      to = List<String>.from(widget.mail!.getHeader("To") ?? []);
+      toController.text = to?.join(", ") ?? "";
+      from = widget.mail!.getHeader("From") ?? "";
+      editorState = EditorState(document: htmlToDocument(widget.mail!.htmlContent ?? ""));
+    }
     super.initState();
   }
 

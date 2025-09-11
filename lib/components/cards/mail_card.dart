@@ -4,23 +4,29 @@ import 'package:ab_shared/utils/shortcuts.dart';
 import 'package:flutter/material.dart';
 import 'package:mail/components/avatars/mail_user_avatar.dart';
 import 'package:mail/models/mail/mail.dart';
+import 'package:mail/pages/mails/mail_composer.dart';
 import 'package:mail/pages/mails/mail_details.dart';
 import 'package:mail/services/sync.service.dart';
 
 class MailCard extends StatelessWidget {
   final Mail mail;
-  const MailCard({super.key, required this.mail});
+  final bool draft;
+  const MailCard({super.key, required this.mail, required this.draft});
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () async {
-        await Navigator.of(context).push(MaterialPageRoute(
+        if (!draft) {
+          await Navigator.of(context).push(MaterialPageRoute(
             builder: (context) => MailDetailScreen(
                   mail,
                 )));
         if (!context.mounted) return;
         SyncService.sync(context);
+        } else {
+          _openComposer(context);
+        }
       },
       child: ElevatedContainer(
         padding: EdgeInsets.symmetric(
@@ -84,5 +90,32 @@ class MailCard extends StatelessWidget {
       }
     }
     return initials.toUpperCase();
+  }
+  
+  void _openComposer(BuildContext context) {
+    if (isDesktop(context)) {
+              showDialog(
+                  context: context,
+                  builder: (context) => Dialog(
+                        child: SizedBox(
+                          height: getSize(context).height * 0.8,
+                          width: getSize(context).width * 0.8,
+                          child: ClipRRect(
+                            borderRadius:
+                                BorderRadius.circular($constants.corners.md),
+                            child: MailComposer(mail: mail),
+                          ),
+                        ),
+                      ));
+            } else {
+              showModalBottomSheet(
+                isScrollControlled: true,
+                context: context,
+                isDismissible: false,
+                enableDrag: false,
+                backgroundColor: Colors.transparent,
+                builder: (context) => SizedBox(height: getSize(context).height * 0.92, child: MailComposer(mail: mail)),
+              );
+            } 
   }
 }
