@@ -1,5 +1,6 @@
 import 'package:ab_shared/blocs/auth/auth.bloc.dart';
 import 'package:ab_shared/components/forms/app_text_form_field.dart';
+import 'package:ab_shared/components/modals/ab_modal.dart';
 import 'package:ab_shared/components/responsive_stateful_widget.dart';
 import 'package:ab_shared/components/widgets/elevated_container.dart';
 import 'package:ab_shared/utils/constants.dart';
@@ -10,9 +11,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mail/blocs/mail/mail_bloc.dart';
 import 'package:mail/models/mail/mail.dart';
+import 'package:mail/models/send_mail/send_mail.dart' as send_mail;
 
 class MailComposer extends ResponsiveStatefulWidget {
-  const MailComposer({super.key});
+  final send_mail.SendMail? mail;
+  const MailComposer({super.key, this.mail});
 
   @override
   ResponsiveState<MailComposer> createState() => _MailComposerState();
@@ -30,6 +33,13 @@ class _MailComposerState extends ResponsiveState<MailComposer> {
 
   @override
   void initState() {
+    if (widget.mail?.mail != null) {
+      subjectController.text = widget.mail!.mail!.getHeader("Subject") ?? "";
+      to = List<String>.from(widget.mail!.mail!.getHeader("To") ?? []);
+      toController.text = to?.join(", ") ?? "";
+      from = widget.mail!.mail!.getHeader("From") ?? "";
+      editorState = EditorState(document: htmlToDocument(widget.mail!.mail!.htmlContent ?? ""));
+    }
     super.initState();
   }
 
@@ -70,7 +80,6 @@ class _MailComposerState extends ResponsiveState<MailComposer> {
                     icon: Icon(CupertinoIcons.chevron_back),
                   ),
                   SizedBox(height: $constants.insets.xs),
-                  // TODO: Add email fields (To, Subject, etc.) here
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: $constants.insets.sm),
                     child: Row(
@@ -94,8 +103,6 @@ class _MailComposerState extends ResponsiveState<MailComposer> {
                   },),
                   _buildPaddedDivider(),
                   _buildEmailFields("Subject", subjectController),
-                  //TODO: Add email fields (To, Subject, etc.) here
-                  //TODO: Add email content editor here
                   _buildPaddedDivider(),
                   SizedBox(height: $constants.insets.xs),
                   SizedBox(
@@ -143,10 +150,10 @@ class _MailComposerState extends ResponsiveState<MailComposer> {
     );
   }
 
-  void _sendMail() {
-    final htmlContent = documentToHTML(editorState.document);
+  Mail _generateMailEntity() {
+final htmlContent = documentToHTML(editorState.document);
     final mdContent = documentToMarkdown(editorState.document);
-    final plainTextContent = _plainTextFromMarkdown(mdContent);
+    final plainTextContent = _markdownToPlainText(mdContent);
 
   //TODO: add attachements and create a raw mail entity like it's done in the backend
     final mail = Mail();
@@ -159,16 +166,22 @@ class _MailComposerState extends ResponsiveState<MailComposer> {
     mail.htmlContent = htmlContent;
     mail.createdAt = DateTime.now();
 
+    return mail;
+  }
+
+  void _sendMail() {
+    final mail = _generateMailEntity();
+
     context.read<MailBloc>().add(SendMail(mail));
 
     Navigator.pop(context);
   }
   
-  String _plainTextFromMarkdown(String mdContent) {
-// Regular expression to match Markdown symbols including '#'
-RegExp regex = RegExp(r'[*_~`#]');
-// Replace Markdown symbols with an empty string
-return mdContent.replaceAll(regex, '');
+  String _markdownToPlainText(String mdContent) {
+    // Regular expression to match Markdown symbols including '#'
+    RegExp regex = RegExp(r'[*_~`#]');
+    // Replace Markdown symbols with an empty string
+    return mdContent.replaceAll(regex, '');
   }
   
   void _draftAndPop(BuildContext context) {
@@ -179,17 +192,26 @@ return mdContent.replaceAll(regex, '');
     // ask the user if they want to save the draft when the body content is not filled but there is a subject / from / to
     bool saveDraft = false;
     if (editorState.document.isEmpty && (subjectController.text.isNotEmpty || toController.text.isNotEmpty || from != null)) {
-      //TODO: show modal
-      saveDraft = true;
+      showDialog(context: context, builder: (context) => ABModal(title: "Save Draft", description: "Do you want to save the draft?", onConfirm: () {
+        saveDraft = true;
+        Navigator.pop(context);
+      },));
+      return;
     }
 
     if (!editorState.document.isEmpty) {
-      //TODO: save the draft
       saveDraft = true;
     }
 
     if (saveDraft) {
-      //TODO: save the draft
+      // save the draft
+      final mail = _generateMailEntity();
+      if (widget.mail != null) {
+        // update the draft
+        context.read<MailBloc>().add(UpdateDraft(mail, widget.mail!.id!));
+      } else  {
+        context.read<MailBloc>().add(SaveDraft(mail));
+      }
       Navigator.pop(context);
       return;
     }

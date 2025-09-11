@@ -1,8 +1,11 @@
 import 'package:ab_shared/blocs/auth/auth.bloc.dart';
 import 'package:ab_shared/components/app/ab_navbar.dart';
+import 'package:mail/blocs/app/app.bloc.dart';
 import 'package:mail/i18n/strings.g.dart';
-import 'package:mail/pages/mails/mail.dart';
 import 'package:mail/pages/mails/mail_composer.dart';
+import 'package:mail/pages/mails/views/all_mail.dart';
+import 'package:mail/pages/mails/views/drafts.dart';
+import 'package:mail/pages/mails/views/inbox.dart';
 import 'package:mail/pages/more/more.dart';
 import 'package:mail/services/sync.service.dart';
 import 'package:ab_shared/utils/shortcuts.dart';
@@ -18,8 +21,30 @@ final $navConstants = NavConstants();
 class NavConstants {
   List<NavigationSection> secondaryMenuSections(BuildContext context) => [
         const NavigationSection(
-          key: Key("mails"),
-          items: [],
+          key: Key("mail"),
+          items: [
+            NavigationItem(
+              key: Key("inbox"),
+              icon: LineAwesome.envelope,
+              cupertinoIcon: CupertinoIcons.envelope,
+              label: "Inbox",
+              body: InboxScreen(),
+            ),
+            NavigationItem(
+              key: Key("drafts"),
+              icon: LineAwesome.envelope,
+              cupertinoIcon: CupertinoIcons.square_pencil,
+              label: "Drafts",
+              body: DraftScreen(),
+            ),
+            NavigationItem(
+              key: Key("all"),
+              icon: LineAwesome.envelope_open_solid,
+              cupertinoIcon: CupertinoIcons.envelope_open_fill,
+              label: "All",
+              body: AllMailScreen(),
+            ),
+          ],
         ),
         const NavigationSection(
           key: Key("organize"),
@@ -44,21 +69,34 @@ class NavConstants {
   // on desktop: the more apps page is moved at the end of the menu
   List<NavigationItem> primaryMenuItems(BuildContext context) => [
         NavigationItem(
-          key: const Key("inbox"),
+          key: const Key("mail"),
           icon: LineAwesome.envelope,
           cupertinoIcon: CupertinoIcons.envelope,
-          label: "Inbox",
-          body: MailScreen(),
+          label: "Mail",
+          body: AllMailScreen(),
+          mainSecondaryKey: "inbox",
           appBar: AppBar(
-            key: const Key("inbox"),
+            key: const Key("mail"),
             backgroundColor: getTheme(context).surfaceContainer,
-            leading: Container(),
-            title: Text(
-              "Inbox",
-              style: getTextTheme(context).headlineSmall!.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
-            ),
+            title: BlocBuilder<AppCubit, AppState>(builder: (context, appState) {
+                    var selectedSecondarySection =
+                        secondaryMenuSections(context)
+                            .where((element) =>
+                                (element.key as ValueKey).value ==
+                                appState.primaryMenuSelectedKey)
+                            .firstOrNull;
+                    var selectedSecondaryItem = selectedSecondarySection?.items
+                        .where((element) =>
+                            (element.key as ValueKey).value ==
+                            appState.secondaryMenuSelectedKey)
+                        .firstOrNull;
+                    return Text(
+                      selectedSecondaryItem?.label ?? "",
+                      style: getTextTheme(context).headlineSmall!.copyWith(
+                            fontWeight: FontWeight.bold,
+                          ),
+                    );
+                  }),
             actions: [
               BlocBuilder<AuthBloc, AuthState>(builder: (context, authState) {
                 return Container();

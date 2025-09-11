@@ -9,19 +9,35 @@ import 'package:mail/blocs/mail/mail_bloc.dart';
 import 'package:mail/components/cards/mail_card.dart';
 import 'package:mail/services/sync.service.dart';
 
-class MailScreen extends StatefulWidget {
-  const MailScreen({super.key});
+class FilteredMailScreen extends StatefulWidget {
+  final List<dynamic> Function(List<dynamic>? mails) filterFunction;
+  final bool? drafts;
+  final Function(String)? onDelete;
+
+  const FilteredMailScreen({
+    super.key,
+    required this.filterFunction,
+    this.drafts = false,
+    this.onDelete,
+  });
 
   @override
-  State<MailScreen> createState() => _MailScreenState();
+  State<FilteredMailScreen> createState() => _FilteredMailScreenState();
 }
 
-class _MailScreenState extends State<MailScreen> {
+class _FilteredMailScreenState extends State<FilteredMailScreen> {
   final TextEditingController searchController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<MailBloc, MailState>(builder: (context, mailState) {
-      if (mailState.mails != null && mailState.mails!.isEmpty) {
+      List<dynamic> filteredMails = widget.filterFunction(mailState.mails);
+      
+      if (widget.drafts ?? false) {
+        filteredMails = widget.filterFunction(mailState.drafts);
+      }
+
+      if (filteredMails.isEmpty) {
         return RefreshIndicator.adaptive(
           onRefresh: () async {
             SyncService.sync(context);
@@ -45,7 +61,6 @@ class _MailScreenState extends State<MailScreen> {
                   children: [
                     ElevatedContainer(
                       width: getSize(context).width * 0.65,
-                      // height: getSize(context).height * 0.15,
                       padding: EdgeInsets.all($constants.insets.sm),
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
@@ -92,9 +107,14 @@ class _MailScreenState extends State<MailScreen> {
                 ),
               ),
               SizedBox(height: $constants.insets.xxs),
-              ...?mailState.mails?.map((mail) => MailCard(
-                    mail: mail,
-                  ))
+              ...filteredMails.map((mail) => Padding(
+                padding: EdgeInsets.only(bottom: $constants.insets.xs),
+                child: MailCard(
+                  draft: widget.drafts == true ? mail  : null,
+                      mail: widget.drafts != true ? mail  : null,
+                      onDelete: widget.onDelete,
+                    ),
+              ))
             ],
           ),
         );
@@ -102,3 +122,5 @@ class _MailScreenState extends State<MailScreen> {
     });
   }
 }
+
+
