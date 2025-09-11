@@ -11,7 +11,7 @@ import 'package:mail/models/mail/mail.dart';
 import 'package:mail/services/sync.service.dart';
 
 class FilteredMailScreen extends StatefulWidget {
-  final List<Mail> Function(List<Mail>? mails) filterFunction;
+  final List<dynamic> Function(List<dynamic>? mails) filterFunction;
   final bool? drafts;
 
   const FilteredMailScreen({
@@ -30,11 +30,13 @@ class _FilteredMailScreenState extends State<FilteredMailScreen> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<MailBloc, MailState>(builder: (context, mailState) {
-      List<Mail> filteredMails = widget.filterFunction(mailState.mails);
+      List<dynamic> filteredMails = widget.filterFunction(mailState.mails);
       
       if (widget.drafts ?? false) {
         filteredMails = widget.filterFunction(mailState.drafts);
       }
+  print(mailState.drafts);
+      print(filteredMails);
 
       if (filteredMails.isEmpty) {
         return RefreshIndicator.adaptive(
@@ -107,8 +109,8 @@ class _FilteredMailScreenState extends State<FilteredMailScreen> {
               ),
               SizedBox(height: $constants.insets.xxs),
               ...filteredMails.map((mail) => MailCard(
-                draft: widget.drafts ?? false,
-                    mail: mail,
+                draft: widget.drafts == true ? mail  : null,
+                    mail: widget.drafts != true ? mail  : null,
                   ))
             ],
           ),

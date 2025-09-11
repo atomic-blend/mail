@@ -2,22 +2,28 @@ import 'package:ab_shared/components/widgets/elevated_container.dart';
 import 'package:ab_shared/utils/constants.dart';
 import 'package:ab_shared/utils/shortcuts.dart';
 import 'package:flutter/material.dart';
+import 'package:mail/blocs/mail/mail_bloc.dart';
 import 'package:mail/components/avatars/mail_user_avatar.dart';
 import 'package:mail/models/mail/mail.dart';
 import 'package:mail/pages/mails/mail_composer.dart';
 import 'package:mail/pages/mails/mail_details.dart';
 import 'package:mail/services/sync.service.dart';
+import 'package:mail/models/send_mail/send_mail.dart' as send_mail;
 
 class MailCard extends StatelessWidget {
-  final Mail mail;
-  final bool draft;
+  final Mail? mail;
+  final send_mail.SendMail? draft;
   const MailCard({super.key, required this.mail, required this.draft});
 
   @override
   Widget build(BuildContext context) {
+    final Mail? mail = this.mail ?? draft!.mail;
+    if (mail == null) {
+      return const SizedBox.shrink();
+    }
     return GestureDetector(
       onTap: () async {
-        if (!draft) {
+        if (draft == null) {
           await Navigator.of(context).push(MaterialPageRoute(
             builder: (context) => MailDetailScreen(
                   mail,
@@ -34,7 +40,7 @@ class MailCard extends StatelessWidget {
             vertical: $constants.insets.xs + 4),
         child: Row(
           children: [
-            MailUserAvatar(value: mail.getHeader("From"), read: mail.read),
+            MailUserAvatar(value: mail?.getHeader("From"), read: mail!.read),
             SizedBox(width: $constants.insets.sm),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -42,10 +48,10 @@ class MailCard extends StatelessWidget {
                 Row(
                   children: [
                     Text(
-                      mail.getHeader("Subject"),
+                      mail!.getHeader("Subject"),
                       style: getTextTheme(context).headlineSmall!.copyWith(
                             fontWeight:
-                                mail.read != true ? FontWeight.bold : null,
+                                mail!.read != true ? FontWeight.bold : null,
                           ),
                     ),
                     if (mail.read != true) ...[
@@ -103,7 +109,7 @@ class MailCard extends StatelessWidget {
                           child: ClipRRect(
                             borderRadius:
                                 BorderRadius.circular($constants.corners.md),
-                            child: MailComposer(mail: mail),
+                            child: MailComposer(mail: draft),
                           ),
                         ),
                       ));
@@ -114,7 +120,7 @@ class MailCard extends StatelessWidget {
                 isDismissible: false,
                 enableDrag: false,
                 backgroundColor: Colors.transparent,
-                builder: (context) => SizedBox(height: getSize(context).height * 0.92, child: MailComposer(mail: mail)),
+                builder: (context) => SizedBox(height: getSize(context).height * 0.92, child: MailComposer(mail: draft)),
               );
             } 
   }

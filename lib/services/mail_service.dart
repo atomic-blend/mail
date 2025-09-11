@@ -1,5 +1,7 @@
+import 'package:mail/blocs/mail/mail_bloc.dart';
 import 'package:mail/main.dart';
 import 'package:mail/models/mail/mail.dart';
+import 'package:mail/models/send_mail/send_mail.dart' as send_mail;
 
 class MailSyncResult {
   final bool success;
@@ -60,16 +62,16 @@ class MailService {
     }
   }
 
-  Future<List<Mail>> getDrafts({int page = 1, int size = 10}) async {
+  Future<List<send_mail.SendMail>> getDrafts({int page = 1, int size = 10}) async {
     final result = await globalApiClient?.get('/mail/draft?page=$page&size=$size');
     if (result != null && result.statusCode == 200) {
-      final List<Mail> decryptedDrafts = [];
+      final List<send_mail.SendMail> decryptedDrafts = [];
       final drafts = result.data["draft_mails"];
 
       for (var draft in (drafts ?? [])) {
-        final decryptedDraft = await Mail.decrypt(
-            draft["mail"] as Map<String, dynamic>, encryptionService!);
-            decryptedDraft.read = true;
+        final decryptedDraft = await send_mail.SendMail.decrypt(
+            draft as Map<String, dynamic>, encryptionService!);
+            decryptedDraft.mail!.read = true;
         decryptedDrafts.add(decryptedDraft);
       }
       return decryptedDrafts;

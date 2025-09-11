@@ -4,6 +4,7 @@ import 'package:equatable/equatable.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:mail/models/mail/mail.dart';
 import 'package:mail/services/mail_service.dart';
+import 'package:mail/models/send_mail/send_mail.dart' as send_mail;
 
 part 'mail_event.dart';
 part 'mail_state.dart';
@@ -28,7 +29,7 @@ class MailBloc extends HydratedBloc<MailEvent, MailState> {
     if (json["mails"] != null) {
       return MailLoaded(
         (json["mails"] as List).map((e) => Mail.fromJson(e)).toList(),
-        drafts: (json["drafts"] as List).map((e) => Mail.fromJson(e)).toList(),
+        drafts: (json["drafts"] as List).map((e) => send_mail.SendMail.fromJson(e)).toList(),
       );
     }
     return MailInitial();

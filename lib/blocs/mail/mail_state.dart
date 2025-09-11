@@ -2,12 +2,12 @@ part of 'mail_bloc.dart';
 
 sealed class MailState extends Equatable {
   final List<Mail>? mails;
-  final List<Mail>? drafts;
+  final List<send_mail.SendMail>? drafts;
   final List<String> readMails;
   final List<String> unreadMails;
   final DateTime? latestSync;
   MailState(this.mails,
-      {this.latestSync, List<String>? readMails, List<String>? unreadMails, List<Mail>? drafts})
+      {this.latestSync, List<String>? readMails, List<String>? unreadMails, List<send_mail.SendMail>? drafts})
       : readMails = readMails ?? [],
         unreadMails = unreadMails ?? [],
         drafts = drafts ?? [];
