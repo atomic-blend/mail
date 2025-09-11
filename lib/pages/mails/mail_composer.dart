@@ -94,9 +94,7 @@ class _MailComposerState extends ResponsiveState<MailComposer> {
                   ),
                   SizedBox(height: $constants.insets.xs),
                   _buildPaddedDivider(),
-                  SizedBox(height: $constants.insets.xs),
                   _buildEmailFields("To", toController),
-                  SizedBox(height: $constants.insets.xs),
                   _buildPaddedDivider(),
                   _buildEmailFields("From", null, enabled: false, value: from, onTap: () {
                     // _showFromSelector();
@@ -141,10 +139,13 @@ class _MailComposerState extends ResponsiveState<MailComposer> {
           }
         },
         child: AppTextFormField(
-          labelText: label,
+          height: 25,
+          labelText: "$label:",
+          rowLayout: true,
+          labelStyle: getTextTheme(context).bodyMedium!.copyWith(color: Colors.grey),
           controller: controller,
           value: value,
-          backgroundColor: getTheme(context).surface,
+          backgroundColor: null,
           ),
       ),
     );
