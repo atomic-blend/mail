@@ -60,10 +60,18 @@ class MailService {
     }
   }
 
-  Future<List<Mail>> getDrafts() async {
-    final result = await globalApiClient?.get('/mail/draft');
+  Future<List<Mail>> getDrafts({int page = 1, int size = 10}) async {
+    final result = await globalApiClient?.get('/mail/draft?page=$page&size=$size');
     if (result != null && result.statusCode == 200) {
-      return result.data['drafts'].map((e) => Mail.decrypt(e, encryptionService!)).toList();
+      final List<Mail> decryptedDrafts = [];
+      final drafts = result.data["draft_mails"];
+
+      for (var draft in (drafts ?? [])) {
+        final decryptedDraft = await Mail.decrypt(
+            draft["mail"] as Map<String, dynamic>, encryptionService!);
+        decryptedDrafts.add(decryptedDraft);
+      }
+      return decryptedDrafts;
     } else {
       throw Exception('Failed to get drafts');
     }

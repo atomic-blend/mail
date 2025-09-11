@@ -2,8 +2,11 @@ import 'package:ab_shared/blocs/auth/auth.bloc.dart';
 import 'package:ab_shared/components/app/ab_navbar.dart';
 import 'package:mail/blocs/app/app.bloc.dart';
 import 'package:mail/i18n/strings.g.dart';
-import 'package:mail/pages/mails/mail.dart';
+import 'package:mail/pages/mails/filtered_mail.dart';
 import 'package:mail/pages/mails/mail_composer.dart';
+import 'package:mail/pages/mails/views/all_mail.dart';
+import 'package:mail/pages/mails/views/drafts.dart';
+import 'package:mail/pages/mails/views/inbox.dart';
 import 'package:mail/pages/more/more.dart';
 import 'package:mail/services/sync.service.dart';
 import 'package:ab_shared/utils/shortcuts.dart';
@@ -26,7 +29,21 @@ class NavConstants {
               icon: LineAwesome.envelope,
               cupertinoIcon: CupertinoIcons.envelope,
               label: "Inbox",
-              body: MailScreen(),
+              body: InboxScreen(),
+            ),
+            NavigationItem(
+              key: Key("drafts"),
+              icon: LineAwesome.envelope,
+              cupertinoIcon: CupertinoIcons.envelope,
+              label: "Drafts",
+              body: DraftScreen(),
+            ),
+            NavigationItem(
+              key: Key("all"),
+              icon: LineAwesome.envelope_open_solid,
+              cupertinoIcon: CupertinoIcons.envelope_open_fill,
+              label: "All",
+              body: AllMailScreen(),
             ),
           ],
         ),
@@ -57,7 +74,7 @@ class NavConstants {
           icon: LineAwesome.envelope,
           cupertinoIcon: CupertinoIcons.envelope,
           label: "Mail",
-          body: MailScreen(),
+          body: AllMailScreen(),
           mainSecondaryKey: "inbox",
           appBar: AppBar(
             key: const Key("mail"),
