@@ -26,3 +26,23 @@ final class SendMail extends MailEvent {
   const SendMail(this.mail);
   final Mail mail;
 }
+
+final class SaveDraft extends MailEvent {
+  const SaveDraft(this.mail);
+  final Mail mail;
+}
+
+final class GetDrafts extends MailEvent {
+  const GetDrafts();
+}
+
+final class DeleteDraft extends MailEvent {
+  const DeleteDraft(this.draftId);
+  final String draftId;
+}
+
+final class UpdateDraft extends MailEvent {
+  const UpdateDraft(this.mail, this.draftId);
+  final String draftId;
+  final Mail mail;
+}
