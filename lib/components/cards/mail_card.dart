@@ -5,7 +5,6 @@ import 'package:ab_shared/utils/shortcuts.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:mail/blocs/mail/mail_bloc.dart';
 import 'package:mail/components/avatars/mail_user_avatar.dart';
 import 'package:mail/models/mail/mail.dart';
 import 'package:mail/pages/mails/mail_composer.dart';
