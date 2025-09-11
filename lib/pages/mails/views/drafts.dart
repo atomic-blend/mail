@@ -13,7 +13,7 @@ class DraftScreen extends StatefulWidget {
 class _DraftScreenState extends State<DraftScreen> {
   @override
   void initState() {
-    context.read<MailBloc>().add(GetDrafts());
+    context.read<MailBloc>().add(const LoadMails());
     super.initState();
   }
   @override

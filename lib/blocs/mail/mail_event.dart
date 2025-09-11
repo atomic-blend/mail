@@ -32,10 +32,6 @@ final class SaveDraft extends MailEvent {
   final Mail mail;
 }
 
-final class GetDrafts extends MailEvent {
-  const GetDrafts();
-}
-
 final class DeleteDraft extends MailEvent {
   const DeleteDraft(this.draftId);
   final String draftId;
