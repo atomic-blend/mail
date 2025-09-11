@@ -36,7 +36,6 @@ class _MailComposerState extends ResponsiveState<MailComposer> {
     if (widget.mail?.mail != null) {
       subjectController.text = widget.mail!.mail!.getHeader("Subject") ?? "";
       to = List<String>.from(widget.mail!.mail!.getHeader("To") ?? []);
-      toController.text = to?.join(", ") ?? "";
       from = widget.mail!.mail!.getHeader("From") ?? "";
       editorState = EditorState(document: htmlToDocument(widget.mail!.mail!.htmlContent ?? ""));
     }
@@ -94,7 +93,7 @@ class _MailComposerState extends ResponsiveState<MailComposer> {
                   ),
                   SizedBox(height: $constants.insets.xs),
                   _buildPaddedDivider(),
-                  _buildEmailFields("To", toController),
+                  _buildToField(toController, to),
                   _buildPaddedDivider(),
                   _buildEmailFields("From", null, enabled: false, value: from, onTap: () {
                     // _showFromSelector();
@@ -147,6 +146,80 @@ class _MailComposerState extends ResponsiveState<MailComposer> {
           value: value,
           backgroundColor: null,
           ),
+      ),
+    );
+  }
+
+  Widget _buildToField(TextEditingController? controller, List<String>? to, {String? value, bool? enabled = true, VoidCallback? onTap,}) {
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: $constants.insets.sm),
+      child: 
+      Column(
+        children: [
+          if (to != null && to.isNotEmpty) 
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: $constants.insets.xl),
+              child: Wrap(
+                children: [
+                 ...to.map((to) => Padding(
+                   padding: EdgeInsets.symmetric(horizontal: $constants.insets.xs, vertical: $constants.insets.xxs),
+                   child: Container(
+                        padding: EdgeInsets.symmetric(horizontal: $constants.insets.sm),
+                        decoration: BoxDecoration(
+                          color: Colors.grey.shade200,
+                          borderRadius: BorderRadius.circular($constants.insets.sm),
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text(to),
+                            SizedBox(width: $constants.insets.xs),
+                            GestureDetector(child: Icon(CupertinoIcons.xmark_circle_fill, size: 15,), onTap: () {
+                              setState(() {
+                                this.to?.remove(to);
+                              });
+                            },),
+                          ],
+                        ),
+                      ),
+                 )),
+                ],
+              ),
+            ),
+          GestureDetector(
+            onTap: () {
+              if (onTap != null && enabled == false) {
+                onTap();
+              }
+            },
+            child: AppTextFormField(
+              height: 25,
+              labelText: "To:",
+              rowLayout: true,
+              labelStyle: getTextTheme(context).bodyMedium!.copyWith(color: Colors.grey),
+              controller: controller,
+              value: value,
+              backgroundColor: null,
+              onChange: () {
+                // detect spaces in the controller text and add them to the to list + clear the controller text
+                final spaces = controller?.text.split(" ");
+                if (spaces!.length > 1) {
+                  setState(() {
+                    to?.add(spaces.first);
+                controller?.clear();  
+                  });
+                }
+              },
+              onSubmitted: () {
+                // store the email to the list + clear the controller text when the user presses enter
+                setState(() {
+                  to?.add(controller?.text ?? "");
+                  controller?.clear();
+                }); 
+              },
+              ),
+          ),
+        ],
       ),
     );
   }
