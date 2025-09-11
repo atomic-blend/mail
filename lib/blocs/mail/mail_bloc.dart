@@ -52,7 +52,7 @@ class MailBloc extends HydratedBloc<MailEvent, MailState> {
         ));
     try {
       final mails = await _mailService.getAllMails();
-      emit(MailLoaded(mails));
+      emit(MailLoaded(mails, drafts: prevState.drafts, latestSync: prevState.latestSync, readMails: prevState.readMails, unreadMails: prevState.unreadMails,));
     } catch (e) {
       emit(MailLoadingError(prevState.mails ?? [], e.toString()));
     }

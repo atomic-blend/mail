@@ -69,6 +69,7 @@ class MailService {
       for (var draft in (drafts ?? [])) {
         final decryptedDraft = await Mail.decrypt(
             draft["mail"] as Map<String, dynamic>, encryptionService!);
+            decryptedDraft.read = true;
         decryptedDrafts.add(decryptedDraft);
       }
       return decryptedDrafts;
