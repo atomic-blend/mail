@@ -35,8 +35,6 @@ class _FilteredMailScreenState extends State<FilteredMailScreen> {
       if (widget.drafts ?? false) {
         filteredMails = widget.filterFunction(mailState.drafts);
       }
-  print(mailState.drafts);
-      print(filteredMails);
 
       if (filteredMails.isEmpty) {
         return RefreshIndicator.adaptive(
@@ -108,10 +106,13 @@ class _FilteredMailScreenState extends State<FilteredMailScreen> {
                 ),
               ),
               SizedBox(height: $constants.insets.xxs),
-              ...filteredMails.map((mail) => MailCard(
-                draft: widget.drafts == true ? mail  : null,
-                    mail: widget.drafts != true ? mail  : null,
-                  ))
+              ...filteredMails.map((mail) => Padding(
+                padding: EdgeInsets.only(bottom: $constants.insets.xs),
+                child: MailCard(
+                  draft: widget.drafts == true ? mail  : null,
+                      mail: widget.drafts != true ? mail  : null,
+                    ),
+              ))
             ],
           ),
         );
