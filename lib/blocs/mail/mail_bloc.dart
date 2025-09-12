@@ -23,6 +23,8 @@ class MailBloc extends HydratedBloc<MailEvent, MailState> {
     on<UpdateDraft>(_onUpdateDraft);
     on<ArchiveMail>(_onArchiveMail);
     on<UnarchiveMail>(_onUnarchiveMail);
+    on<TrashMail>(_onTrashMail);
+    on<UntrashMail>(_onUntrashMail);
   }
 
   @override
@@ -89,6 +91,8 @@ class MailBloc extends HydratedBloc<MailEvent, MailState> {
         unreadMailIds: state.unreadMails,
         archivedMailIds: state.archivedMails,
         unarchivedMailIds: state.unarchivedMails,
+        trashedMailIds: state.trashedMails,
+        untrashedMailIds: state.untrashedMails,
       );
       if (result.success) {
         state.readMails.clear();
@@ -174,6 +178,36 @@ class MailBloc extends HydratedBloc<MailEvent, MailState> {
       add(SyncMailActions());
     } catch (e) {
       emit(MailState.transformError(MailUnarchiveError.new, prevState, e.toString()));
+    }
+  }
+
+  FutureOr<void> _onTrashMail(TrashMail event, Emitter<MailState> emit) async {
+    final prevState = state;
+    try {
+      if (prevState.trashedMails.contains(event.mailId)) {
+        return;
+      }
+      prevState.untrashedMails.remove(event.mailId);
+      prevState.trashedMails.add(event.mailId);
+      emit(MailState.transform(MailTrashSuccess.new, prevState));
+      add(SyncMailActions());
+    } catch (e) {
+      emit(MailState.transformError(MailTrashError.new, prevState, e.toString()));
+    }
+  }
+
+  FutureOr<void> _onUntrashMail(UntrashMail event, Emitter<MailState> emit) async {
+    final prevState = state;
+    try {
+      if (prevState.untrashedMails.contains(event.mailId)) {
+        return;
+      }
+      prevState.trashedMails.remove(event.mailId);
+      prevState.untrashedMails.add(event.mailId);
+      emit(MailState.transform(MailUntrashSuccess.new, prevState));
+      add(SyncMailActions());
+    } catch (e) {
+      emit(MailState.transformError(MailUntrashError.new, prevState, e.toString()));
     }
   }
 }

@@ -52,3 +52,13 @@ final class UnarchiveMail extends MailEvent {
   const UnarchiveMail(this.mailId);
   final String mailId;
 }
+
+final class TrashMail extends MailEvent {
+  const TrashMail(this.mailId);
+  final String mailId;
+}
+
+final class UntrashMail extends MailEvent {
+  const UntrashMail(this.mailId);
+  final String mailId;
+}
