@@ -31,11 +31,15 @@ class MailService {
 
   Future<MailSyncResult> syncMailActions(
       {required List<String> readMailIds,
-      required List<String> unreadMailIds}) async {
+      required List<String> unreadMailIds,
+      required List<String> archivedMailIds,
+      required List<String> unarchivedMailIds}) async {
     try {
       await globalApiClient?.put('/mail/actions', data: {
         'read': readMailIds,
         'unread': unreadMailIds,
+        'archived': archivedMailIds,
+        'unarchived': unarchivedMailIds,
       });
       return MailSyncResult(success: true);
     } catch (e) {
