@@ -203,6 +203,7 @@ class MailDetailScreenState extends ResponsiveState<MailDetailScreen> {
                           } else {
                             context.read<MailBloc>().add(UntrashMail(mail.id!));
                           }
+                          Navigator.of(context).pop();
                         },
                         icon: mail.trashed == true
                             ? Icon(CupertinoIcons.trash_slash)

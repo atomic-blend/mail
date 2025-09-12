@@ -42,7 +42,8 @@ class MailCard extends StatelessWidget {
           )),
           child: SlidableAction(
             onPressed: (context) {
-              showDialog(
+              if (draft != null) {
+                showDialog(
                   context: context,
                   builder: (context) => ABModal(
                         title: "Delete draft",
@@ -51,18 +52,21 @@ class MailCard extends StatelessWidget {
                         warning:
                             "This action cannot be undone.",
                         onConfirm: () {
-                          if (draft != null) {
                             onDelete?.call(draft!.id!);
-                          } else {
-                            onDelete?.call(mail.id!);
-                          }
                           Navigator.of(context).pop();
                         },
                       ));
+              } else {
+                if (mail.trashed != true) {
+                  context.read<MailBloc>().add(TrashMail(mail.id!));
+                } else {
+                  context.read<MailBloc>().add(UntrashMail(mail.id!));
+                }
+              }
             },
             backgroundColor: getTheme(context).error,
             foregroundColor: Colors.white,
-            icon: CupertinoIcons.delete,
+            icon: draft != null ? CupertinoIcons.delete : mail.trashed != true ? CupertinoIcons.delete : CupertinoIcons.trash_slash,
             borderRadius: BorderRadius.circular(
               $constants.corners.sm,
             ),
@@ -95,7 +99,7 @@ class MailCard extends StatelessWidget {
               $constants.corners.sm,
             ),
           ),
-        )
+        ),
       ]),
       child: GestureDetector(
         onTap: () async {
