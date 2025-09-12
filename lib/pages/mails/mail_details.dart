@@ -194,6 +194,20 @@ class MailDetailScreenState extends ResponsiveState<MailDetailScreen> {
                             ? Icon(CupertinoIcons.tray_arrow_down)
                             : Icon(CupertinoIcons.archivebox),
                       ),
+                      IconButton(
+                        onPressed: () {
+                          if (mail.trashed != true) {
+                            context
+                                .read<MailBloc>()
+                                .add(TrashMail(mail.id!));
+                          } else {
+                            context.read<MailBloc>().add(UntrashMail(mail.id!));
+                          }
+                        },
+                        icon: mail.trashed == true
+                            ? Icon(CupertinoIcons.trash_slash)
+                            : Icon(CupertinoIcons.trash),
+                      ),
                     ],
                   )),
             ),

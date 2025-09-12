@@ -7,6 +7,7 @@ import 'package:mail/pages/mails/views/all_mail.dart';
 import 'package:mail/pages/mails/views/archive.dart';
 import 'package:mail/pages/mails/views/drafts.dart';
 import 'package:mail/pages/mails/views/inbox.dart';
+import 'package:mail/pages/mails/views/trashed.dart';
 import 'package:mail/pages/more/more.dart';
 import 'package:mail/services/sync.service.dart';
 import 'package:ab_shared/utils/shortcuts.dart';
@@ -44,6 +45,13 @@ class NavConstants {
               cupertinoIcon: CupertinoIcons.archivebox,
               label: "Archive",
               body: ArchiveScreen(),
+            ),
+            NavigationItem(
+              key: Key("trashed"),
+              icon: LineAwesome.trash_solid,
+              cupertinoIcon: CupertinoIcons.bin_xmark_fill,
+              label: "Trashed",
+              body: TrashedScreen(),
             ),
             NavigationItem(
               key: Key("all"),
