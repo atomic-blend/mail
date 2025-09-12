@@ -23,6 +23,9 @@ _$MailImpl _$$MailImplFromJson(Map<String, dynamic> json) => _$MailImpl(
       rejected: json['rejected'] as bool?,
       rewriteSubject: json['rewriteSubject'] as bool?,
       read: json['read'] as bool?,
+      trashedAt: json['trashedAt'] == null
+          ? null
+          : DateTime.parse(json['trashedAt'] as String),
       createdAt: json['createdAt'] == null
           ? null
           : DateTime.parse(json['createdAt'] as String),
@@ -45,6 +48,7 @@ Map<String, dynamic> _$$MailImplToJson(_$MailImpl instance) =>
       'rejected': instance.rejected,
       'rewriteSubject': instance.rewriteSubject,
       'read': instance.read,
+      'trashedAt': instance.trashedAt?.toIso8601String(),
       'createdAt': instance.createdAt?.toIso8601String(),
       'updatedAt': instance.updatedAt?.toIso8601String(),
     };
