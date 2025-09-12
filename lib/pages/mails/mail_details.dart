@@ -161,8 +161,9 @@ class MailDetailScreenState extends ResponsiveState<MailDetailScreen> {
                   padding: EdgeInsets.symmetric(
                     horizontal: $constants.insets.sm,
                   ),
-                  height: 50,
+                  height: 60,
                   child: Row(
+                    spacing: $constants.insets.xs,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       IconButton(
@@ -178,6 +179,20 @@ class MailDetailScreenState extends ResponsiveState<MailDetailScreen> {
                         icon: mail.read == true
                             ? Icon(CupertinoIcons.envelope_open)
                             : Icon(CupertinoIcons.envelope),
+                      ),
+                      IconButton(
+                        onPressed: () {
+                          if (mail.archived != true) {
+                            context
+                                .read<MailBloc>()
+                                .add(ArchiveMail(mail.id!));
+                          } else {
+                            context.read<MailBloc>().add(UnarchiveMail(mail.id!));
+                          }
+                        },
+                        icon: mail.archived == true
+                            ? Icon(CupertinoIcons.archivebox_fill)
+                            : Icon(CupertinoIcons.archivebox),
                       ),
                     ],
                   )),
