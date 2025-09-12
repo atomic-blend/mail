@@ -35,6 +35,7 @@ class Mail with _$Mail {
     bool? rejected,
     bool? rewriteSubject,
     bool? read,
+    DateTime? trashedAt,
     DateTime? createdAt,
     DateTime? updatedAt,
   }) = _Mail;
@@ -51,6 +52,7 @@ class Mail with _$Mail {
     'greylisted',
     'rejected',
     'rewriteSubject',
+    'trashedAt',
     'createdAt',
     'updatedAt',
   ];
@@ -59,7 +61,7 @@ class Mail with _$Mail {
 
   @override
   String toString() {
-    return 'Mail { id: $id, userId: $userId, headers: $headers, textContent: $textContent, htmlContent: $htmlContent, attachments: $attachments, archived: $archived, trashed: $trashed, greylisted: $greylisted, rejected: $rejected, rewriteSubject: $rewriteSubject, createdAt: $createdAt, updatedAt: $updatedAt }';
+    return 'Mail { id: $id, userId: $userId, headers: $headers, textContent: $textContent, htmlContent: $htmlContent, attachments: $attachments, archived: $archived, trashed: $trashed, trashedAt: $trashedAt, greylisted: $greylisted, rejected: $rejected, rewriteSubject: $rewriteSubject, createdAt: $createdAt, updatedAt: $updatedAt }';
   }
 
   Future<Map<String, dynamic>> encrypt(
@@ -82,6 +84,7 @@ class Mail with _$Mail {
       'greylisted': greylisted,
       'rejected': rejected,
       'rewriteSubject': rewriteSubject,
+      'trashedAt': trashedAt?.toIso8601String(),
       'createdAt': createdAt?.toIso8601String(),
       'updatedAt': updatedAt?.toIso8601String(),
     };
