@@ -191,7 +191,7 @@ class MailDetailScreenState extends ResponsiveState<MailDetailScreen> {
                           }
                         },
                         icon: mail.archived == true
-                            ? Icon(CupertinoIcons.archivebox_fill)
+                            ? Icon(CupertinoIcons.tray_arrow_down)
                             : Icon(CupertinoIcons.archivebox),
                       ),
                     ],

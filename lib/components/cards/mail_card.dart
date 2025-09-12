@@ -90,7 +90,7 @@ class MailCard extends StatelessWidget {
             },
             backgroundColor: getTheme(context).tertiary,
             foregroundColor: Colors.white,
-            icon: CupertinoIcons.archivebox,
+            icon: mail.archived == true ? CupertinoIcons.tray_arrow_down : CupertinoIcons.archivebox,
             borderRadius: BorderRadius.circular(
               $constants.corners.sm,
             ),
