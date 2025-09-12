@@ -42,3 +42,13 @@ final class UpdateDraft extends MailEvent {
   final String draftId;
   final Mail mail;
 }
+
+final class ArchiveMail extends MailEvent {
+  const ArchiveMail(this.mailId);
+  final String mailId;
+}
+
+final class UnarchiveMail extends MailEvent {
+  const UnarchiveMail(this.mailId);
+  final String mailId;
+}

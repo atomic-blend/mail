@@ -8,7 +8,7 @@ class InboxScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return FilteredMailScreen(
       filterFunction: (mails) {
-        return mails?.where((mail) => mail.read == false).toList() ?? [];
+        return mails?.where((mail) => mail.archived != true && mail.trashed != true).toList() ?? [];
       },
     );
   }

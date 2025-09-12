@@ -21,6 +21,8 @@ class MailBloc extends HydratedBloc<MailEvent, MailState> {
     on<SaveDraft>(_onSaveDraft);
     on<DeleteDraft>(_onDeleteDraft);
     on<UpdateDraft>(_onUpdateDraft);
+    on<ArchiveMail>(_onArchiveMail);
+    on<UnarchiveMail>(_onUnarchiveMail);
   }
 
   @override
@@ -98,6 +100,8 @@ class MailBloc extends HydratedBloc<MailEvent, MailState> {
       final MailSyncResult result = await _mailService.syncMailActions(
         readMailIds: state.readMails,
         unreadMailIds: state.unreadMails,
+        archivedMailIds: state.archivedMails,
+        unarchivedMailIds: state.unarchivedMails,
       );
       if (result.success) {
         state.readMails.clear();
@@ -154,6 +158,30 @@ class MailBloc extends HydratedBloc<MailEvent, MailState> {
       add(const LoadMails());
     } catch (e) {
       emit(MailUpdateDraftError(prevState.mails ?? [], e.toString(), latestSync: prevState.latestSync, readMails: prevState.readMails, unreadMails: prevState.unreadMails, drafts: prevState.drafts,));
+    }
+  }
+
+  FutureOr<void> _onArchiveMail(ArchiveMail event, Emitter<MailState> emit) async {
+    final prevState = state;
+    try {
+      prevState.unarchivedMails.remove(event.mailId);
+      prevState.archivedMails.add(event.mailId);
+      emit(MailArchiveSuccess(prevState.mails ?? [], latestSync: prevState.latestSync, readMails: prevState.readMails, unreadMails: prevState.unreadMails, drafts: prevState.drafts,));
+      add(SyncMailActions());
+    } catch (e) {
+      emit(MailArchiveError(prevState.mails ?? [], e.toString(), latestSync: prevState.latestSync, readMails: prevState.readMails, unreadMails: prevState.unreadMails, drafts: prevState.drafts,));
+    }
+  }
+
+  FutureOr<void> _onUnarchiveMail(UnarchiveMail event, Emitter<MailState> emit) async {
+    final prevState = state;
+    try {
+      prevState.archivedMails.remove(event.mailId);
+      prevState.unarchivedMails.add(event.mailId);
+      emit(MailUnarchiveSuccess(prevState.mails ?? [], latestSync: prevState.latestSync, readMails: prevState.readMails, unreadMails: prevState.unreadMails, drafts: prevState.drafts,));
+      add(SyncMailActions());
+    } catch (e) {
+      emit(MailUnarchiveError(prevState.mails ?? [], e.toString(), latestSync: prevState.latestSync, readMails: prevState.readMails, unreadMails: prevState.unreadMails, drafts: prevState.drafts,));
     }
   }
 }
