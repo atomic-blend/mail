@@ -18,6 +18,55 @@ sealed class MailState extends Equatable {
 
   @override
   List<Object?> get props => [mails, latestSync, readMails, unreadMails, drafts, archivedMails, unarchivedMails];
+
+  /// Transforms one MailState to another while preserving all properties
+  static T transform<T extends MailState>(T Function(List<Mail>? mails, {
+    DateTime? latestSync,
+    List<String>? readMails,
+    List<String>? unreadMails,
+    List<send_mail.SendMail>? drafts,
+    List<String>? archivedMails,
+    List<String>? unarchivedMails,
+  }) constructor, MailState fromState, {
+    List<Mail>? mails,
+    DateTime? latestSync,
+    List<String>? readMails,
+    List<String>? unreadMails,
+    List<send_mail.SendMail>? drafts,
+    List<String>? archivedMails,
+    List<String>? unarchivedMails,
+  }) {
+    return constructor(
+      mails ?? fromState.mails,
+      latestSync: latestSync ?? fromState.latestSync,
+      readMails: readMails ?? fromState.readMails,
+      unreadMails: unreadMails ?? fromState.unreadMails,
+      drafts: drafts ?? fromState.drafts,
+      archivedMails: archivedMails ?? fromState.archivedMails,
+      unarchivedMails: unarchivedMails ?? fromState.unarchivedMails,
+    );
+  }
+
+  /// Transforms one MailState to an error state while preserving all properties
+  static T transformError<T extends MailState>(T Function(List<Mail>? mails, String message, {
+    DateTime? latestSync,
+    List<String>? readMails,
+    List<String>? unreadMails,
+    List<send_mail.SendMail>? drafts,
+    List<String>? archivedMails,
+    List<String>? unarchivedMails,
+  }) constructor, MailState fromState, String message) {
+    return constructor(
+      fromState.mails,
+      message,
+      latestSync: fromState.latestSync,
+      readMails: fromState.readMails,
+      unreadMails: fromState.unreadMails,
+      drafts: fromState.drafts,
+      archivedMails: fromState.archivedMails,
+      unarchivedMails: fromState.unarchivedMails,
+    );
+  }
 }
 
 class MailInitial extends MailState {
@@ -25,12 +74,12 @@ class MailInitial extends MailState {
 }
 
 class MailLoading extends MailState {
-  MailLoading(List<Mail> super.mails,
+  MailLoading(super.mails,
       {super.readMails, super.unreadMails, super.latestSync, super.drafts, super.archivedMails, super.unarchivedMails});
 }
 
 class MailLoaded extends MailState {
-  MailLoaded(List<Mail> super.mails,
+  MailLoaded(super.mails,
       {super.readMails, super.unreadMails, super.latestSync, super.drafts, super.archivedMails, super.unarchivedMails});
 
   @override
