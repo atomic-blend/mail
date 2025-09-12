@@ -4,7 +4,9 @@ import 'package:ab_shared/utils/constants.dart';
 import 'package:ab_shared/utils/shortcuts.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:mail/blocs/mail/mail_bloc.dart';
 import 'package:mail/components/avatars/mail_user_avatar.dart';
 import 'package:mail/models/mail/mail.dart';
 import 'package:mail/pages/mails/mail_composer.dart';
@@ -26,46 +28,75 @@ class MailCard extends StatelessWidget {
     }
     return Slidable(
       endActionPane: ActionPane(motion: const ScrollMotion(), children: [
-         SizedBox(
-                            width: $constants.insets.xs,
-                          ),
-                          Theme(
-                            data: Theme.of(context).copyWith(
-                                outlinedButtonTheme:
-                                    const OutlinedButtonThemeData(
-                              style: ButtonStyle(
-                                  iconColor:
-                                      WidgetStatePropertyAll(Colors.white),
-                                  iconSize: WidgetStatePropertyAll(25)),
-                            )),
-                            child: SlidableAction(
-                              onPressed: (context) {
-                                showDialog(
-                                    context: context,
-                                    builder: (context) => ABModal(
-                                          title: "Delete draft",
-                                          description:
-                                              "Are you sure you want to delete this draft?",
-                                          warning:
-                                              "This action cannot be undone.",
-                                          onConfirm: () {
-                                            if (draft != null) {
-                                              onDelete?.call(draft!.id!);
-                                            } else {
-                                              onDelete?.call(mail.id!);
-                                            }
-                                            Navigator.of(context).pop();
-                                          },
-                                        ));
-                              },
-                              backgroundColor: getTheme(context).error,
-                              foregroundColor: Colors.white,
-                              icon: CupertinoIcons.delete,
-                              borderRadius: BorderRadius.circular(
-                                $constants.corners.sm,
-                              ),
-                            ),
-                          ),]),
+        SizedBox(
+          width: $constants.insets.xs,
+        ),
+        Theme(
+          data: Theme.of(context).copyWith(
+              outlinedButtonTheme:
+                  const OutlinedButtonThemeData(
+            style: ButtonStyle(
+                iconColor:
+                    WidgetStatePropertyAll(Colors.white),
+                iconSize: WidgetStatePropertyAll(25)),
+          )),
+          child: SlidableAction(
+            onPressed: (context) {
+              showDialog(
+                  context: context,
+                  builder: (context) => ABModal(
+                        title: "Delete draft",
+                        description:
+                            "Are you sure you want to delete this draft?",
+                        warning:
+                            "This action cannot be undone.",
+                        onConfirm: () {
+                          if (draft != null) {
+                            onDelete?.call(draft!.id!);
+                          } else {
+                            onDelete?.call(mail.id!);
+                          }
+                          Navigator.of(context).pop();
+                        },
+                      ));
+            },
+            backgroundColor: getTheme(context).error,
+            foregroundColor: Colors.white,
+            icon: CupertinoIcons.delete,
+            borderRadius: BorderRadius.circular(
+              $constants.corners.sm,
+            ),
+          ),
+        ),
+        SizedBox(
+          width: $constants.insets.xs,
+        ),
+        if (draft == null) Theme(
+          data: Theme.of(context).copyWith(
+              outlinedButtonTheme:
+                  const OutlinedButtonThemeData(
+            style: ButtonStyle(
+                iconColor:
+                    WidgetStatePropertyAll(Colors.white),
+                iconSize: WidgetStatePropertyAll(25)),
+          )),
+          child: SlidableAction(
+            onPressed: (context) {
+              if (mail.archived != true) {
+                context.read<MailBloc>().add(ArchiveMail(mail.id!));
+              } else {
+                context.read<MailBloc>().add(UnarchiveMail(mail.id!));
+              }
+            },
+            backgroundColor: getTheme(context).tertiary,
+            foregroundColor: Colors.white,
+            icon: CupertinoIcons.archivebox,
+            borderRadius: BorderRadius.circular(
+              $constants.corners.sm,
+            ),
+          ),
+        )
+      ]),
       child: GestureDetector(
         onTap: () async {
           if (draft == null) {
