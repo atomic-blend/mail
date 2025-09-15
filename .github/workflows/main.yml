@@ -191,7 +191,7 @@ jobs:
 
 
   build-docker-images:
-    needs: bump-version
+    needs: build-web-app-for-web
     runs-on: [self-hosted, Linux]
     strategy:
       matrix:
