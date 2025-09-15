@@ -15,7 +15,7 @@ env:
 
 jobs:
   test-coverage:
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, Linux]
 
     steps:
       - name: Checkout Repository
@@ -27,9 +27,6 @@ jobs:
           flutter-version: ${{ env.FLUTTER_VERSION }}
           channel: "stable"
           cache: true
-
-      - name: Install Dependencies
-        run: flutter pub get
 
       - name: Check for Local Path Dependencies
         run: |
@@ -44,6 +41,9 @@ jobs:
           else
             echo "✅ No local path dependencies found in pubspec.yaml"
           fi
+
+      - name: Install Dependencies
+        run: flutter pub get
 
       - name: Lint
         run: dart analyze --fatal-infos
