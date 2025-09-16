@@ -18,7 +18,8 @@ class MailCard extends StatelessWidget {
   final Mail? mail;
   final send_mail.SendMail? draft;
   final Function(String)? onDelete;
-  const MailCard({super.key, required this.mail, required this.draft, this.onDelete});
+  const MailCard(
+      {super.key, required this.mail, required this.draft, this.onDelete});
 
   @override
   Widget build(BuildContext context) {
@@ -33,29 +34,26 @@ class MailCard extends StatelessWidget {
         ),
         Theme(
           data: Theme.of(context).copyWith(
-              outlinedButtonTheme:
-                  const OutlinedButtonThemeData(
+              outlinedButtonTheme: const OutlinedButtonThemeData(
             style: ButtonStyle(
-                iconColor:
-                    WidgetStatePropertyAll(Colors.white),
+                iconColor: WidgetStatePropertyAll(Colors.white),
                 iconSize: WidgetStatePropertyAll(25)),
           )),
           child: SlidableAction(
             onPressed: (context) {
               if (draft != null) {
                 showDialog(
-                  context: context,
-                  builder: (context) => ABModal(
-                        title: "Delete draft",
-                        description:
-                            "Are you sure you want to delete this draft?",
-                        warning:
-                            "This action cannot be undone.",
-                        onConfirm: () {
+                    context: context,
+                    builder: (context) => ABModal(
+                          title: "Delete draft",
+                          description:
+                              "Are you sure you want to delete this draft?",
+                          warning: "This action cannot be undone.",
+                          onConfirm: () {
                             onDelete?.call(draft!.id!);
-                          Navigator.of(context).pop();
-                        },
-                      ));
+                            Navigator.of(context).pop();
+                          },
+                        ));
               } else {
                 if (mail.trashed != true) {
                   context.read<MailBloc>().add(TrashMail(mail.id!));
@@ -66,7 +64,11 @@ class MailCard extends StatelessWidget {
             },
             backgroundColor: getTheme(context).error,
             foregroundColor: Colors.white,
-            icon: draft != null ? CupertinoIcons.delete : mail.trashed != true ? CupertinoIcons.delete : CupertinoIcons.trash_slash,
+            icon: draft != null
+                ? CupertinoIcons.delete
+                : mail.trashed != true
+                    ? CupertinoIcons.delete
+                    : CupertinoIcons.trash_slash,
             borderRadius: BorderRadius.circular(
               $constants.corners.sm,
             ),
@@ -75,41 +77,42 @@ class MailCard extends StatelessWidget {
         SizedBox(
           width: $constants.insets.xs,
         ),
-        if (draft == null) Theme(
-          data: Theme.of(context).copyWith(
-              outlinedButtonTheme:
-                  const OutlinedButtonThemeData(
-            style: ButtonStyle(
-                iconColor:
-                    WidgetStatePropertyAll(Colors.white),
-                iconSize: WidgetStatePropertyAll(25)),
-          )),
-          child: SlidableAction(
-            onPressed: (context) {
-              if (mail.archived != true) {
-                context.read<MailBloc>().add(ArchiveMail(mail.id!));
-              } else {
-                context.read<MailBloc>().add(UnarchiveMail(mail.id!));
-              }
-            },
-            backgroundColor: getTheme(context).tertiary,
-            foregroundColor: Colors.white,
-            icon: mail.archived == true ? CupertinoIcons.tray_arrow_down : CupertinoIcons.archivebox,
-            borderRadius: BorderRadius.circular(
-              $constants.corners.sm,
+        if (draft == null)
+          Theme(
+            data: Theme.of(context).copyWith(
+                outlinedButtonTheme: const OutlinedButtonThemeData(
+              style: ButtonStyle(
+                  iconColor: WidgetStatePropertyAll(Colors.white),
+                  iconSize: WidgetStatePropertyAll(25)),
+            )),
+            child: SlidableAction(
+              onPressed: (context) {
+                if (mail.archived != true) {
+                  context.read<MailBloc>().add(ArchiveMail(mail.id!));
+                } else {
+                  context.read<MailBloc>().add(UnarchiveMail(mail.id!));
+                }
+              },
+              backgroundColor: getTheme(context).tertiary,
+              foregroundColor: Colors.white,
+              icon: mail.archived == true
+                  ? CupertinoIcons.tray_arrow_down
+                  : CupertinoIcons.archivebox,
+              borderRadius: BorderRadius.circular(
+                $constants.corners.sm,
+              ),
             ),
           ),
-        ),
       ]),
       child: GestureDetector(
         onTap: () async {
           if (draft == null) {
             await Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => MailDetailScreen(
-                    mail,
-                  )));
-          if (!context.mounted) return;
-          SyncService.sync(context);
+                builder: (context) => MailDetailScreen(
+                      mail,
+                    )));
+            if (!context.mounted) return;
+            SyncService.sync(context);
           } else {
             _openComposer(context);
           }
@@ -150,9 +153,14 @@ class MailCard extends StatelessWidget {
                   ),
                   SizedBox(height: $constants.insets.xxs),
                   Text(
-                    mail.textContent ?? mail.htmlContent ?? "No content",
+                    mail.htmlContent != null && mail.htmlContent != ""
+                        ? mail.htmlContent!
+                        : mail.textContent != null && mail.textContent != ""
+                            ? mail.textContent!
+                            : "No content",
                     style: getTextTheme(context).bodyMedium!.copyWith(
-                          fontWeight: mail.read != true ? FontWeight.bold : null,
+                          fontWeight:
+                              mail.read != true ? FontWeight.bold : null,
                         ),
                     overflow: TextOverflow.ellipsis,
                     textAlign: TextAlign.left,
@@ -178,31 +186,32 @@ class MailCard extends StatelessWidget {
     }
     return initials.toUpperCase();
   }
-  
+
   void _openComposer(BuildContext context) {
     if (isDesktop(context)) {
-              showDialog(
-                  context: context,
-                  builder: (context) => Dialog(
-                        child: SizedBox(
-                          height: getSize(context).height * 0.8,
-                          width: getSize(context).width * 0.8,
-                          child: ClipRRect(
-                            borderRadius:
-                                BorderRadius.circular($constants.corners.md),
-                            child: MailComposer(mail: draft),
-                          ),
-                        ),
-                      ));
-            } else {
-              showModalBottomSheet(
-                isScrollControlled: true,
-                context: context,
-                isDismissible: false,
-                enableDrag: false,
-                backgroundColor: Colors.transparent,
-                builder: (context) => SizedBox(height: getSize(context).height * 0.92, child: MailComposer(mail: draft)),
-              );
-            } 
+      showDialog(
+          context: context,
+          builder: (context) => Dialog(
+                child: SizedBox(
+                  height: getSize(context).height * 0.8,
+                  width: getSize(context).width * 0.8,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular($constants.corners.md),
+                    child: MailComposer(mail: draft),
+                  ),
+                ),
+              ));
+    } else {
+      showModalBottomSheet(
+        isScrollControlled: true,
+        context: context,
+        isDismissible: false,
+        enableDrag: false,
+        backgroundColor: Colors.transparent,
+        builder: (context) => SizedBox(
+            height: getSize(context).height * 0.92,
+            child: MailComposer(mail: draft)),
+      );
+    }
   }
 }
