@@ -204,9 +204,8 @@ class _OrganizeScreenState extends State<OrganizeScreen> {
           AutoSizeText(
             mail.getHeader("Subject"),
             maxLines: 1,
-            style: getTextTheme(context)
-                .headlineLarge!
-                .copyWith(fontWeight: mail.read != true ? FontWeight.bold : null),
+            style: getTextTheme(context).headlineLarge!.copyWith(
+                fontWeight: mail.read != true ? FontWeight.bold : null),
           ),
           SizedBox(height: $constants.insets.xs),
           _buildPeopleRow("From", mail.getHeader("From"), mail.read),
@@ -249,22 +248,18 @@ class _OrganizeScreenState extends State<OrganizeScreen> {
   }
 
   void _onArchive(Mail mail) {
-    print("archive");
     context.read<MailBloc>().add(ArchiveMail(mail.id!));
   }
 
   void _onTrash(Mail mail) {
     context.read<MailBloc>().add(TrashMail(mail.id!));
-    print("trash");
   }
 
   void _onRead(Mail mail) {
-    print("read");
     context.read<MailBloc>().add(MarkAsRead(mail.id!));
   }
 
   void _onMove(Mail mail) {
-    print("move");
     // context.read<MailBloc>().add(MoveToFolder(mail.id!));
   }
 }
