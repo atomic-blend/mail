@@ -62,3 +62,7 @@ final class UntrashMail extends MailEvent {
   const UntrashMail(this.mailId);
   final String mailId;
 }
+
+final class EmptyTrash extends MailEvent {
+  const EmptyTrash();
+}

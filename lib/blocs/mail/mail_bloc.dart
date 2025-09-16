@@ -25,6 +25,7 @@ class MailBloc extends HydratedBloc<MailEvent, MailState> {
     on<UnarchiveMail>(_onUnarchiveMail);
     on<TrashMail>(_onTrashMail);
     on<UntrashMail>(_onUntrashMail);
+    on<EmptyTrash>(_onEmptyTrash);
   }
 
   @override
@@ -208,6 +209,17 @@ class MailBloc extends HydratedBloc<MailEvent, MailState> {
       add(SyncMailActions());
     } catch (e) {
       emit(MailState.transformError(MailUntrashError.new, prevState, e.toString()));
+    }
+  }
+
+  FutureOr<void> _onEmptyTrash(EmptyTrash event, Emitter<MailState> emit) async {
+    final prevState = state;
+    try {
+      await _mailService.emptyTrash();
+      emit(MailState.transform(MailEmptyTrashSuccess.new, prevState));
+      add(const LoadMails());
+    } catch (e) {
+      emit(MailState.transformError(MailEmptyTrashError.new, prevState, e.toString()));
     }
   }
 }

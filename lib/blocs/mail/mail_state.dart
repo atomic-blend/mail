@@ -278,3 +278,20 @@ class MailUntrashError extends MailState {
   @override
   List<Object?> get props => [message, latestSync, readMails, unreadMails, drafts, archivedMails, unarchivedMails];
 }
+
+class MailEmptyTrashSuccess extends MailState {
+  MailEmptyTrashSuccess(super.mails,
+      {super.latestSync, super.readMails, super.unreadMails, super.drafts, super.archivedMails, super.unarchivedMails, super.trashedMails, super.untrashedMails});
+
+  @override
+  List<Object?> get props => [mails, latestSync, readMails, unreadMails, drafts, archivedMails, unarchivedMails];
+}
+
+class MailEmptyTrashError extends MailState { 
+  MailEmptyTrashError(super.mails, this.message,
+      {super.latestSync, super.readMails, super.unreadMails, super.drafts, super.archivedMails, super.unarchivedMails, super.trashedMails, super.untrashedMails});
+  final String message;
+
+  @override
+  List<Object?> get props => [message, latestSync, readMails, unreadMails, drafts, archivedMails, unarchivedMails];
+}
