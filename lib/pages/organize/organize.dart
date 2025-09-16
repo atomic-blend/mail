@@ -95,7 +95,7 @@ class _OrganizeScreenState extends State<OrganizeScreen> {
     return Column(
       children: [
         SizedBox(
-          height: getSize(context).height * 0.5,
+          height: getSize(context).height * 0.62,
           child: CardSwiper(
             isLoop: false,
             controller: cardSwiperController,
@@ -133,9 +133,7 @@ class _OrganizeScreenState extends State<OrganizeScreen> {
             },
           ),
         ),
-        SizedBox(
-          height: getSize(context).height * 0.08,
-        ),
+        SizedBox(height: $constants.insets.sm),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
