@@ -1,12 +1,16 @@
-import 'package:ab_shared/components/forms/search_bar.dart';
 import 'package:ab_shared/components/widgets/elevated_container.dart';
 import 'package:ab_shared/utils/constants.dart';
 import 'package:ab_shared/utils/shortcuts.dart';
+import 'package:appflowy_editor/appflowy_editor.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_card_swiper/flutter_card_swiper.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:mail/blocs/mail/mail_bloc.dart';
 import 'package:mail/models/mail/mail.dart';
+import 'package:mail/pages/mails/mail_details.dart';
 import 'package:mail/services/sync.service.dart';
 
 class OrganizeScreen extends StatefulWidget {
@@ -81,6 +85,87 @@ class _OrganizeScreenState extends State<OrganizeScreen> {
   }
 
   Widget _buildOrganizer(List<Mail> inboxMails) {
-    return Container();
+    final inboxCards = inboxMails.map((mail) => _buildMailCard(mail)).toList();
+    return Column(
+      children: [
+        SizedBox(
+          height: getSize(context).height * 0.5,
+          child: CardSwiper(
+            cardsCount: inboxCards.length,
+            cardBuilder:
+                (context, index, percentThresholdX, percentThresholdY) =>
+                    inboxCards[index],
+            onSwipe: (previousIndex, currentIndex, direction) {
+              if (direction == CardSwiperDirection.left) {
+                // archive
+                print("left");
+              } else if (direction == CardSwiperDirection.right) {
+                // skip (mark as read if not read)
+                print("right");
+              } else if (direction == CardSwiperDirection.top) {
+                // move
+                print("up");
+              } else if (direction == CardSwiperDirection.bottom) {
+                // trash
+                print("down");
+              } else if (direction == CardSwiperDirection.none) {
+                print("none");
+              }
+              return true;
+            },
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildMailCard(Mail mail) {
+    return ElevatedContainer(
+      padding: EdgeInsets.symmetric(
+          horizontal: $constants.insets.sm, vertical: $constants.insets.sm),
+      width: getSize(context).width * 0.9,
+      height: getSize(context).height * 0.5,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          AutoSizeText(
+            mail.getHeader("Subject"),
+            maxLines: 1,
+            style: getTextTheme(context)
+                .headlineLarge!
+                .copyWith(fontWeight: FontWeight.bold),
+          ),
+          SizedBox(height: $constants.insets.xs),
+          _buildPeopleRow("From", mail.getHeader("From"), mail.read),
+          _buildPeopleRow("To", mail.getHeader("To"), mail.read),
+          SizedBox(height: $constants.insets.xs),
+          Divider(),
+          SizedBox(height: $constants.insets.xs),
+          SizedBox(
+            height: getSize(context).height * 0.2,
+            child: mail.htmlContent != null && mail.htmlContent != "" ? Html(data: mail.htmlContent!,) : mail.textContent != null && mail.textContent != "" ? Text(mail.textContent!) : const SizedBox.shrink(),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildPeopleRow(String label, String value, bool? read) {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Text(
+          "$label: ",
+          style: getTextTheme(context).bodyMedium!.copyWith(color: Colors.grey),
+        ),
+        SizedBox(width: $constants.insets.xs),
+        Text(
+          value,
+          style: getTextTheme(context)
+              .bodyMedium!
+              .copyWith(fontWeight: read != true ? FontWeight.bold : null),
+        ),
+      ],
+    );
   }
 }

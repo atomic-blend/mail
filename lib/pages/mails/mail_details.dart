@@ -56,14 +56,18 @@ class MailDetailScreenState extends ResponsiveState<MailDetailScreen> {
                       Padding(
                         padding: EdgeInsets.symmetric(
                             horizontal: $constants.insets.sm),
-                        child: AutoSizeText(
-                          maxLines: 1,
-                          mail.getHeader("Subject"),
-                          overflow: TextOverflow.ellipsis,
-                          style: getTextTheme(context).displaySmall!.copyWith(
-                                fontWeight:
-                                    mail.read != true ? FontWeight.bold : null,
-                              ),
+                        child: SizedBox(
+                          width: getSize(context).width * 0.9,
+                          child: AutoSizeText(
+                            maxLines: 1,
+                            mail.getHeader("Subject"),
+                            overflow: TextOverflow.ellipsis,
+                            style: getTextTheme(context).displaySmall!.copyWith(
+                                  fontWeight: mail.read != true
+                                      ? FontWeight.bold
+                                      : null,
+                                ),
+                          ),
                         ),
                       ),
                       if (mail.read != true) ...[
@@ -183,11 +187,11 @@ class MailDetailScreenState extends ResponsiveState<MailDetailScreen> {
                       IconButton(
                         onPressed: () {
                           if (mail.archived != true) {
+                            context.read<MailBloc>().add(ArchiveMail(mail.id!));
+                          } else {
                             context
                                 .read<MailBloc>()
-                                .add(ArchiveMail(mail.id!));
-                          } else {
-                            context.read<MailBloc>().add(UnarchiveMail(mail.id!));
+                                .add(UnarchiveMail(mail.id!));
                           }
                         },
                         icon: mail.archived == true
@@ -197,9 +201,7 @@ class MailDetailScreenState extends ResponsiveState<MailDetailScreen> {
                       IconButton(
                         onPressed: () {
                           if (mail.trashed != true) {
-                            context
-                                .read<MailBloc>()
-                                .add(TrashMail(mail.id!));
+                            context.read<MailBloc>().add(TrashMail(mail.id!));
                           } else {
                             context.read<MailBloc>().add(UntrashMail(mail.id!));
                           }
