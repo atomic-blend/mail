@@ -12,13 +12,14 @@ import 'package:mail/services/sync.service.dart';
 class FilteredMailScreen extends StatefulWidget {
   final List<dynamic> Function(List<dynamic>? mails) filterFunction;
   final bool? drafts;
+  final Widget? header;
   final Function(String)? onDelete;
 
   const FilteredMailScreen({
     super.key,
     required this.filterFunction,
     this.drafts = false,
-    this.onDelete,
+    this.onDelete, this.header,
   });
 
   @override
@@ -106,6 +107,11 @@ class _FilteredMailScreenState extends State<FilteredMailScreen> {
                   child: ABSearchBar(controller: searchController),
                 ),
               ),
+                            if (widget.header != null) ...[
+                              widget.header!,
+                              SizedBox(height: $constants.insets.xxs),
+                            ],
+
               SizedBox(height: $constants.insets.xxs),
               ...filteredMails.map((mail) => Padding(
                 padding: EdgeInsets.only(bottom: $constants.insets.xs),
