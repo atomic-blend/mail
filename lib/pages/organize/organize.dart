@@ -98,22 +98,68 @@ class _OrganizeScreenState extends State<OrganizeScreen> {
             onSwipe: (previousIndex, currentIndex, direction) {
               if (direction == CardSwiperDirection.left) {
                 // archive
-                print("left");
+                _onArchive();
               } else if (direction == CardSwiperDirection.right) {
                 // skip (mark as read if not read)
-                print("right");
+                _onRead();
               } else if (direction == CardSwiperDirection.top) {
                 // move
-                print("up");
+                _onMove();
               } else if (direction == CardSwiperDirection.bottom) {
                 // trash
-                print("down");
+                _onTrash();
               } else if (direction == CardSwiperDirection.none) {
                 print("none");
               }
               return true;
             },
           ),
+        ),
+        SizedBox(
+          height: getSize(context).height * 0.08,
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            ElevatedContainer(
+              width: 70,
+              height: 70,
+              onTap: _onTrash,
+              borderRadius: $constants.corners.full,
+              child: Icon(CupertinoIcons.trash,
+                  size: 25, color: getTheme(context).error),
+            ),
+            ElevatedContainer(
+              width: 100,
+              height: 100,
+              onTap: _onArchive,
+              borderRadius: $constants.corners.full,
+              child: Icon(CupertinoIcons.archivebox,
+                  size: 35, color: Colors.grey.shade600),
+            ),
+            ElevatedContainer(
+              width: 100,
+              height: 100,
+              onTap: _onRead,
+              borderRadius: $constants.corners.full,
+              child: Icon(
+                CupertinoIcons.envelope_open,
+                size: 35,
+                color: getTheme(context).primary,
+              ),
+            ),
+            ElevatedContainer(
+              width: 70,
+              height: 70,
+              onTap: _onMove,
+              borderRadius: $constants.corners.full,
+              child: Icon(
+                CupertinoIcons.arrow_branch,
+                size: 25,
+                color: Colors.green,
+              ),
+            ),
+          ],
         ),
       ],
     );
@@ -143,7 +189,13 @@ class _OrganizeScreenState extends State<OrganizeScreen> {
           SizedBox(height: $constants.insets.xs),
           SizedBox(
             height: getSize(context).height * 0.2,
-            child: mail.htmlContent != null && mail.htmlContent != "" ? Html(data: mail.htmlContent!,) : mail.textContent != null && mail.textContent != "" ? Text(mail.textContent!) : const SizedBox.shrink(),
+            child: mail.htmlContent != null && mail.htmlContent != ""
+                ? Html(
+                    data: mail.htmlContent!,
+                  )
+                : mail.textContent != null && mail.textContent != ""
+                    ? Text(mail.textContent!)
+                    : const SizedBox.shrink(),
           ),
         ],
       ),
@@ -167,5 +219,21 @@ class _OrganizeScreenState extends State<OrganizeScreen> {
         ),
       ],
     );
+  }
+
+  void _onArchive() {
+    print("archive");
+  }
+
+  void _onTrash() {
+    print("trash");
+  }
+
+  void _onRead() {
+    print("read");
+  }
+
+  void _onMove() {
+    print("move");
   }
 }
