@@ -206,7 +206,7 @@ class _OrganizeScreenState extends State<OrganizeScreen> {
             maxLines: 1,
             style: getTextTheme(context)
                 .headlineLarge!
-                .copyWith(fontWeight: FontWeight.bold),
+                .copyWith(fontWeight: mail.read != true ? FontWeight.bold : null),
           ),
           SizedBox(height: $constants.insets.xs),
           _buildPeopleRow("From", mail.getHeader("From"), mail.read),
