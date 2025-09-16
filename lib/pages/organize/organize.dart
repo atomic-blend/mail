@@ -1,7 +1,6 @@
 import 'package:ab_shared/components/widgets/elevated_container.dart';
 import 'package:ab_shared/utils/constants.dart';
 import 'package:ab_shared/utils/shortcuts.dart';
-import 'package:appflowy_editor/appflowy_editor.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -10,7 +9,6 @@ import 'package:flutter_card_swiper/flutter_card_swiper.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:mail/blocs/mail/mail_bloc.dart';
 import 'package:mail/models/mail/mail.dart';
-import 'package:mail/pages/mails/mail_details.dart';
 import 'package:mail/services/sync.service.dart';
 
 class OrganizeScreen extends StatefulWidget {
@@ -21,15 +19,21 @@ class OrganizeScreen extends StatefulWidget {
 }
 
 class _OrganizeScreenState extends State<OrganizeScreen> {
+  final CardSwiperController cardSwiperController = CardSwiperController();
   final TextEditingController searchController = TextEditingController();
+  final List<String> organizedMails = [];
+  bool ended = false;
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<MailBloc, MailState>(builder: (context, mailState) {
       final inboxMails = mailState.mails
-              ?.where((mail) => mail.archived != true && mail.trashed != true)
+              ?.where((mail) =>
+                  mail.archived != true &&
+                  mail.trashed != true &&
+                  !organizedMails.contains(mail.id))
               .toList() ??
           [];
-      if (inboxMails.isEmpty) {
+      if (inboxMails.isEmpty || ended) {
         return _buildNothingToOrganize();
       }
       return _buildOrganizer(inboxMails);
@@ -85,33 +89,47 @@ class _OrganizeScreenState extends State<OrganizeScreen> {
   }
 
   Widget _buildOrganizer(List<Mail> inboxMails) {
-    final inboxCards = inboxMails.map((mail) => _buildMailCard(mail)).toList();
+    final inboxCards = inboxMails.map((mail) {
+      return _buildMailCard(mail);
+    }).toList();
     return Column(
       children: [
         SizedBox(
           height: getSize(context).height * 0.5,
           child: CardSwiper(
+            isLoop: false,
+            controller: cardSwiperController,
             cardsCount: inboxCards.length,
             cardBuilder:
                 (context, index, percentThresholdX, percentThresholdY) =>
                     inboxCards[index],
             onSwipe: (previousIndex, currentIndex, direction) {
+              if (direction == CardSwiperDirection.none) {
+                return false;
+              }
               if (direction == CardSwiperDirection.left) {
                 // archive
                 _onArchive();
+                cardSwiperController.swipe(CardSwiperDirection.left);
               } else if (direction == CardSwiperDirection.right) {
                 // skip (mark as read if not read)
                 _onRead();
+                cardSwiperController.swipe(CardSwiperDirection.right);
               } else if (direction == CardSwiperDirection.top) {
                 // move
                 _onMove();
+                cardSwiperController.swipe(CardSwiperDirection.top);
               } else if (direction == CardSwiperDirection.bottom) {
                 // trash
                 _onTrash();
-              } else if (direction == CardSwiperDirection.none) {
-                print("none");
+                cardSwiperController.swipe(CardSwiperDirection.bottom);
               }
               return true;
+            },
+            onEnd: () {
+              setState(() {
+                ended = true;
+              });
             },
           ),
         ),
@@ -124,7 +142,10 @@ class _OrganizeScreenState extends State<OrganizeScreen> {
             ElevatedContainer(
               width: 70,
               height: 70,
-              onTap: _onTrash,
+              onTap: () {
+                _onTrash();
+                cardSwiperController.swipe(CardSwiperDirection.bottom);
+              },
               borderRadius: $constants.corners.full,
               child: Icon(CupertinoIcons.trash,
                   size: 25, color: getTheme(context).error),
@@ -132,7 +153,10 @@ class _OrganizeScreenState extends State<OrganizeScreen> {
             ElevatedContainer(
               width: 100,
               height: 100,
-              onTap: _onArchive,
+              onTap: () {
+                _onArchive();
+                cardSwiperController.swipe(CardSwiperDirection.top);
+              },
               borderRadius: $constants.corners.full,
               child: Icon(CupertinoIcons.archivebox,
                   size: 35, color: Colors.grey.shade600),
@@ -140,7 +164,10 @@ class _OrganizeScreenState extends State<OrganizeScreen> {
             ElevatedContainer(
               width: 100,
               height: 100,
-              onTap: _onRead,
+              onTap: () {
+                _onRead();
+                cardSwiperController.swipe(CardSwiperDirection.right);
+              },
               borderRadius: $constants.corners.full,
               child: Icon(
                 CupertinoIcons.envelope_open,
@@ -151,7 +178,10 @@ class _OrganizeScreenState extends State<OrganizeScreen> {
             ElevatedContainer(
               width: 70,
               height: 70,
-              onTap: _onMove,
+              onTap: () {
+                _onMove();
+                cardSwiperController.swipe(CardSwiperDirection.left);
+              },
               borderRadius: $constants.corners.full,
               child: Icon(
                 CupertinoIcons.arrow_branch,
