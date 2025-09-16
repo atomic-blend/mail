@@ -99,6 +99,7 @@ class _OrganizeScreenState extends State<OrganizeScreen> {
           child: CardSwiper(
             isLoop: false,
             controller: cardSwiperController,
+            numberOfCardsDisplayed: inboxMails.length,
             cardsCount: inboxCards.length,
             cardBuilder:
                 (context, index, percentThresholdX, percentThresholdY) =>
@@ -107,22 +108,24 @@ class _OrganizeScreenState extends State<OrganizeScreen> {
               if (direction == CardSwiperDirection.none) {
                 return false;
               }
+              Mail? mail;
+              if (currentIndex != null) {
+                mail = inboxMails[currentIndex];
+              } else {
+                mail = inboxMails[0];
+              }
               if (direction == CardSwiperDirection.left) {
                 // archive
-                _onArchive();
-                cardSwiperController.swipe(CardSwiperDirection.left);
+                _onArchive(mail);
               } else if (direction == CardSwiperDirection.right) {
                 // skip (mark as read if not read)
-                _onRead();
-                cardSwiperController.swipe(CardSwiperDirection.right);
+                _onRead(mail);
               } else if (direction == CardSwiperDirection.top) {
                 // move
-                _onMove();
-                cardSwiperController.swipe(CardSwiperDirection.top);
+                _onMove(mail);
               } else if (direction == CardSwiperDirection.bottom) {
                 // trash
-                _onTrash();
-                cardSwiperController.swipe(CardSwiperDirection.bottom);
+                _onTrash(mail);
               }
               return true;
             },
@@ -141,7 +144,6 @@ class _OrganizeScreenState extends State<OrganizeScreen> {
               width: 70,
               height: 70,
               onTap: () {
-                _onTrash();
                 cardSwiperController.swipe(CardSwiperDirection.bottom);
               },
               borderRadius: $constants.corners.full,
@@ -152,8 +154,7 @@ class _OrganizeScreenState extends State<OrganizeScreen> {
               width: 100,
               height: 100,
               onTap: () {
-                _onArchive();
-                cardSwiperController.swipe(CardSwiperDirection.top);
+                cardSwiperController.swipe(CardSwiperDirection.left);
               },
               borderRadius: $constants.corners.full,
               child: Icon(CupertinoIcons.archivebox,
@@ -163,7 +164,6 @@ class _OrganizeScreenState extends State<OrganizeScreen> {
               width: 100,
               height: 100,
               onTap: () {
-                _onRead();
                 cardSwiperController.swipe(CardSwiperDirection.right);
               },
               borderRadius: $constants.corners.full,
@@ -177,8 +177,7 @@ class _OrganizeScreenState extends State<OrganizeScreen> {
               width: 70,
               height: 70,
               onTap: () {
-                _onMove();
-                cardSwiperController.swipe(CardSwiperDirection.left);
+                cardSwiperController.swipe(CardSwiperDirection.top);
               },
               borderRadius: $constants.corners.full,
               child: Icon(
@@ -249,19 +248,23 @@ class _OrganizeScreenState extends State<OrganizeScreen> {
     );
   }
 
-  void _onArchive() {
+  void _onArchive(Mail mail) {
     print("archive");
+    context.read<MailBloc>().add(ArchiveMail(mail.id!));
   }
 
-  void _onTrash() {
+  void _onTrash(Mail mail) {
+    context.read<MailBloc>().add(TrashMail(mail.id!));
     print("trash");
   }
 
-  void _onRead() {
+  void _onRead(Mail mail) {
     print("read");
+    context.read<MailBloc>().add(MarkAsRead(mail.id!));
   }
 
-  void _onMove() {
+  void _onMove(Mail mail) {
     print("move");
+    // context.read<MailBloc>().add(MoveToFolder(mail.id!));
   }
 }
