@@ -40,7 +40,8 @@ class _MailComposerState extends ResponsiveState<MailComposer> {
       subjectController.text = widget.mail!.mail!.getHeader("Subject") ?? "";
       to = List<String>.from(widget.mail!.mail!.getHeader("To") ?? []);
       from = widget.mail!.mail!.getHeader("From") ?? "";
-      editorState = FleatherController(document: parchmentHtml.decode(widget.mail!.mail!.textContent ?? ""));
+      editorState = FleatherController(
+          document: parchmentHtml.decode(widget.mail!.mail!.textContent ?? ""));
     } else {
       editorState = FleatherController(document: ParchmentDocument());
     }
@@ -66,64 +67,110 @@ class _MailComposerState extends ResponsiveState<MailComposer> {
           top: $constants.insets.xs,
         ),
         width: double.infinity,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.start,
+        child: Stack(
           children: [
-            IconButton(
-              onPressed: () {
-                _draftAndPop(context);
-              },
-              icon: Icon(CupertinoIcons.chevron_back),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                IconButton(
+                  onPressed: () {
+                    _draftAndPop(context);
+                  },
+                  icon: Icon(CupertinoIcons.chevron_back),
+                ),
+                SizedBox(height: $constants.insets.xs),
+                Padding(
+                  padding:
+                      EdgeInsets.symmetric(horizontal: $constants.insets.sm),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        "New Mail",
+                        style: getTextTheme(context)
+                            .displaySmall!
+                            .copyWith(fontWeight: FontWeight.bold),
+                      ),
+                      IconButton(
+                        onPressed: () {
+                          _sendMail();
+                        },
+                        icon: Icon(
+                          CupertinoIcons.arrow_up_circle_fill,
+                          size: 30,
+                          color: getTheme(context).primary,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(height: $constants.insets.xs),
+                _buildPaddedDivider(),
+                _buildToField(toController, to),
+                _buildPaddedDivider(),
+                _buildEmailFields(
+                  "From",
+                  null,
+                  enabled: false,
+                  value: from,
+                  onTap: () {
+                    // _showFromSelector();
+                  },
+                ),
+                _buildPaddedDivider(),
+                _buildEmailFields("Subject", subjectController),
+                _buildPaddedDivider(),
+                SizedBox(height: $constants.insets.xs),
+                SizedBox(
+                  width: double.infinity,
+                  height: getSize(context).height * 0.55,
+                  child: _getEditor(),
+                ),
+              ],
             ),
-            SizedBox(height: $constants.insets.xs),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: $constants.insets.sm),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "New Mail",
-                    style: getTextTheme(context)
-                        .displaySmall!
-                        .copyWith(fontWeight: FontWeight.bold),
-                  ),
-                  IconButton(
-                    onPressed: () {
-                      _sendMail();
-                    },
-                    icon: Icon(
-                      CupertinoIcons.arrow_up_circle_fill,
-                      size: 30,
-                      color: getTheme(context).primary,
-                    ),
-                  ),
-                ],
+            Positioned(
+              bottom: MediaQuery.of(context).viewInsets.bottom == 0
+                  ? $constants.insets.lg
+                  : MediaQuery.of(context).viewInsets.bottom +
+                      $constants.insets.xs,
+              left: 0,
+              right: 0,
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: $constants.insets.md),
+                child: ElevatedContainer(
+                    height: 50,
+                    child: FleatherToolbar(children: [
+                      ToggleStyleButton(
+                        attribute: ParchmentAttribute.bold,
+                        icon: CupertinoIcons.bold,
+                        controller: editorState,
+                        childBuilder:
+                            (context, attribute, icon, isToggled, onPressed) =>
+                                GestureDetector(
+                          onTap: () {
+                            if (onPressed != null) {
+                              onPressed();
+                            }
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                              borderRadius:
+                                  BorderRadius.circular($constants.corners.md),
+                              color: isToggled
+                                  ? getTheme(context).surface
+                                  : getTheme(context).surfaceContainer,
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Icon(icon),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ])),
               ),
             ),
-            SizedBox(height: $constants.insets.xs),
-            _buildPaddedDivider(),
-            _buildToField(toController, to),
-            _buildPaddedDivider(),
-            _buildEmailFields(
-              "From",
-              null,
-              enabled: false,
-              value: from,
-              onTap: () {
-                // _showFromSelector();
-              },
-            ),
-            _buildPaddedDivider(),
-            _buildEmailFields("Subject", subjectController),
-            _buildPaddedDivider(),
-            SizedBox(height: $constants.insets.xs),
-            SizedBox(
-              width: double.infinity,
-              height: getSize(context).height * 0.42,
-              child: _getEditor(),
-            ),
-            _getEditor(),
           ],
         ),
       );
