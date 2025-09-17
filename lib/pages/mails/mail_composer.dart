@@ -52,7 +52,7 @@ class _MailComposerState extends ResponsiveState<MailComposer> {
 
   @override
   Widget buildDesktop(BuildContext context) {
-    return const Placeholder();
+    return buildMobile(context);
   }
 
   @override
@@ -124,11 +124,18 @@ class _MailComposerState extends ResponsiveState<MailComposer> {
                 _buildEmailFields("Subject", subjectController),
                 _buildPaddedDivider(),
                 SizedBox(height: $constants.insets.xs),
-                SizedBox(
-                  width: double.infinity,
-                  height: getSize(context).height * 0.55,
-                  child: ABEditor(editorState: editorState!),
+                Flexible(
+                  child: SizedBox(
+                    width: double.infinity,
+                    child: ABEditor(editorState: editorState!),
+                  ),
                 ),
+                SizedBox(
+                    height: isDesktop(context)
+                        ? $constants.insets.sm
+                        : MediaQuery.of(context).viewInsets.bottom == 0
+                            ? 85
+                            : 60 + MediaQuery.of(context).viewInsets.bottom),
               ],
             ),
             Positioned(
@@ -313,7 +320,7 @@ class _MailComposerState extends ResponsiveState<MailComposer> {
     return mdContent.replaceAll(regex, '');
   }
 
-  void _draftAndPop(BuildContext context)async  {
+  void _draftAndPop(BuildContext context) async {
     if (editorState!.document.length <= 1 &&
         subjectController.text.isEmpty &&
         toController.text.isEmpty &&
