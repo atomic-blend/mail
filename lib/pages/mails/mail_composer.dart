@@ -1,12 +1,14 @@
+import 'dart:convert';
+
 import 'package:ab_shared/blocs/auth/auth.bloc.dart';
 import 'package:ab_shared/components/forms/app_text_form_field.dart';
 import 'package:ab_shared/components/modals/ab_modal.dart';
 import 'package:ab_shared/components/responsive_stateful_widget.dart';
-import 'package:ab_shared/components/text_editor/ab_text_editor.dart';
 import 'package:ab_shared/components/widgets/elevated_container.dart';
 import 'package:ab_shared/utils/constants.dart';
 import 'package:ab_shared/utils/shortcuts.dart';
 import 'package:appflowy_editor/appflowy_editor.dart';
+import 'package:fleather/fleather.dart' hide EditorState;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -16,7 +18,7 @@ import 'package:mail/models/send_mail/send_mail.dart' as send_mail;
 
 enum ComposerEditor {
   appflowy,
-  custom,
+  fleather,
 }
 
 class MailComposer extends ResponsiveStatefulWidget {
@@ -29,7 +31,7 @@ class MailComposer extends ResponsiveStatefulWidget {
 }
 
 class _MailComposerState extends ResponsiveState<MailComposer> {
-  EditorState editorState = EditorState.blank(withInitialText: true);
+  dynamic editorState;
   TextEditingController subjectController = TextEditingController();
   TextEditingController toController = TextEditingController();
 
@@ -44,8 +46,20 @@ class _MailComposerState extends ResponsiveState<MailComposer> {
       subjectController.text = widget.mail!.mail!.getHeader("Subject") ?? "";
       to = List<String>.from(widget.mail!.mail!.getHeader("To") ?? []);
       from = widget.mail!.mail!.getHeader("From") ?? "";
-      editorState = EditorState(
-          document: htmlToDocument(widget.mail!.mail!.htmlContent ?? ""));
+      if (widget.editor == ComposerEditor.appflowy) {
+        editorState = EditorState(
+            document: htmlToDocument(widget.mail!.mail!.htmlContent ?? ""));
+      } else if (widget.editor == ComposerEditor.fleather) {
+        final document = ParchmentDocument.fromJson(
+            json.decode(widget.mail!.mail!.textContent ?? ""));
+        editorState = FleatherController(document: document);
+      }
+    } else {
+      if (widget.editor == ComposerEditor.appflowy) {
+        editorState = EditorState.blank(withInitialText: true);
+      } else if (widget.editor == ComposerEditor.fleather) {
+        editorState = FleatherController(document: ParchmentDocument());
+      }
     }
     super.initState();
   }
@@ -141,7 +155,7 @@ class _MailComposerState extends ResponsiveState<MailComposer> {
                 dividerMobileToolbarItem,
               ],
               child: body);
-        case ComposerEditor.custom:
+        case ComposerEditor.fleather:
           return body;
       }
     });
@@ -155,8 +169,11 @@ class _MailComposerState extends ResponsiveState<MailComposer> {
           editorStyle:
               isDesktop(context) ? EditorStyle.desktop() : EditorStyle.mobile(),
         );
-      case ComposerEditor.custom:
-        return ABTextEditor();
+      case ComposerEditor.fleather:
+        return Padding(
+          padding: EdgeInsets.symmetric(horizontal: $constants.insets.sm),
+          child: FleatherEditor(controller: editorState),
+        );
     }
   }
 
