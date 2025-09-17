@@ -168,7 +168,6 @@ class NavConstants {
                             borderRadius:
                                 BorderRadius.circular($constants.corners.md),
                             child: MailComposer(
-                              editor: ComposerEditor.fleather,
                             ),
                           ),
                         ),
@@ -183,7 +182,6 @@ class NavConstants {
                 builder: (context) => SizedBox(
                     height: getSize(context).height * 0.92,
                     child: MailComposer(
-                      editor: ComposerEditor.fleather,
                     )),
               );
             }

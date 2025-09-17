@@ -7,8 +7,7 @@ import 'package:ab_shared/components/responsive_stateful_widget.dart';
 import 'package:ab_shared/components/widgets/elevated_container.dart';
 import 'package:ab_shared/utils/constants.dart';
 import 'package:ab_shared/utils/shortcuts.dart';
-import 'package:appflowy_editor/appflowy_editor.dart';
-import 'package:fleather/fleather.dart' hide EditorState;
+import 'package:fleather/fleather.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -16,15 +15,9 @@ import 'package:mail/blocs/mail/mail_bloc.dart';
 import 'package:mail/models/mail/mail.dart';
 import 'package:mail/models/send_mail/send_mail.dart' as send_mail;
 
-enum ComposerEditor {
-  appflowy,
-  fleather,
-}
-
 class MailComposer extends ResponsiveStatefulWidget {
   final send_mail.SendMail? mail;
-  final ComposerEditor editor;
-  const MailComposer({super.key, this.mail, required this.editor});
+  const MailComposer({super.key, this.mail});
 
   @override
   ResponsiveState<MailComposer> createState() => _MailComposerState();
@@ -46,20 +39,11 @@ class _MailComposerState extends ResponsiveState<MailComposer> {
       subjectController.text = widget.mail!.mail!.getHeader("Subject") ?? "";
       to = List<String>.from(widget.mail!.mail!.getHeader("To") ?? []);
       from = widget.mail!.mail!.getHeader("From") ?? "";
-      if (widget.editor == ComposerEditor.appflowy) {
-        editorState = EditorState(
-            document: htmlToDocument(widget.mail!.mail!.htmlContent ?? ""));
-      } else if (widget.editor == ComposerEditor.fleather) {
-        final document = ParchmentDocument.fromJson(
-            json.decode(widget.mail!.mail!.textContent ?? ""));
-        editorState = FleatherController(document: document);
-      }
+      final document = ParchmentDocument.fromJson(
+          json.decode(widget.mail!.mail!.textContent ?? ""));
+      editorState = FleatherController(document: document);
     } else {
-      if (widget.editor == ComposerEditor.appflowy) {
-        editorState = EditorState.blank(withInitialText: true);
-      } else if (widget.editor == ComposerEditor.fleather) {
-        editorState = FleatherController(document: ParchmentDocument());
-      }
+      editorState = FleatherController(document: ParchmentDocument());
     }
     super.initState();
   }
@@ -78,7 +62,7 @@ class _MailComposerState extends ResponsiveState<MailComposer> {
         from = availableFrom.first;
       }
 
-      final body = ElevatedContainer(
+      return ElevatedContainer(
         padding: EdgeInsets.only(
           top: $constants.insets.xs,
         ),
@@ -140,41 +124,18 @@ class _MailComposerState extends ResponsiveState<MailComposer> {
               height: getSize(context).height * 0.42,
               child: _getEditor(),
             ),
+            _getEditor(),
           ],
         ),
       );
-      switch (widget.editor) {
-        case ComposerEditor.appflowy:
-          return MobileToolbarV2(
-              editorState: editorState,
-              toolbarItems: [
-                textDecorationMobileToolbarItemV2,
-                buildTextAndBackgroundColorMobileToolbarItem(),
-                blocksMobileToolbarItem,
-                linkMobileToolbarItem,
-                dividerMobileToolbarItem,
-              ],
-              child: body);
-        case ComposerEditor.fleather:
-          return body;
-      }
     });
   }
 
   Widget _getEditor() {
-    switch (widget.editor) {
-      case ComposerEditor.appflowy:
-        return AppFlowyEditor(
-          editorState: editorState,
-          editorStyle:
-              isDesktop(context) ? EditorStyle.desktop() : EditorStyle.mobile(),
-        );
-      case ComposerEditor.fleather:
-        return Padding(
-          padding: EdgeInsets.symmetric(horizontal: $constants.insets.sm),
-          child: FleatherEditor(controller: editorState),
-        );
-    }
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: $constants.insets.sm),
+      child: FleatherEditor(controller: editorState),
+    );
   }
 
   Widget _buildPaddedDivider() {
@@ -305,8 +266,11 @@ class _MailComposerState extends ResponsiveState<MailComposer> {
   }
 
   Mail _generateMailEntity() {
-    final htmlContent = documentToHTML(editorState.document);
-    final mdContent = documentToMarkdown(editorState.document);
+    // final htmlContent = documentToHTML(editorState.document);
+    // final mdContent = documentToMarkdown(editorState.document);
+    //TODO: update this with fleather
+    final htmlContent = "";
+    final mdContent = "";
     final plainTextContent = _markdownToPlainText(mdContent);
 
     //TODO: add attachements and create a raw mail entity like it's done in the backend

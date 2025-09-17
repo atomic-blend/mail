@@ -199,7 +199,6 @@ class MailCard extends StatelessWidget {
                     borderRadius: BorderRadius.circular($constants.corners.md),
                     child: MailComposer(
                       mail: draft,
-                      editor: ComposerEditor.appflowy,
                     ),
                   ),
                 ),
@@ -213,7 +212,7 @@ class MailCard extends StatelessWidget {
         backgroundColor: Colors.transparent,
         builder: (context) => SizedBox(
             height: getSize(context).height * 0.92,
-            child: MailComposer(mail: draft, editor: ComposerEditor.appflowy)),
+            child: MailComposer(mail: draft)),
       );
     }
   }

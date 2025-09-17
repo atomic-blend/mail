@@ -65,11 +65,10 @@ class AppLayoutState extends ResponsiveState<AppLayout> {
   Widget buildMobile(BuildContext context) {
     return BlocBuilder<AppCubit, AppState>(
       builder: (context, appState) {
-        return BlocBuilder<AuthBloc, AuthState>(
-            builder: (context, authState) {
+        return BlocBuilder<AuthBloc, AuthState>(builder: (context, authState) {
           _runAppInitAndChecks(
               context: context, appState: appState, authState: authState);
-        
+
           // get the secondary section based on the selected primary menu
           final secondarySection = $navConstants
               .secondaryMenuSections(context)
@@ -79,7 +78,7 @@ class AppLayoutState extends ResponsiveState<AppLayout> {
                     appState.primaryMenuSelectedKey,
               )
               .firstOrNull;
-        
+
           var primaryMenuItem = $navConstants
               .primaryMenuItems(context)
               .where((item) =>
@@ -89,7 +88,7 @@ class AppLayoutState extends ResponsiveState<AppLayout> {
           // by default, the primary menu is selected
           Widget? body = primaryMenuItem?.body;
           AppBar? appBar = primaryMenuItem?.appBar;
-        
+
           // select the items if there's a secondary menu and a secondary menu item is selected
           if (secondarySection != null &&
               secondarySection.items.isNotEmpty &&
@@ -100,14 +99,14 @@ class AppLayoutState extends ResponsiveState<AppLayout> {
                     appState.secondaryMenuSelectedKey)
                 .firstOrNull
                 ?.body;
-        
+
             final secondaryAppBar = secondarySection.items
                 .where((item) =>
                     (item.key as ValueKey).value ==
                     appState.secondaryMenuSelectedKey)
                 .firstOrNull
                 ?.appBar;
-        
+
             // use the secondary appBar if it exists, else let the parent appBar
             if (secondaryAppBar != null) {
               appBar = secondaryAppBar;
@@ -115,187 +114,171 @@ class AppLayoutState extends ResponsiveState<AppLayout> {
           }
 
           final drawer = TapRegion(
-                          onTapOutside: (_) {
-                            Navigator.of(context).pop();
-                          },
-                          child: ClipRRect(
-                            borderRadius:
-                                BorderRadius.circular($constants.corners.xxl),
-                            child: SideMenu(
-                              controller: _secondarySideMenuController,
-                              mode: SideMenuMode.open,
-                              hasResizer: false,
-                              hasResizerToggle: false,
-                              minWidth: getSize(context).width * 0.18,
-                              backgroundColor: getTheme(context).surfaceContainer,
-                              builder: (data) {
-                                return SideMenuData(
-                                  header: SafeArea(
-                                    top: true,
-                                    bottom: false,
-                                    left: false,
-                                    right: false,
-                                    child: ElevatedContainer(
-                                      width: 50,
-                                      height: 50,
-                                      child: ClipRRect(
-                                          borderRadius: BorderRadius.circular(
-                                            $constants.corners.md,
-                                          ),
-                                          child: Image.asset(
-                                              "assets/images/appicon.png")),
-                                    ),
-                                  ),
-                                  customChild: SingleChildScrollView(
-                                    child: Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        SizedBox(
-                                          height: $constants.insets.xs,
-                                        ),
-                                        ...?secondarySection?.items
-                                            .map((item) => Column(
-                                                  mainAxisSize: MainAxisSize.min,
-                                                  children: [
-                                                    if (item.separatorBefore !=
-                                                        true)
-                                                      SizedBox(
-                                                        height:
-                                                            $constants.insets.xxs,
-                                                      ),
-                                                    if (item.separatorBefore ==
-                                                        true)
-                                                      Padding(
-                                                        padding:
-                                                            EdgeInsets.symmetric(
-                                                          horizontal:
-                                                              $constants.insets.sm,
-                                                        ),
-                                                        child: Divider(
-                                                          color:
-                                                              Colors.grey.shade300,
-                                                          thickness: 2,
-                                                        ),
-                                                      ),
-                                                    GestureDetector(
-                                                      onTap: () {
-                                                        if (item.onTap != null) {
-                                                          item.onTap!(0);
-                                                        } else {
-                                                          context
-                                                              .read<AppCubit>()
-                                                              .changeSecondaryMenuSelectedKey(
-                                                                key: (item.key
-                                                                        as ValueKey)
-                                                                    .value,
-                                                              );
-                                                        }
-                                                        Navigator.of(context).pop();
-                                                      },
-                                                      child: Padding(
-                                                        padding:
-                                                            EdgeInsets.symmetric(
-                                                                horizontal:
-                                                                    $constants
-                                                                        .insets.sm),
-                                                        child: Row(
-                                                          children: [
-                                                            Column(
-                                                              mainAxisSize:
-                                                                  MainAxisSize.min,
-                                                              children: [
-                                                                Container(
-                                                                  width: 50,
-                                                                  height: 50,
-                                                                  decoration:
-                                                                      BoxDecoration(
-                                                                    border: appState
-                                                                                .secondaryMenuSelectedKey ==
-                                                                            (item.key
-                                                                                    as ValueKey)
-                                                                                .value
-                                                                        ? Border
-                                                                            .all(
-                                                                            color: Colors
-                                                                                .grey
-                                                                                .shade500,
-                                                                            width:
-                                                                                1,
-                                                                          )
-                                                                        : null,
-                                                                    color: item
-                                                                                .color !=
-                                                                            null
-                                                                        ? item.color!.withValues(
-                                                                            alpha: getTheme(context).brightness == Brightness.dark
-                                                                                ? 0.4
-                                                                                : 0.2)
-                                                                        : Colors
-                                                                            .grey
-                                                                            .shade400
-                                                                            .withValues(
-                                                                                alpha:
-                                                                                    0.2),
-                                                                    borderRadius:
-                                                                        BorderRadius.circular(
-                                                                            $constants
-                                                                                .corners
-                                                                                .lg),
-                                                                  ),
-                                                                  child: item.initialsOnly ==
-                                                                          true
-                                                                      ? Center(
-                                                                          child:
-                                                                              Text(
-                                                                            _getInitials(
-                                                                                item.label),
-                                                                            style: getTextTheme(context)
-                                                                                .bodyLarge!
-                                                                                .copyWith(
-                                                                                  fontWeight: FontWeight.bold,
-                                                                                  color: item.color != null ? item.color! : Colors.grey.shade800,
-                                                                                ),
-                                                                          ),
-                                                                        )
-                                                                      : IconTheme(
-                                                                          data:
-                                                                              IconThemeData(
-                                                                            color: getTheme(context).brightness ==
-                                                                                    Brightness.light
-                                                                                ? item.color != null
-                                                                                    ? item.color!
-                                                                                    : Colors.grey.shade800
-                                                                                : Colors.white,
-                                                                          ),
-                                                                          child: isApple(
-                                                                                  context)
-                                                                              ? Icon(item
-                                                                                  .cupertinoIcon)
-                                                                              : Icon(item
-                                                                                  .icon)),
-                                                                ),
-                                                              ],
-                                                            ),
-                                                            SizedBox(
-                                                              width: $constants
-                                                                  .insets.sm,
-                                                            ),
-                                                            Text(item.label)
-                                                          ],
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ))
-                                      ],
-                                    ),
-                                  ),
-                                );
-                              },
+            onTapOutside: (_) {
+              Navigator.of(context).pop();
+            },
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular($constants.corners.xxl),
+              child: SideMenu(
+                controller: _secondarySideMenuController,
+                mode: SideMenuMode.open,
+                hasResizer: false,
+                hasResizerToggle: false,
+                minWidth: getSize(context).width * 0.18,
+                backgroundColor: getTheme(context).surfaceContainer,
+                builder: (data) {
+                  return SideMenuData(
+                    header: SafeArea(
+                      top: true,
+                      bottom: false,
+                      left: false,
+                      right: false,
+                      child: ElevatedContainer(
+                        width: 50,
+                        height: 50,
+                        child: ClipRRect(
+                            borderRadius: BorderRadius.circular(
+                              $constants.corners.md,
                             ),
+                            child: Image.asset("assets/images/appicon.png")),
+                      ),
+                    ),
+                    customChild: SingleChildScrollView(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          SizedBox(
+                            height: $constants.insets.xs,
                           ),
-                        );
-        
+                          ...?secondarySection?.items.map((item) => Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  if (item.separatorBefore != true)
+                                    SizedBox(
+                                      height: $constants.insets.xxs,
+                                    ),
+                                  if (item.separatorBefore == true)
+                                    Padding(
+                                      padding: EdgeInsets.symmetric(
+                                        horizontal: $constants.insets.sm,
+                                      ),
+                                      child: Divider(
+                                        color: Colors.grey.shade300,
+                                        thickness: 2,
+                                      ),
+                                    ),
+                                  GestureDetector(
+                                    onTap: () {
+                                      if (item.onTap != null) {
+                                        item.onTap!(0);
+                                      } else {
+                                        context
+                                            .read<AppCubit>()
+                                            .changeSecondaryMenuSelectedKey(
+                                              key: (item.key as ValueKey).value,
+                                            );
+                                      }
+                                      Navigator.of(context).pop();
+                                    },
+                                    child: Padding(
+                                      padding: EdgeInsets.symmetric(
+                                          horizontal: $constants.insets.sm),
+                                      child: Row(
+                                        children: [
+                                          Column(
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                              Container(
+                                                width: 50,
+                                                height: 50,
+                                                decoration: BoxDecoration(
+                                                  border: appState
+                                                              .secondaryMenuSelectedKey ==
+                                                          (item.key as ValueKey)
+                                                              .value
+                                                      ? Border.all(
+                                                          color: Colors
+                                                              .grey.shade500,
+                                                          width: 1,
+                                                        )
+                                                      : null,
+                                                  color: item.color != null
+                                                      ? item.color!.withValues(
+                                                          alpha: getTheme(context)
+                                                                      .brightness ==
+                                                                  Brightness
+                                                                      .dark
+                                                              ? 0.4
+                                                              : 0.2)
+                                                      : Colors.grey.shade400
+                                                          .withValues(
+                                                              alpha: 0.2),
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          $constants
+                                                              .corners.lg),
+                                                ),
+                                                child: item.initialsOnly == true
+                                                    ? Center(
+                                                        child: Text(
+                                                          _getInitials(
+                                                              item.label),
+                                                          style: getTextTheme(
+                                                                  context)
+                                                              .bodyLarge!
+                                                              .copyWith(
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                                color: item.color !=
+                                                                        null
+                                                                    ? item
+                                                                        .color!
+                                                                    : Colors
+                                                                        .grey
+                                                                        .shade800,
+                                                              ),
+                                                        ),
+                                                      )
+                                                    : IconTheme(
+                                                        data: IconThemeData(
+                                                          color: getTheme(context)
+                                                                      .brightness ==
+                                                                  Brightness
+                                                                      .light
+                                                              ? item.color !=
+                                                                      null
+                                                                  ? item.color!
+                                                                  : Colors.grey
+                                                                      .shade800
+                                                              : Colors.white,
+                                                        ),
+                                                        child: isApple(context)
+                                                            ? Icon(item
+                                                                .cupertinoIcon)
+                                                            : Icon(item.icon)),
+                                              ),
+                                            ],
+                                          ),
+                                          SizedBox(
+                                            width: $constants.insets.sm,
+                                          ),
+                                          Text(item.label)
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ))
+                        ],
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+          );
+
           return Flex(
             direction: Axis.horizontal,
             children: [
@@ -315,27 +298,32 @@ class AppLayoutState extends ResponsiveState<AppLayout> {
                       left: 0,
                       right: 0,
                       child: Padding(
-                        padding: EdgeInsets.symmetric(horizontal: $constants.insets.md),
+                        padding: EdgeInsets.symmetric(
+                            horizontal: $constants.insets.md),
                         child: ABNavbar(
                           backgroundColor: getTheme(context).surfaceContainer,
-                        onPrimaryMenuSelected: (key) {
-                          context.read<AppCubit>().changePrimaryMenuSelectedKey(
-                                key: key,
-                              );
-                        },
-                        onSecondaryMenuSelected: (key) {
-                          context.read<AppCubit>().changeSecondaryMenuSelectedKey(
-                                key: key,
-                              );
-                        },
-                        destinations: $navConstants
-                            .primaryMenuItems(context)
-                            .take(5)
-                            .toList(),
-                        primaryMenuKey: appState.primaryMenuSelectedKey,
+                          onPrimaryMenuSelected: (key) {
+                            context
+                                .read<AppCubit>()
+                                .changePrimaryMenuSelectedKey(
+                                  key: key,
+                                );
+                          },
+                          onSecondaryMenuSelected: (key) {
+                            context
+                                .read<AppCubit>()
+                                .changeSecondaryMenuSelectedKey(
+                                  key: key,
+                                );
+                          },
+                          destinations: $navConstants
+                              .primaryMenuItems(context)
+                              .take(5)
+                              .toList(),
+                          primaryMenuKey: appState.primaryMenuSelectedKey,
                         ),
                       ),
-                    ), 
+                    ),
                   ],
                 ),
               )
@@ -350,11 +338,10 @@ class AppLayoutState extends ResponsiveState<AppLayout> {
   Widget buildDesktop(BuildContext context) {
     return BlocBuilder<AppCubit, AppState>(
       builder: (context, appState) {
-        return BlocBuilder<AuthBloc, AuthState>(
-            builder: (context, authState) {
+        return BlocBuilder<AuthBloc, AuthState>(builder: (context, authState) {
           _runAppInitAndChecks(
               context: context, appState: appState, authState: authState);
-        
+
           // get the secondary section based on the selected primary menu
           final secondarySection = $navConstants
               .secondaryMenuSections(context)
@@ -364,7 +351,7 @@ class AppLayoutState extends ResponsiveState<AppLayout> {
                     appState.primaryMenuSelectedKey,
               )
               .firstOrNull;
-        
+
           // by default, the primary menu is selected
           Widget? body = $navConstants
               .primaryMenuItems(context)
@@ -380,7 +367,7 @@ class AppLayoutState extends ResponsiveState<AppLayout> {
                   appState.primaryMenuSelectedKey)
               .firstOrNull
               ?.appBar;
-        
+
           // on desktop, move the 4th primary menu item to the end of the list
           final primaryMenuItems =
               $navConstants.primaryMenuItems(context).toList();
@@ -388,7 +375,7 @@ class AppLayoutState extends ResponsiveState<AppLayout> {
             final itemToMove = primaryMenuItems.removeAt(4);
             primaryMenuItems.add(itemToMove);
           }
-        
+
           // select the items if there's a secondary menu and a secondary menu item is selected
           if (secondarySection != null &&
               secondarySection.items.isNotEmpty &&
@@ -399,20 +386,20 @@ class AppLayoutState extends ResponsiveState<AppLayout> {
                     appState.secondaryMenuSelectedKey)
                 .firstOrNull
                 ?.body;
-        
+
             final secondaryAppBar = secondarySection.items
                 .where((item) =>
                     (item.key as ValueKey).value ==
                     appState.secondaryMenuSelectedKey)
                 .firstOrNull
                 ?.appBar;
-        
+
             // use the secondary appBar if it exists, else let the parent appBar
             if (secondaryAppBar != null) {
               appBar = secondaryAppBar;
             }
           }
-        
+
           final renderedBody = Flex(
             direction: Axis.horizontal,
             children: [
@@ -421,8 +408,7 @@ class AppLayoutState extends ResponsiveState<AppLayout> {
                 padding: EdgeInsets.all($constants.insets.xs),
                 child: ElevatedContainer(
                   child: ClipRRect(
-                    borderRadius:
-                        BorderRadius.circular($constants.corners.sm),
+                    borderRadius: BorderRadius.circular($constants.corners.sm),
                     child: SideMenu(
                       controller: _primarySideMenuController,
                       mode: SideMenuMode.open,
@@ -433,8 +419,7 @@ class AppLayoutState extends ResponsiveState<AppLayout> {
                       builder: (data) {
                         return SideMenuData(
                           header: Padding(
-                            padding:
-                                EdgeInsets.only(top: $constants.insets.xs),
+                            padding: EdgeInsets.only(top: $constants.insets.xs),
                             child: ElevatedContainer(
                               width: 50,
                               height: 50,
@@ -442,8 +427,8 @@ class AppLayoutState extends ResponsiveState<AppLayout> {
                                   borderRadius: BorderRadius.circular(
                                     $constants.corners.md,
                                   ),
-                                  child: Image.asset(
-                                      "assets/images/appicon.png")),
+                                  child:
+                                      Image.asset("assets/images/appicon.png")),
                             ),
                           ),
                           customChild: SingleChildScrollView(
@@ -463,8 +448,7 @@ class AppLayoutState extends ResponsiveState<AppLayout> {
                                         if (item.separatorBefore == true)
                                           Padding(
                                             padding: EdgeInsets.symmetric(
-                                              horizontal:
-                                                  $constants.insets.sm,
+                                              horizontal: $constants.insets.sm,
                                             ),
                                             child: Divider(
                                               color: Colors.grey.shade300,
@@ -483,13 +467,11 @@ class AppLayoutState extends ResponsiveState<AppLayout> {
                                                   key: (item.key as ValueKey)
                                                       .value,
                                                 );
-                                            if (item.mainSecondaryKey !=
-                                                null) {
+                                            if (item.mainSecondaryKey != null) {
                                               context
                                                   .read<AppCubit>()
                                                   .changeSecondaryMenuSelectedKey(
-                                                    key: item
-                                                        .mainSecondaryKey!,
+                                                    key: item.mainSecondaryKey!,
                                                   );
                                             }
                                           },
@@ -506,8 +488,7 @@ class AppLayoutState extends ResponsiveState<AppLayout> {
                                                     Container(
                                                       width: 40,
                                                       height: 40,
-                                                      decoration:
-                                                          BoxDecoration(
+                                                      decoration: BoxDecoration(
                                                         border: appState
                                                                     .primaryMenuSelectedKey ==
                                                                 (item.key
@@ -524,13 +505,11 @@ class AppLayoutState extends ResponsiveState<AppLayout> {
                                                                 null
                                                             ? item.color!
                                                                 .withValues(
-                                                                    alpha:
-                                                                        0.1)
+                                                                    alpha: 0.1)
                                                             : Colors
                                                                 .grey.shade500
                                                                 .withValues(
-                                                                    alpha:
-                                                                        0.2),
+                                                                    alpha: 0.2),
                                                         borderRadius:
                                                             BorderRadius
                                                                 .circular(
@@ -549,11 +528,15 @@ class AppLayoutState extends ResponsiveState<AppLayout> {
                                                                     .bodyLarge!
                                                                     .copyWith(
                                                                       fontWeight:
-                                                                          FontWeight.bold,
+                                                                          FontWeight
+                                                                              .bold,
                                                                       color: item.color !=
                                                                               null
-                                                                          ? item.color!
-                                                                          : Colors.grey.shade800,
+                                                                          ? item
+                                                                              .color!
+                                                                          : Colors
+                                                                              .grey
+                                                                              .shade800,
                                                                     ),
                                                               ),
                                                             )
@@ -656,8 +639,7 @@ class AppLayoutState extends ResponsiveState<AppLayout> {
                                                 }
                                               },
                                               child: Column(
-                                                mainAxisSize:
-                                                    MainAxisSize.min,
+                                                mainAxisSize: MainAxisSize.min,
                                                 children: [
                                                   Container(
                                                     width: 50,
@@ -669,27 +651,22 @@ class AppLayoutState extends ResponsiveState<AppLayout> {
                                                                       as ValueKey)
                                                                   .value
                                                           ? Border.all(
-                                                              color: Colors
-                                                                  .grey
+                                                              color: Colors.grey
                                                                   .shade500,
                                                               width: 1,
                                                             )
                                                           : null,
-                                                      color: item.color !=
-                                                              null
+                                                      color: item.color != null
                                                           ? item.color!
                                                               .withValues(
                                                                   alpha: 0.1)
-                                                          : Colors
-                                                              .grey.shade500
+                                                          : Colors.grey.shade500
                                                               .withValues(
                                                                   alpha: 0.2),
                                                       borderRadius:
-                                                          BorderRadius
-                                                              .circular(
-                                                                  $constants
-                                                                      .corners
-                                                                      .lg),
+                                                          BorderRadius.circular(
+                                                              $constants
+                                                                  .corners.lg),
                                                     ),
                                                     child: item.initialsOnly ==
                                                             true
@@ -715,22 +692,19 @@ class AppLayoutState extends ResponsiveState<AppLayout> {
                                                             ),
                                                           )
                                                         : IconTheme(
-                                                            data:
-                                                                IconThemeData(
+                                                            data: IconThemeData(
                                                               color: item.color !=
                                                                       null
-                                                                  ? item
-                                                                      .color!
-                                                                  : Colors
-                                                                      .grey
+                                                                  ? item.color!
+                                                                  : Colors.grey
                                                                       .shade800,
                                                             ),
                                                             child: isApple(
                                                                     context)
                                                                 ? Icon(item
                                                                     .cupertinoIcon)
-                                                                : Icon(item
-                                                                    .icon)),
+                                                                : Icon(
+                                                                    item.icon)),
                                                   ),
                                                 ],
                                               ),
@@ -759,7 +733,7 @@ class AppLayoutState extends ResponsiveState<AppLayout> {
               )
             ],
           );
-        
+
           if (!kIsWeb && Platform.isMacOS) {
             return TitlebarSafeArea(child: renderedBody);
           }
@@ -795,6 +769,8 @@ class AppLayoutState extends ResponsiveState<AppLayout> {
 
   void _showLoginModal(BuildContext context) {
     if (kIsWeb || Platform.isMacOS || Platform.isWindows || Platform.isLinux) {
+      print(encryptionService);
+      print(globalApiClient);
       showDialog(
           context: context,
           barrierDismissible: false,
@@ -802,8 +778,8 @@ class AppLayoutState extends ResponsiveState<AppLayout> {
                 child: SizedBox(
                   width: getSize(context).width * 0.5,
                   child: LoginOrRegisterModal(
-                    encryptionService: encryptionService!,
-                    globalApiClient: globalApiClient!,
+                    encryptionService: encryptionService,
+                    globalApiClient: globalApiClient,
                     prefs: prefs!,
                     env: env!,
                     onAuthSuccess: () => setState(() {
