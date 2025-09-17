@@ -323,8 +323,7 @@ class _MailComposerState extends ResponsiveState<MailComposer> {
   void _draftAndPop(BuildContext context) async {
     if (editorState!.document.length <= 1 &&
         subjectController.text.isEmpty &&
-        toController.text.isEmpty &&
-        from == null) {
+        toController.text.isEmpty) {
       Navigator.pop(context);
       return;
     }
@@ -340,7 +339,7 @@ class _MailComposerState extends ResponsiveState<MailComposer> {
                 title: "Save Draft",
                 description: "Do you want to save the draft?",
                 confirmText: "Save",
-                cancelText: "Cancel",
+                cancelText: "Discard",
                 onConfirm: () {
                   Navigator.pop(context, true);
                 },
@@ -364,8 +363,8 @@ class _MailComposerState extends ResponsiveState<MailComposer> {
       } else {
         context.read<MailBloc>().add(SaveDraft(mail));
       }
-      Navigator.pop(context);
-      return;
     }
+    Navigator.pop(context);
+    return;
   }
 }
