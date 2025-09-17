@@ -769,8 +769,6 @@ class AppLayoutState extends ResponsiveState<AppLayout> {
 
   void _showLoginModal(BuildContext context) {
     if (kIsWeb || Platform.isMacOS || Platform.isWindows || Platform.isLinux) {
-      print(encryptionService);
-      print(globalApiClient);
       showDialog(
           context: context,
           barrierDismissible: false,

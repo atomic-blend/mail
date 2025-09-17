@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:ab_shared/blocs/auth/auth.bloc.dart';
 import 'package:ab_shared/components/editor/ab_editor.dart';
 import 'package:ab_shared/components/editor/ab_editor_toolbar.dart';
@@ -359,11 +357,14 @@ class _MailComposerState extends ResponsiveState<MailComposer> {
       final mail = _generateMailEntity();
       if (widget.mail != null) {
         // update the draft
+        if (!context.mounted) return;
         context.read<MailBloc>().add(UpdateDraft(mail, widget.mail!.id!));
       } else {
+        if (!context.mounted) return;
         context.read<MailBloc>().add(SaveDraft(mail));
       }
     }
+    if (!context.mounted) return;
     Navigator.pop(context);
     return;
   }
