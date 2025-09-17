@@ -27,7 +27,7 @@ class MailComposer extends ResponsiveStatefulWidget {
 }
 
 class _MailComposerState extends ResponsiveState<MailComposer> {
-  dynamic editorState;
+  FleatherController? editorState;
   TextEditingController subjectController = TextEditingController();
   TextEditingController toController = TextEditingController();
 
@@ -127,7 +127,7 @@ class _MailComposerState extends ResponsiveState<MailComposer> {
                 SizedBox(
                   width: double.infinity,
                   height: getSize(context).height * 0.55,
-                  child: ABEditor(editorState: editorState),
+                  child: ABEditor(editorState: editorState!),
                 ),
               ],
             ),
@@ -140,7 +140,7 @@ class _MailComposerState extends ResponsiveState<MailComposer> {
               right: 0,
               child: Padding(
                 padding: EdgeInsets.symmetric(horizontal: $constants.insets.md),
-                child: ABEditorToolbar(editorState: editorState),
+                child: ABEditorToolbar(editorState: editorState!),
               ),
             ),
           ],
@@ -277,8 +277,8 @@ class _MailComposerState extends ResponsiveState<MailComposer> {
   }
 
   Mail _generateMailEntity() {
-    final htmlContent = parchmentHtml.encode(editorState.document);
-    final mdContent = parchmentMarkdown.encode(editorState.document);
+    final htmlContent = parchmentHtml.encode(editorState!.document);
+    final mdContent = parchmentMarkdown.encode(editorState!.document);
     final plainTextContent = _markdownToPlainText(mdContent);
 
     //TODO: add attachements and create a raw mail entity like it's done in the backend
@@ -313,31 +313,38 @@ class _MailComposerState extends ResponsiveState<MailComposer> {
     return mdContent.replaceAll(regex, '');
   }
 
-  void _draftAndPop(BuildContext context) {
-    if (editorState.document.isEmpty) {
+  void _draftAndPop(BuildContext context)async  {
+    if (editorState!.document.length <= 1 &&
+        subjectController.text.isEmpty &&
+        toController.text.isEmpty &&
+        from == null) {
       Navigator.pop(context);
       return;
     }
     // ask the user if they want to save the draft when the body content is not filled but there is a subject / from / to
     bool saveDraft = false;
-    if (editorState.document.isEmpty &&
+    if (editorState!.document.length <= 1 &&
         (subjectController.text.isNotEmpty ||
             toController.text.isNotEmpty ||
             from != null)) {
-      showDialog(
+      final result = await showDialog(
           context: context,
           builder: (context) => ABModal(
                 title: "Save Draft",
                 description: "Do you want to save the draft?",
+                confirmText: "Save",
+                cancelText: "Cancel",
                 onConfirm: () {
-                  saveDraft = true;
-                  Navigator.pop(context);
+                  Navigator.pop(context, true);
+                },
+                onCancel: () {
+                  Navigator.pop(context, false);
                 },
               ));
-      return;
+      saveDraft = result;
     }
 
-    if (!editorState.document.isEmpty) {
+    if (editorState!.document.length > 1) {
       saveDraft = true;
     }
 
