@@ -152,19 +152,22 @@ class MailCard extends StatelessWidget {
                     ],
                   ),
                   SizedBox(height: $constants.insets.xxs),
-                  Text(
-                    mail.htmlContent != null && mail.htmlContent != ""
-                        ? mail.htmlContent!
-                        : mail.textContent != null && mail.textContent != ""
-                            ? mail.textContent!
-                            : "No content",
-                    style: getTextTheme(context).bodyMedium!.copyWith(
-                          fontWeight:
-                              mail.read != true ? FontWeight.bold : null,
-                        ),
-                    overflow: TextOverflow.ellipsis,
-                    textAlign: TextAlign.left,
-                    maxLines: 1,
+                  SizedBox(
+                    width: getSize(context).width * 0.7,
+                    child: Text(
+                      mail.htmlContent != null && mail.htmlContent != ""
+                          ? mail.htmlContent!
+                          : mail.textContent != null && mail.textContent != ""
+                              ? mail.textContent!
+                              : "No content",
+                      style: getTextTheme(context).bodyMedium!.copyWith(
+                            fontWeight:
+                                mail.read != true ? FontWeight.bold : null,
+                          ),
+                      overflow: TextOverflow.ellipsis,
+                      textAlign: TextAlign.left,
+                      maxLines: 1,
+                    ),
                   ),
                 ],
               ),
