@@ -1,6 +1,8 @@
 import 'dart:convert';
 
 import 'package:ab_shared/blocs/auth/auth.bloc.dart';
+import 'package:ab_shared/components/editor/ab_editor.dart';
+import 'package:ab_shared/components/editor/ab_editor_toolbar.dart';
 import 'package:ab_shared/components/forms/app_text_form_field.dart';
 import 'package:ab_shared/components/modals/ab_modal.dart';
 import 'package:ab_shared/components/responsive_stateful_widget.dart';
@@ -125,7 +127,7 @@ class _MailComposerState extends ResponsiveState<MailComposer> {
                 SizedBox(
                   width: double.infinity,
                   height: getSize(context).height * 0.55,
-                  child: _getEditor(),
+                  child: ABEditor(editorState: editorState),
                 ),
               ],
             ),
@@ -138,50 +140,13 @@ class _MailComposerState extends ResponsiveState<MailComposer> {
               right: 0,
               child: Padding(
                 padding: EdgeInsets.symmetric(horizontal: $constants.insets.md),
-                child: ElevatedContainer(
-                    height: 50,
-                    child: FleatherToolbar(children: [
-                      ToggleStyleButton(
-                        attribute: ParchmentAttribute.bold,
-                        icon: CupertinoIcons.bold,
-                        controller: editorState,
-                        childBuilder:
-                            (context, attribute, icon, isToggled, onPressed) =>
-                                GestureDetector(
-                          onTap: () {
-                            if (onPressed != null) {
-                              onPressed();
-                            }
-                          },
-                          child: Container(
-                            decoration: BoxDecoration(
-                              borderRadius:
-                                  BorderRadius.circular($constants.corners.md),
-                              color: isToggled
-                                  ? getTheme(context).surface
-                                  : getTheme(context).surfaceContainer,
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Icon(icon),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ])),
+                child: ABEditorToolbar(editorState: editorState),
               ),
             ),
           ],
         ),
       );
     });
-  }
-
-  Widget _getEditor() {
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: $constants.insets.sm),
-      child: FleatherEditor(controller: editorState),
-    );
   }
 
   Widget _buildPaddedDivider() {
