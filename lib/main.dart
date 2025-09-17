@@ -45,8 +45,6 @@ RevenueCatService? revenueCatService;
 ApiClient? globalApiClient;
 
 FutureOr<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-
   await SentryFlutter.init((options) {
     String? dsn = const String.fromEnvironment(
       'SENTRY_DSN',
@@ -77,8 +75,6 @@ FutureOr<void> main() async {
       WindowManipulator.makeTitlebarTransparent();
       WindowManipulator.enableFullSizeContentView();
     }
-
-   
 
     final rawUserData = prefs?.getString("user");
     userData = rawUserData != null ? json.decode(rawUserData) : null;
@@ -133,24 +129,25 @@ FutureOr<void> main() async {
         child: MultiBlocProvider(
             providers: [
               BlocProvider(create: (context) => AppCubit()),
-              BlocProvider(create: (context) => AuthBloc(
-                prefs: prefs!,
-                onLogout: () {
-                  userKey = null;
-                  userData = null;
-                  prefs?.clear();
-                  globalApiClient?.setIdToken(null);
-                  Sentry.configureScope(
-                    (scope) => scope.setUser(SentryUser(id: null)),
-                  );
-                  encryptionService = null;
-                },
-                onLogin: (e) {
-                  encryptionService = e;
-                },
-                globalApiClient: globalApiClient!,
-                encryptionService: encryptionService,
-              )),
+              BlocProvider(
+                  create: (context) => AuthBloc(
+                        prefs: prefs!,
+                        onLogout: () {
+                          userKey = null;
+                          userData = null;
+                          prefs?.clear();
+                          globalApiClient?.setIdToken(null);
+                          Sentry.configureScope(
+                            (scope) => scope.setUser(SentryUser(id: null)),
+                          );
+                          encryptionService = null;
+                        },
+                        onLogin: (e) {
+                          encryptionService = e;
+                        },
+                        globalApiClient: globalApiClient!,
+                        encryptionService: encryptionService,
+                      )),
               BlocProvider(create: (context) => MailBloc()),
             ],
             child: ab_shared_translations.TranslationProvider(

@@ -167,7 +167,8 @@ class NavConstants {
                           child: ClipRRect(
                             borderRadius:
                                 BorderRadius.circular($constants.corners.md),
-                            child: MailComposer(),
+                            child: MailComposer(
+                            ),
                           ),
                         ),
                       ));
@@ -180,7 +181,8 @@ class NavConstants {
                 backgroundColor: Colors.transparent,
                 builder: (context) => SizedBox(
                     height: getSize(context).height * 0.92,
-                    child: MailComposer()),
+                    child: MailComposer(
+                    )),
               );
             }
             SyncService.sync(context);

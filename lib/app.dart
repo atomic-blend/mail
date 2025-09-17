@@ -1,5 +1,4 @@
 import 'package:ab_shared/flavors.dart';
-import 'package:appflowy_editor/appflowy_editor.dart';
 import 'package:mail/i18n/strings.g.dart';
 import 'package:mail/main.dart';
 import 'package:mail/pages/app_layout.dart';
@@ -23,7 +22,6 @@ class App extends StatelessWidget {
       supportedLocales: AppLocaleUtils.supportedLocales,
       localizationsDelegates: const [
         FleatherLocalizations.delegate,
-        AppFlowyEditorLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
