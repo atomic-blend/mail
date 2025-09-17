@@ -124,7 +124,7 @@ class _MailComposerState extends ResponsiveState<MailComposer> {
                 _buildEmailFields("Subject", subjectController),
                 _buildPaddedDivider(),
                 SizedBox(height: $constants.insets.xs),
-                Flexible(
+                Expanded(
                   child: SizedBox(
                     width: double.infinity,
                     child: ABEditor(editorState: editorState!),
@@ -132,7 +132,7 @@ class _MailComposerState extends ResponsiveState<MailComposer> {
                 ),
                 SizedBox(
                     height: isDesktop(context)
-                        ? $constants.insets.sm
+                        ? 85
                         : MediaQuery.of(context).viewInsets.bottom == 0
                             ? 85
                             : 60 + MediaQuery.of(context).viewInsets.bottom),
