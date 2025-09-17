@@ -14,6 +14,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mail/blocs/mail/mail_bloc.dart';
 import 'package:mail/models/mail/mail.dart';
 import 'package:mail/models/send_mail/send_mail.dart' as send_mail;
+import 'package:parchment/codecs.dart';
 
 class MailComposer extends ResponsiveStatefulWidget {
   final send_mail.SendMail? mail;
@@ -39,9 +40,7 @@ class _MailComposerState extends ResponsiveState<MailComposer> {
       subjectController.text = widget.mail!.mail!.getHeader("Subject") ?? "";
       to = List<String>.from(widget.mail!.mail!.getHeader("To") ?? []);
       from = widget.mail!.mail!.getHeader("From") ?? "";
-      final document = ParchmentDocument.fromJson(
-          json.decode(widget.mail!.mail!.textContent ?? ""));
-      editorState = FleatherController(document: document);
+      editorState = FleatherController(document: parchmentHtml.decode(widget.mail!.mail!.textContent ?? ""));
     } else {
       editorState = FleatherController(document: ParchmentDocument());
     }
@@ -266,11 +265,8 @@ class _MailComposerState extends ResponsiveState<MailComposer> {
   }
 
   Mail _generateMailEntity() {
-    // final htmlContent = documentToHTML(editorState.document);
-    // final mdContent = documentToMarkdown(editorState.document);
-    //TODO: update this with fleather
-    final htmlContent = "";
-    final mdContent = "";
+    final htmlContent = parchmentHtml.encode(editorState.document);
+    final mdContent = parchmentMarkdown.encode(editorState.document);
     final plainTextContent = _markdownToPlainText(mdContent);
 
     //TODO: add attachements and create a raw mail entity like it's done in the backend
