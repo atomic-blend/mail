@@ -189,6 +189,70 @@ jobs:
           name: web-app
           path: ./build/web
 
+  build-web-app-for-linux:
+    needs: bump-version
+    runs-on: [self-hosted, Linux]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: "stable"
+          cache: true
+      - name: Install dependencies
+        run: |
+          apt-get install mesa-utils openjdk-17-jdk libcurl4-openssl-dev libsecret-1-dev libsecret-tools libsecret-1-0 clang cmake ninja-build pkg-config libgtk-3-dev -y
+
+      - name: Write Firebase Options
+        run: |
+          cat > lib/firebase_options_prod.dart << 'EOF'
+          ${{ secrets.FIREBASE_OPTIONS_PROD }}
+          EOF
+          
+          cat > lib/firebase_options_dev.dart << 'EOF'
+          ${{ secrets.FIREBASE_OPTIONS_DEV }}
+          EOF
+          
+          cat > assets/configs/prod.json << 'EOF'
+          ${{ secrets.APP_CONFIG_PROD }}
+          EOF
+          
+          cat > assets/configs/dev.json << 'EOF'
+          ${{ secrets.APP_CONFIG_DEV }}
+          EOF
+      - name: Get tag
+        id: get-tag
+        run: |
+          TAG=$(git describe --abbrev=0 --tags)
+          echo "tag=$TAG" >> $GITHUB_OUTPUT
+      - name: Build Web App
+        run: |
+          export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
+          flutter clean
+          flutter pub get
+          flutter pub run build_runner build --delete-conflicting-outputs
+          flutter build linux --release -t lib/main_prod.dart --dart-define APP_ENV=prod
+
+      - name: Update version
+        run: |
+          sed -i "s/Version: .*/Version: ${{ steps.get-tag.outputs.tag }}/" debian/debian.yaml
+          sed -i "s/Version=.*$/Version=${{ steps.get-tag.outputs.tag }}/" debian/gui/atomic-task.desktop
+      
+      - name: Package Linux App
+        run: |
+          dart pub global activate flutter_to_debian
+          flutter_to_debian
+          ls -la debian/packages
+      - name: Upload Linux App
+        uses: actions/upload-artifact@v4
+        with:
+          name: linux-app
+          path: debian/packages/atomic-mail_${{ steps.get-tag.outputs.tag }}_amd64.deb
+
 
   build-docker-images:
     needs: build-web-app-for-web
@@ -257,6 +321,11 @@ jobs:
         uses: actions/setup-go@v4
         with:
           go-version: "stable"
+      - name: Download Linux App Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: linux-app
+          path: ./debian/packages/atomic-mail_${{ steps.get-tag.outputs.tag }}_amd64.deb
 
       - name: Install ghr
         run: |
@@ -301,6 +370,9 @@ jobs:
             --title "v$TAG" \
             --notes "$(cat release_notes.md)" \
             --target ${{ github.sha }}
+
+          # Upload linux app
+          gh release upload $TAG debian/packages/atomic-mail_${{ steps.get-tag.outputs.tag }}_amd64.deb
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
