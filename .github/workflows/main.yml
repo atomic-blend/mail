@@ -372,9 +372,6 @@ jobs:
       - build-app-for-web
       - build-app-for-android
     runs-on: [self-hosted, Linux]
-    strategy:
-      matrix:
-        platform: [linux/amd64, linux/arm64]
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
