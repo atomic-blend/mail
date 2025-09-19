@@ -2,6 +2,14 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## 0.2.13 - 2025-09-19
+#### Bug Fixes
+- use stable as rust toolchain when installing it - (00ce008) - Brandon Guigo
+#### Miscellaneous Chores
+- **(release)** 0.2.12 [skip ci] - (a9c436f) - GitHub Actions
+
+- - -
+
 ## 0.2.12 - 2025-09-19
 #### Bug Fixes
 - remove unnecessary matrix - (7e1f677) - Brandon Guigo
