@@ -146,7 +146,7 @@ jobs:
         with:
           name: changelog
           path: CHANGELOG.md
-  build-web-app-for-web:
+  build-app-for-web:
     needs: bump-version
     runs-on: [self-hosted, Linux, docker-builder]
     steps:
@@ -189,7 +189,7 @@ jobs:
           name: web-app
           path: ./build/web
 
-  build-web-app-for-linux:
+  build-app-for-linux:
     needs: bump-version
     runs-on: [self-hosted, Linux]
     steps:
@@ -277,6 +277,8 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
+      - name: Ensure unzip is installed
+        run: sudo apt-get update && sudo apt-get install -y unzip
 
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
@@ -326,7 +328,7 @@ jobs:
 
 
   build-docker-images:
-    needs: build-web-app-for-web
+    needs: build-app-for-web
     runs-on: [self-hosted, Linux]
     strategy:
       matrix:
@@ -376,7 +378,7 @@ jobs:
   create-github-release:
     needs: 
       - build-docker-images
-      - build-web-app-for-linux
+      - build-app-for-linux
       - build-app-for-android
     runs-on: [self-hosted, Linux]
     steps:
