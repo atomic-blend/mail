@@ -2,6 +2,14 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## 0.2.16 - 2025-09-19
+#### Bug Fixes
+- remane variable - (3cd4b60) - Brandon Guigo
+#### Miscellaneous Chores
+- **(release)** 0.2.15 [skip ci] - (c3f6e18) - GitHub Actions
+
+- - -
+
 ## 0.2.15 - 2025-09-19
 #### Bug Fixes
 - update flutter shared - (4e18426) - Brandon Guigo
