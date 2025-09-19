@@ -353,27 +353,57 @@ jobs:
       - name: Build Android App
         run: |
           cd fastlane
-          # Kill any existing Gradle daemons to prevent conflicts
-          ./gradlew --stop || true
           fastlane android build_beta
+      - name: Upload Android APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: android-apk
+          path: build/app/outputs/flutter-apk/app-prod-release.apk
+      - name: Upload Android AAB
+        uses: actions/upload-artifact@v4
+        with:
+          name: android-aab
+          path: build/app/outputs/flutter-apk/app-prod-release.aab
+
+
+  publish-android-app:
+    needs: 
+      - build-app-for-web
+      - build-app-for-android
+    runs-on: [self-hosted, Linux]
+    strategy:
+      matrix:
+        platform: [linux/amd64, linux/arm64]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+    
+      - name: Download Web App Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: android-aab
+          path: ./build/app/outputs/flutter-apk/
+
+
+      - name: Get tag
+        id: get-tag
+        run: |
+          TAG=$(git describe --abbrev=0 --tags)
+          echo "tag=$TAG" >> $GITHUB_OUTPUT
+
       - name: Publish Android App to Play Store
         continue-on-error: true
         run: |
           cd fastlane
           fastlane android upload_beta
-      - name: Upload Android App
-        uses: actions/upload-artifact@v4
-        with:
-          name: android-app
-          path: build/app/outputs/flutter-apk/app-prod-release.apk
 
-
-  build-docker-images:
-    needs: build-app-for-web
+  publish-docker-images:
+    needs: 
+      - build-app-for-android
+      - build-app-for-web
     runs-on: [self-hosted, Linux]
-    strategy:
-      matrix:
-        platform: [linux/amd64, linux/arm64]
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -418,9 +448,8 @@ jobs:
 
   create-github-release:
     needs: 
-      - build-docker-images
-      - build-app-for-linux
-      - build-app-for-android
+      - publish-docker-images
+      - publish-android-app
     runs-on: [self-hosted, Linux]
     steps:
       - name: Checkout Repository
