@@ -2,6 +2,14 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## 0.2.10 - 2025-09-19
+#### Bug Fixes
+- upgrade android components to latest version - (de70ffd) - Brandon Guigo
+#### Miscellaneous Chores
+- **(release)** 0.2.9 [skip ci] - (852ac6c) - GitHub Actions
+
+- - -
+
 ## 0.2.9 - 2025-09-19
 #### Bug Fixes
 - update kotlin for android and restore the signing files for android - (d6507bd) - Brandon Guigo
