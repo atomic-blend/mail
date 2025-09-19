@@ -317,7 +317,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: android-app
-          path: build/mail/outputs/bundle/prodRelease/mail-prod-release.apk
+          path: build/app/outputs/flutter-apk/app-prod-release.apk
 
 
   build-docker-images:
@@ -369,7 +369,10 @@ jobs:
 
 
   create-github-release:
-    needs: [build-docker-images, build-web-app-for-linux]
+    needs: 
+      - build-docker-images
+      - build-web-app-for-linux
+      - build-app-for-android
     runs-on: [self-hosted, Linux]
     steps:
       - name: Checkout Repository
@@ -398,6 +401,15 @@ jobs:
         with:
           name: linux-app
           path: ./debian/packages/
+
+      - name: Download Android App Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: android-app
+          path: ./build/app/outputs/flutter-apk/app-prod-release.apk
+      - name: Rename the Android App file
+        run: |
+          mv build/app/outputs/flutter-apk/app-prod-release.apk build/app/outputs/flutter-apk/atomic-mail-${{ steps.get-tag.outputs.tag }}.apk
 
       - name: Install ghr
         run: |
@@ -445,6 +457,9 @@ jobs:
 
           # Upload linux app
           gh release upload $TAG "debian/packages/atomic-mail_${TAG}_amd64.deb"
+
+          # Upload android app
+          gh release upload $TAG "build/app/outputs/flutter-apk/atomic-mail-${TAG}.apk"
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
