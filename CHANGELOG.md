@@ -2,6 +2,15 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## 0.2.11 - 2025-09-19
+#### Bug Fixes
+- rm graddle properties before recreating it - (462147c) - Brandon Guigo
+- try some settings for graddle crashing - (204df9c) - Brandon Guigo
+#### Miscellaneous Chores
+- **(release)** 0.2.10 [skip ci] - (19549c3) - GitHub Actions
+
+- - -
+
 ## 0.2.10 - 2025-09-19
 #### Bug Fixes
 - upgrade android components to latest version - (de70ffd) - Brandon Guigo
