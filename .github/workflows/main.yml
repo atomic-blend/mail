@@ -312,7 +312,12 @@ jobs:
       - name: Build Web App
         run: |
           cd fastlane
-          fastlane android beta
+          fastlane android build_beta
+      - name: Publish Android App to Play Store
+        continue-on-error: true
+        run: |
+          cd fastlane
+          fastlane android upload_beta
       - name: Upload Android App
         uses: actions/upload-artifact@v4
         with:
