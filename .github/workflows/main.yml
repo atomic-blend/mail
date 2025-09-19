@@ -321,6 +321,12 @@ jobs:
         uses: actions/setup-go@v4
         with:
           go-version: "stable"
+
+      - name: Get tag
+        id: get-tag
+        run: |
+          TAG=$(git describe --abbrev=0 --tags)
+          echo "tag=$TAG" >> $GITHUB_OUTPUT
       - name: Download Linux App Artifact
         uses: actions/download-artifact@v4
         with:
