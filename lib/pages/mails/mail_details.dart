@@ -9,6 +9,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:mail/blocs/mail/mail_bloc.dart';
 import 'package:mail/components/avatars/mail_user_avatar.dart';
+import 'package:mail/i18n/strings.g.dart';
 import 'package:mail/models/mail/mail.dart';
 
 class MailDetailScreen extends ResponsiveStatefulWidget {
@@ -108,8 +109,8 @@ class MailDetailScreenState extends ResponsiveState<MailDetailScreen> {
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              buildPeopleRow("From", mail.getHeader("From")),
-                              buildPeopleRow("To", mail.getHeader("To")),
+                              buildPeopleRow(context.t.mail_composer.from, mail.getHeader("From")),
+                              buildPeopleRow(context.t.mail_composer.to, mail.getHeader("To")),
                             ],
                           ),
                           Expanded(
@@ -227,7 +228,7 @@ class MailDetailScreenState extends ResponsiveState<MailDetailScreen> {
     } else if (mail.textContent != null && mail.textContent!.isNotEmpty) {
       return mail.textContent!;
     } else {
-      return "No content";
+      return context.t.mail_card.no_content;
     }
   }
 
