@@ -18,8 +18,7 @@ class MailCard extends StatelessWidget {
   final Mail? mail;
   final send_mail.SendMail? draft;
   final Function(String)? onDelete;
-  const MailCard(
-      {super.key, required this.mail, required this.draft, this.onDelete});
+  const MailCard({super.key, this.mail, this.draft, this.onDelete});
 
   @override
   Widget build(BuildContext context) {

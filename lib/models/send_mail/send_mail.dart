@@ -54,6 +54,13 @@ class SendMail with _$SendMail {
     return 'SendMail { id: $id, mail: $mail, sendStatus: $sendStatus, retryCounter: $retryCounter, failureReason: $failureReason, failedAt: $failedAt, trashed: $trashed, createdAt: $createdAt, updatedAt: $updatedAt }';
   }
 
+  bool search(String query) {
+    if (mail != null && mail!.search(query)) {
+      return true;
+    }
+    return false;
+  }
+
   Future<Map<String, dynamic>> encrypt(
       {required EncryptionService encryptionService}) async {
     return {
