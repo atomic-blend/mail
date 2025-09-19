@@ -387,8 +387,11 @@ jobs:
         with:
           name: android-aab
           path: ./build/app/outputs/bundle/prodRelease/
-
-
+      - name: Write Play Store Key
+        run: |
+          cat > playstore_key.json << 'EOF'
+          ${{ secrets.PLAY_STORE_KEY }}
+          EOF
       - name: Get tag
         id: get-tag
         run: |
