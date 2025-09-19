@@ -11,7 +11,7 @@ control:
   Priority: optional
   Depends:
   Maintainer: Atomic Blend
-  Description: End-to-end encrypted todo list & habits
+  Description: End-to-end encrypted email app.
 
 options:
   exec_out_dir: debian/packages
