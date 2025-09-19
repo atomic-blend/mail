@@ -2,6 +2,14 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## 0.2.3 - 2025-09-19
+#### Bug Fixes
+- again the upload path in the release script - (435f1a1) - Brandon Guigo
+#### Miscellaneous Chores
+- **(release)** 0.2.2 [skip ci] - (8eddbe9) - GitHub Actions
+
+- - -
+
 ## 0.2.2 - 2025-09-19
 #### Bug Fixes
 - filename for upload in the release - (ddc7805) - Brandon Guigo
