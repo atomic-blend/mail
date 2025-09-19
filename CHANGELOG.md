@@ -2,6 +2,14 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## 0.2.2 - 2025-09-19
+#### Bug Fixes
+- filename for upload in the release - (ddc7805) - Brandon Guigo
+#### Miscellaneous Chores
+- **(release)** 0.2.1 [skip ci] - (d057d26) - GitHub Actions
+
+- - -
+
 ## 0.2.1 - 2025-09-19
 #### Bug Fixes
 - add sudo to the install dependency commands - (93ae5b9) - Brandon Guigo
