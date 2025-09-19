@@ -8,6 +8,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_card_swiper/flutter_card_swiper.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:mail/blocs/mail/mail_bloc.dart';
+import 'package:mail/i18n/strings.g.dart';
 import 'package:mail/models/mail/mail.dart';
 import 'package:mail/services/sync.service.dart';
 
@@ -66,14 +67,14 @@ class _OrganizeScreenState extends State<OrganizeScreen> {
                       ),
                       SizedBox(height: $constants.insets.sm),
                       Text(
-                        "Congratulations!",
+                        context.t.zero_inbox_card.title,
                         style: getTextTheme(context).headlineMedium!.copyWith(
                               fontWeight: FontWeight.bold,
                             ),
                       ),
                       SizedBox(height: $constants.insets.xs),
                       Text(
-                        "You don't have any unread messages.",
+                        context.t.zero_inbox_card.description,
                         textAlign: TextAlign.center,
                         style: getTextTheme(context).bodyMedium,
                       ),
@@ -208,8 +209,8 @@ class _OrganizeScreenState extends State<OrganizeScreen> {
                 fontWeight: mail.read != true ? FontWeight.bold : null),
           ),
           SizedBox(height: $constants.insets.xs),
-          _buildPeopleRow("From", mail.getHeader("From"), mail.read),
-          _buildPeopleRow("To", mail.getHeader("To"), mail.read),
+          _buildPeopleRow(context.t.mail_composer.from, mail.getHeader("From"), mail.read),
+          _buildPeopleRow(context.t.mail_composer.to, mail.getHeader("To"), mail.read),
           SizedBox(height: $constants.insets.xs),
           Divider(),
           SizedBox(height: $constants.insets.xs),
