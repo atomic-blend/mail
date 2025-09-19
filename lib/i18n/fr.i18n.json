@@ -10,6 +10,10 @@
     },
     "logout": "Déconnexion"
   },
+  "zero_inbox_card": {
+    "title": "Félicitations !",
+    "description": "Vous n'avez aucun message non lu."
+  },
   "mail_card": {
     "no_content": "Aucun contenu",
     "delete_draft_modal": {

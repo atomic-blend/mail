@@ -42,6 +42,7 @@ class Translations implements BaseTranslations<AppLocale, Translations> {
 	late final TranslationsSettingsEn settings = TranslationsSettingsEn._(_root);
 	late final TranslationsAccountEn account = TranslationsAccountEn._(_root);
 	late final TranslationsMailCardEn mail_card = TranslationsMailCardEn._(_root);
+	late final TranslationsZeroInboxCardEn zero_inbox_card = TranslationsZeroInboxCardEn._(_root);
 	late final TranslationsTrashedEn trashed = TranslationsTrashedEn._(_root);
 	late final TranslationsUnderConstructionEn under_construction = TranslationsUnderConstructionEn._(_root);
 	late final TranslationsMoreEn more = TranslationsMoreEn._(_root);
@@ -87,6 +88,21 @@ class TranslationsMailCardEn {
 	String get no_content => 'No content';
 
 	late final TranslationsMailCardDeleteDraftModalEn delete_draft_modal = TranslationsMailCardDeleteDraftModalEn._(_root);
+}
+
+// Path: zero_inbox_card
+class TranslationsZeroInboxCardEn {
+	TranslationsZeroInboxCardEn._(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Congratulations!'
+	String get title => 'Congratulations!';
+
+	/// en: 'You don't have any unread messages.'
+	String get description => 'You don\'t have any unread messages.';
 }
 
 // Path: trashed
@@ -240,6 +256,8 @@ extension on Translations {
 			case 'mail_card.delete_draft_modal.title': return 'Delete draft';
 			case 'mail_card.delete_draft_modal.description': return 'Are you sure you want to delete this draft?';
 			case 'mail_card.delete_draft_modal.warning': return 'This action cannot be undone.';
+			case 'zero_inbox_card.title': return 'Congratulations!';
+			case 'zero_inbox_card.description': return 'You don\'t have any unread messages.';
 			case 'trashed.card_title': return 'Delete all trashed mails';
 			case 'trashed.x_mails_trashed': return ({required Object count}) => '${count} mails trashed';
 			case 'trashed.description': return 'Those are the mails that have been trashed by you, they will be deleted after 30 days.';

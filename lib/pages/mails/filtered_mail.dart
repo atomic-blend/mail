@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mail/blocs/mail/mail_bloc.dart';
 import 'package:mail/components/cards/mail_card.dart';
+import 'package:mail/i18n/strings.g.dart';
 import 'package:mail/services/sync.service.dart';
 
 class FilteredMailScreen extends StatefulWidget {
@@ -65,7 +66,7 @@ class _FilteredMailScreenState extends State<FilteredMailScreen> {
                           ),
                           SizedBox(height: $constants.insets.sm),
                           Text(
-                            "Congratulations!",
+                            context.t.zero_inbox_card.title,
                             style:
                                 getTextTheme(context).headlineMedium!.copyWith(
                                       fontWeight: FontWeight.bold,
@@ -73,7 +74,7 @@ class _FilteredMailScreenState extends State<FilteredMailScreen> {
                           ),
                           SizedBox(height: $constants.insets.xs),
                           Text(
-                            "You don't have any unread messages.",
+                            context.t.zero_inbox_card.description,
                             textAlign: TextAlign.center,
                             style: getTextTheme(context).bodyMedium,
                           ),

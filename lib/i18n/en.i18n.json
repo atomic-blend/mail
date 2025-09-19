@@ -23,6 +23,10 @@
       "warning": "This action cannot be undone."
     }
   },
+  "zero_inbox_card": {
+    "title": "Congratulations!",
+    "description": "You don't have any unread messages."
+  },
   "trashed": {
     "card_title": "Delete all trashed mails",
     "x_mails_trashed": "${count} mails trashed",
