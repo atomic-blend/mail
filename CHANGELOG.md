@@ -2,6 +2,14 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## 0.2.19 - 2025-09-19
+#### Bug Fixes
+- write the playstore key at the right place - (cdcd73f) - Brandon Guigo
+#### Miscellaneous Chores
+- **(release)** 0.2.18 [skip ci] - (2568c77) - GitHub Actions
+
+- - -
+
 ## 0.2.18 - 2025-09-19
 #### Bug Fixes
 - path of the apk in release step - (9778f1a) - Brandon Guigo
