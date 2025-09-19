@@ -2,6 +2,14 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## 0.2.14 - 2025-09-19
+#### Bug Fixes
+- update flutter - (2a1d006) - Brandon Guigo
+#### Miscellaneous Chores
+- **(release)** 0.2.13 [skip ci] - (6d921d4) - GitHub Actions
+
+- - -
+
 ## 0.2.13 - 2025-09-19
 #### Bug Fixes
 - use stable as rust toolchain when installing it - (00ce008) - Brandon Guigo
