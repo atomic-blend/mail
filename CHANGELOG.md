@@ -2,6 +2,17 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## 0.2.12 - 2025-09-19
+#### Bug Fixes
+- remove unnecessary matrix - (7e1f677) - Brandon Guigo
+- dependencies between the jobs - (943a7fc) - Brandon Guigo
+- wait for all builds to success to publish - (d4680b3) - Brandon Guigo
+- add rustup targets - (0339886) - Brandon Guigo
+#### Miscellaneous Chores
+- **(release)** 0.2.11 [skip ci] - (fbf7675) - GitHub Actions
+
+- - -
+
 ## 0.2.11 - 2025-09-19
 #### Bug Fixes
 - rm graddle properties before recreating it - (462147c) - Brandon Guigo
