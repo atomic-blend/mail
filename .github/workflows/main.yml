@@ -258,6 +258,72 @@ jobs:
           name: linux-app
           path: debian/packages/atomic-mail_${{ steps.get-tag.outputs.tag }}_amd64.deb
 
+  build-app-for-android:
+    needs: bump-version
+    runs-on: [self-hosted, Linux]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: "stable"
+          cache: true
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+        
+      - name: Install dependencies
+        run: |
+          sudo apt-get install mesa-utils openjdk-17-jdk libcurl4-openssl-dev libsecret-1-dev libsecret-tools libsecret-1-0 clang cmake ninja-build pkg-config libgtk-3-dev -y
+          sudo apt install ruby ruby-dev -y
+          sudo gem install fastlane
+
+      - name: Write Firebase Options
+        run: |
+          cat > lib/firebase_options_prod.dart << 'EOF'
+          ${{ secrets.FIREBASE_OPTIONS_PROD }}
+          EOF
+          
+          cat > lib/firebase_options_dev.dart << 'EOF'
+          ${{ secrets.FIREBASE_OPTIONS_DEV }}
+          EOF
+          
+          cat > assets/configs/prod.json << 'EOF'
+          ${{ secrets.APP_CONFIG_PROD }}
+          EOF
+          
+          cat > assets/configs/dev.json << 'EOF'
+          ${{ secrets.APP_CONFIG_DEV }}
+          EOF
+      - name: Get tag
+        id: get-tag
+        run: |
+          TAG=$(git describe --abbrev=0 --tags)
+          echo "tag=$TAG" >> $GITHUB_OUTPUT
+      - name: Build Web App
+        run: |
+          cd fastlane
+          fastlane android build_beta
+      - name: Publish Android App to Play Store
+        continue-on-error: true
+        run: |
+          cd fastlane
+          fastlane android upload_beta
+      - name: Upload Android App
+        uses: actions/upload-artifact@v4
+        with:
+          name: android-app
+          path: build/app/outputs/flutter-apk/app-prod-release.apk
+
 
   build-docker-images:
     needs: build-web-app-for-web
@@ -308,7 +374,10 @@ jobs:
 
 
   create-github-release:
-    needs: [build-docker-images, build-web-app-for-linux]
+    needs: 
+      - build-docker-images
+      - build-web-app-for-linux
+      - build-app-for-android
     runs-on: [self-hosted, Linux]
     steps:
       - name: Checkout Repository
@@ -337,6 +406,15 @@ jobs:
         with:
           name: linux-app
           path: ./debian/packages/
+
+      - name: Download Android App Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: android-app
+          path: ./build/app/outputs/flutter-apk/app-prod-release.apk
+      - name: Rename the Android App file
+        run: |
+          mv build/app/outputs/flutter-apk/app-prod-release.apk build/app/outputs/flutter-apk/atomic-mail-${{ steps.get-tag.outputs.tag }}.apk
 
       - name: Install ghr
         run: |
@@ -384,6 +462,9 @@ jobs:
 
           # Upload linux app
           gh release upload $TAG "debian/packages/atomic-mail_${TAG}_amd64.deb"
+
+          # Upload android app
+          gh release upload $TAG "build/app/outputs/flutter-apk/atomic-mail-${TAG}.apk"
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
