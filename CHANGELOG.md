@@ -2,6 +2,14 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## 0.2.9 - 2025-09-19
+#### Bug Fixes
+- update kotlin for android and restore the signing files for android - (d6507bd) - Brandon Guigo
+#### Miscellaneous Chores
+- **(release)** 0.2.8 [skip ci] - (4ca6d4e) - GitHub Actions
+
+- - -
+
 ## 0.2.8 - 2025-09-19
 #### Bug Fixes
 - job naming + check / install unzip before android sdk - (0c38329) - Brandon Guigo
