@@ -12,6 +12,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mail/blocs/mail/mail_bloc.dart';
+import 'package:mail/i18n/strings.g.dart';
 import 'package:mail/models/mail/mail.dart';
 import 'package:mail/models/send_mail/send_mail.dart' as send_mail;
 import 'package:parchment/codecs.dart';
@@ -87,7 +88,7 @@ class _MailComposerState extends ResponsiveState<MailComposer> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        "New Mail",
+                        context.t.mail_composer.title,
                         style: getTextTheme(context)
                             .displaySmall!
                             .copyWith(fontWeight: FontWeight.bold),
@@ -110,7 +111,7 @@ class _MailComposerState extends ResponsiveState<MailComposer> {
                 _buildToField(toController, to),
                 _buildPaddedDivider(),
                 _buildEmailFields(
-                  "From",
+                  context.t.mail_composer.from,
                   null,
                   enabled: false,
                   value: from,
@@ -119,7 +120,8 @@ class _MailComposerState extends ResponsiveState<MailComposer> {
                   },
                 ),
                 _buildPaddedDivider(),
-                _buildEmailFields("Subject", subjectController),
+                _buildEmailFields(
+                    context.t.mail_composer.subject, subjectController),
                 _buildPaddedDivider(),
                 SizedBox(height: $constants.insets.xs),
                 Expanded(
@@ -249,7 +251,7 @@ class _MailComposerState extends ResponsiveState<MailComposer> {
             },
             child: AppTextFormField(
               height: 25,
-              labelText: "To:",
+              labelText: "${context.t.mail_composer.to}:",
               rowLayout: true,
               labelStyle: getTextTheme(context)
                   .bodyMedium!
@@ -334,10 +336,10 @@ class _MailComposerState extends ResponsiveState<MailComposer> {
       final result = await showDialog(
           context: context,
           builder: (context) => ABModal(
-                title: "Save Draft",
-                description: "Do you want to save the draft?",
-                confirmText: "Save",
-                cancelText: "Discard",
+                title: context.t.mail_composer.save_draft_modal.title,
+                description: context.t.mail_composer.save_draft_modal.description,
+                confirmText: context.t.mail_composer.save_draft_modal.confirm_text,
+                cancelText: context.t.mail_composer.save_draft_modal.cancel_text,
                 onConfirm: () {
                   Navigator.pop(context, true);
                 },

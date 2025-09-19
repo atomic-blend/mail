@@ -44,6 +44,7 @@ class Translations implements BaseTranslations<AppLocale, Translations> {
 	late final TranslationsMailCardEn mail_card = TranslationsMailCardEn._(_root);
 	late final TranslationsZeroInboxCardEn zero_inbox_card = TranslationsZeroInboxCardEn._(_root);
 	late final TranslationsTrashedEn trashed = TranslationsTrashedEn._(_root);
+	late final TranslationsMailComposerEn mail_composer = TranslationsMailComposerEn._(_root);
 	late final TranslationsUnderConstructionEn under_construction = TranslationsUnderConstructionEn._(_root);
 	late final TranslationsMoreEn more = TranslationsMoreEn._(_root);
 	late final TranslationsActionsEn actions = TranslationsActionsEn._(_root);
@@ -123,6 +124,29 @@ class TranslationsTrashedEn {
 	String get description => 'Those are the mails that have been trashed by you, they will be deleted after 30 days.';
 
 	late final TranslationsTrashedDeleteAllTrashedMailsModalEn delete_all_trashed_mails_modal = TranslationsTrashedDeleteAllTrashedMailsModalEn._(_root);
+}
+
+// Path: mail_composer
+class TranslationsMailComposerEn {
+	TranslationsMailComposerEn._(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'New Mail'
+	String get title => 'New Mail';
+
+	/// en: 'From'
+	String get from => 'From';
+
+	/// en: 'Subject'
+	String get subject => 'Subject';
+
+	/// en: 'To'
+	String get to => 'To';
+
+	late final TranslationsMailComposerSaveDraftModalEn save_draft_modal = TranslationsMailComposerSaveDraftModalEn._(_root);
 }
 
 // Path: under_construction
@@ -226,6 +250,27 @@ class TranslationsTrashedDeleteAllTrashedMailsModalEn {
 	String get warning => 'This action cannot be undone.';
 }
 
+// Path: mail_composer.save_draft_modal
+class TranslationsMailComposerSaveDraftModalEn {
+	TranslationsMailComposerSaveDraftModalEn._(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Save Draft'
+	String get title => 'Save Draft';
+
+	/// en: 'Do you want to save the draft?'
+	String get description => 'Do you want to save the draft?';
+
+	/// en: 'Save'
+	String get confirm_text => 'Save';
+
+	/// en: 'Discard'
+	String get cancel_text => 'Discard';
+}
+
 // Path: settings.app_settings.selfHostedUrl
 class TranslationsSettingsAppSettingsSelfHostedUrlEn {
 	TranslationsSettingsAppSettingsSelfHostedUrlEn._(this._root);
@@ -264,6 +309,14 @@ extension on Translations {
 			case 'trashed.delete_all_trashed_mails_modal.title': return 'Delete all trashed mails';
 			case 'trashed.delete_all_trashed_mails_modal.description': return 'Are you sure you want to delete all trashed mails?';
 			case 'trashed.delete_all_trashed_mails_modal.warning': return 'This action cannot be undone.';
+			case 'mail_composer.title': return 'New Mail';
+			case 'mail_composer.from': return 'From';
+			case 'mail_composer.subject': return 'Subject';
+			case 'mail_composer.to': return 'To';
+			case 'mail_composer.save_draft_modal.title': return 'Save Draft';
+			case 'mail_composer.save_draft_modal.description': return 'Do you want to save the draft?';
+			case 'mail_composer.save_draft_modal.confirm_text': return 'Save';
+			case 'mail_composer.save_draft_modal.cancel_text': return 'Discard';
 			case 'under_construction.title': return 'We\'re working on it!';
 			case 'under_construction.description': return 'This feature is not yet available, but we\'re working hard to bring it to you soon.\n\nStay tuned!';
 			case 'more.title': return 'More';

@@ -40,6 +40,7 @@ class TranslationsFr implements Translations {
 	@override late final _TranslationsZeroInboxCardFr zero_inbox_card = _TranslationsZeroInboxCardFr._(_root);
 	@override late final _TranslationsMailCardFr mail_card = _TranslationsMailCardFr._(_root);
 	@override late final _TranslationsTrashedFr trashed = _TranslationsTrashedFr._(_root);
+	@override late final _TranslationsMailComposerFr mail_composer = _TranslationsMailComposerFr._(_root);
 	@override late final _TranslationsAccountFr account = _TranslationsAccountFr._(_root);
 	@override late final _TranslationsUnderConstructionFr under_construction = _TranslationsUnderConstructionFr._(_root);
 	@override late final _TranslationsMoreFr more = _TranslationsMoreFr._(_root);
@@ -91,6 +92,20 @@ class _TranslationsTrashedFr implements TranslationsTrashedEn {
 	@override String x_mails_trashed({required Object count}) => '${count} mails supprimés';
 	@override String get description => 'Ce sont les mails que vous avez supprimés, ils seront supprimés après 30 jours.';
 	@override late final _TranslationsTrashedDeleteAllTrashedMailsModalFr delete_all_trashed_mails_modal = _TranslationsTrashedDeleteAllTrashedMailsModalFr._(_root);
+}
+
+// Path: mail_composer
+class _TranslationsMailComposerFr implements TranslationsMailComposerEn {
+	_TranslationsMailComposerFr._(this._root);
+
+	final TranslationsFr _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Nouveau Mail';
+	@override String get from => 'De';
+	@override String get subject => 'Objet';
+	@override String get to => 'À';
+	@override late final _TranslationsMailComposerSaveDraftModalFr save_draft_modal = _TranslationsMailComposerSaveDraftModalFr._(_root);
 }
 
 // Path: account
@@ -171,6 +186,19 @@ class _TranslationsTrashedDeleteAllTrashedMailsModalFr implements TranslationsTr
 	@override String get warning => 'Cette action ne peut pas être annulée.';
 }
 
+// Path: mail_composer.save_draft_modal
+class _TranslationsMailComposerSaveDraftModalFr implements TranslationsMailComposerSaveDraftModalEn {
+	_TranslationsMailComposerSaveDraftModalFr._(this._root);
+
+	final TranslationsFr _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Enregistrer le brouillon';
+	@override String get description => 'Voulez-vous enregistrer le brouillon ?';
+	@override String get confirm_text => 'Enregistrer';
+	@override String get cancel_text => 'Annuler';
+}
+
 // Path: account.sections
 class _TranslationsAccountSectionsFr implements TranslationsAccountSectionsEn {
 	_TranslationsAccountSectionsFr._(this._root);
@@ -214,6 +242,14 @@ extension on TranslationsFr {
 			case 'trashed.delete_all_trashed_mails_modal.title': return 'Supprimer tous les mails supprimés';
 			case 'trashed.delete_all_trashed_mails_modal.description': return 'Êtes-vous sûr de vouloir supprimer tous les mails supprimés ?';
 			case 'trashed.delete_all_trashed_mails_modal.warning': return 'Cette action ne peut pas être annulée.';
+			case 'mail_composer.title': return 'Nouveau Mail';
+			case 'mail_composer.from': return 'De';
+			case 'mail_composer.subject': return 'Objet';
+			case 'mail_composer.to': return 'À';
+			case 'mail_composer.save_draft_modal.title': return 'Enregistrer le brouillon';
+			case 'mail_composer.save_draft_modal.description': return 'Voulez-vous enregistrer le brouillon ?';
+			case 'mail_composer.save_draft_modal.confirm_text': return 'Enregistrer';
+			case 'mail_composer.save_draft_modal.cancel_text': return 'Annuler';
 			case 'account.sections.account': return 'Compte';
 			case 'under_construction.title': return 'On travaille dessus !';
 			case 'under_construction.description': return 'Cette fonctionnalité est en cours de développement.\n\nRevenez bientôt pour découvrir les dernières mises à jour !';

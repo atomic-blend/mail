@@ -32,6 +32,18 @@
       "warning": "Cette action ne peut pas être annulée."
     }
   },
+  "mail_composer": {
+    "title": "Nouveau Mail",
+    "from": "De",
+    "subject": "Objet",
+    "to": "À",
+    "save_draft_modal": {
+      "title": "Enregistrer le brouillon",
+      "description": "Voulez-vous enregistrer le brouillon ?",
+      "confirm_text": "Enregistrer",
+      "cancel_text": "Annuler"
+    }
+  },
   "account": {
     "sections": {
       "account": "Compte"

@@ -37,6 +37,18 @@
       "warning": "This action cannot be undone."
     }
   },
+  "mail_composer": {
+    "title": "New Mail",
+    "from": "From",
+    "subject": "Subject",
+    "to": "To",
+    "save_draft_modal": {
+      "title": "Save Draft",
+      "description": "Do you want to save the draft?",
+      "confirm_text": "Save",
+      "cancel_text": "Discard"
+    }
+  },
   "under_construction": {
     "title": "We're working on it!",
     "description": "This feature is not yet available, but we're working hard to bring it to you soon.\n\nStay tuned!"
