@@ -318,9 +318,28 @@ jobs:
         run: |
           TAG=$(git describe --abbrev=0 --tags)
           echo "tag=$TAG" >> $GITHUB_OUTPUT
-      - name: Build Web App
+          
+      - name: Configure Gradle
+        run: |
+          rm -f ~/.gradle/gradle.properties
+          echo "org.gradle.daemon=false" >> ~/.gradle/gradle.properties
+          echo "org.gradle.parallel=true" >> ~/.gradle/gradle.properties
+          echo "org.gradle.configureondemand=true" >> ~/.gradle/gradle.properties
+          echo "org.gradle.jvmargs=-Xmx4g -XX:MaxMetaspaceSize=1g -XX:+HeapDumpOnOutOfMemoryError" >> ~/.gradle/gradle.properties
+          
+      - name: Clean and prepare build
+        run: |
+          flutter clean
+          flutter pub get
+          flutter pub run build_runner build --delete-conflicting-outputs
+          # Ensure build directories exist
+          mkdir -p build/app/outputs/flutter-apk
+          
+      - name: Build Android App
         run: |
           cd fastlane
+          # Kill any existing Gradle daemons to prevent conflicts
+          ./gradlew --stop || true
           fastlane android build_beta
       - name: Publish Android App to Play Store
         continue-on-error: true
