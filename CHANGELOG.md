@@ -2,6 +2,17 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## 0.2.7 - 2025-09-19
+#### Bug Fixes
+- continue the release if the play store upload didn't work - (3dfeb45) - Brandon Guigo
+- add the rest of the pipeline for android - (f63dff1) - Brandon Guigo
+- add first version of the android build pipeline - (9bfac81) - Brandon Guigo
+- upgrade for android - (add9480) - Brandon Guigo
+#### Miscellaneous Chores
+- **(release)** 0.2.6 [skip ci] - (8f10330) - GitHub Actions
+
+- - -
+
 ## 0.2.6 - 2025-09-19
 #### Bug Fixes
 - test with java 17 setup action - (d714d4e) - Brandon Guigo
