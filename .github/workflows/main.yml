@@ -368,6 +368,7 @@ jobs:
 
   publish-android-app:
     needs: 
+      - build-app-for-linux
       - build-app-for-web
       - build-app-for-android
     runs-on: [self-hosted, Linux]
@@ -401,6 +402,7 @@ jobs:
 
   publish-docker-images:
     needs: 
+      - build-app-for-linux
       - build-app-for-android
       - build-app-for-web
     runs-on: [self-hosted, Linux]
