@@ -65,9 +65,10 @@ platform :android do
     lane :build_beta do
         Dir.chdir("..") do
             sh('fvm flutter build appbundle --flavor prod --release -t lib/main_prod.dart --dart-define APP_ENV=prod')
-            Dir.chdir("..") do
-              sh('zip -r build/app/outputs/bundle/prodRelease/native-debug-symbols.zip build/app/intermediates/merged_native_libs/prodRelease/out/lib/*')
-            end
+            sh('fvm flutter build apk --flavor prod --release -t lib/main_prod.dart --dart-define APP_ENV=prod')
+            # Dir.chdir("..") do
+            #   sh('zip -r build/app/outputs/bundle/prodRelease/native-debug-symbols.zip build/app/intermediates/merged_native_libs/prodRelease/out/lib/*')
+            # end
         end
       end
 
@@ -75,8 +76,8 @@ platform :android do
         upload_to_play_store(
             package_name: "fr.atomicblend.mail",
             track: "alpha",
-            json_key: "/Users/brandonguigo/playstore_key.json",
-            aab: "../build/notes/outputs/bundle/prodRelease/mail-prod-release.aab",
+            json_key: "../playstore_key.json",
+            aab: "../build/mail/outputs/bundle/prodRelease/mail-prod-release.aab",
             # mapping_paths: ["../build/app/outputs/bundle/prodRelease/native-debug-symbols.zip"]
             )
     end
