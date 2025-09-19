@@ -328,6 +328,10 @@ jobs:
 
           echo ${{ secrets.UPLOAD_KEYSTORE }} | base64 -d > upload-keystore.jks
 
+          cat > playstore_key.json << 'EOF'
+          ${{ secrets.PLAY_STORE_KEY }}
+          EOF
+
       - name: Get tag
         id: get-tag
         run: |
@@ -363,7 +367,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: android-aab
-          path: build/app/outputs/flutter-apk/app-prod-release.aab
+          path: build/app/outputs/bundle/prodRelease/app-prod-release.aab
 
 
   publish-android-app:
@@ -382,7 +386,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: android-aab
-          path: ./build/app/outputs/flutter-apk/
+          path: ./build/app/outputs/bundle/prodRelease/
 
 
       - name: Get tag
@@ -483,7 +487,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: android-app
-          path: ./build/app/outputs/flutter-apk/app-prod-release.apk
+          path: ./build/app/outputs/flutter-apk/
       - name: Rename the Android App file
         run: |
           mv build/app/outputs/flutter-apk/app-prod-release.apk build/app/outputs/flutter-apk/atomic-mail-${{ steps.get-tag.outputs.tag }}.apk
