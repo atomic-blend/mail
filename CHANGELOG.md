@@ -2,6 +2,14 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## 0.2.6 - 2025-09-19
+#### Bug Fixes
+- test with java 17 setup action - (d714d4e) - Brandon Guigo
+#### Miscellaneous Chores
+- **(release)** 0.2.5 [skip ci] - (4a39a2c) - GitHub Actions
+
+- - -
+
 ## 0.2.5 - 2025-09-19
 #### Bug Fixes
 - debian config + path to download the artifact - (6fb4d75) - Brandon Guigo
