@@ -2,6 +2,55 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## 0.2.0 - 2025-09-19
+#### Bug Fixes
+- add a new step in the cicd that will build the linux app and store it as an artifact - (0e38747) - Brandon Guigo
+- translate organize - (1ede3d8) - Brandon Guigo
+- translate mail details - (69b2964) - Brandon Guigo
+- translate mail composer - (cf3ff19) - Brandon Guigo
+- translate filtered view - (eb478eb) - Brandon Guigo
+- translate trashed view - (e3e0208) - Brandon Guigo
+- linter - (ea3d7b8) - Brandon Guigo
+- draft didn't use sync service - (d2b4cd7) - Brandon Guigo
+- update to latest shared - (1c07c6a) - Brandon Guigo
+- linter - (364ddc9) - Brandon Guigo
+- draft popup bugs - (d0ea212) - Brandon Guigo
+- ui so the text editor is always to the max of the available space - (2c66ab8) - Brandon Guigo
+- sizes of the editor - (48966e8) - Brandon Guigo
+- overflow on mail card - (2fa9e05) - Brandon Guigo
+- draft bug with new editor + fix broken modal for draft save - (a12ae73) - Brandon Guigo
+- move editor and toolbar to shared package - (cf14372) - Brandon Guigo
+- wasm error - (785d0af) - Brandon Guigo
+- add the ability to choose editor when using MailComposer widget - (68fd01a) - Brandon Guigo
+- linter - (f1ee60f) - Brandon Guigo
+- bug with card swiper - (94a25be) - Brandon Guigo
+- linter - (1bca72b) - Brandon Guigo
+#### Features
+- translate mail card - (20c02c5) - Brandon Guigo
+- make draft screen have search too - (0ed1bc5) - Brandon Guigo
+- add search to filtered view - (9ffc4d1) - Brandon Guigo
+- add basic search for the search page - (0652ec0) - Brandon Guigo
+- support json to search without a model - (e0f1e6b) - Brandon Guigo
+- add search service - (dfe3c65) - Brandon Guigo
+- update to new version of shared - (31df0af) - Brandon Guigo
+- add load config when the app starts - (46bef63) - Brandon Guigo
+- customized navbar for mobile editor - (33ad8ab) - Brandon Guigo
+- update the parchment document to html convert + load draft document - (6504e56) - Brandon Guigo
+- add fleather controller - (26bbb53) - Brandon Guigo
+- update min version + fix the last bugs in organize page for now - (9b99f19) - Brandon Guigo
+- ui for organize screen - (ccefb63) - Brandon Guigo
+- add the loop and end ui for the tinder like ui - (7013794) - Brandon Guigo
+- add buttons for actions - (133e438) - Brandon Guigo
+- add a tinder like swappable effect for the mail app - (e5f1380) - Brandon Guigo
+- add the empty inbox ui in organize - (5a32051) - Brandon Guigo
+- add organize page - (bf36afd) - Brandon Guigo
+- add call to empty trash endpoint with modal to confirm before - (3765ec8) - Brandon Guigo
+- add header to filtered mail view + container for trashed elements - (d8333e9) - Brandon Guigo
+#### Miscellaneous Chores
+- **(release)** 0.1.0 [skip ci] - (3bb22be) - GitHub Actions
+
+- - -
+
 ## 0.1.0 - 2025-09-15
 #### Bug Fixes
 - bad depends on in pipeline - (06ec48e) - Brandon Guigo
