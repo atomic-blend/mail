@@ -306,6 +306,13 @@ jobs:
           cat > assets/configs/dev.json << 'EOF'
           ${{ secrets.APP_CONFIG_DEV }}
           EOF
+
+          cat > android/key.properties << 'EOF'
+          ${{ secrets.KEY_PROPERTIES }}
+          EOF
+
+          echo ${{ secrets.KEY_PROPERTIES }} | base64 -d > upload-keystore.jks
+
       - name: Get tag
         id: get-tag
         run: |
