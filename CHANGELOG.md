@@ -2,6 +2,14 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## 0.2.1 - 2025-09-19
+#### Bug Fixes
+- add sudo to the install dependency commands - (93ae5b9) - Brandon Guigo
+#### Miscellaneous Chores
+- **(release)** 0.2.0 [skip ci] - (36d58e5) - GitHub Actions
+
+- - -
+
 ## 0.2.0 - 2025-09-19
 #### Bug Fixes
 - add a new step in the cicd that will build the linux app and store it as an artifact - (0e38747) - Brandon Guigo
