@@ -330,7 +330,7 @@ jobs:
       - name: Install ghr
         run: |
           go install github.com/tcnksm/ghr@latest
-
+      
       - name: Create GitHub Release
         run: |
           echo "Creating GitHub release"
@@ -372,7 +372,7 @@ jobs:
             --target ${{ github.sha }}
 
           # Upload linux app
-          gh release upload $TAG debian/packages/atomic-mail_${{ steps.get-tag.outputs.tag }}_amd64.deb
+          gh release upload $TAG debian/packages/atomic-mail_$TAG_amd64.deb
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
