@@ -326,7 +326,7 @@ jobs:
           ${{ secrets.KEY_PROPERTIES }}
           EOF
 
-          echo ${{ secrets.KEY_PROPERTIES }} | base64 -d > upload-keystore.jks
+          echo ${{ secrets.UPLOAD_KEYSTORE }} | base64 -d > upload-keystore.jks
 
       - name: Get tag
         id: get-tag
