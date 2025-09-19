@@ -64,6 +64,29 @@ class Mail with _$Mail {
     return 'Mail { id: $id, userId: $userId, headers: $headers, textContent: $textContent, htmlContent: $htmlContent, attachments: $attachments, archived: $archived, trashed: $trashed, trashedAt: $trashedAt, greylisted: $greylisted, rejected: $rejected, rewriteSubject: $rewriteSubject, createdAt: $createdAt, updatedAt: $updatedAt }';
   }
 
+  bool search(String query) {
+    bool isMatch = false;
+    if (textContent?.toLowerCase().contains(query.toLowerCase()) ?? false) {
+      isMatch = true;
+    }
+    if (htmlContent?.toLowerCase().contains(query.toLowerCase()) ?? false) {
+      isMatch = true;
+    }
+    if (headers?.any((header) => header['Subject']?.toLowerCase().contains(query.toLowerCase()) ?? false) ?? false) {
+      isMatch = true;
+    }
+    if (headers?.any((header) => header['From']?.toLowerCase().contains(query.toLowerCase()) ?? false) ?? false) {
+      isMatch = true;
+    }
+    if (headers?.any((header) => header['To']?.toLowerCase().contains(query.toLowerCase()) ?? false) ?? false) {
+      isMatch = true;
+    }
+    if (attachments?.any((attachment) => attachment.filename.toLowerCase().contains(query.toLowerCase())) ?? false) {
+      isMatch = true;
+    }
+    return isMatch;
+  }
+
   Future<Map<String, dynamic>> encrypt(
       {required EncryptionService encryptionService}) async {
     return {
