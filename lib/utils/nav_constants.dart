@@ -10,6 +10,7 @@ import 'package:mail/pages/mails/views/inbox.dart';
 import 'package:mail/pages/mails/views/trashed.dart';
 import 'package:mail/pages/more/more.dart';
 import 'package:mail/pages/organize/organize.dart';
+import 'package:mail/pages/search/search.dart';
 import 'package:mail/services/sync.service.dart';
 import 'package:ab_shared/utils/shortcuts.dart';
 import 'package:flutter/cupertino.dart';
@@ -193,7 +194,7 @@ class NavConstants {
           icon: LineAwesome.search_solid,
           cupertinoIcon: CupertinoIcons.search,
           label: "Search",
-          body: Container(),
+          body: SearchScreen(),
           appBar: AppBar(
               key: const Key("search"),
               backgroundColor: getTheme(context).surfaceContainer,

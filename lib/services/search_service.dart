@@ -2,15 +2,18 @@ import 'package:mail/models/mail/mail.dart';
 
 class SearchService {
   static List<dynamic> search(List<dynamic> data, String query) {
+    if (query.isEmpty) {
+      return [];
+    }
     final matches = [];
     for (var item in data) {
-      switch (item.runtimeType) {
-        case const (Mail):
+      switch (item) {
+        case Mail():
           if (item.search(query)) {
             matches.add(item);
           }
           break;
-        case const (Map<String, dynamic>):
+        case Map<String, dynamic>():
           if (_searchInMap(item, query)) {
             matches.add(item);
           }
