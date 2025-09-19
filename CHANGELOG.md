@@ -2,6 +2,14 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## 0.2.17 - 2025-09-19
+#### Bug Fixes
+- remove fastlane plugin - (4e7b468) - Brandon Guigo
+#### Miscellaneous Chores
+- **(release)** 0.2.16 [skip ci] - (dd3f175) - GitHub Actions
+
+- - -
+
 ## 0.2.16 - 2025-09-19
 #### Bug Fixes
 - remane variable - (3cd4b60) - Brandon Guigo
