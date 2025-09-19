@@ -208,7 +208,7 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
-        
+      
       - name: Install dependencies
         run: |
           sudo apt-get install mesa-utils openjdk-17-jdk libcurl4-openssl-dev libsecret-1-dev libsecret-tools libsecret-1-0 clang cmake ninja-build pkg-config libgtk-3-dev -y
@@ -280,6 +280,21 @@ jobs:
       - name: Ensure unzip is installed
         run: sudo apt-get update && sudo apt-get install -y unzip
 
+      - name: Setup Rust
+        uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          toolchain: nightly
+          override: true
+      
+      - name: Add rust targets
+        run: |
+          rustup target add \
+            aarch64-linux-android \
+            armv7-linux-androideabi \
+            x86_64-linux-android \
+            i686-linux-android 
+
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
         
@@ -338,27 +353,57 @@ jobs:
       - name: Build Android App
         run: |
           cd fastlane
-          # Kill any existing Gradle daemons to prevent conflicts
-          ./gradlew --stop || true
           fastlane android build_beta
+      - name: Upload Android APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: android-apk
+          path: build/app/outputs/flutter-apk/app-prod-release.apk
+      - name: Upload Android AAB
+        uses: actions/upload-artifact@v4
+        with:
+          name: android-aab
+          path: build/app/outputs/flutter-apk/app-prod-release.aab
+
+
+  publish-android-app:
+    needs: 
+      - build-app-for-web
+      - build-app-for-android
+    runs-on: [self-hosted, Linux]
+    strategy:
+      matrix:
+        platform: [linux/amd64, linux/arm64]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+    
+      - name: Download Web App Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: android-aab
+          path: ./build/app/outputs/flutter-apk/
+
+
+      - name: Get tag
+        id: get-tag
+        run: |
+          TAG=$(git describe --abbrev=0 --tags)
+          echo "tag=$TAG" >> $GITHUB_OUTPUT
+
       - name: Publish Android App to Play Store
         continue-on-error: true
         run: |
           cd fastlane
           fastlane android upload_beta
-      - name: Upload Android App
-        uses: actions/upload-artifact@v4
-        with:
-          name: android-app
-          path: build/app/outputs/flutter-apk/app-prod-release.apk
 
-
-  build-docker-images:
-    needs: build-app-for-web
+  publish-docker-images:
+    needs: 
+      - build-app-for-android
+      - build-app-for-web
     runs-on: [self-hosted, Linux]
-    strategy:
-      matrix:
-        platform: [linux/amd64, linux/arm64]
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -403,9 +448,8 @@ jobs:
 
   create-github-release:
     needs: 
-      - build-docker-images
-      - build-app-for-linux
-      - build-app-for-android
+      - publish-docker-images
+      - publish-android-app
     runs-on: [self-hosted, Linux]
     steps:
       - name: Checkout Repository
