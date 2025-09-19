@@ -2,6 +2,15 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## 0.2.18 - 2025-09-19
+#### Bug Fixes
+- path of the apk in release step - (9778f1a) - Brandon Guigo
+- upload path of the aab + playstore key for upload - (09a338a) - Brandon Guigo
+#### Miscellaneous Chores
+- **(release)** 0.2.17 [skip ci] - (53b2e00) - GitHub Actions
+
+- - -
+
 ## 0.2.17 - 2025-09-19
 #### Bug Fixes
 - remove fastlane plugin - (4e7b468) - Brandon Guigo
