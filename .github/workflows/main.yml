@@ -331,7 +331,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: linux-app
-          path: ./debian/packages/atomic-mail_${{ steps.get-tag.outputs.tag }}_amd64.deb
+          path: ./debian/packages/
 
       - name: Install ghr
         run: |
