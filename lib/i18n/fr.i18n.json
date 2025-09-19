@@ -18,6 +18,16 @@
       "warning": "Cette action ne peut pas être annulée."
     }
   },
+  "trashed": {
+    "card_title": "Supprimer tous les mails supprimés",
+    "x_mails_trashed": "${count} mails supprimés",
+    "description": "Ce sont les mails que vous avez supprimés, ils seront supprimés après 30 jours.",
+    "delete_all_trashed_mails_modal": {
+      "title": "Supprimer tous les mails supprimés",
+      "description": "Êtes-vous sûr de vouloir supprimer tous les mails supprimés ?",
+      "warning": "Cette action ne peut pas être annulée."
+    }
+  },
   "account": {
     "sections": {
       "account": "Compte"

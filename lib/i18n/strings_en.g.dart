@@ -42,6 +42,7 @@ class Translations implements BaseTranslations<AppLocale, Translations> {
 	late final TranslationsSettingsEn settings = TranslationsSettingsEn._(_root);
 	late final TranslationsAccountEn account = TranslationsAccountEn._(_root);
 	late final TranslationsMailCardEn mail_card = TranslationsMailCardEn._(_root);
+	late final TranslationsTrashedEn trashed = TranslationsTrashedEn._(_root);
 	late final TranslationsUnderConstructionEn under_construction = TranslationsUnderConstructionEn._(_root);
 	late final TranslationsMoreEn more = TranslationsMoreEn._(_root);
 	late final TranslationsActionsEn actions = TranslationsActionsEn._(_root);
@@ -86,6 +87,26 @@ class TranslationsMailCardEn {
 	String get no_content => 'No content';
 
 	late final TranslationsMailCardDeleteDraftModalEn delete_draft_modal = TranslationsMailCardDeleteDraftModalEn._(_root);
+}
+
+// Path: trashed
+class TranslationsTrashedEn {
+	TranslationsTrashedEn._(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Delete all trashed mails'
+	String get card_title => 'Delete all trashed mails';
+
+	/// en: '${count} mails trashed'
+	String x_mails_trashed({required Object count}) => '${count} mails trashed';
+
+	/// en: 'Those are the mails that have been trashed by you, they will be deleted after 30 days.'
+	String get description => 'Those are the mails that have been trashed by you, they will be deleted after 30 days.';
+
+	late final TranslationsTrashedDeleteAllTrashedMailsModalEn delete_all_trashed_mails_modal = TranslationsTrashedDeleteAllTrashedMailsModalEn._(_root);
 }
 
 // Path: under_construction
@@ -171,6 +192,24 @@ class TranslationsMailCardDeleteDraftModalEn {
 	String get warning => 'This action cannot be undone.';
 }
 
+// Path: trashed.delete_all_trashed_mails_modal
+class TranslationsTrashedDeleteAllTrashedMailsModalEn {
+	TranslationsTrashedDeleteAllTrashedMailsModalEn._(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Delete all trashed mails'
+	String get title => 'Delete all trashed mails';
+
+	/// en: 'Are you sure you want to delete all trashed mails?'
+	String get description => 'Are you sure you want to delete all trashed mails?';
+
+	/// en: 'This action cannot be undone.'
+	String get warning => 'This action cannot be undone.';
+}
+
 // Path: settings.app_settings.selfHostedUrl
 class TranslationsSettingsAppSettingsSelfHostedUrlEn {
 	TranslationsSettingsAppSettingsSelfHostedUrlEn._(this._root);
@@ -201,6 +240,12 @@ extension on Translations {
 			case 'mail_card.delete_draft_modal.title': return 'Delete draft';
 			case 'mail_card.delete_draft_modal.description': return 'Are you sure you want to delete this draft?';
 			case 'mail_card.delete_draft_modal.warning': return 'This action cannot be undone.';
+			case 'trashed.card_title': return 'Delete all trashed mails';
+			case 'trashed.x_mails_trashed': return ({required Object count}) => '${count} mails trashed';
+			case 'trashed.description': return 'Those are the mails that have been trashed by you, they will be deleted after 30 days.';
+			case 'trashed.delete_all_trashed_mails_modal.title': return 'Delete all trashed mails';
+			case 'trashed.delete_all_trashed_mails_modal.description': return 'Are you sure you want to delete all trashed mails?';
+			case 'trashed.delete_all_trashed_mails_modal.warning': return 'This action cannot be undone.';
 			case 'under_construction.title': return 'We\'re working on it!';
 			case 'under_construction.description': return 'This feature is not yet available, but we\'re working hard to bring it to you soon.\n\nStay tuned!';
 			case 'more.title': return 'More';

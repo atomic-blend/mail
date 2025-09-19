@@ -38,6 +38,7 @@ class TranslationsFr implements Translations {
 	// Translations
 	@override late final _TranslationsSettingsFr settings = _TranslationsSettingsFr._(_root);
 	@override late final _TranslationsMailCardFr mail_card = _TranslationsMailCardFr._(_root);
+	@override late final _TranslationsTrashedFr trashed = _TranslationsTrashedFr._(_root);
 	@override late final _TranslationsAccountFr account = _TranslationsAccountFr._(_root);
 	@override late final _TranslationsUnderConstructionFr under_construction = _TranslationsUnderConstructionFr._(_root);
 	@override late final _TranslationsMoreFr more = _TranslationsMoreFr._(_root);
@@ -65,6 +66,19 @@ class _TranslationsMailCardFr implements TranslationsMailCardEn {
 	// Translations
 	@override String get no_content => 'Aucun contenu';
 	@override late final _TranslationsMailCardDeleteDraftModalFr delete_draft_modal = _TranslationsMailCardDeleteDraftModalFr._(_root);
+}
+
+// Path: trashed
+class _TranslationsTrashedFr implements TranslationsTrashedEn {
+	_TranslationsTrashedFr._(this._root);
+
+	final TranslationsFr _root; // ignore: unused_field
+
+	// Translations
+	@override String get card_title => 'Supprimer tous les mails supprimés';
+	@override String x_mails_trashed({required Object count}) => '${count} mails supprimés';
+	@override String get description => 'Ce sont les mails que vous avez supprimés, ils seront supprimés après 30 jours.';
+	@override late final _TranslationsTrashedDeleteAllTrashedMailsModalFr delete_all_trashed_mails_modal = _TranslationsTrashedDeleteAllTrashedMailsModalFr._(_root);
 }
 
 // Path: account
@@ -133,6 +147,18 @@ class _TranslationsMailCardDeleteDraftModalFr implements TranslationsMailCardDel
 	@override String get warning => 'Cette action ne peut pas être annulée.';
 }
 
+// Path: trashed.delete_all_trashed_mails_modal
+class _TranslationsTrashedDeleteAllTrashedMailsModalFr implements TranslationsTrashedDeleteAllTrashedMailsModalEn {
+	_TranslationsTrashedDeleteAllTrashedMailsModalFr._(this._root);
+
+	final TranslationsFr _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Supprimer tous les mails supprimés';
+	@override String get description => 'Êtes-vous sûr de vouloir supprimer tous les mails supprimés ?';
+	@override String get warning => 'Cette action ne peut pas être annulée.';
+}
+
 // Path: account.sections
 class _TranslationsAccountSectionsFr implements TranslationsAccountSectionsEn {
 	_TranslationsAccountSectionsFr._(this._root);
@@ -168,6 +194,12 @@ extension on TranslationsFr {
 			case 'mail_card.delete_draft_modal.title': return 'Supprimer le brouillon';
 			case 'mail_card.delete_draft_modal.description': return 'Êtes-vous sûr de vouloir supprimer ce brouillon ?';
 			case 'mail_card.delete_draft_modal.warning': return 'Cette action ne peut pas être annulée.';
+			case 'trashed.card_title': return 'Supprimer tous les mails supprimés';
+			case 'trashed.x_mails_trashed': return ({required Object count}) => '${count} mails supprimés';
+			case 'trashed.description': return 'Ce sont les mails que vous avez supprimés, ils seront supprimés après 30 jours.';
+			case 'trashed.delete_all_trashed_mails_modal.title': return 'Supprimer tous les mails supprimés';
+			case 'trashed.delete_all_trashed_mails_modal.description': return 'Êtes-vous sûr de vouloir supprimer tous les mails supprimés ?';
+			case 'trashed.delete_all_trashed_mails_modal.warning': return 'Cette action ne peut pas être annulée.';
 			case 'account.sections.account': return 'Compte';
 			case 'under_construction.title': return 'On travaille dessus !';
 			case 'under_construction.description': return 'Cette fonctionnalité est en cours de développement.\n\nRevenez bientôt pour découvrir les dernières mises à jour !';

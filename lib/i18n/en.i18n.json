@@ -23,6 +23,16 @@
       "warning": "This action cannot be undone."
     }
   },
+  "trashed": {
+    "card_title": "Delete all trashed mails",
+    "x_mails_trashed": "${count} mails trashed",
+    "description": "Those are the mails that have been trashed by you, they will be deleted after 30 days.",
+    "delete_all_trashed_mails_modal": {
+      "title": "Delete all trashed mails",
+      "description": "Are you sure you want to delete all trashed mails?",
+      "warning": "This action cannot be undone."
+    }
+  },
   "under_construction": {
     "title": "We're working on it!",
     "description": "This feature is not yet available, but we're working hard to bring it to you soon.\n\nStay tuned!"
