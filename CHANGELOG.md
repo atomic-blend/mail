@@ -2,6 +2,14 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## 0.2.5 - 2025-09-19
+#### Bug Fixes
+- debian config + path to download the artifact - (6fb4d75) - Brandon Guigo
+#### Miscellaneous Chores
+- **(release)** 0.2.4 [skip ci] - (90cd372) - GitHub Actions
+
+- - -
+
 ## 0.2.4 - 2025-09-19
 #### Bug Fixes
 - get the tag from git when building the consolidated release - (abd7f3d) - Brandon Guigo
