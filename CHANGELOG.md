@@ -2,6 +2,14 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## 0.2.15 - 2025-09-19
+#### Bug Fixes
+- update flutter shared - (4e18426) - Brandon Guigo
+#### Miscellaneous Chores
+- **(release)** 0.2.14 [skip ci] - (5751899) - GitHub Actions
+
+- - -
+
 ## 0.2.14 - 2025-09-19
 #### Bug Fixes
 - update flutter - (2a1d006) - Brandon Guigo
