@@ -8,6 +8,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:mail/blocs/mail/mail_bloc.dart';
 import 'package:mail/components/avatars/mail_user_avatar.dart';
+import 'package:mail/i18n/strings.g.dart';
 import 'package:mail/models/mail/mail.dart';
 import 'package:mail/pages/mails/mail_composer.dart';
 import 'package:mail/pages/mails/mail_details.dart';
@@ -44,10 +45,10 @@ class MailCard extends StatelessWidget {
                 showDialog(
                     context: context,
                     builder: (context) => ABModal(
-                          title: "Delete draft",
+                          title: context.t.mail_card.delete_draft_modal.title,
                           description:
-                              "Are you sure you want to delete this draft?",
-                          warning: "This action cannot be undone.",
+                              context.t.mail_card.delete_draft_modal.description,
+                          warning: context.t.mail_card.delete_draft_modal.warning,
                           onConfirm: () {
                             onDelete?.call(draft!.id!);
                             Navigator.of(context).pop();
@@ -158,7 +159,7 @@ class MailCard extends StatelessWidget {
                           ? mail.htmlContent!
                           : mail.textContent != null && mail.textContent != ""
                               ? mail.textContent!
-                              : "No content",
+                              : context.t.mail_card.no_content,
                       style: getTextTheme(context).bodyMedium!.copyWith(
                             fontWeight:
                                 mail.read != true ? FontWeight.bold : null,

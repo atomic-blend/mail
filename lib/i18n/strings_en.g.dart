@@ -41,6 +41,7 @@ class Translations implements BaseTranslations<AppLocale, Translations> {
 	// Translations
 	late final TranslationsSettingsEn settings = TranslationsSettingsEn._(_root);
 	late final TranslationsAccountEn account = TranslationsAccountEn._(_root);
+	late final TranslationsMailCardEn mail_card = TranslationsMailCardEn._(_root);
 	late final TranslationsUnderConstructionEn under_construction = TranslationsUnderConstructionEn._(_root);
 	late final TranslationsMoreEn more = TranslationsMoreEn._(_root);
 	late final TranslationsActionsEn actions = TranslationsActionsEn._(_root);
@@ -71,6 +72,20 @@ class TranslationsAccountEn {
 
 	// Translations
 	late final TranslationsAccountSectionsEn sections = TranslationsAccountSectionsEn._(_root);
+}
+
+// Path: mail_card
+class TranslationsMailCardEn {
+	TranslationsMailCardEn._(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'No content'
+	String get no_content => 'No content';
+
+	late final TranslationsMailCardDeleteDraftModalEn delete_draft_modal = TranslationsMailCardDeleteDraftModalEn._(_root);
 }
 
 // Path: under_construction
@@ -138,6 +153,24 @@ class TranslationsAccountSectionsEn {
 	String get account => 'Account';
 }
 
+// Path: mail_card.delete_draft_modal
+class TranslationsMailCardDeleteDraftModalEn {
+	TranslationsMailCardDeleteDraftModalEn._(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Delete draft'
+	String get title => 'Delete draft';
+
+	/// en: 'Are you sure you want to delete this draft?'
+	String get description => 'Are you sure you want to delete this draft?';
+
+	/// en: 'This action cannot be undone.'
+	String get warning => 'This action cannot be undone.';
+}
+
 // Path: settings.app_settings.selfHostedUrl
 class TranslationsSettingsAppSettingsSelfHostedUrlEn {
 	TranslationsSettingsAppSettingsSelfHostedUrlEn._(this._root);
@@ -164,6 +197,10 @@ extension on Translations {
 			case 'settings.app_settings.selfHostedUrl.not_set': return 'Not set';
 			case 'settings.logout': return 'Logout';
 			case 'account.sections.account': return 'Account';
+			case 'mail_card.no_content': return 'No content';
+			case 'mail_card.delete_draft_modal.title': return 'Delete draft';
+			case 'mail_card.delete_draft_modal.description': return 'Are you sure you want to delete this draft?';
+			case 'mail_card.delete_draft_modal.warning': return 'This action cannot be undone.';
 			case 'under_construction.title': return 'We\'re working on it!';
 			case 'under_construction.description': return 'This feature is not yet available, but we\'re working hard to bring it to you soon.\n\nStay tuned!';
 			case 'more.title': return 'More';

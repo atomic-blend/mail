@@ -10,6 +10,14 @@
     },
     "logout": "Déconnexion"
   },
+  "mail_card": {
+    "no_content": "Aucun contenu",
+    "delete_draft_modal": {
+      "title": "Supprimer le brouillon",
+      "description": "Êtes-vous sûr de vouloir supprimer ce brouillon ?",
+      "warning": "Cette action ne peut pas être annulée."
+    }
+  },
   "account": {
     "sections": {
       "account": "Compte"
