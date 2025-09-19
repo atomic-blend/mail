@@ -1,7 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:mail/blocs/mail/mail_bloc.dart';
-import 'package:mail/models/mail/mail.dart';
 import 'package:mail/services/search_service.dart';
 
 part 'search_event.dart';

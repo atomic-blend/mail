@@ -79,8 +79,7 @@ class Mail with _$Mail {
     }
     if (headers?.any((header) =>
             header['Key'] == 'From' &&
-                header['Value']?.toLowerCase().contains(query.toLowerCase()) ??
-            false) ??
+                header['Value']?.toLowerCase().contains(query.toLowerCase())) ??
         false) {
       isMatch = true;
     }
