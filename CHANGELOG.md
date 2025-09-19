@@ -2,6 +2,14 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## 0.2.8 - 2025-09-19
+#### Bug Fixes
+- job naming + check / install unzip before android sdk - (0c38329) - Brandon Guigo
+#### Miscellaneous Chores
+- **(release)** 0.2.7 [skip ci] - (f3fc88c) - GitHub Actions
+
+- - -
+
 ## 0.2.7 - 2025-09-19
 #### Bug Fixes
 - continue the release if the play store upload didn't work - (3dfeb45) - Brandon Guigo
