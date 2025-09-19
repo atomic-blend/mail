@@ -372,7 +372,7 @@ jobs:
             --target ${{ github.sha }}
 
           # Upload linux app
-          gh release upload $TAG debian/packages/atomic-mail_$TAG_amd64.deb
+          gh release upload $TAG "debian/packages/atomic-mail_${TAG}_amd64.deb"
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
