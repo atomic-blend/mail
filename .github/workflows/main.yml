@@ -489,7 +489,7 @@ jobs:
       - name: Download Android App Artifact
         uses: actions/download-artifact@v4
         with:
-          name: android-app
+          name: android-apk
           path: ./build/app/outputs/flutter-apk/
       - name: Rename the Android App file
         run: |
