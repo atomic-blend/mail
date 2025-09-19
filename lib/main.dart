@@ -12,6 +12,7 @@ import 'package:mail/blocs/app/app.bloc.dart';
 import 'package:ab_shared/blocs/auth/auth.bloc.dart';
 import 'package:ab_shared/i18n/strings.g.dart' as ab_shared_translations;
 import 'package:mail/blocs/mail/mail_bloc.dart';
+import 'package:mail/blocs/search/search_bloc.dart';
 import 'package:mail/i18n/strings.g.dart';
 import 'package:mail/services/notifications/background_notification_processor.dart';
 import 'package:mail/services/notifications/fcm_service.dart';
@@ -45,8 +46,6 @@ RevenueCatService? revenueCatService;
 ApiClient? globalApiClient;
 
 FutureOr<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-
   await SentryFlutter.init((options) {
     String? dsn = const String.fromEnvironment(
       'SENTRY_DSN',
@@ -77,8 +76,6 @@ FutureOr<void> main() async {
       WindowManipulator.makeTitlebarTransparent();
       WindowManipulator.enableFullSizeContentView();
     }
-
-   
 
     final rawUserData = prefs?.getString("user");
     userData = rawUserData != null ? json.decode(rawUserData) : null;
@@ -133,25 +130,27 @@ FutureOr<void> main() async {
         child: MultiBlocProvider(
             providers: [
               BlocProvider(create: (context) => AppCubit()),
-              BlocProvider(create: (context) => AuthBloc(
-                prefs: prefs!,
-                onLogout: () {
-                  userKey = null;
-                  userData = null;
-                  prefs?.clear();
-                  globalApiClient?.setIdToken(null);
-                  Sentry.configureScope(
-                    (scope) => scope.setUser(SentryUser(id: null)),
-                  );
-                  encryptionService = null;
-                },
-                onLogin: (e) {
-                  encryptionService = e;
-                },
-                globalApiClient: globalApiClient!,
-                encryptionService: encryptionService,
-              )),
+              BlocProvider(
+                  create: (context) => AuthBloc(
+                        prefs: prefs!,
+                        onLogout: () {
+                          userKey = null;
+                          userData = null;
+                          prefs?.clear();
+                          globalApiClient?.setIdToken(null);
+                          Sentry.configureScope(
+                            (scope) => scope.setUser(SentryUser(id: null)),
+                          );
+                          encryptionService = null;
+                        },
+                        onLogin: (e) {
+                          encryptionService = e;
+                        },
+                        globalApiClient: globalApiClient!,
+                        encryptionService: encryptionService,
+                      )),
               BlocProvider(create: (context) => MailBloc()),
+              BlocProvider(create: (context) => SearchBloc()),
             ],
             child: ab_shared_translations.TranslationProvider(
               child: TranslationProvider(

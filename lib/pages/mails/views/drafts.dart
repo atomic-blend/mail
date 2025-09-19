@@ -2,6 +2,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mail/blocs/mail/mail_bloc.dart';
 import 'package:mail/pages/mails/filtered_mail.dart';
+import 'package:mail/services/sync.service.dart';
 
 class DraftScreen extends StatefulWidget {
   const DraftScreen({super.key});
@@ -13,9 +14,10 @@ class DraftScreen extends StatefulWidget {
 class _DraftScreenState extends State<DraftScreen> {
   @override
   void initState() {
-    context.read<MailBloc>().add(const LoadMails());
+    SyncService.sync(context);
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     return FilteredMailScreen(

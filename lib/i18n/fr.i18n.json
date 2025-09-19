@@ -10,6 +10,40 @@
     },
     "logout": "Déconnexion"
   },
+  "zero_inbox_card": {
+    "title": "Félicitations !",
+    "description": "Vous n'avez aucun message non lu."
+  },
+  "mail_card": {
+    "no_content": "Aucun contenu",
+    "delete_draft_modal": {
+      "title": "Supprimer le brouillon",
+      "description": "Êtes-vous sûr de vouloir supprimer ce brouillon ?",
+      "warning": "Cette action ne peut pas être annulée."
+    }
+  },
+  "trashed": {
+    "card_title": "Supprimer tous les mails supprimés",
+    "x_mails_trashed": "${count} mails supprimés",
+    "description": "Ce sont les mails que vous avez supprimés, ils seront supprimés après 30 jours.",
+    "delete_all_trashed_mails_modal": {
+      "title": "Supprimer tous les mails supprimés",
+      "description": "Êtes-vous sûr de vouloir supprimer tous les mails supprimés ?",
+      "warning": "Cette action ne peut pas être annulée."
+    }
+  },
+  "mail_composer": {
+    "title": "Nouveau Mail",
+    "from": "De",
+    "subject": "Objet",
+    "to": "À",
+    "save_draft_modal": {
+      "title": "Enregistrer le brouillon",
+      "description": "Voulez-vous enregistrer le brouillon ?",
+      "confirm_text": "Enregistrer",
+      "cancel_text": "Annuler"
+    }
+  },
   "account": {
     "sections": {
       "account": "Compte"

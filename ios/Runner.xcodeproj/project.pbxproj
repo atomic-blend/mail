@@ -1311,6 +1311,7 @@
 				DEVELOPMENT_TEAM = GJF9Q39UD7;
 				INFOPLIST_KEY_CFBundleDisplayName = LifeOS;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
+				PRODUCT_BUNDLE_IDENTIFIER = "fr.atomicblend.mail-dev";
 				PRODUCT_NAME = Runner;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;

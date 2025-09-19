@@ -7,11 +7,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mail/blocs/mail/mail_bloc.dart';
 import 'package:mail/components/cards/mail_card.dart';
+import 'package:mail/i18n/strings.g.dart';
 import 'package:mail/services/sync.service.dart';
 
 class FilteredMailScreen extends StatefulWidget {
   final List<dynamic> Function(List<dynamic>? mails) filterFunction;
   final bool? drafts;
+  final Widget? header;
   final Function(String)? onDelete;
 
   const FilteredMailScreen({
@@ -19,6 +21,7 @@ class FilteredMailScreen extends StatefulWidget {
     required this.filterFunction,
     this.drafts = false,
     this.onDelete,
+    this.header,
   });
 
   @override
@@ -32,7 +35,7 @@ class _FilteredMailScreenState extends State<FilteredMailScreen> {
   Widget build(BuildContext context) {
     return BlocBuilder<MailBloc, MailState>(builder: (context, mailState) {
       List<dynamic> filteredMails = widget.filterFunction(mailState.mails);
-      
+
       if (widget.drafts ?? false) {
         filteredMails = widget.filterFunction(mailState.drafts);
       }
@@ -45,14 +48,6 @@ class _FilteredMailScreenState extends State<FilteredMailScreen> {
           child: ListView(
             padding: EdgeInsets.zero,
             children: [
-              Padding(
-                padding: EdgeInsets.symmetric(
-                    horizontal: $constants.insets.sm,
-                    vertical: $constants.insets.xs),
-                child: ElevatedContainer(
-                  child: ABSearchBar(controller: searchController),
-                ),
-              ),
               Padding(
                 padding: EdgeInsetsGeometry.only(
                     top: getSize(context).height * 0.15),
@@ -71,7 +66,7 @@ class _FilteredMailScreenState extends State<FilteredMailScreen> {
                           ),
                           SizedBox(height: $constants.insets.sm),
                           Text(
-                            "Congratulations!",
+                            context.t.zero_inbox_card.title,
                             style:
                                 getTextTheme(context).headlineMedium!.copyWith(
                                       fontWeight: FontWeight.bold,
@@ -79,7 +74,7 @@ class _FilteredMailScreenState extends State<FilteredMailScreen> {
                           ),
                           SizedBox(height: $constants.insets.xs),
                           Text(
-                            "You don't have any unread messages.",
+                            context.t.zero_inbox_card.description,
                             textAlign: TextAlign.center,
                             style: getTextTheme(context).bodyMedium,
                           ),
@@ -103,18 +98,33 @@ class _FilteredMailScreenState extends State<FilteredMailScreen> {
               Padding(
                 padding: EdgeInsets.symmetric(vertical: $constants.insets.xs),
                 child: ElevatedContainer(
-                  child: ABSearchBar(controller: searchController),
+                  child: ABSearchBar(
+                    controller: searchController,
+                    onChanged: (p0) {
+                      setState(() {});
+                    },
+                  ),
                 ),
               ),
+              if (widget.header != null) ...[
+                widget.header!,
+                SizedBox(height: $constants.insets.xxs),
+              ],
               SizedBox(height: $constants.insets.xxs),
-              ...filteredMails.map((mail) => Padding(
-                padding: EdgeInsets.only(bottom: $constants.insets.xs),
-                child: MailCard(
-                  draft: widget.drafts == true ? mail  : null,
-                      mail: widget.drafts != true ? mail  : null,
-                      onDelete: widget.onDelete,
-                    ),
-              ))
+              ...filteredMails.map((mail) {
+                if (searchController.text.isNotEmpty &&
+                    !mail.search(searchController.text)) {
+                  return const SizedBox.shrink();
+                }
+                return Padding(
+                  padding: EdgeInsets.only(bottom: $constants.insets.xs),
+                  child: MailCard(
+                    draft: widget.drafts == true ? mail : null,
+                    mail: widget.drafts != true ? mail : null,
+                    onDelete: widget.onDelete,
+                  ),
+                );
+              })
             ],
           ),
         );
@@ -122,5 +132,3 @@ class _FilteredMailScreenState extends State<FilteredMailScreen> {
     });
   }
 }
-
-

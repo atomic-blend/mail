@@ -9,6 +9,8 @@ import 'package:mail/pages/mails/views/drafts.dart';
 import 'package:mail/pages/mails/views/inbox.dart';
 import 'package:mail/pages/mails/views/trashed.dart';
 import 'package:mail/pages/more/more.dart';
+import 'package:mail/pages/organize/organize.dart';
+import 'package:mail/pages/search/search.dart';
 import 'package:mail/services/sync.service.dart';
 import 'package:ab_shared/utils/shortcuts.dart';
 import 'package:flutter/cupertino.dart';
@@ -94,25 +96,25 @@ class NavConstants {
           appBar: AppBar(
             key: const Key("mail"),
             backgroundColor: getTheme(context).surfaceContainer,
-            title: BlocBuilder<AppCubit, AppState>(builder: (context, appState) {
-                    var selectedSecondarySection =
-                        secondaryMenuSections(context)
-                            .where((element) =>
-                                (element.key as ValueKey).value ==
-                                appState.primaryMenuSelectedKey)
-                            .firstOrNull;
-                    var selectedSecondaryItem = selectedSecondarySection?.items
-                        .where((element) =>
-                            (element.key as ValueKey).value ==
-                            appState.secondaryMenuSelectedKey)
-                        .firstOrNull;
-                    return Text(
-                      selectedSecondaryItem?.label ?? "",
-                      style: getTextTheme(context).headlineSmall!.copyWith(
-                            fontWeight: FontWeight.bold,
-                          ),
-                    );
-                  }),
+            title:
+                BlocBuilder<AppCubit, AppState>(builder: (context, appState) {
+              var selectedSecondarySection = secondaryMenuSections(context)
+                  .where((element) =>
+                      (element.key as ValueKey).value ==
+                      appState.primaryMenuSelectedKey)
+                  .firstOrNull;
+              var selectedSecondaryItem = selectedSecondarySection?.items
+                  .where((element) =>
+                      (element.key as ValueKey).value ==
+                      appState.secondaryMenuSelectedKey)
+                  .firstOrNull;
+              return Text(
+                selectedSecondaryItem?.label ?? "",
+                style: getTextTheme(context).headlineSmall!.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
+              );
+            }),
             actions: [
               BlocBuilder<AuthBloc, AuthState>(builder: (context, authState) {
                 return Container();
@@ -131,10 +133,10 @@ class NavConstants {
           icon: LineAwesome.filter_solid,
           cupertinoIcon: CupertinoIcons.square_fill_line_vertical_square,
           label: "Organize",
-          body: Container(),
+          body: OrganizeScreen(),
           appBar: AppBar(
               key: const Key("organize"),
-              backgroundColor: getTheme(context).surface,
+              backgroundColor: getTheme(context).surfaceContainer,
               surfaceTintColor: getTheme(context).surface,
               leading: Container(),
               title: Text(
@@ -166,7 +168,8 @@ class NavConstants {
                           child: ClipRRect(
                             borderRadius:
                                 BorderRadius.circular($constants.corners.md),
-                            child: MailComposer(),
+                            child: MailComposer(
+                            ),
                           ),
                         ),
                       ));
@@ -177,7 +180,10 @@ class NavConstants {
                 isDismissible: false,
                 enableDrag: false,
                 backgroundColor: Colors.transparent,
-                builder: (context) => SizedBox(height: getSize(context).height * 0.92, child: MailComposer()),
+                builder: (context) => SizedBox(
+                    height: getSize(context).height * 0.92,
+                    child: MailComposer(
+                    )),
               );
             }
             SyncService.sync(context);
@@ -188,7 +194,7 @@ class NavConstants {
           icon: LineAwesome.search_solid,
           cupertinoIcon: CupertinoIcons.search,
           label: "Search",
-          body: Container(),
+          body: SearchScreen(),
           appBar: AppBar(
               key: const Key("search"),
               backgroundColor: getTheme(context).surfaceContainer,

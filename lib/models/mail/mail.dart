@@ -12,12 +12,11 @@ class Mail with _$Mail {
   Map<String, dynamic> toRawMail() {
     // convert headers from list of maps to a single map where Key is the key and Value is the value
     final Map<String, dynamic> headersMap = Map.fromEntries(
-      headers!.map((header) => MapEntry(header["Key"], header["Value"]))
-    );
+        headers!.map((header) => MapEntry(header["Key"], header["Value"])));
     return {
       "textContent": textContent,
       "htmlContent": htmlContent,
-      "headers": headersMap, 
+      "headers": headersMap,
       "createdAt": createdAt?.toIso8601String(),
     };
   }
@@ -62,6 +61,40 @@ class Mail with _$Mail {
   @override
   String toString() {
     return 'Mail { id: $id, userId: $userId, headers: $headers, textContent: $textContent, htmlContent: $htmlContent, attachments: $attachments, archived: $archived, trashed: $trashed, trashedAt: $trashedAt, greylisted: $greylisted, rejected: $rejected, rewriteSubject: $rewriteSubject, createdAt: $createdAt, updatedAt: $updatedAt }';
+  }
+
+  bool search(String query) {
+    bool isMatch = false;
+    if (textContent?.toLowerCase().contains(query.toLowerCase()) ?? false) {
+      isMatch = true;
+    }
+    if (htmlContent?.toLowerCase().contains(query.toLowerCase()) ?? false) {
+      isMatch = true;
+    }
+    if (headers?.any((header) =>
+            header['Key'] == 'Subject' &&
+            header['Value']?.toLowerCase().contains(query.toLowerCase())) ??
+        false) {
+      isMatch = true;
+    }
+    if (headers?.any((header) =>
+            header['Key'] == 'From' &&
+                header['Value']?.toLowerCase().contains(query.toLowerCase())) ??
+        false) {
+      isMatch = true;
+    }
+    if (headers?.any((header) =>
+            header['To']?.toLowerCase().contains(query.toLowerCase()) ??
+            false) ??
+        false) {
+      isMatch = true;
+    }
+    if (attachments?.any((attachment) =>
+            attachment.filename.toLowerCase().contains(query.toLowerCase())) ??
+        false) {
+      isMatch = true;
+    }
+    return isMatch;
   }
 
   Future<Map<String, dynamic>> encrypt(

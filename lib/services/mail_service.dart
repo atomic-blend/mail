@@ -105,4 +105,13 @@ class MailService {
       throw Exception('Failed to update draft');
     }
   }
+
+  Future<bool> emptyTrash() async {
+    final result = await globalApiClient?.post('/mail/trash/empty');
+    if (result != null && result.statusCode == 200) {
+      return true;
+    } else {
+      throw Exception('Failed to empty trash');
+    }
+  }
 }
