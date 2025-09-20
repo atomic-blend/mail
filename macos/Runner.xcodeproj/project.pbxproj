@@ -53,6 +53,377 @@
 			remoteGlobalIDString = 33CC111A2044C6BA0003C045;
 			remoteInfo = FLX;
 		};
+		F0639F4F2E7F299C00A97B14 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F0639F0A2E7F295D00A97B14 /* Pods.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 02A736E1BDACFC0A6CAE810130768C55;
+			remoteInfo = device_info_plus;
+		};
+		F0639F512E7F299C00A97B14 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F0639F0A2E7F295D00A97B14 /* Pods.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = AF5281419A326DD7CD6E32341946DFEE;
+			remoteInfo = "device_info_plus-device_info_plus_privacy";
+		};
+		F0639F532E7F299C00A97B14 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F0639F0A2E7F295D00A97B14 /* Pods.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 7E42DEAFECF92D7816EA7CBE42F29B62;
+			remoteInfo = emoji_picker_flutter;
+		};
+		F0639F552E7F299C00A97B14 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F0639F0A2E7F295D00A97B14 /* Pods.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 308378B6ADC631E53C97B459FBCD7A32;
+			remoteInfo = file_picker;
+		};
+		F0639F572E7F299C00A97B14 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F0639F0A2E7F295D00A97B14 /* Pods.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = F761FBCDBCC7F5E3FCF0A6A4241F766E;
+			remoteInfo = "file_picker-file_picker_privacy";
+		};
+		F0639F592E7F299C00A97B14 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F0639F0A2E7F295D00A97B14 /* Pods.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = F3B74672DAE304DCA370B761FBD5B2D7;
+			remoteInfo = firebase_core;
+		};
+		F0639F5B2E7F299C00A97B14 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F0639F0A2E7F295D00A97B14 /* Pods.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 626B91FA30530F8DA0D892C01BC22133;
+			remoteInfo = firebase_messaging;
+		};
+		F0639F5D2E7F299C00A97B14 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F0639F0A2E7F295D00A97B14 /* Pods.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 75CF387A098437DDEB77C4DD2B48D012;
+			remoteInfo = "firebase_messaging-firebase_messaging_Privacy";
+		};
+		F0639F5F2E7F299C00A97B14 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F0639F0A2E7F295D00A97B14 /* Pods.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = E2B63D462DB7F827C4B11FD51E4F8E2D;
+			remoteInfo = FirebaseCore;
+		};
+		F0639F612E7F299C00A97B14 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F0639F0A2E7F295D00A97B14 /* Pods.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 8BB937B1C0DFFCF92F41861C2BC54DDA;
+			remoteInfo = "FirebaseCore-FirebaseCore_Privacy";
+		};
+		F0639F632E7F299C00A97B14 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F0639F0A2E7F295D00A97B14 /* Pods.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 148D0F9E8C7373FEAF40D800FC5F1BAA;
+			remoteInfo = FirebaseCoreInternal;
+		};
+		F0639F652E7F299C00A97B14 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F0639F0A2E7F295D00A97B14 /* Pods.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 4DB03FD262B678178A44272143846563;
+			remoteInfo = "FirebaseCoreInternal-FirebaseCoreInternal_Privacy";
+		};
+		F0639F672E7F299C00A97B14 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F0639F0A2E7F295D00A97B14 /* Pods.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 13C8C8B254851998F9289F71229B28A2;
+			remoteInfo = FirebaseInstallations;
+		};
+		F0639F692E7F299C00A97B14 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F0639F0A2E7F295D00A97B14 /* Pods.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 47C581450CDB4A6111CB97EEE0711A8C;
+			remoteInfo = "FirebaseInstallations-FirebaseInstallations_Privacy";
+		};
+		F0639F6B2E7F299C00A97B14 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F0639F0A2E7F295D00A97B14 /* Pods.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 5B654B4B042BA7DC93766943A643E42B;
+			remoteInfo = FirebaseMessaging;
+		};
+		F0639F6D2E7F299C00A97B14 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F0639F0A2E7F295D00A97B14 /* Pods.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = B0B6501341FD6783C6874C54AB31A9CF;
+			remoteInfo = "FirebaseMessaging-FirebaseMessaging_Privacy";
+		};
+		F0639F6F2E7F299C00A97B14 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F0639F0A2E7F295D00A97B14 /* Pods.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 320FE4081EF0AECFE6A326EE79263FCD;
+			remoteInfo = flutter_age;
+		};
+		F0639F712E7F299C00A97B14 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F0639F0A2E7F295D00A97B14 /* Pods.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = D2818DB76C14B8736924E987E37A9823;
+			remoteInfo = flutter_local_notifications;
+		};
+		F0639F732E7F299C00A97B14 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F0639F0A2E7F295D00A97B14 /* Pods.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 513486288D9850EF657161C39358ED93;
+			remoteInfo = "flutter_local_notifications-flutter_local_notifications_privacy";
+		};
+		F0639F752E7F299C00A97B14 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F0639F0A2E7F295D00A97B14 /* Pods.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = A5DEDDCD541825388ACA7A6AF69E4553;
+			remoteInfo = flutter_secure_storage_macos;
+		};
+		F0639F772E7F299C00A97B14 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F0639F0A2E7F295D00A97B14 /* Pods.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = EE61EFAFACDD872DA0464DD89DD5F07F;
+			remoteInfo = "flutter_secure_storage_macos-flutter_secure_storage_macos";
+		};
+		F0639F792E7F299C00A97B14 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F0639F0A2E7F295D00A97B14 /* Pods.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 14BCB62DDBB5B8DD119E816FCA88B405;
+			remoteInfo = flutter_timezone;
+		};
+		F0639F7B2E7F299C00A97B14 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F0639F0A2E7F295D00A97B14 /* Pods.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 0E92FFB446DBA431F7F9BA73AA19A85F;
+			remoteInfo = "flutter_timezone-flutter_timezone_privacy";
+		};
+		F0639F7D2E7F299C00A97B14 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F0639F0A2E7F295D00A97B14 /* Pods.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 856B5CD56F194FAD26EA91620B66D614;
+			remoteInfo = GoogleDataTransport;
+		};
+		F0639F7F2E7F299C00A97B14 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F0639F0A2E7F295D00A97B14 /* Pods.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = F73AA961F4AEFF2B46B00AE435DF6BE3;
+			remoteInfo = "GoogleDataTransport-GoogleDataTransport_Privacy";
+		};
+		F0639F812E7F299C00A97B14 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F0639F0A2E7F295D00A97B14 /* Pods.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = B43874C6CBB50E7134FBEC24BABFE14F;
+			remoteInfo = GoogleUtilities;
+		};
+		F0639F832E7F299C00A97B14 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F0639F0A2E7F295D00A97B14 /* Pods.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 44E291D18340EAC3F761346198515323;
+			remoteInfo = "GoogleUtilities-GoogleUtilities_Privacy";
+		};
+		F0639F852E7F299C00A97B14 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F0639F0A2E7F295D00A97B14 /* Pods.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 13E78D79623218D2A86EAC2BE9805C5A;
+			remoteInfo = macos_window_utils;
+		};
+		F0639F872E7F299C00A97B14 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F0639F0A2E7F295D00A97B14 /* Pods.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = E4EC8D426CB926D8BB85551AC394D261;
+			remoteInfo = "macos_window_utils-macos_window_utils_privacy";
+		};
+		F0639F892E7F299C00A97B14 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F0639F0A2E7F295D00A97B14 /* Pods.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 06FC5C9CF96D60C50FCD47D339C91951;
+			remoteInfo = nanopb;
+		};
+		F0639F8B2E7F299C00A97B14 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F0639F0A2E7F295D00A97B14 /* Pods.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 3227F3FC45681D7CEE5D1355A532398A;
+			remoteInfo = "nanopb-nanopb_Privacy";
+		};
+		F0639F8D2E7F299C00A97B14 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F0639F0A2E7F295D00A97B14 /* Pods.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = C39BE06027F24EB0328A76E7507FA463;
+			remoteInfo = package_info_plus;
+		};
+		F0639F8F2E7F299C00A97B14 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F0639F0A2E7F295D00A97B14 /* Pods.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 64FB8D36F3D5FD1F4E08A8CB92BCD154;
+			remoteInfo = "package_info_plus-package_info_plus_privacy";
+		};
+		F0639F912E7F299C00A97B14 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F0639F0A2E7F295D00A97B14 /* Pods.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = AE157A33FEF959A214796BFF348717F6;
+			remoteInfo = path_provider_foundation;
+		};
+		F0639F932E7F299C00A97B14 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F0639F0A2E7F295D00A97B14 /* Pods.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 3DBD4BADE27F8B91024E4B4B4DD75DB5;
+			remoteInfo = "path_provider_foundation-path_provider_foundation_privacy";
+		};
+		F0639F952E7F299C00A97B14 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F0639F0A2E7F295D00A97B14 /* Pods.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 669E8F25E1897672BDB80B7EB784DA24;
+			remoteInfo = "Pods-Runner";
+		};
+		F0639F972E7F299C00A97B14 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F0639F0A2E7F295D00A97B14 /* Pods.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 6C3345B1B3CAEDF5B03B1F731FDC492E;
+			remoteInfo = "Pods-RunnerTests";
+		};
+		F0639F992E7F299C00A97B14 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F0639F0A2E7F295D00A97B14 /* Pods.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 3347A1AB6546F0A3977529B8F199DC41;
+			remoteInfo = PromisesObjC;
+		};
+		F0639F9B2E7F299C00A97B14 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F0639F0A2E7F295D00A97B14 /* Pods.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 3F238BB22C5201CE689CAF2F766AED95;
+			remoteInfo = "PromisesObjC-FBLPromises_Privacy";
+		};
+		F0639F9D2E7F299C00A97B14 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F0639F0A2E7F295D00A97B14 /* Pods.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 0A8F8CD8CB233637784BFD05D998CFDC;
+			remoteInfo = purchases_flutter;
+		};
+		F0639F9F2E7F299C00A97B14 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F0639F0A2E7F295D00A97B14 /* Pods.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 80B4EAC55FDCA2A0D3FC58E15C98A22E;
+			remoteInfo = PurchasesHybridCommon;
+		};
+		F0639FA12E7F299C00A97B14 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F0639F0A2E7F295D00A97B14 /* Pods.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 3AA9124C018EA7BF6460091D86216692;
+			remoteInfo = "PurchasesHybridCommon-PurchasesHybridCommon";
+		};
+		F0639FA32E7F299C00A97B14 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F0639F0A2E7F295D00A97B14 /* Pods.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 74A3C88613D4EB0E63038367698A81E9;
+			remoteInfo = RevenueCat;
+		};
+		F0639FA52E7F299C00A97B14 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F0639F0A2E7F295D00A97B14 /* Pods.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = D83AE5D93C653BDBFDDF59AC3D1E32BB;
+			remoteInfo = "RevenueCat-RevenueCat";
+		};
+		F0639FA72E7F299C00A97B14 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F0639F0A2E7F295D00A97B14 /* Pods.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 0115C3C00C175D77422084DD0542CE6F;
+			remoteInfo = Sentry;
+		};
+		F0639FA92E7F299C00A97B14 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F0639F0A2E7F295D00A97B14 /* Pods.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 2F194FCABAEDAB823F9B72AF05D34561;
+			remoteInfo = "Sentry-Sentry";
+		};
+		F0639FAB2E7F299C00A97B14 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F0639F0A2E7F295D00A97B14 /* Pods.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 69E79B6352F5EEE6319DD35575B44D3F;
+			remoteInfo = sentry_flutter;
+		};
+		F0639FAD2E7F299C00A97B14 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F0639F0A2E7F295D00A97B14 /* Pods.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 93C6A45C6E4792269BE9BE0073839BF0;
+			remoteInfo = shared_preferences_foundation;
+		};
+		F0639FAF2E7F299C00A97B14 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F0639F0A2E7F295D00A97B14 /* Pods.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 0652FCE3FC19056983AABE058B3CC45B;
+			remoteInfo = "shared_preferences_foundation-shared_preferences_foundation_privacy";
+		};
+		F0639FB12E7F299C00A97B14 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F0639F0A2E7F295D00A97B14 /* Pods.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 4FE20B1CF8B318A8D9591ED1587D7592;
+			remoteInfo = sqflite_darwin;
+		};
+		F0639FB32E7F299C00A97B14 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F0639F0A2E7F295D00A97B14 /* Pods.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 071549DBDD4BFC0BD7D2715539015DC2;
+			remoteInfo = "sqflite_darwin-sqflite_darwin_privacy";
+		};
+		F0639FB52E7F299C00A97B14 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F0639F0A2E7F295D00A97B14 /* Pods.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = C0C9A074EEF12F27AC2F536567F9FAE1;
+			remoteInfo = url_launcher_macos;
+		};
+		F0639FB72E7F299C00A97B14 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F0639F0A2E7F295D00A97B14 /* Pods.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 1C017A23A0627698026BC47D53596E76;
+			remoteInfo = "url_launcher_macos-url_launcher_macos_privacy";
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
@@ -99,6 +470,7 @@
 		CC36C909FC282D43703C842D /* Pods-RunnerTests.profile-prod.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RunnerTests.profile-prod.xcconfig"; path = "Target Support Files/Pods-RunnerTests/Pods-RunnerTests.profile-prod.xcconfig"; sourceTree = "<group>"; };
 		E1C452BA33C4EBEB4FB9F81E /* Pods-Runner.profile-dev.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.profile-dev.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.profile-dev.xcconfig"; sourceTree = "<group>"; };
 		E257B9A26D3891167DA38148 /* Pods-RunnerTests.debug-dev.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RunnerTests.debug-dev.xcconfig"; path = "Target Support Files/Pods-RunnerTests/Pods-RunnerTests.debug-dev.xcconfig"; sourceTree = "<group>"; };
+		F0639F0A2E7F295D00A97B14 /* Pods.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Pods.xcodeproj; path = Pods/Pods.xcodeproj; sourceTree = "<group>"; };
 		F08862F62DD24015007B657C /* Runner.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Runner.entitlements; sourceTree = "<group>"; };
 		FAE6BA73E48438DDB8987453 /* Pods-RunnerTests.release-prod.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RunnerTests.release-prod.xcconfig"; path = "Target Support Files/Pods-RunnerTests/Pods-RunnerTests.release-prod.xcconfig"; sourceTree = "<group>"; };
 		FCFCC0C4658E1454E9C8C02C /* prodDebug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = prodDebug.xcconfig; path = Runner/Configs/prodDebug.xcconfig; sourceTree = "<group>"; };
@@ -146,6 +518,7 @@
 		33CC10E42044A3C60003C045 = {
 			isa = PBXGroup;
 			children = (
+				F0639F0A2E7F295D00A97B14 /* Pods.xcodeproj */,
 				33FAB671232836740065AC1E /* Runner */,
 				33CEB47122A05771004F2AC0 /* Flutter */,
 				331C80D6294CF71000263BE5 /* RunnerTests */,
@@ -241,6 +614,66 @@
 			path = Pods;
 			sourceTree = "<group>";
 		};
+		F0639F162E7F299C00A97B14 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				F0639F502E7F299C00A97B14 /* device_info_plus.framework */,
+				F0639F522E7F299C00A97B14 /* device_info_plus_privacy.bundle */,
+				F0639F542E7F299C00A97B14 /* emoji_picker_flutter.framework */,
+				F0639F562E7F299C00A97B14 /* file_picker.framework */,
+				F0639F582E7F299C00A97B14 /* file_picker_privacy.bundle */,
+				F0639F5A2E7F299C00A97B14 /* firebase_core.framework */,
+				F0639F5C2E7F299C00A97B14 /* firebase_messaging.framework */,
+				F0639F5E2E7F299C00A97B14 /* firebase_messaging_Privacy.bundle */,
+				F0639F602E7F299C00A97B14 /* FirebaseCore.framework */,
+				F0639F622E7F299C00A97B14 /* FirebaseCore_Privacy.bundle */,
+				F0639F642E7F299C00A97B14 /* FirebaseCoreInternal.framework */,
+				F0639F662E7F299C00A97B14 /* FirebaseCoreInternal_Privacy.bundle */,
+				F0639F682E7F299C00A97B14 /* FirebaseInstallations.framework */,
+				F0639F6A2E7F299C00A97B14 /* FirebaseInstallations_Privacy.bundle */,
+				F0639F6C2E7F299C00A97B14 /* FirebaseMessaging.framework */,
+				F0639F6E2E7F299C00A97B14 /* FirebaseMessaging_Privacy.bundle */,
+				F0639F702E7F299C00A97B14 /* flutter_age.framework */,
+				F0639F722E7F299C00A97B14 /* flutter_local_notifications.framework */,
+				F0639F742E7F299C00A97B14 /* flutter_local_notifications_privacy.bundle */,
+				F0639F762E7F299C00A97B14 /* flutter_secure_storage_macos.framework */,
+				F0639F782E7F299C00A97B14 /* flutter_secure_storage_macos.bundle */,
+				F0639F7A2E7F299C00A97B14 /* flutter_timezone.framework */,
+				F0639F7C2E7F299C00A97B14 /* flutter_timezone_privacy.bundle */,
+				F0639F7E2E7F299C00A97B14 /* GoogleDataTransport.framework */,
+				F0639F802E7F299C00A97B14 /* GoogleDataTransport_Privacy.bundle */,
+				F0639F822E7F299C00A97B14 /* GoogleUtilities.framework */,
+				F0639F842E7F299C00A97B14 /* GoogleUtilities_Privacy.bundle */,
+				F0639F862E7F299C00A97B14 /* macos_window_utils.framework */,
+				F0639F882E7F299C00A97B14 /* macos_window_utils_privacy.bundle */,
+				F0639F8A2E7F299C00A97B14 /* nanopb.framework */,
+				F0639F8C2E7F299C00A97B14 /* nanopb_Privacy.bundle */,
+				F0639F8E2E7F299C00A97B14 /* package_info_plus.framework */,
+				F0639F902E7F299C00A97B14 /* package_info_plus_privacy.bundle */,
+				F0639F922E7F299C00A97B14 /* path_provider_foundation.framework */,
+				F0639F942E7F299C00A97B14 /* path_provider_foundation_privacy.bundle */,
+				F0639F962E7F299C00A97B14 /* Pods_Runner.framework */,
+				F0639F982E7F299C00A97B14 /* Pods_RunnerTests.framework */,
+				F0639F9A2E7F299C00A97B14 /* FBLPromises.framework */,
+				F0639F9C2E7F299C00A97B14 /* FBLPromises_Privacy.bundle */,
+				F0639F9E2E7F299C00A97B14 /* purchases_flutter.framework */,
+				F0639FA02E7F299C00A97B14 /* PurchasesHybridCommon.framework */,
+				F0639FA22E7F299C00A97B14 /* PurchasesHybridCommon.bundle */,
+				F0639FA42E7F299C00A97B14 /* RevenueCat.framework */,
+				F0639FA62E7F299C00A97B14 /* RevenueCat.bundle */,
+				F0639FA82E7F299C00A97B14 /* Sentry.framework */,
+				F0639FAA2E7F299C00A97B14 /* Sentry.bundle */,
+				F0639FAC2E7F299C00A97B14 /* sentry_flutter.framework */,
+				F0639FAE2E7F299C00A97B14 /* shared_preferences_foundation.framework */,
+				F0639FB02E7F299C00A97B14 /* shared_preferences_foundation_privacy.bundle */,
+				F0639FB22E7F299C00A97B14 /* sqflite_darwin.framework */,
+				F0639FB42E7F299C00A97B14 /* sqflite_darwin_privacy.bundle */,
+				F0639FB62E7F299C00A97B14 /* url_launcher_macos.framework */,
+				F0639FB82E7F299C00A97B14 /* url_launcher_macos_privacy.bundle */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -328,6 +761,12 @@
 			mainGroup = 33CC10E42044A3C60003C045;
 			productRefGroup = 33CC10EE2044A3C60003C045 /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = F0639F162E7F299C00A97B14 /* Products */;
+					ProjectRef = F0639F0A2E7F295D00A97B14 /* Pods.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				33CC10EC2044A3C60003C045 /* Runner */,
@@ -336,6 +775,380 @@
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		F0639F502E7F299C00A97B14 /* device_info_plus.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = device_info_plus.framework;
+			remoteRef = F0639F4F2E7F299C00A97B14 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		F0639F522E7F299C00A97B14 /* device_info_plus_privacy.bundle */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = device_info_plus_privacy.bundle;
+			remoteRef = F0639F512E7F299C00A97B14 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		F0639F542E7F299C00A97B14 /* emoji_picker_flutter.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = emoji_picker_flutter.framework;
+			remoteRef = F0639F532E7F299C00A97B14 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		F0639F562E7F299C00A97B14 /* file_picker.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = file_picker.framework;
+			remoteRef = F0639F552E7F299C00A97B14 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		F0639F582E7F299C00A97B14 /* file_picker_privacy.bundle */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = file_picker_privacy.bundle;
+			remoteRef = F0639F572E7F299C00A97B14 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		F0639F5A2E7F299C00A97B14 /* firebase_core.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = firebase_core.framework;
+			remoteRef = F0639F592E7F299C00A97B14 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		F0639F5C2E7F299C00A97B14 /* firebase_messaging.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = firebase_messaging.framework;
+			remoteRef = F0639F5B2E7F299C00A97B14 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		F0639F5E2E7F299C00A97B14 /* firebase_messaging_Privacy.bundle */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = firebase_messaging_Privacy.bundle;
+			remoteRef = F0639F5D2E7F299C00A97B14 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		F0639F602E7F299C00A97B14 /* FirebaseCore.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = FirebaseCore.framework;
+			remoteRef = F0639F5F2E7F299C00A97B14 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		F0639F622E7F299C00A97B14 /* FirebaseCore_Privacy.bundle */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = FirebaseCore_Privacy.bundle;
+			remoteRef = F0639F612E7F299C00A97B14 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		F0639F642E7F299C00A97B14 /* FirebaseCoreInternal.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = FirebaseCoreInternal.framework;
+			remoteRef = F0639F632E7F299C00A97B14 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		F0639F662E7F299C00A97B14 /* FirebaseCoreInternal_Privacy.bundle */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = FirebaseCoreInternal_Privacy.bundle;
+			remoteRef = F0639F652E7F299C00A97B14 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		F0639F682E7F299C00A97B14 /* FirebaseInstallations.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = FirebaseInstallations.framework;
+			remoteRef = F0639F672E7F299C00A97B14 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		F0639F6A2E7F299C00A97B14 /* FirebaseInstallations_Privacy.bundle */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = FirebaseInstallations_Privacy.bundle;
+			remoteRef = F0639F692E7F299C00A97B14 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		F0639F6C2E7F299C00A97B14 /* FirebaseMessaging.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = FirebaseMessaging.framework;
+			remoteRef = F0639F6B2E7F299C00A97B14 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		F0639F6E2E7F299C00A97B14 /* FirebaseMessaging_Privacy.bundle */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = FirebaseMessaging_Privacy.bundle;
+			remoteRef = F0639F6D2E7F299C00A97B14 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		F0639F702E7F299C00A97B14 /* flutter_age.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = flutter_age.framework;
+			remoteRef = F0639F6F2E7F299C00A97B14 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		F0639F722E7F299C00A97B14 /* flutter_local_notifications.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = flutter_local_notifications.framework;
+			remoteRef = F0639F712E7F299C00A97B14 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		F0639F742E7F299C00A97B14 /* flutter_local_notifications_privacy.bundle */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = flutter_local_notifications_privacy.bundle;
+			remoteRef = F0639F732E7F299C00A97B14 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		F0639F762E7F299C00A97B14 /* flutter_secure_storage_macos.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = flutter_secure_storage_macos.framework;
+			remoteRef = F0639F752E7F299C00A97B14 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		F0639F782E7F299C00A97B14 /* flutter_secure_storage_macos.bundle */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = flutter_secure_storage_macos.bundle;
+			remoteRef = F0639F772E7F299C00A97B14 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		F0639F7A2E7F299C00A97B14 /* flutter_timezone.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = flutter_timezone.framework;
+			remoteRef = F0639F792E7F299C00A97B14 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		F0639F7C2E7F299C00A97B14 /* flutter_timezone_privacy.bundle */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = flutter_timezone_privacy.bundle;
+			remoteRef = F0639F7B2E7F299C00A97B14 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		F0639F7E2E7F299C00A97B14 /* GoogleDataTransport.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = GoogleDataTransport.framework;
+			remoteRef = F0639F7D2E7F299C00A97B14 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		F0639F802E7F299C00A97B14 /* GoogleDataTransport_Privacy.bundle */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = GoogleDataTransport_Privacy.bundle;
+			remoteRef = F0639F7F2E7F299C00A97B14 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		F0639F822E7F299C00A97B14 /* GoogleUtilities.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = GoogleUtilities.framework;
+			remoteRef = F0639F812E7F299C00A97B14 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		F0639F842E7F299C00A97B14 /* GoogleUtilities_Privacy.bundle */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = GoogleUtilities_Privacy.bundle;
+			remoteRef = F0639F832E7F299C00A97B14 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		F0639F862E7F299C00A97B14 /* macos_window_utils.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = macos_window_utils.framework;
+			remoteRef = F0639F852E7F299C00A97B14 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		F0639F882E7F299C00A97B14 /* macos_window_utils_privacy.bundle */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = macos_window_utils_privacy.bundle;
+			remoteRef = F0639F872E7F299C00A97B14 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		F0639F8A2E7F299C00A97B14 /* nanopb.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = nanopb.framework;
+			remoteRef = F0639F892E7F299C00A97B14 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		F0639F8C2E7F299C00A97B14 /* nanopb_Privacy.bundle */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = nanopb_Privacy.bundle;
+			remoteRef = F0639F8B2E7F299C00A97B14 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		F0639F8E2E7F299C00A97B14 /* package_info_plus.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = package_info_plus.framework;
+			remoteRef = F0639F8D2E7F299C00A97B14 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		F0639F902E7F299C00A97B14 /* package_info_plus_privacy.bundle */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = package_info_plus_privacy.bundle;
+			remoteRef = F0639F8F2E7F299C00A97B14 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		F0639F922E7F299C00A97B14 /* path_provider_foundation.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = path_provider_foundation.framework;
+			remoteRef = F0639F912E7F299C00A97B14 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		F0639F942E7F299C00A97B14 /* path_provider_foundation_privacy.bundle */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = path_provider_foundation_privacy.bundle;
+			remoteRef = F0639F932E7F299C00A97B14 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		F0639F962E7F299C00A97B14 /* Pods_Runner.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = Pods_Runner.framework;
+			remoteRef = F0639F952E7F299C00A97B14 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		F0639F982E7F299C00A97B14 /* Pods_RunnerTests.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = Pods_RunnerTests.framework;
+			remoteRef = F0639F972E7F299C00A97B14 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		F0639F9A2E7F299C00A97B14 /* FBLPromises.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = FBLPromises.framework;
+			remoteRef = F0639F992E7F299C00A97B14 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		F0639F9C2E7F299C00A97B14 /* FBLPromises_Privacy.bundle */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = FBLPromises_Privacy.bundle;
+			remoteRef = F0639F9B2E7F299C00A97B14 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		F0639F9E2E7F299C00A97B14 /* purchases_flutter.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = purchases_flutter.framework;
+			remoteRef = F0639F9D2E7F299C00A97B14 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		F0639FA02E7F299C00A97B14 /* PurchasesHybridCommon.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = PurchasesHybridCommon.framework;
+			remoteRef = F0639F9F2E7F299C00A97B14 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		F0639FA22E7F299C00A97B14 /* PurchasesHybridCommon.bundle */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = PurchasesHybridCommon.bundle;
+			remoteRef = F0639FA12E7F299C00A97B14 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		F0639FA42E7F299C00A97B14 /* RevenueCat.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = RevenueCat.framework;
+			remoteRef = F0639FA32E7F299C00A97B14 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		F0639FA62E7F299C00A97B14 /* RevenueCat.bundle */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = RevenueCat.bundle;
+			remoteRef = F0639FA52E7F299C00A97B14 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		F0639FA82E7F299C00A97B14 /* Sentry.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = Sentry.framework;
+			remoteRef = F0639FA72E7F299C00A97B14 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		F0639FAA2E7F299C00A97B14 /* Sentry.bundle */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = Sentry.bundle;
+			remoteRef = F0639FA92E7F299C00A97B14 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		F0639FAC2E7F299C00A97B14 /* sentry_flutter.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = sentry_flutter.framework;
+			remoteRef = F0639FAB2E7F299C00A97B14 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		F0639FAE2E7F299C00A97B14 /* shared_preferences_foundation.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = shared_preferences_foundation.framework;
+			remoteRef = F0639FAD2E7F299C00A97B14 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		F0639FB02E7F299C00A97B14 /* shared_preferences_foundation_privacy.bundle */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = shared_preferences_foundation_privacy.bundle;
+			remoteRef = F0639FAF2E7F299C00A97B14 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		F0639FB22E7F299C00A97B14 /* sqflite_darwin.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = sqflite_darwin.framework;
+			remoteRef = F0639FB12E7F299C00A97B14 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		F0639FB42E7F299C00A97B14 /* sqflite_darwin_privacy.bundle */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = sqflite_darwin_privacy.bundle;
+			remoteRef = F0639FB32E7F299C00A97B14 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		F0639FB62E7F299C00A97B14 /* url_launcher_macos.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = url_launcher_macos.framework;
+			remoteRef = F0639FB52E7F299C00A97B14 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		F0639FB82E7F299C00A97B14 /* url_launcher_macos_privacy.bundle */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = url_launcher_macos_privacy.bundle;
+			remoteRef = F0639FB72E7F299C00A97B14 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		331C80D3294CF70F00263BE5 /* Resources */ = {

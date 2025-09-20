@@ -472,6 +472,13 @@ jobs:
       - build-app-for-android
       - build-app-for-web
       - build-app-for-windows
+    strategy:
+      matrix:
+        platform:
+          - linux/amd64
+          - linux/arm64
+          - linux/arm/v7
+          - linux/arm/v6
     runs-on: [self-hosted, Linux]
     steps:
       - name: Checkout code
@@ -547,6 +554,11 @@ jobs:
         with:
           name: linux-app
           path: ./debian/packages/
+      - name: Download Windows App Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: windows-app
+          path: ./output/
 
       - name: Download Android App Artifact
         uses: actions/download-artifact@v4
@@ -606,6 +618,9 @@ jobs:
 
           # Upload android app
           gh release upload $TAG "build/app/outputs/flutter-apk/atomic-mail-${TAG}.apk"
+
+          # Upload windows app
+          gh release upload $TAG "output/atomic-mail-${TAG}-windows-installer.exe"
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
