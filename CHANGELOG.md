@@ -2,6 +2,14 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## 0.2.24 - 2025-09-20
+#### Bug Fixes
+- use another form - (d8c4bf4) - Brandon Guigo
+#### Miscellaneous Chores
+- **(release)** 0.2.23 [skip ci] - (559e71f) - GitHub Actions
+
+- - -
+
 ## 0.2.23 - 2025-09-20
 #### Bug Fixes
 - use another way of creating files for windows - (22d3c78) - Brandon Guigo
