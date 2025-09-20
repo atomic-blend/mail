@@ -2,6 +2,16 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## 0.2.20 - 2025-09-20
+#### Bug Fixes
+- installer name in rename - (ed4cb82) - Brandon Guigo
+- add first version of windows pipeline - (508e945) - Brandon Guigo
+- change bad artifact name - (7869658) - Brandon Guigo
+#### Miscellaneous Chores
+- **(release)** 0.2.19 [skip ci] - (6466036) - GitHub Actions
+
+- - -
+
 ## 0.2.19 - 2025-09-19
 #### Bug Fixes
 - write the playstore key at the right place - (cdcd73f) - Brandon Guigo
