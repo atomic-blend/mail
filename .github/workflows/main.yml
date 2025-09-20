@@ -414,13 +414,25 @@ jobs:
           fetch-depth: 0
       - name: Write Firebase Options
         run: |
-          Set-Content -Path "lib/firebase_options_prod.dart" -Value ${{ secrets.FIREBASE_OPTIONS_PROD }} -Encoding UTF8
+          $firebaseOptionsProd = @"
+          ${{ secrets.FIREBASE_OPTIONS_PROD }}
+          "@
+          Set-Content -Path "lib/firebase_options_prod.dart" -Value $firebaseOptionsProd -NoNewline
           
-          Set-Content -Path "lib/firebase_options_dev.dart" -Value ${{ secrets.FIREBASE_OPTIONS_DEV }} -Encoding UTF8
+          $firebaseOptionsDev = @"
+          ${{ secrets.FIREBASE_OPTIONS_DEV }}
+          "@
+          Set-Content -Path "lib/firebase_options_dev.dart" -Value $firebaseOptionsDev -NoNewline
           
-          Set-Content -Path "assets/configs/prod.json" -Value ${{ secrets.APP_CONFIG_PROD }} -Encoding UTF8
+          $appConfigProd = @"
+          ${{ secrets.APP_CONFIG_PROD }}
+          "@
+          Set-Content -Path "assets/configs/prod.json" -Value $appConfigProd -NoNewline
           
-          Set-Content -Path "assets/configs/dev.json" -Value ${{ secrets.APP_CONFIG_DEV }} -Encoding UTF8
+          $appConfigDev = @"
+          ${{ secrets.APP_CONFIG_DEV }}
+          "@
+          Set-Content -Path "assets/configs/dev.json" -Value $appConfigDev -NoNewline
 
       - name: Get tag
         id: get-tag
