@@ -403,12 +403,80 @@ jobs:
         run: |
           cd fastlane
           fastlane android upload_beta
+  build-app-for-windows:
+    needs: bump-version
+    runs-on: [self-hosted, Windows]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: "stable"
+          cache: true
+
+      - name: Setup Rust
+        uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          toolchain: stable
+          override: true
+      
+      - name: Write Firebase Options
+        run: |
+          cat > lib/firebase_options_prod.dart << 'EOF'
+          ${{ secrets.FIREBASE_OPTIONS_PROD }}
+          EOF
+          
+          cat > lib/firebase_options_dev.dart << 'EOF'
+          ${{ secrets.FIREBASE_OPTIONS_DEV }}
+          EOF
+          
+          cat > assets/configs/prod.json << 'EOF'
+          ${{ secrets.APP_CONFIG_PROD }}
+          EOF
+          
+          cat > assets/configs/dev.json << 'EOF'
+          ${{ secrets.APP_CONFIG_DEV }}
+          EOF
+
+      - name: Get tag
+        id: get-tag
+        run: |
+          TAG=$(git describe --abbrev=0 --tags)
+          echo "tag=$TAG" >> $GITHUB_OUTPUT
+          
+      - name: Clean and prepare build
+        run: |
+          flutter clean
+          flutter pub get
+          flutter pub run build_runner build --delete-conflicting-outputs
+          
+      - name: Build Windows App
+        run: |
+          flutter build windows --release -t lib/main_prod.dart --dart-define APP_ENV=prod
+      
+      - name: Package Windows App
+        run: |
+          $innopath = "C:\Program Files (x86)\Inno Setup 6"
+          $env:PATH += ";$innopath"
+          iscc .\innosetup.iss
+          mv output\AtomicMailInstaller.exe output\atomic-mail-${{ steps.get-tag.outputs.tag }}-windows-installer.exe
+      - name: Upload Windows Installer
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-app
+          path: output\atomic-mail-${{ steps.get-tag.outputs.tag }}-windows-installer.exe
 
   publish-docker-images:
     needs: 
       - build-app-for-linux
       - build-app-for-android
       - build-app-for-web
+      - build-app-for-windows
     runs-on: [self-hosted, Linux]
     steps:
       - name: Checkout code
@@ -455,7 +523,6 @@ jobs:
   create-github-release:
     needs: 
       - publish-docker-images
-      - build-app-for-linux
       - publish-android-app
     runs-on: [self-hosted, Linux]
     steps:
@@ -489,7 +556,7 @@ jobs:
       - name: Download Android App Artifact
         uses: actions/download-artifact@v4
         with:
-          name: android-app
+          name: android-apk
           path: ./build/app/outputs/flutter-apk/
       - name: Rename the Android App file
         run: |
