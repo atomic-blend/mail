@@ -411,43 +411,46 @@ jobs:
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
-      - name: Setup Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          flutter-version: ${{ env.FLUTTER_VERSION }}
-          channel: "stable"
-          cache: true
+      # - name: Setup Flutter
+      #   uses: subosito/flutter-action@v2
+      #   with:
+      #     flutter-version: ${{ env.FLUTTER_VERSION }}
+      #     channel: "stable"
+      #     cache: true
 
-      - name: Setup Rust
-        uses: actions-rs/toolchain@v1
-        with:
-          profile: minimal
-          toolchain: stable
-          override: true
+      # - name: Setup Rust
+      #   uses: actions-rs/toolchain@v1
+      #   with:
+      #     profile: minimal
+      #     toolchain: stable
+      #     override: true
+
+      - name: Check dependencies
+        run: |
+          if (-not (Get-Command iscc -ErrorAction SilentlyContinue)) {
+            Write-Error "iscc is not installed"
+            exit 1
+          }
+          if (-not (Get-Command flutter -ErrorAction SilentlyContinue)) {
+            Write-Error "flutter is not installed"
+            exit 1
+          }
       
       - name: Write Firebase Options
         run: |
-          cat > lib/firebase_options_prod.dart << 'EOF'
-          ${{ secrets.FIREBASE_OPTIONS_PROD }}
-          EOF
+          ${{ secrets.FIREBASE_OPTIONS_PROD }} | Out-File -FilePath "lib/firebase_options_prod.dart" -Encoding UTF8
           
-          cat > lib/firebase_options_dev.dart << 'EOF'
-          ${{ secrets.FIREBASE_OPTIONS_DEV }}
-          EOF
+          ${{ secrets.FIREBASE_OPTIONS_DEV }} | Out-File -FilePath "lib/firebase_options_dev.dart" -Encoding UTF8
           
-          cat > assets/configs/prod.json << 'EOF'
-          ${{ secrets.APP_CONFIG_PROD }}
-          EOF
+          ${{ secrets.APP_CONFIG_PROD }} | Out-File -FilePath "assets/configs/prod.json" -Encoding UTF8
           
-          cat > assets/configs/dev.json << 'EOF'
-          ${{ secrets.APP_CONFIG_DEV }}
-          EOF
+          ${{ secrets.APP_CONFIG_DEV }} | Out-File -FilePath "assets/configs/dev.json" -Encoding UTF8
 
       - name: Get tag
         id: get-tag
         run: |
-          TAG=$(git describe --abbrev=0 --tags)
-          echo "tag=$TAG" >> $GITHUB_OUTPUT
+          $TAG = git describe --abbrev=0 --tags
+          echo "tag=$TAG" >> $env:GITHUB_OUTPUT
           
       - name: Clean and prepare build
         run: |
