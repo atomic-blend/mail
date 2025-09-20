@@ -2,6 +2,14 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## 0.2.26 - 2025-09-20
+#### Bug Fixes
+- mac os config + release installer as well as other apps in GitHub - (36efdf7) - Brandon Guigo
+#### Miscellaneous Chores
+- **(release)** 0.2.25 [skip ci] - (1b2c6d0) - GitHub Actions
+
+- - -
+
 ## 0.2.25 - 2025-09-20
 #### Bug Fixes
 - add flutter path to the runner script path - (b82226a) - Brandon Guigo
