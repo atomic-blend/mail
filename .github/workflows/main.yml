@@ -442,12 +442,16 @@ jobs:
           
       - name: Clean and prepare build
         run: |
+          $flutterpath = "$env:HOME\devtools\flutter\bin"
+          $env:PATH += ";$flutterpath"
           flutter clean
           flutter pub get
           flutter pub run build_runner build --delete-conflicting-outputs
           
       - name: Build Windows App
         run: |
+          $flutterpath = "$env:HOME\devtools\flutter\bin"
+          $env:PATH += ";$flutterpath"
           flutter build windows --release -t lib/main_prod.dart --dart-define APP_ENV=prod
       
       - name: Package Windows App
