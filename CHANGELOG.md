@@ -2,6 +2,14 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## 0.2.25 - 2025-09-20
+#### Bug Fixes
+- add flutter path to the runner script path - (b82226a) - Brandon Guigo
+#### Miscellaneous Chores
+- **(release)** 0.2.24 [skip ci] - (30ea58c) - GitHub Actions
+
+- - -
+
 ## 0.2.24 - 2025-09-20
 #### Bug Fixes
 - use another form - (d8c4bf4) - Brandon Guigo
