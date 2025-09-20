@@ -2,6 +2,14 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## 0.2.21 - 2025-09-20
+#### Bug Fixes
+- remove uncompatible GH Actions and convert part to powershell scripts - (968e402) - Brandon Guigo
+#### Miscellaneous Chores
+- **(release)** 0.2.20 [skip ci] - (8edb9f4) - GitHub Actions
+
+- - -
+
 ## 0.2.20 - 2025-09-20
 #### Bug Fixes
 - installer name in rename - (ed4cb82) - Brandon Guigo
