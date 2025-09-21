@@ -2,6 +2,14 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## 0.2.31 - 2025-09-21
+#### Bug Fixes
+- use fixed cocoapods version - (410c627) - Brandon Guigo
+#### Miscellaneous Chores
+- **(release)** 0.2.30 [skip ci] - (65b5990) - GitHub Actions
+
+- - -
+
 ## 0.2.30 - 2025-09-21
 #### Bug Fixes
 - add setup cocoapods step - (eb55df7) - Brandon Guigo
