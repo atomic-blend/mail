@@ -2,6 +2,14 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## 0.2.37 - 2025-09-21
+#### Bug Fixes
+- make the path overrides after the path - (8c5edc9) - Brandon Guigo
+#### Miscellaneous Chores
+- **(release)** 0.2.36 [skip ci] - (51e5f32) - GitHub Actions
+
+- - -
+
 ## 0.2.36 - 2025-09-21
 #### Bug Fixes
 - test installing cocoapods inside the pipeline directly - (f59e169) - Brandon Guigo
