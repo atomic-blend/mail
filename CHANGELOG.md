@@ -2,6 +2,14 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## 0.2.27 - 2025-09-21
+#### Bug Fixes
+- add pipeline for mac os - (df7b806) - Brandon Guigo
+#### Miscellaneous Chores
+- **(release)** 0.2.26 [skip ci] - (0a01be8) - GitHub Actions
+
+- - -
+
 ## 0.2.26 - 2025-09-20
 #### Bug Fixes
 - mac os config + release installer as well as other apps in GitHub - (36efdf7) - Brandon Guigo
