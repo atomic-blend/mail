@@ -375,6 +375,12 @@ jobs:
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: "stable"
+          cache: true
       - name: Write Firebase Options
         run: |
           cat > lib/firebase_options_prod.dart << 'EOF'
@@ -417,7 +423,7 @@ jobs:
           
       - name: Build MacOS App
         run: |
-          flutter build windows --release -t lib/main_prod.dart --dart-define APP_ENV=prod
+          flutter build macos --release -t lib/main_prod.dart --dart-define APP_ENV=prod
       
       - name: Package MacOS App
         run: |
@@ -635,6 +641,12 @@ jobs:
         run: |
           mv build/app/outputs/flutter-apk/app-prod-release.apk build/app/outputs/flutter-apk/atomic-mail-${{ steps.get-tag.outputs.tag }}.apk
 
+      - name: Download MacOS App Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: macos-app
+          path: ./macos_dmg/atomic-mail-${{ steps.get-tag.outputs.tag }}-macos.dmg
+
       - name: Install ghr
         run: |
           go install github.com/tcnksm/ghr@latest
@@ -687,6 +699,9 @@ jobs:
 
           # Upload windows app
           gh release upload $TAG "output/atomic-mail-${TAG}-windows-installer.exe"
+
+          # Upload macos app
+          gh release upload $TAG "macos_dmg/atomic-mail-${TAG}-macos.dmg"
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
