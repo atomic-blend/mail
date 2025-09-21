@@ -406,8 +406,8 @@ jobs:
       - name: Get tag
         id: get-tag
         run: |
-          $TAG = git describe --abbrev=0 --tags
-          echo "tag=$TAG" >> $env:GITHUB_OUTPUT
+          TAG=$(git describe --abbrev=0 --tags)
+          echo "tag=$TAG" >> $GITHUB_OUTPUT
           
       - name: Clean and prepare build
         run: |
