@@ -376,6 +376,26 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: "stable"
+          cache: true
+
+      - name: Install CocoaPods
+        run: |
+          # Set up Ruby environment
+          export PATH="/opt/homebrew/bin:/opt/homebrew/opt/ruby/bin:$PATH"
+          export GEM_HOME="/opt/homebrew/lib/ruby/gems/3.4.0"
+          export GEM_PATH="/opt/homebrew/lib/ruby/gems/3.4.0"
+          
+          # Install or reinstall CocoaPods
+          gem install cocoapods
+          
+          # Verify installation
+          pod --version
+
       - name: Write Firebase Options
         run: |
           cat > lib/firebase_options_prod.dart << 'EOF'
