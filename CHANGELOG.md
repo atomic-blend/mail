@@ -2,6 +2,14 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## 0.2.34 - 2025-09-21
+#### Bug Fixes
+- try setting the exports directly inside the pipeline script - (42f8829) - Brandon Guigo
+#### Miscellaneous Chores
+- **(release)** 0.2.33 [skip ci] - (abc80fe) - GitHub Actions
+
+- - -
+
 ## 0.2.33 - 2025-09-21
 #### Bug Fixes
 - re-add the flutter setup step - (78c5fb8) - Brandon Guigo
