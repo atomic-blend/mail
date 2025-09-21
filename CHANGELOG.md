@@ -2,6 +2,14 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## 0.2.35 - 2025-09-21
+#### Bug Fixes
+- test new exports - (698257a) - Brandon Guigo
+#### Miscellaneous Chores
+- **(release)** 0.2.34 [skip ci] - (90e2901) - GitHub Actions
+
+- - -
+
 ## 0.2.34 - 2025-09-21
 #### Bug Fixes
 - try setting the exports directly inside the pipeline script - (42f8829) - Brandon Guigo
