@@ -2,6 +2,14 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## 0.2.38 - 2025-09-21
+#### Bug Fixes
+- use the setup ruby action + cocoapods install with gem - (2cea1fd) - Brandon Guigo
+#### Miscellaneous Chores
+- **(release)** 0.2.37 [skip ci] - (b66c758) - GitHub Actions
+
+- - -
+
 ## 0.2.37 - 2025-09-21
 #### Bug Fixes
 - make the path overrides after the path - (8c5edc9) - Brandon Guigo
