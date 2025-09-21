@@ -426,14 +426,14 @@ jobs:
           
       - name: Build MacOS App
         run: |
-          # Ruby + CocoaPods environment
-          export PATH="/opt/homebrew/bin:/opt/homebrew/opt/ruby/bin:$PATH"
+          #  Set Ruby and CocoaPods environment variables
+          export PATH="/opt/homebrew/bin:/opt/homebrew/opt/ruby/bin:/opt/homebrew/lib/ruby/gems/3.4.0/bin:$PATH"
           export GEM_HOME="/opt/homebrew/lib/ruby/gems/3.4.0"
           export GEM_PATH="/opt/homebrew/lib/ruby/gems/3.4.0"
 
-          # FVM Flutter
+          # Ensure FVM Flutter is in the PATH
           export PATH="$HOME/fvm/versions/stable/bin:$PATH"
-          
+
           flutter build macos --release -t lib/main_prod.dart --dart-define APP_ENV=prod
       
       - name: Package MacOS App
