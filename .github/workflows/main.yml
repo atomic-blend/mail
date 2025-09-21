@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - main
-  workflow_dispatch:
 
 env:
   FLUTTER_VERSION: "3.35.4"
@@ -368,42 +367,70 @@ jobs:
         with:
           name: android-aab
           path: build/app/outputs/bundle/prodRelease/app-prod-release.aab
-
-
-  publish-android-app:
-    needs: 
-      - build-app-for-linux
-      - build-app-for-web
-      - build-app-for-windows
-      - build-app-for-android
-    runs-on: [self-hosted, Linux]
+  build-app-for-macos:
+    needs: bump-version
+    runs-on: [self-hosted, MacOS]
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
-    
-      - name: Download Web App Artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: android-aab
-          path: ./build/app/outputs/bundle/prodRelease/
-      - name: Write Play Store Key
+      - name: Write Firebase Options
         run: |
+          cat > lib/firebase_options_prod.dart << 'EOF'
+          ${{ secrets.FIREBASE_OPTIONS_PROD }}
+          EOF
+          
+          cat > lib/firebase_options_dev.dart << 'EOF'
+          ${{ secrets.FIREBASE_OPTIONS_DEV }}
+          EOF
+          
+          cat > assets/configs/prod.json << 'EOF'
+          ${{ secrets.APP_CONFIG_PROD }}
+          EOF
+          
+          cat > assets/configs/dev.json << 'EOF'
+          ${{ secrets.APP_CONFIG_DEV }}
+          EOF
+
+          cat > android/key.properties << 'EOF'
+          ${{ secrets.KEY_PROPERTIES }}
+          EOF
+
+          echo ${{ secrets.UPLOAD_KEYSTORE }} | base64 -d > upload-keystore.jks
+
           cat > playstore_key.json << 'EOF'
           ${{ secrets.PLAY_STORE_KEY }}
           EOF
+
       - name: Get tag
         id: get-tag
         run: |
-          TAG=$(git describe --abbrev=0 --tags)
-          echo "tag=$TAG" >> $GITHUB_OUTPUT
-
-      - name: Publish Android App to Play Store
-        continue-on-error: true
+          $TAG = git describe --abbrev=0 --tags
+          echo "tag=$TAG" >> $env:GITHUB_OUTPUT
+          
+      - name: Clean and prepare build
         run: |
-          cd fastlane
-          fastlane android upload_beta
+          flutter clean
+          flutter pub get
+          flutter pub run build_runner build --delete-conflicting-outputs
+          
+      - name: Build MacOS App
+        run: |
+          flutter build windows --release -t lib/main_prod.dart --dart-define APP_ENV=prod
+      
+      - name: Package MacOS App
+        run: |
+          npm install -g appdmg
+          appdmg macos_dmg/config.json macos_dmg/AtomicMail.dmg
+          mv macos_dmg/AtomicMail.dmg macos_dmg/atomic-mail-${{ steps.get-tag.outputs.tag }}-macos.dmg
+
+      - name: Upload MacOS App
+        uses: actions/upload-artifact@v4
+        with:
+          name: macos-app
+          path: macos_dmg/atomic-mail-${{ steps.get-tag.outputs.tag }}-macos.dmg
+
   build-app-for-windows:
     needs: bump-version
     runs-on: [self-hosted, Windows]
@@ -466,12 +493,51 @@ jobs:
           name: windows-app
           path: output\atomic-mail-${{ steps.get-tag.outputs.tag }}-windows-installer.exe
 
+
+  publish-android-app:
+    needs: 
+      - build-app-for-linux
+      - build-app-for-web
+      - build-app-for-windows
+      - build-app-for-android
+      - build-app-for-macos
+    runs-on: [self-hosted, Linux]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+    
+      - name: Download Web App Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: android-aab
+          path: ./build/app/outputs/bundle/prodRelease/
+      - name: Write Play Store Key
+        run: |
+          cat > playstore_key.json << 'EOF'
+          ${{ secrets.PLAY_STORE_KEY }}
+          EOF
+      - name: Get tag
+        id: get-tag
+        run: |
+          TAG=$(git describe --abbrev=0 --tags)
+          echo "tag=$TAG" >> $GITHUB_OUTPUT
+
+      - name: Publish Android App to Play Store
+        continue-on-error: true
+        run: |
+          cd fastlane
+          fastlane android upload_beta
+  
+
   publish-docker-images:
     needs: 
       - build-app-for-linux
       - build-app-for-android
       - build-app-for-web
       - build-app-for-windows
+      - build-app-for-macos
     strategy:
       matrix:
         platform:
