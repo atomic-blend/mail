@@ -2,6 +2,15 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## 0.2.32 - 2025-09-21
+#### Bug Fixes
+- update flutter version for test pipeline too - (1c9e71e) - Brandon Guigo
+- update the pubspec dependency + comment in pipeline install of flutter and cocoapods - (35ed740) - Brandon Guigo
+#### Miscellaneous Chores
+- **(release)** 0.2.31 [skip ci] - (acddb08) - GitHub Actions
+
+- - -
+
 ## 0.2.31 - 2025-09-21
 #### Bug Fixes
 - use fixed cocoapods version - (410c627) - Brandon Guigo
