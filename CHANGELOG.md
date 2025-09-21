@@ -2,6 +2,14 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## 0.2.39 - 2025-09-21
+#### Bug Fixes
+- new test - (61dad65) - Brandon Guigo
+#### Miscellaneous Chores
+- **(release)** 0.2.38 [skip ci] - (4aa960e) - GitHub Actions
+
+- - -
+
 ## 0.2.38 - 2025-09-21
 #### Bug Fixes
 - use the setup ruby action + cocoapods install with gem - (2cea1fd) - Brandon Guigo
