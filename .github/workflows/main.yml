@@ -384,7 +384,7 @@ jobs:
       - name: setup-cocoapods
         uses: maxim-lobanov/setup-cocoapods@v1
         with:
-          podfile-path: macos/Podfile.lock
+          version: "1.16.2"
       - name: Write Firebase Options
         run: |
           cat > lib/firebase_options_prod.dart << 'EOF'
