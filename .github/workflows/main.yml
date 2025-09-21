@@ -641,6 +641,12 @@ jobs:
         run: |
           mv build/app/outputs/flutter-apk/app-prod-release.apk build/app/outputs/flutter-apk/atomic-mail-${{ steps.get-tag.outputs.tag }}.apk
 
+      - name: Download MacOS App Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: macos-app
+          path: ./macos_dmg/atomic-mail-${{ steps.get-tag.outputs.tag }}-macos.dmg
+
       - name: Install ghr
         run: |
           go install github.com/tcnksm/ghr@latest
@@ -693,6 +699,9 @@ jobs:
 
           # Upload windows app
           gh release upload $TAG "output/atomic-mail-${TAG}-windows-installer.exe"
+
+          # Upload macos app
+          gh release upload $TAG "macos_dmg/atomic-mail-${TAG}-macos.dmg"
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
