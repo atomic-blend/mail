@@ -376,22 +376,12 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Setup Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          flutter-version: ${{ env.FLUTTER_VERSION }}
-          channel: "stable"
-          cache: true
-
-      - uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: '3.4' # Not needed with a .ruby-version, .tool-versions or mise.toml
-          bundler-cache: true # runs 'bundle install' and caches installed gems automatically
-      - name: Install CocoaPods
-        run: |
-          ruby --version
-          gem install cocoapods
-          pod --version
+      # - name: Setup Flutter
+      #   uses: subosito/flutter-action@v2
+      #   with:
+      #     flutter-version: ${{ env.FLUTTER_VERSION }}
+      #     channel: "stable"
+      #     cache: true
 
       - name: Write Firebase Options
         run: |
@@ -435,7 +425,7 @@ jobs:
           export GEM_PATH="/opt/homebrew/lib/ruby/gems/3.4.0"
 
           # FVM Flutter
-          export PATH="$HOME/fvm/versions/stable/bin:$PATH"
+          export PATH="/Users/brandonguigo/fvm/versions/stable/bin:$PATH"
 
           flutter clean
           flutter pub get
@@ -449,7 +439,7 @@ jobs:
           export GEM_PATH="/opt/homebrew/lib/ruby/gems/3.4.0"
 
           # Ensure FVM Flutter is in the PATH
-          export PATH="$HOME/fvm/versions/stable/bin:$PATH"
+          export PATH="/Users/brandonguigo/fvm/versions/stable/bin:$PATH"
 
           flutter build macos --release -t lib/main_prod.dart --dart-define APP_ENV=prod
       
