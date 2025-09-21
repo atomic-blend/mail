@@ -2,6 +2,14 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## 0.2.28 - 2025-09-21
+#### Bug Fixes
+- change get tag step on mac os to linux commands - (5915fb5) - Brandon Guigo
+#### Miscellaneous Chores
+- **(release)** 0.2.27 [skip ci] - (daf6d6c) - GitHub Actions
+
+- - -
+
 ## 0.2.27 - 2025-09-21
 #### Bug Fixes
 - add pipeline for mac os - (df7b806) - Brandon Guigo
