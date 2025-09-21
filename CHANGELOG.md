@@ -2,6 +2,14 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## 0.2.33 - 2025-09-21
+#### Bug Fixes
+- re-add the flutter setup step - (78c5fb8) - Brandon Guigo
+#### Miscellaneous Chores
+- **(release)** 0.2.32 [skip ci] - (eaa267a) - GitHub Actions
+
+- - -
+
 ## 0.2.32 - 2025-09-21
 #### Bug Fixes
 - update flutter version for test pipeline too - (1c9e71e) - Brandon Guigo
