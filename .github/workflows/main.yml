@@ -386,7 +386,7 @@ jobs:
       - name: Install CocoaPods
         run: |
           # Set up Ruby environment
-          export PATH="/opt/homebrew/bin:/opt/homebrew/opt/ruby/bin:$PATH"
+          export PATH="$PATH:/opt/homebrew/bin:/opt/homebrew/opt/ruby/bin"
           export GEM_HOME="/opt/homebrew/lib/ruby/gems/3.4.0"
           export GEM_PATH="/opt/homebrew/lib/ruby/gems/3.4.0"
           
@@ -446,7 +446,7 @@ jobs:
           
       - name: Build MacOS App
         run: |
-          #  Set Ruby and CocoaPods environment variables
+          # Set Ruby and CocoaPods environment variables - use Homebrew Ruby exclusively
           export PATH="/opt/homebrew/bin:/opt/homebrew/opt/ruby/bin:/opt/homebrew/lib/ruby/gems/3.4.0/bin:$PATH"
           export GEM_HOME="/opt/homebrew/lib/ruby/gems/3.4.0"
           export GEM_PATH="/opt/homebrew/lib/ruby/gems/3.4.0"
