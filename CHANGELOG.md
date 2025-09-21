@@ -2,6 +2,15 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## 0.2.29 - 2025-09-21
+#### Bug Fixes
+- add macos app to the release step - (b13fcf9) - Brandon Guigo
+- add setup action flutter for mac os - (77610ee) - Brandon Guigo
+#### Miscellaneous Chores
+- **(release)** 0.2.28 [skip ci] - (a327d12) - GitHub Actions
+
+- - -
+
 ## 0.2.28 - 2025-09-21
 #### Bug Fixes
 - change get tag step on mac os to linux commands - (5915fb5) - Brandon Guigo
