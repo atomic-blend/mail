@@ -402,6 +402,10 @@ jobs:
           cat > macos/config/prod/GoogleService-Info.plist << 'EOF'
           ${{ secrets.GOOGLE_SERVICE_INFO_PLIST_PROD }}
           EOF
+          cat > macos/Runner/GoogleService-Info.plist << 'EOF'
+          ${{ secrets.GOOGLE_SERVICE_INFO_PLIST_PROD }}
+          EOF
+
 
       - name: Get tag
         id: get-tag
