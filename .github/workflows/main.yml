@@ -259,7 +259,7 @@ jobs:
 
   build-app-for-android:
     needs: bump-version
-    runs-on: [self-hosted, Linux]
+    runs-on: [self-hosted, Linux, docker-builder]
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
