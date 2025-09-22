@@ -405,6 +405,7 @@ jobs:
           ${{ secrets.KEY_PROPERTIES }}
           EOF
 
+          mkdir -p macos/config/prod
           cat > macos/config/prod/GoogleService-Info.plist << 'EOF'
           ${{ secrets.GOOGLE_SERVICE_INFO_PLIST_PROD }}
           EOF
