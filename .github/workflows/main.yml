@@ -405,10 +405,8 @@ jobs:
           ${{ secrets.KEY_PROPERTIES }}
           EOF
 
-          echo ${{ secrets.UPLOAD_KEYSTORE }} | base64 -d > upload-keystore.jks
-
-          cat > playstore_key.json << 'EOF'
-          ${{ secrets.PLAY_STORE_KEY }}
+          cat > macos/config/prod/GoogleService-Info.plist << 'EOF'
+          ${{ secrets.GOOGLE_SERVICE_INFO_PLIST_PROD }}
           EOF
 
       - name: Get tag
