@@ -2,6 +2,14 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## 0.2.40 - 2025-09-22
+#### Bug Fixes
+- add google service info plist from secret - (dde1957) - Brandon Guigo
+#### Miscellaneous Chores
+- **(release)** 0.2.39 [skip ci] - (bee1667) - GitHub Actions
+
+- - -
+
 ## 0.2.39 - 2025-09-21
 #### Bug Fixes
 - new test - (61dad65) - Brandon Guigo
