@@ -450,6 +450,79 @@ jobs:
         with:
           name: macos-app
           path: macos_dmg/atomic-mail-${{ steps.get-tag.outputs.tag }}-macos.dmg
+  build-app-for-ios:
+    needs: bump-version
+    runs-on: [self-hosted, MacOS]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Write Firebase Options
+        run: |
+          cat > lib/firebase_options_prod.dart << 'EOF'
+          ${{ secrets.FIREBASE_OPTIONS_PROD }}
+          EOF
+          
+          cat > lib/firebase_options_dev.dart << 'EOF'
+          ${{ secrets.FIREBASE_OPTIONS_DEV }}
+          EOF
+          
+          cat > assets/configs/prod.json << 'EOF'
+          ${{ secrets.APP_CONFIG_PROD }}
+          EOF
+          
+          cat > assets/configs/dev.json << 'EOF'
+          ${{ secrets.APP_CONFIG_DEV }}
+          EOF
+
+          mkdir -p ios/config/prod
+          cat > ios/config/prod/GoogleService-Info.plist << 'EOF'
+          ${{ secrets.GOOGLE_SERVICE_INFO_PLIST_PROD }}
+          EOF
+          cat > ios/Runner/GoogleService-Info.plist << 'EOF'
+          ${{ secrets.GOOGLE_SERVICE_INFO_PLIST_PROD }}
+          EOF
+
+
+      - name: Get tag
+        id: get-tag
+        run: |
+          TAG=$(git describe --abbrev=0 --tags)
+          echo "tag=$TAG" >> $GITHUB_OUTPUT
+          
+      - name: Clean and prepare build
+        run: |
+          # Ruby + CocoaPods environment
+          export PATH="/opt/homebrew/bin:/opt/homebrew/opt/ruby/bin:$PATH"
+          export GEM_HOME="/opt/homebrew/lib/ruby/gems/3.4.0"
+          export GEM_PATH="/opt/homebrew/lib/ruby/gems/3.4.0"
+
+          # FVM Flutter
+          export PATH="/Users/brandonguigo/fvm/versions/stable/bin:$PATH"
+
+          flutter clean
+          flutter pub get
+          flutter pub run build_runner build --delete-conflicting-outputs
+          
+      - name: Build MacOS App
+        run: |
+          # Set Ruby and CocoaPods environment variables - use Homebrew Ruby exclusively
+          export PATH="/opt/homebrew/bin:/opt/homebrew/opt/ruby/bin:/opt/homebrew/lib/ruby/gems/3.4.0/bin:$PATH"
+          export GEM_HOME="/opt/homebrew/lib/ruby/gems/3.4.0"
+          export GEM_PATH="/opt/homebrew/lib/ruby/gems/3.4.0"
+
+          # Ensure FVM Flutter is in the PATH
+          export PATH="/Users/brandonguigo/fvm/versions/stable/bin:$PATH"
+
+          flutter build ipa --release -t lib/main_prod.dart --dart-define APP_ENV=prod --flavor prod
+      
+      - name: Upload iOS App
+        uses: actions/upload-artifact@v4
+        with:
+          name: ios-app
+          path: "build/ios/ipa/Atomic Mail.ipa"
 
   build-app-for-windows:
     needs: bump-version
@@ -521,6 +594,7 @@ jobs:
       - build-app-for-windows
       - build-app-for-android
       - build-app-for-macos
+      - build-app-for-ios
     runs-on: [self-hosted, Linux]
     steps:
       - name: Checkout code
@@ -549,6 +623,32 @@ jobs:
         run: |
           cd fastlane
           fastlane android upload_beta
+  publish-ios-app:
+    needs: 
+      - build-app-for-linux
+      - build-app-for-web
+      - build-app-for-windows
+      - build-app-for-android
+      - build-app-for-macos
+      - build-app-for-ios
+    runs-on: [self-hosted, MacOS]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+    
+      - name: Download Web App Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: ios-app
+          path: build/ios/ipa
+
+      - name: Publish iOS App to TestFlight
+        continue-on-error: true
+        run: |
+          cd fastlane
+          fastlane ios upload_beta
   
 
   publish-docker-images:
@@ -558,6 +658,7 @@ jobs:
       - build-app-for-web
       - build-app-for-windows
       - build-app-for-macos
+      - build-app-for-ios
     strategy:
       matrix:
         platform:
@@ -612,6 +713,7 @@ jobs:
     needs: 
       - publish-docker-images
       - publish-android-app
+      - publish-ios-app
     runs-on: [self-hosted, Linux]
     steps:
       - name: Checkout Repository
@@ -659,7 +761,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: macos-app
-          path: ./macos_dmg/atomic-mail-${{ steps.get-tag.outputs.tag }}-macos.dmg
+          path: ./macos_dmg/
 
       - name: Install ghr
         run: |
