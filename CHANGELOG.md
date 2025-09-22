@@ -2,6 +2,15 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## 0.2.42 - 2025-09-22
+#### Bug Fixes
+- use large docker builders runners for android - (4f15738) - Brandon Guigo
+- add missing flavor flag - (d76974c) - Brandon Guigo
+#### Miscellaneous Chores
+- **(release)** 0.2.41 [skip ci] - (78ed155) - GitHub Actions
+
+- - -
+
 ## 0.2.41 - 2025-09-22
 #### Bug Fixes
 - add mkdir to create empty config dir before putting the file - (4e339c4) - Brandon Guigo
