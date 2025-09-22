@@ -2,6 +2,14 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## 0.2.45 - 2025-09-22
+#### Bug Fixes
+- try to set path so pipeline use the right fastlane - (24de0bd) - Brandon Guigo
+#### Miscellaneous Chores
+- **(release)** 0.2.44 [skip ci] - (f2dcb3d) - GitHub Actions
+
+- - -
+
 ## 0.2.44 - 2025-09-22
 #### Bug Fixes
 - mac os gh release + add ios pipeline - (3afc824) - Brandon Guigo
