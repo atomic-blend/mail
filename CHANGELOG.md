@@ -2,6 +2,14 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## 0.2.41 - 2025-09-22
+#### Bug Fixes
+- add mkdir to create empty config dir before putting the file - (4e339c4) - Brandon Guigo
+#### Miscellaneous Chores
+- **(release)** 0.2.40 [skip ci] - (da896cf) - GitHub Actions
+
+- - -
+
 ## 0.2.40 - 2025-09-22
 #### Bug Fixes
 - add google service info plist from secret - (dde1957) - Brandon Guigo
