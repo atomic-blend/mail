@@ -81,6 +81,8 @@ jobs:
   bump-version:
     needs: test-coverage
     runs-on: [self-hosted, Linux]
+    outputs:
+      tag: ${{ steps.get-tag.outputs.tag }}
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -125,6 +127,12 @@ jobs:
         run: |
           $HOME/.cargo/bin/cog bump --auto
 
+      - name: Get tag
+        id: get-tag
+        run: |
+          TAG=$(git describe --abbrev=0 --tags)
+          echo "tag=$TAG" >> $GITHUB_OUTPUT
+
       - name: Commit and Push Changes
         run: |
           TAG=$(git describe --abbrev=0 --tags)
@@ -145,6 +153,12 @@ jobs:
         with:
           name: changelog
           path: CHANGELOG.md
+
+      - name: Upload Pubspec
+        uses: actions/upload-artifact@v4
+        with:
+          name: pubspec
+          path: pubspec.yaml
   build-app-for-web:
     needs: bump-version
     runs-on: [self-hosted, Linux, docker-builder]
@@ -153,6 +167,11 @@ jobs:
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
+      - name: Download Pubspec
+        uses: actions/download-artifact@v4
+        with:
+          name: pubspec
+          path: ./
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
@@ -196,6 +215,11 @@ jobs:
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
+      - name: Download Pubspec
+        uses: actions/download-artifact@v4
+        with:
+          name: pubspec
+          path: ./
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
@@ -229,11 +253,6 @@ jobs:
           cat > assets/configs/dev.json << 'EOF'
           ${{ secrets.APP_CONFIG_DEV }}
           EOF
-      - name: Get tag
-        id: get-tag
-        run: |
-          TAG=$(git describe --abbrev=0 --tags)
-          echo "tag=$TAG" >> $GITHUB_OUTPUT
       - name: Build Web App
         run: |
           flutter clean
@@ -243,8 +262,8 @@ jobs:
 
       - name: Update version
         run: |
-          sed -i "s/Version: .*/Version: ${{ steps.get-tag.outputs.tag }}/" debian/debian.yaml
-          sed -i "s/Version=.*$/Version=${{ steps.get-tag.outputs.tag }}/" debian/gui/atomic-task.desktop
+          sed -i "s/Version: .*/Version: ${{ needs.bump-version.outputs.tag }}/" debian/debian.yaml
+          sed -i "s/Version=.*$/Version=${{ needs.bump-version.outputs.tag }}/" debian/gui/atomic-task.desktop
       
       - name: Package Linux App
         run: |
@@ -255,7 +274,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: linux-app
-          path: debian/packages/atomic-mail_${{ steps.get-tag.outputs.tag }}_amd64.deb
+          path: debian/packages/atomic-mail_${{ needs.bump-version.outputs.tag }}_amd64.deb
 
   build-app-for-android:
     needs: bump-version
@@ -265,6 +284,11 @@ jobs:
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
+      - name: Download Pubspec
+        uses: actions/download-artifact@v4
+        with:
+          name: pubspec
+          path: ./
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
@@ -331,12 +355,6 @@ jobs:
           ${{ secrets.PLAY_STORE_KEY }}
           EOF
 
-      - name: Get tag
-        id: get-tag
-        run: |
-          TAG=$(git describe --abbrev=0 --tags)
-          echo "tag=$TAG" >> $GITHUB_OUTPUT
-          
       - name: Configure Gradle
         run: |
           rm -f ~/.gradle/gradle.properties
@@ -375,6 +393,11 @@ jobs:
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
+      - name: Download Pubspec
+        uses: actions/download-artifact@v4
+        with:
+          name: pubspec
+          path: ./
 
       - name: Write Firebase Options
         run: |
@@ -406,13 +429,6 @@ jobs:
           ${{ secrets.GOOGLE_SERVICE_INFO_PLIST_PROD }}
           EOF
 
-
-      - name: Get tag
-        id: get-tag
-        run: |
-          TAG=$(git describe --abbrev=0 --tags)
-          echo "tag=$TAG" >> $GITHUB_OUTPUT
-          
       - name: Clean and prepare build
         run: |
           # Ruby + CocoaPods environment
@@ -443,13 +459,13 @@ jobs:
         run: |
           npm install -g appdmg
           appdmg macos_dmg/config.json macos_dmg/AtomicMail.dmg
-          mv macos_dmg/AtomicMail.dmg macos_dmg/atomic-mail-${{ steps.get-tag.outputs.tag }}-macos.dmg
+          mv macos_dmg/AtomicMail.dmg macos_dmg/atomic-mail-${{ needs.bump-version.outputs.tag }}-macos.dmg
 
       - name: Upload MacOS App
         uses: actions/upload-artifact@v4
         with:
           name: macos-app
-          path: macos_dmg/atomic-mail-${{ steps.get-tag.outputs.tag }}-macos.dmg
+          path: macos_dmg/atomic-mail-${{ needs.bump-version.outputs.tag }}-macos.dmg
   build-app-for-ios:
     needs: bump-version
     runs-on: [self-hosted, MacOS]
@@ -458,6 +474,11 @@ jobs:
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
+      - name: Download Pubspec
+        uses: actions/download-artifact@v4
+        with:
+          name: pubspec
+          path: ./
 
       - name: Write Firebase Options
         run: |
@@ -485,12 +506,6 @@ jobs:
           ${{ secrets.GOOGLE_SERVICE_INFO_PLIST_PROD }}
           EOF
 
-      - name: Get tag
-        id: get-tag
-        run: |
-          TAG=$(git describe --abbrev=0 --tags)
-          echo "tag=$TAG" >> $GITHUB_OUTPUT
-          
       - name: Clean and prepare build
         run: |
           # Ruby + CocoaPods environment
@@ -531,6 +546,11 @@ jobs:
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
+      - name: Download Pubspec
+        uses: actions/download-artifact@v4
+        with:
+          name: pubspec
+          path: ./
       - name: Write Firebase Options
         run: |
           $firebaseOptionsProd = @"
@@ -553,12 +573,6 @@ jobs:
           "@
           Set-Content -Path "assets/configs/dev.json" -Value $appConfigDev -NoNewline
 
-      - name: Get tag
-        id: get-tag
-        run: |
-          $TAG = git describe --abbrev=0 --tags
-          echo "tag=$TAG" >> $env:GITHUB_OUTPUT
-          
       - name: Clean and prepare build
         run: |
           $flutterpath = "$env:HOME\devtools\flutter\bin"
@@ -578,12 +592,12 @@ jobs:
           $innopath = "C:\Program Files (x86)\Inno Setup 6"
           $env:PATH += ";$innopath"
           iscc .\innosetup.iss
-          mv output\AtomicMailInstaller.exe output\atomic-mail-${{ steps.get-tag.outputs.tag }}-windows-installer.exe
+          mv output\AtomicMailInstaller.exe output\atomic-mail-${{ needs.bump-version.outputs.tag }}-windows-installer.exe
       - name: Upload Windows Installer
         uses: actions/upload-artifact@v4
         with:
           name: windows-app
-          path: output\atomic-mail-${{ steps.get-tag.outputs.tag }}-windows-installer.exe
+          path: output\atomic-mail-${{ needs.bump-version.outputs.tag }}-windows-installer.exe
 
 
   publish-android-app:
@@ -600,6 +614,11 @@ jobs:
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
+      - name: Download Pubspec
+        uses: actions/download-artifact@v4
+        with:
+          name: pubspec
+          path: ./
     
       - name: Download Web App Artifact
         uses: actions/download-artifact@v4
@@ -631,6 +650,11 @@ jobs:
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
+      - name: Download Pubspec
+        uses: actions/download-artifact@v4
+        with:
+          name: pubspec
+          path: ./
     
       - name: Download iOS App Artifact
         uses: actions/download-artifact@v4
@@ -648,6 +672,7 @@ jobs:
 
   publish-docker-images:
     needs: 
+      - bump-version
       - build-app-for-linux
       - build-app-for-android
       - build-app-for-web
@@ -667,6 +692,11 @@ jobs:
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
+      - name: Download Pubspec
+        uses: actions/download-artifact@v4
+        with:
+          name: pubspec
+          path: ./
     
       - name: Download Web App Artifact
         uses: actions/download-artifact@v4
@@ -687,12 +717,6 @@ jobs:
         
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
-      - name: Get tag
-        id: get-tag
-        run: |
-          TAG=$(git describe --abbrev=0 --tags)
-          echo "tag=$TAG" >> $GITHUB_OUTPUT
-
       - name: Build and push Docker image
         uses: docker/build-push-action@v6
         with:
@@ -701,11 +725,12 @@ jobs:
           platforms: ${{ matrix.platform }}
           push: true
           tags: |
-            ghcr.io/atomic-blend/mail-app:${{ steps.get-tag.outputs.tag }}
+            ghcr.io/atomic-blend/mail-app:${{ needs.bump-version.outputs.tag }}
 
 
   create-github-release:
     needs: 
+      - bump-version
       - publish-docker-images
       - publish-android-app
       - publish-ios-app
@@ -726,12 +751,6 @@ jobs:
         uses: actions/setup-go@v4
         with:
           go-version: "stable"
-
-      - name: Get tag
-        id: get-tag
-        run: |
-          TAG=$(git describe --abbrev=0 --tags)
-          echo "tag=$TAG" >> $GITHUB_OUTPUT
       - name: Download Linux App Artifact
         uses: actions/download-artifact@v4
         with:
@@ -750,7 +769,7 @@ jobs:
           path: ./build/app/outputs/flutter-apk/
       - name: Rename the Android App file
         run: |
-          mv build/app/outputs/flutter-apk/app-prod-release.apk build/app/outputs/flutter-apk/atomic-mail-${{ steps.get-tag.outputs.tag }}.apk
+          mv build/app/outputs/flutter-apk/app-prod-release.apk build/app/outputs/flutter-apk/atomic-mail-${{ needs.bump-version.outputs.tag }}.apk
 
       - name: Download MacOS App Artifact
         uses: actions/download-artifact@v4
@@ -765,7 +784,7 @@ jobs:
       - name: Create GitHub Release
         run: |
           echo "Creating GitHub release"
-          TAG=$(git describe --abbrev=0 --tags)
+          TAG="${{ needs.bump-version.outputs.tag }}"
           echo "Release tag: $TAG"
 
           # Extract changelog for the current version - improved approach
