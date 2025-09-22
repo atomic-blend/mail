@@ -2,6 +2,14 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## 0.2.43 - 2025-09-22
+#### Bug Fixes
+- copy the google plist inside the runner directory too - (45e1286) - Brandon Guigo
+#### Miscellaneous Chores
+- **(release)** 0.2.42 [skip ci] - (0851544) - GitHub Actions
+
+- - -
+
 ## 0.2.42 - 2025-09-22
 #### Bug Fixes
 - use large docker builders runners for android - (4f15738) - Brandon Guigo
