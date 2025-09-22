@@ -2,6 +2,14 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## 0.2.47 - 2025-09-22
+#### Bug Fixes
+- typo - (5cf351f) - Brandon Guigo
+#### Miscellaneous Chores
+- **(release)** 0.2.46 [skip ci] - (2fbf1c7) - GitHub Actions
+
+- - -
+
 ## 0.2.46 - 2025-09-22
 #### Bug Fixes
 - fastfile changelog and skip submission validation - (2389ac6) - Brandon Guigo
