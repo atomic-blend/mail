@@ -485,7 +485,6 @@ jobs:
           ${{ secrets.GOOGLE_SERVICE_INFO_PLIST_PROD }}
           EOF
 
-
       - name: Get tag
         id: get-tag
         run: |
@@ -506,7 +505,7 @@ jobs:
           flutter pub get
           flutter pub run build_runner build --delete-conflicting-outputs
           
-      - name: Build MacOS App
+      - name: Build iOS App
         run: |
           # Set Ruby and CocoaPods environment variables - use Homebrew Ruby exclusively
           export PATH="/opt/homebrew/bin:/opt/homebrew/opt/ruby/bin:/opt/homebrew/lib/ruby/gems/3.4.0/bin:$PATH"
@@ -612,11 +611,6 @@ jobs:
           cat > playstore_key.json << 'EOF'
           ${{ secrets.PLAY_STORE_KEY }}
           EOF
-      - name: Get tag
-        id: get-tag
-        run: |
-          TAG=$(git describe --abbrev=0 --tags)
-          echo "tag=$TAG" >> $GITHUB_OUTPUT
 
       - name: Publish Android App to Play Store
         continue-on-error: true
@@ -638,7 +632,7 @@ jobs:
         with:
           fetch-depth: 0
     
-      - name: Download Web App Artifact
+      - name: Download iOS App Artifact
         uses: actions/download-artifact@v4
         with:
           name: ios-app
@@ -648,6 +642,7 @@ jobs:
         continue-on-error: true
         run: |
           cd fastlane
+          export PATH="$PATH:/opt/homebrew/bin"
           fastlane ios upload_beta
   
 
@@ -820,4 +815,3 @@ jobs:
           gh release upload $TAG "macos_dmg/atomic-mail-${TAG}-macos.dmg"
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
