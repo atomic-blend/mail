@@ -2,6 +2,14 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## 0.2.49 - 2025-09-22
+#### Bug Fixes
+- resolve the bug where the wrong version is used to build the apps - (0519305) - Brandon Guigo
+#### Miscellaneous Chores
+- **(release)** 0.2.48 [skip ci] - (737f87e) - GitHub Actions
+
+- - -
+
 ## 0.2.48 - 2025-09-22
 #### Bug Fixes
 - add missing coma - (d9a653d) - Brandon Guigo
