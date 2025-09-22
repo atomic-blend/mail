@@ -39,8 +39,10 @@ platform :ios do
      distribute_external: true,
      notify_external_testers: true,
      submit_beta_review: true,
+     skip_waiting_for_build_processing: true,
+     change_log: "This release from the Atomic Blend team includes a wide array of updates, minor enhancements, dependency adjustments, and behind-the-scenes improvements, all designed to enhance stability, performance, and overall reliability while continuing to refine and optimize the user experience across the platform."
      groups: ['beta']
-       )
+    )
   end
 
   lane :test_and_beta do
