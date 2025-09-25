@@ -2,6 +2,15 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## 0.2.50 - 2025-09-25
+#### Bug Fixes
+- linter - (cf1b58e) - Brandon Guigo
+- move pkg to web directory - (baa278f) - Brandon Guigo
+#### Miscellaneous Chores
+- **(release)** 0.2.49 [skip ci] - (8be20e7) - GitHub Actions
+
+- - -
+
 ## 0.2.49 - 2025-09-22
 #### Bug Fixes
 - resolve the bug where the wrong version is used to build the apps - (0519305) - Brandon Guigo
