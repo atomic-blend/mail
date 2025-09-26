@@ -1,6 +1,8 @@
 import 'dart:io';
 
 import 'package:ab_shared/components/app/ab_navbar.dart';
+import 'package:ab_shared/components/widgets/loading_city.dart';
+import 'package:ab_shared/i18n/strings.g.dart';
 import 'package:mail/blocs/app/app.bloc.dart';
 import 'package:ab_shared/blocs/auth/auth.bloc.dart';
 import 'package:ab_shared/components/responsive_stateful_widget.dart';
@@ -38,8 +40,6 @@ class AppLayoutState extends ResponsiveState<AppLayout> {
       prefs: prefs!,
     );
 
-    context.read<AuthBloc>().add(const LoadConfig());
-
     if (context.read<AuthBloc>().state.user != null) {
       WidgetsBinding.instance.addPostFrameCallback((_) async {
         if (context.read<AuthBloc>().state.user?.devices == null) {
@@ -70,6 +70,25 @@ class AppLayoutState extends ResponsiveState<AppLayout> {
         return BlocBuilder<AuthBloc, AuthState>(builder: (context, authState) {
           _runAppInitAndChecks(
               context: context, appState: appState, authState: authState);
+
+          if (authState is LoggedOut || authState is AuthError) {
+            return Scaffold(
+              body: LoginOrRegisterModal(
+                onAuthSuccess: () {},
+                encryptionService: encryptionService,
+                globalApiClient: globalApiClient,
+                prefs: prefs,
+                env: env,
+              ),
+            );
+          }
+
+          if (authState is Loading) {
+            return LoadingAnimated(
+              imageWidth: getSize(context).width * 0.6,
+              title: context.t.loading.simple,
+            );
+          }
 
           // get the secondary section based on the selected primary menu
           final secondarySection = $navConstants
@@ -764,20 +783,53 @@ class AppLayoutState extends ResponsiveState<AppLayout> {
     if (authState is LoggedOut && !_isLoginModalVisible) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (isPaymentSupported()) revenueCatService?.logOut();
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (context) => LoginOrRegisterModal(
-              onAuthSuccess: () {},
-              encryptionService: encryptionService,
-              globalApiClient: globalApiClient,
-              prefs: prefs,
-              env: env,
-            ),
-          ),
-        );
+        // _showLoginModal(context);
       });
     }
+  }
+
+  void _showLoginModal(BuildContext context) {
+    if (kIsWeb || Platform.isMacOS || Platform.isWindows || Platform.isLinux) {
+      showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (context) => Dialog(
+                child: SizedBox(
+                  width: getSize(context).width * 0.5,
+                  child: LoginOrRegisterModal(
+                    encryptionService: encryptionService,
+                    globalApiClient: globalApiClient,
+                    prefs: prefs!,
+                    env: env!,
+                    onAuthSuccess: () => setState(() {
+                      _isLoginModalVisible = false;
+                    }),
+                  ),
+                ),
+              ));
+    } else {
+      showModalBottomSheet(
+        isDismissible: false,
+        isScrollControlled: true,
+        enableDrag: false,
+        context: context,
+        builder: (context) => SizedBox(
+          height: getSize(context).height * 0.88,
+          child: LoginOrRegisterModal(
+            encryptionService: encryptionService,
+            globalApiClient: globalApiClient,
+            prefs: prefs!,
+            env: env!,
+            onAuthSuccess: () => setState(() {
+              _isLoginModalVisible = false;
+            }),
+          ),
+        ),
+      );
+    }
+    setState(() {
+      _isLoginModalVisible = true;
+    });
   }
 
   String _getInitials(String name) {
