@@ -34,30 +34,10 @@ class App extends StatelessWidget {
       ],
       debugShowCheckedModeBanner: env!.debugShowCheckedModeBanner,
       title: F.title,
-      home: BlocBuilder<AuthBloc, AuthState>(builder: (context, authState) {
-        if (authState is LoggedOut) {
-          final loginPage = LoginOrRegisterModal(
-            encryptionService: encryptionService,
-            globalApiClient: globalApiClient,
-            prefs: prefs!,
-            env: env!,
-            onAuthSuccess: () {});
-          Widget? body = SafeArea(child: loginPage);
-          if (!kIsWeb && Platform.isMacOS) {
-            body = TitlebarSafeArea(child: loginPage);
-          }
-          if (!kIsWasm && Platform.isMacOS) {
-            body = TitlebarSafeArea(child: loginPage);
-          }
-          return Scaffold(
-              body: body,
-          );
-        }
-        return _flavorBanner(
-          child: const Scaffold(body: AppLayout()),
-          show: kDebugMode && env!.debugShowCheckedModeBanner,
-        );
-      }),
+      home: _flavorBanner(
+        child: const Scaffold(body: AppLayout()),
+        show: kDebugMode && env!.debugShowCheckedModeBanner,
+      ),
     );
   }
 
