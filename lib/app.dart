@@ -1,4 +1,10 @@
+import 'dart:io';
+
+import 'package:ab_shared/blocs/auth/auth.bloc.dart';
 import 'package:ab_shared/flavors.dart';
+import 'package:ab_shared/pages/auth/login_or_register_modal.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:macos_window_utils/widgets/titlebar_safe_area.dart';
 import 'package:mail/i18n/strings.g.dart';
 import 'package:mail/main.dart';
 import 'package:mail/pages/app_layout.dart';
@@ -28,10 +34,30 @@ class App extends StatelessWidget {
       ],
       debugShowCheckedModeBanner: env!.debugShowCheckedModeBanner,
       title: F.title,
-      home: _flavorBanner(
-        child: const Scaffold(body: AppLayout()),
-        show: kDebugMode && env!.debugShowCheckedModeBanner,
-      ),
+      home: BlocBuilder<AuthBloc, AuthState>(builder: (context, authState) {
+        if (authState is LoggedOut) {
+          final loginPage = LoginOrRegisterModal(
+            encryptionService: encryptionService,
+            globalApiClient: globalApiClient,
+            prefs: prefs!,
+            env: env!,
+            onAuthSuccess: () {});
+          Widget? body = SafeArea(child: loginPage);
+          if (!kIsWeb && Platform.isMacOS) {
+            body = TitlebarSafeArea(child: loginPage);
+          }
+          if (!kIsWasm && Platform.isMacOS) {
+            body = TitlebarSafeArea(child: loginPage);
+          }
+          return Scaffold(
+              body: body,
+          );
+        }
+        return _flavorBanner(
+          child: const Scaffold(body: AppLayout()),
+          show: kDebugMode && env!.debugShowCheckedModeBanner,
+        );
+      }),
     );
   }
 

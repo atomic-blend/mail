@@ -40,7 +40,6 @@ class AppLayoutState extends ResponsiveState<AppLayout> {
 
     context.read<AuthBloc>().add(const LoadConfig());
 
-
     if (context.read<AuthBloc>().state.user != null) {
       WidgetsBinding.instance.addPostFrameCallback((_) async {
         if (context.read<AuthBloc>().state.user?.devices == null) {
@@ -765,53 +764,20 @@ class AppLayoutState extends ResponsiveState<AppLayout> {
     if (authState is LoggedOut && !_isLoginModalVisible) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (isPaymentSupported()) revenueCatService?.logOut();
-        _showLoginModal(context);
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => LoginOrRegisterModal(
+              onAuthSuccess: () {},
+              encryptionService: encryptionService,
+              globalApiClient: globalApiClient,
+              prefs: prefs,
+              env: env,
+            ),
+          ),
+        );
       });
     }
-  }
-
-  void _showLoginModal(BuildContext context) {
-    if (kIsWeb || Platform.isMacOS || Platform.isWindows || Platform.isLinux) {
-      showDialog(
-          context: context,
-          barrierDismissible: false,
-          builder: (context) => Dialog(
-                child: SizedBox(
-                  width: getSize(context).width * 0.5,
-                  child: LoginOrRegisterModal(
-                    encryptionService: encryptionService,
-                    globalApiClient: globalApiClient,
-                    prefs: prefs!,
-                    env: env!,
-                    onAuthSuccess: () => setState(() {
-                      _isLoginModalVisible = false;
-                    }),
-                  ),
-                ),
-              ));
-    } else {
-      showModalBottomSheet(
-        isDismissible: false,
-        isScrollControlled: true,
-        enableDrag: false,
-        context: context,
-        builder: (context) => SizedBox(
-          height: getSize(context).height * 0.88,
-          child: LoginOrRegisterModal(
-            encryptionService: encryptionService,
-            globalApiClient: globalApiClient,
-            prefs: prefs!,
-            env: env!,
-            onAuthSuccess: () => setState(() {
-              _isLoginModalVisible = false;
-            }),
-          ),
-        ),
-      );
-    }
-    setState(() {
-      _isLoginModalVisible = true;
-    });
   }
 
   String _getInitials(String name) {
