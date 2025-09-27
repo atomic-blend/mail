@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:ab_shared/components/app/ab_navbar.dart';
 import 'package:ab_shared/components/widgets/loading_city.dart';
 import 'package:ab_shared/i18n/strings.g.dart';
+import 'package:ab_shared/pages/auth/screens/mnemonic_key.dart';
 import 'package:mail/blocs/app/app.bloc.dart';
 import 'package:ab_shared/blocs/auth/auth.bloc.dart';
 import 'package:ab_shared/components/responsive_stateful_widget.dart';
@@ -86,6 +87,17 @@ class AppLayoutState extends ResponsiveState<AppLayout> {
             return LoadingAnimated(
               imageWidth: getSize(context).width * 0.6,
               title: context.t.loading.simple,
+            );
+          }
+
+          if (authState is LoggedIn && authState.isRegistration == true) {
+            return Scaffold(
+              body: MnemonicKey(
+                onSuccess: () {
+                  context.read<AuthBloc>().add(MnemonicDisplayed());
+                },
+                mnemonic: authState.user?.keySet.backupPhrase ?? '',
+              ),
             );
           }
 
@@ -362,7 +374,7 @@ class AppLayoutState extends ResponsiveState<AppLayout> {
           _runAppInitAndChecks(
               context: context, appState: appState, authState: authState);
 
-          if (authState is LoggedOut || authState is AuthError) {
+          if (authState is LoggedOut || authState is AuthError || (authState is LoggedIn && authState.isRegistration == true)) {
             return Scaffold(
               body: LoginOrRegisterModal(
                 onAuthSuccess: () {},
