@@ -115,7 +115,7 @@ class _MoreAppsState extends State<MoreApps> {
                             builder: (context) => Account(
                               globalApiClient: globalApiClient!,
                               encryptionService: encryptionService!,
-                              revenueCatService: revenueCatService!,
+                              revenueCatService: revenueCatService,
                               prefs: prefs!,
                             ),
                           );
