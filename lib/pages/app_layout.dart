@@ -68,10 +68,9 @@ class AppLayoutState extends ResponsiveState<AppLayout> {
     return BlocBuilder<AppCubit, AppState>(
       builder: (context, appState) {
         return BlocBuilder<AuthBloc, AuthState>(builder: (context, authState) {
-          _runAppInitAndChecks(
-              context: context, appState: appState, authState: authState);
+          _runAppInitAndChecks(context: context, authState: authState);
 
-          if (authState is LoggedOut || authState is AuthError) {
+          if (authState is! LoggedIn) {
             return Scaffold(
               body: LoginOrRegisterModal(
                 onAuthSuccess: () {},
@@ -79,24 +78,6 @@ class AppLayoutState extends ResponsiveState<AppLayout> {
                 globalApiClient: globalApiClient,
                 prefs: prefs,
                 env: env,
-              ),
-            );
-          }
-
-          if (authState is Loading) {
-            return LoadingAnimated(
-              imageWidth: getSize(context).width * 0.6,
-              title: context.t.loading.simple,
-            );
-          }
-
-          if (authState is LoggedIn && authState.isRegistration == true) {
-            return Scaffold(
-              body: MnemonicKey(
-                onSuccess: () {
-                  context.read<AuthBloc>().add(MnemonicDisplayed());
-                },
-                mnemonic: authState.user?.keySet.backupPhrase ?? '',
               ),
             );
           }
@@ -371,10 +352,11 @@ class AppLayoutState extends ResponsiveState<AppLayout> {
     return BlocBuilder<AppCubit, AppState>(
       builder: (context, appState) {
         return BlocBuilder<AuthBloc, AuthState>(builder: (context, authState) {
-          _runAppInitAndChecks(
-              context: context, appState: appState, authState: authState);
+          _runAppInitAndChecks(context: context, authState: authState);
 
-          if (authState is LoggedOut || authState is AuthError || (authState is LoggedIn && authState.isRegistration == true)) {
+          if (authState is LoggedOut ||
+              authState is AuthError ||
+              (authState is LoggedIn && authState.isRegistration == true)) {
             return Scaffold(
               body: LoginOrRegisterModal(
                 onAuthSuccess: () {},
@@ -796,7 +778,6 @@ class AppLayoutState extends ResponsiveState<AppLayout> {
 
   _runAppInitAndChecks({
     required BuildContext context,
-    required AppState appState,
     required AuthState authState,
   }) {
     if (authState is LoggedIn) {
