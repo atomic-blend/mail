@@ -61,6 +61,27 @@ class AppLayoutState extends ResponsiveState<AppLayout> {
   }
 
   @override
+  Widget build(BuildContext context) {
+    Widget body = buildMobile(context);
+    if (isDesktop(context)) {
+      body = buildDesktop(context);
+    }
+    return BlocBuilder<AuthBloc, AuthState>(builder: (context, authState) {
+      if (authState is! LoggedIn) {
+        return Scaffold(
+          body: SSOModule(
+            encryptionService: encryptionService,
+            globalApiClient: globalApiClient,
+            prefs: prefs,
+            env: env,
+          ),
+        );
+      }
+      return body;
+    });
+  }
+
+  @override
   Widget buildMobile(BuildContext context) {
     return BlocBuilder<AppCubit, AppState>(
       builder: (context, appState) {
@@ -349,17 +370,6 @@ class AppLayoutState extends ResponsiveState<AppLayout> {
       builder: (context, appState) {
         return BlocBuilder<AuthBloc, AuthState>(builder: (context, authState) {
           _runAppInitAndChecks(context: context, authState: authState);
-
-          if (authState is! LoggedIn) {
-            return Scaffold(
-              body: SSOModule(
-                encryptionService: encryptionService,
-                globalApiClient: globalApiClient,
-                prefs: prefs,
-                env: env,
-              ),
-            );
-          }
 
           // get the secondary section based on the selected primary menu
           final secondarySection = $navConstants
