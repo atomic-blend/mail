@@ -1,14 +1,11 @@
 import 'dart:io';
 
 import 'package:ab_shared/components/app/ab_navbar.dart';
-import 'package:ab_shared/components/widgets/loading_city.dart';
-import 'package:ab_shared/i18n/strings.g.dart';
-import 'package:ab_shared/pages/auth/screens/mnemonic_key.dart';
+import 'package:ab_shared/pages/auth/sso_module.dart';
 import 'package:mail/blocs/app/app.bloc.dart';
 import 'package:ab_shared/blocs/auth/auth.bloc.dart';
 import 'package:ab_shared/components/responsive_stateful_widget.dart';
 import 'package:ab_shared/components/widgets/elevated_container.dart';
-import 'package:ab_shared/pages/auth/login_or_register_modal.dart';
 import 'package:ab_shared/pages/paywall/paywall_utils.dart';
 import 'package:ab_shared/services/device_info.service.dart';
 import 'package:ab_shared/services/encryption.service.dart';
@@ -72,8 +69,7 @@ class AppLayoutState extends ResponsiveState<AppLayout> {
 
           if (authState is! LoggedIn) {
             return Scaffold(
-              body: LoginOrRegisterModal(
-                onAuthSuccess: () {},
+              body: SSOModule(
                 encryptionService: encryptionService,
                 globalApiClient: globalApiClient,
                 prefs: prefs,
@@ -354,24 +350,14 @@ class AppLayoutState extends ResponsiveState<AppLayout> {
         return BlocBuilder<AuthBloc, AuthState>(builder: (context, authState) {
           _runAppInitAndChecks(context: context, authState: authState);
 
-          if (authState is LoggedOut ||
-              authState is AuthError ||
-              (authState is LoggedIn && authState.isRegistration == true)) {
+          if (authState is! LoggedIn) {
             return Scaffold(
-              body: LoginOrRegisterModal(
-                onAuthSuccess: () {},
+              body: SSOModule(
                 encryptionService: encryptionService,
                 globalApiClient: globalApiClient,
                 prefs: prefs,
                 env: env,
               ),
-            );
-          }
-
-          if (authState is Loading) {
-            return LoadingAnimated(
-              imageWidth: getSize(context).width * 0.6,
-              title: context.t.loading.simple,
             );
           }
 
