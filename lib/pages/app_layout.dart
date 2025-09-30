@@ -100,38 +100,29 @@ class AppLayoutState extends ResponsiveState<AppLayout> {
             );
           }
 
-          // get the secondary section based on the selected primary menu
-          final secondarySection = $navConstants
-              .secondaryMenuSections(context)
-              .where(
-                (section) =>
-                    (section.key as ValueKey).value ==
-                    appState.primaryMenuSelectedKey,
-              )
-              .firstOrNull;
-
+          // get the primary menu item and its secondary items
           var primaryMenuItem = $navConstants
               .primaryMenuItems(context)
               .where((item) =>
                   (item.key as ValueKey).value ==
                   appState.primaryMenuSelectedKey)
               .firstOrNull;
+          final secondaryItems = primaryMenuItem?.subItems ?? [];
           // by default, the primary menu is selected
           Widget? body = primaryMenuItem?.body;
           AppBar? appBar = primaryMenuItem?.appBar;
 
           // select the items if there's a secondary menu and a secondary menu item is selected
-          if (secondarySection != null &&
-              secondarySection.items.isNotEmpty &&
+          if (secondaryItems.isNotEmpty &&
               appState.secondaryMenuSelectedKey != '') {
-            body = secondarySection.items
+            body = secondaryItems
                 .where((item) =>
                     (item.key as ValueKey).value ==
                     appState.secondaryMenuSelectedKey)
                 .firstOrNull
                 ?.body;
 
-            final secondaryAppBar = secondarySection.items
+            final secondaryAppBar = secondaryItems
                 .where((item) =>
                     (item.key as ValueKey).value ==
                     appState.secondaryMenuSelectedKey)
@@ -181,7 +172,7 @@ class AppLayoutState extends ResponsiveState<AppLayout> {
                           SizedBox(
                             height: $constants.insets.xs,
                           ),
-                          ...?secondarySection?.items.map((item) => Column(
+                          ...secondaryItems.map((item) => Column(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
                                   if (item.separatorBefore != true)
@@ -372,15 +363,14 @@ class AppLayoutState extends ResponsiveState<AppLayout> {
         return BlocBuilder<AuthBloc, AuthState>(builder: (context, authState) {
           _runAppInitAndChecks(context: context, authState: authState);
 
-          // get the secondary section based on the selected primary menu
-          final secondarySection = $navConstants
-              .secondaryMenuSections(context)
-              .where(
-                (section) =>
-                    (section.key as ValueKey).value ==
-                    appState.primaryMenuSelectedKey,
-              )
+          // get the secondary items from the selected primary menu item
+          final primaryMenuItem = $navConstants
+              .primaryMenuItems(context)
+              .where((item) =>
+                  (item.key as ValueKey).value ==
+                  appState.primaryMenuSelectedKey)
               .firstOrNull;
+          final secondaryItems = primaryMenuItem?.subItems ?? [];
 
           // by default, the primary menu is selected
           Widget? body = $navConstants
@@ -407,17 +397,16 @@ class AppLayoutState extends ResponsiveState<AppLayout> {
           }
 
           // select the items if there's a secondary menu and a secondary menu item is selected
-          if (secondarySection != null &&
-              secondarySection.items.isNotEmpty &&
+          if (secondaryItems.isNotEmpty &&
               appState.secondaryMenuSelectedKey != '') {
-            body = secondarySection.items
+            body = secondaryItems
                 .where((item) =>
                     (item.key as ValueKey).value ==
                     appState.secondaryMenuSelectedKey)
                 .firstOrNull
                 ?.body;
 
-            final secondaryAppBar = secondarySection.items
+            final secondaryAppBar = secondaryItems
                 .where((item) =>
                     (item.key as ValueKey).value ==
                     appState.secondaryMenuSelectedKey)
@@ -456,9 +445,8 @@ class AppLayoutState extends ResponsiveState<AppLayout> {
                 child: Flex(
                   direction: Axis.horizontal,
                   children: [
-                    // secodary menu items
-                    if (secondarySection != null &&
-                        secondarySection.items.isNotEmpty)
+                    // secondary menu items
+                    if (secondaryItems.isNotEmpty)
                       SizedBox(
                         width: 80,
                         child: SideMenu(
@@ -475,8 +463,7 @@ class AppLayoutState extends ResponsiveState<AppLayout> {
                                     SizedBox(
                                       height: $constants.insets.sm,
                                     ),
-                                    ...secondarySection.items.map((item) =>
-                                        Column(
+                                    ...secondaryItems.map((item) => Column(
                                           mainAxisSize: MainAxisSize.min,
                                           children: [
                                             if (item.separatorBefore != true)

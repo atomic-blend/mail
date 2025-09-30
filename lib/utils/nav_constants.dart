@@ -23,10 +23,18 @@ final $navConstants = NavConstants();
 
 @immutable
 class NavConstants {
-  List<NavigationSection> secondaryMenuSections(BuildContext context) => [
-        const NavigationSection(
-          key: Key("mail"),
-          items: [
+  // list of fixed items, limited to 5 on mobile
+  // on mobile: the rest is added as a grid on the more apps page (last item to the right)
+  // on desktop: the more apps page is moved at the end of the menu
+  List<NavigationItem> primaryMenuItems(BuildContext context) => [
+        NavigationItem(
+          key: const Key("mail"),
+          icon: LineAwesome.envelope,
+          cupertinoIcon: CupertinoIcons.envelope,
+          label: "Mail",
+          body: AllMailScreen(),
+          mainSecondaryKey: "inbox",
+          subItems: [
             NavigationItem(
               key: Key("inbox"),
               icon: LineAwesome.envelope,
@@ -63,48 +71,18 @@ class NavConstants {
               body: AllMailScreen(),
             ),
           ],
-        ),
-        const NavigationSection(
-          key: Key("organize"),
-          items: [],
-        ),
-        const NavigationSection(
-          key: Key("new_mail"),
-          items: [],
-        ),
-        const NavigationSection(
-          key: Key("search"),
-          items: [],
-        ),
-        const NavigationSection(
-          key: Key("more"),
-          items: [],
-        ),
-      ];
-
-  // list of fixed items, limited to 5 on mobile
-  // on mobile: the rest is added as a grid on the more apps page (last item to the right)
-  // on desktop: the more apps page is moved at the end of the menu
-  List<NavigationItem> primaryMenuItems(BuildContext context) => [
-        NavigationItem(
-          key: const Key("mail"),
-          icon: LineAwesome.envelope,
-          cupertinoIcon: CupertinoIcons.envelope,
-          label: "Mail",
-          body: AllMailScreen(),
-          mainSecondaryKey: "inbox",
           appBar: AppBar(
             key: const Key("mail"),
             backgroundColor: getTheme(context).surfaceContainer,
             title:
                 BlocBuilder<AppCubit, AppState>(builder: (context, appState) {
-              var selectedSecondarySection = secondaryMenuSections(context)
+              var selectedSecondaryItem = primaryMenuItems(context)
                   .where((element) =>
                       (element.key as ValueKey).value ==
                       appState.primaryMenuSelectedKey)
-                  .firstOrNull;
-              var selectedSecondaryItem = selectedSecondarySection?.items
-                  .where((element) =>
+                  .firstOrNull
+                  ?.subItems
+                  ?.where((element) =>
                       (element.key as ValueKey).value ==
                       appState.secondaryMenuSelectedKey)
                   .firstOrNull;
@@ -134,6 +112,7 @@ class NavConstants {
           cupertinoIcon: CupertinoIcons.square_fill_line_vertical_square,
           label: "Organize",
           body: OrganizeScreen(),
+          subItems: [],
           appBar: AppBar(
               key: const Key("organize"),
               backgroundColor: getTheme(context).surfaceContainer,
@@ -157,6 +136,7 @@ class NavConstants {
           cupertinoIcon: CupertinoIcons.plus_circle_fill,
           label: "Compose",
           color: getTheme(context).secondary,
+          subItems: [],
           onTap: (index) {
             if (isDesktop(context)) {
               showDialog(
@@ -168,8 +148,7 @@ class NavConstants {
                           child: ClipRRect(
                             borderRadius:
                                 BorderRadius.circular($constants.corners.md),
-                            child: MailComposer(
-                            ),
+                            child: MailComposer(),
                           ),
                         ),
                       ));
@@ -182,8 +161,7 @@ class NavConstants {
                 backgroundColor: Colors.transparent,
                 builder: (context) => SizedBox(
                     height: getSize(context).height * 0.92,
-                    child: MailComposer(
-                    )),
+                    child: MailComposer()),
               );
             }
             SyncService.sync(context);
@@ -195,6 +173,7 @@ class NavConstants {
           cupertinoIcon: CupertinoIcons.search,
           label: "Search",
           body: SearchScreen(),
+          subItems: [],
           appBar: AppBar(
               key: const Key("search"),
               backgroundColor: getTheme(context).surfaceContainer,
@@ -217,6 +196,7 @@ class NavConstants {
           cupertinoIcon: CupertinoIcons.ellipsis_circle_fill,
           label: context.t.more.title,
           body: const MoreApps(),
+          subItems: [],
           appBar: AppBar(
               key: const Key("more"),
               backgroundColor: getTheme(context).surface,
