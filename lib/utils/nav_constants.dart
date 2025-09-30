@@ -26,7 +26,7 @@ class NavConstants {
   List<NavigationItem> primaryMenuItems(BuildContext context) {
     final allItems = [
       NavigationItem(
-        key: const Key("mail"),
+        key: const Key("inbox"),
         icon: LineAwesome.envelope,
         cupertinoIcon: CupertinoIcons.envelope,
         label: "Mail",
@@ -70,7 +70,7 @@ class NavConstants {
           ),
         ],
         appBar: AppBar(
-          key: const Key("mail"),
+          key: const Key("inbox"),
           backgroundColor: getTheme(context).surfaceContainer,
           title: BlocBuilder<AppCubit, AppState>(builder: (context, appState) {
             var selectedSecondaryItem = primaryMenuItems(context)

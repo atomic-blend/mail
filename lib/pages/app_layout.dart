@@ -145,6 +145,8 @@ class AppLayoutState extends ResponsiveState<AppLayout> {
             child: ABSideMenu(
               controller: _primarySideMenuController,
               primaryMenuItems: primaryMenuItems,
+              primaryMenuKey: appState.primaryMenuSelectedKey,
+              secondaryMenuKey: appState.secondaryMenuSelectedKey,
               onItemTap: (item) {
                 if (item.onTap != null) {
                   item.onTap!(0);
@@ -336,6 +338,8 @@ class AppLayoutState extends ResponsiveState<AppLayout> {
               ABSideMenu(
                 controller: _primarySideMenuController,
                 primaryMenuItems: primaryMenuItems,
+                primaryMenuKey: appState.primaryMenuSelectedKey,
+                secondaryMenuKey: appState.secondaryMenuSelectedKey,
                 onItemTap: (item) {
                   if (item.onTap != null) {
                     item.onTap!(0);
