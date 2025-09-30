@@ -157,6 +157,7 @@ class NavConstants {
         label: context.t.more.title,
         body: const MoreApps(),
         subItems: [],
+        mobileOnly: true,
         appBar: AppBar(
             key: const Key("more"),
             backgroundColor: getTheme(context).surface,
