@@ -40,6 +40,7 @@ class Translations implements BaseTranslations<AppLocale, Translations> {
 
 	// Translations
 	late final TranslationsSettingsEn settings = TranslationsSettingsEn._(_root);
+	late final TranslationsSectionsEn sections = TranslationsSectionsEn._(_root);
 	late final TranslationsAccountEn account = TranslationsAccountEn._(_root);
 	late final TranslationsMailCardEn mail_card = TranslationsMailCardEn._(_root);
 	late final TranslationsZeroInboxCardEn zero_inbox_card = TranslationsZeroInboxCardEn._(_root);
@@ -65,6 +66,18 @@ class TranslationsSettingsEn {
 
 	/// en: 'Logout'
 	String get logout => 'Logout';
+}
+
+// Path: sections
+class TranslationsSectionsEn {
+	TranslationsSectionsEn._(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Mail'
+	String get mail => 'Mail';
 }
 
 // Path: account
@@ -296,6 +309,7 @@ extension on Translations {
 			case 'settings.app_settings.selfHostedUrl.title': return 'Self-Hosted URL';
 			case 'settings.app_settings.selfHostedUrl.not_set': return 'Not set';
 			case 'settings.logout': return 'Logout';
+			case 'sections.mail': return 'Mail';
 			case 'account.sections.account': return 'Account';
 			case 'mail_card.no_content': return 'No content';
 			case 'mail_card.delete_draft_modal.title': return 'Delete draft';

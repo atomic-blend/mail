@@ -10,6 +10,9 @@
     },
     "logout": "Déconnexion"
   },
+  "sections": {
+    "mail": "Mail"
+  },
   "zero_inbox_card": {
     "title": "Félicitations !",
     "description": "Vous n'avez aucun message non lu."
