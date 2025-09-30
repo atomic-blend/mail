@@ -19,6 +19,9 @@ import 'package:flutter_side_menu/flutter_side_menu.dart';
 import 'package:macos_window_utils/widgets/titlebar_safe_area.dart';
 import 'package:mail/main.dart';
 import 'package:mail/utils/nav_constants.dart';
+import 'package:mail/pages/mails/mail_composer.dart';
+import 'package:mail/services/sync.service.dart';
+import 'package:icons_plus/icons_plus.dart';
 
 class AppLayout extends ResponsiveStatefulWidget {
   const AppLayout({super.key});
@@ -338,11 +341,39 @@ class AppLayoutState extends ResponsiveState<AppLayout> {
                                   key: key,
                                 );
                           },
-                          destinations: $navConstants
-                              .primaryMenuItems(context)
-                              .take(5)
-                              .toList(),
+                          destinations: $navConstants.primaryMenuItems(context),
                           primaryMenuKey: appState.primaryMenuSelectedKey,
+                          centerActionEnabled: true,
+                          centerActionIcon: LineAwesome.plus_solid,
+                          centerActionCallback: () {
+                            if (isDesktop(context)) {
+                              showDialog(
+                                  context: context,
+                                  builder: (context) => Dialog(
+                                        child: SizedBox(
+                                          height: getSize(context).height * 0.8,
+                                          width: getSize(context).width * 0.8,
+                                          child: ClipRRect(
+                                            borderRadius: BorderRadius.circular(
+                                                $constants.corners.md),
+                                            child: MailComposer(),
+                                          ),
+                                        ),
+                                      ));
+                            } else {
+                              showModalBottomSheet(
+                                isScrollControlled: true,
+                                context: context,
+                                isDismissible: false,
+                                enableDrag: false,
+                                backgroundColor: Colors.transparent,
+                                builder: (context) => SizedBox(
+                                    height: getSize(context).height * 0.92,
+                                    child: MailComposer()),
+                              );
+                            }
+                            SyncService.sync(context);
+                          },
                         ),
                       ),
                     ),
