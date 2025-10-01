@@ -1,7 +1,9 @@
 import 'package:ab_shared/blocs/auth/auth.bloc.dart';
 import 'package:ab_shared/components/app/ab_navbar.dart';
+import 'package:ab_shared/pages/account/account.dart';
 import 'package:mail/blocs/app/app.bloc.dart';
 import 'package:mail/i18n/strings.g.dart';
+import 'package:mail/main.dart';
 import 'package:mail/pages/mails/views/all_mail.dart';
 import 'package:mail/pages/mails/views/archive.dart';
 import 'package:mail/pages/mails/views/drafts.dart';
@@ -15,6 +17,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:icons_plus/icons_plus.dart';
+import 'package:mail/pages/settings/settings.dart';
 
 final $navConstants = NavConstants();
 
@@ -140,6 +143,54 @@ class NavConstants {
             leading: Container(),
             title: Text(
               "Search",
+              style: getTextTheme(context).headlineSmall!.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
+            ),
+            actions: [
+              BlocBuilder<AuthBloc, AuthState>(builder: (context, authState) {
+                return Container();
+              })
+            ]),
+      ),
+      NavigationItem(
+        key: const Key("account"),
+        icon: LineAwesome.user_solid,
+        cupertinoIcon: CupertinoIcons.person,
+        label: "Account",
+        body: Account(globalApiClient: globalApiClient, encryptionService: encryptionService, prefs: prefs,),
+        subItems: [],
+        desktopOnly: true,
+        appBar: AppBar(
+            key: const Key("account"),
+            backgroundColor: getTheme(context).surfaceContainer,
+            leading: Container(),
+            title: Text(
+              "Account",
+              style: getTextTheme(context).headlineSmall!.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
+            ),
+            actions: [
+              BlocBuilder<AuthBloc, AuthState>(builder: (context, authState) {
+                return Container();
+              })
+            ]),
+      ),
+      NavigationItem(
+        key: const Key("settings"),
+        icon: LineAwesome.cog_solid,
+        cupertinoIcon: CupertinoIcons.gear,
+        label: "Settings",
+        body: Settings(),
+        subItems: [],
+        desktopOnly: true,
+        appBar: AppBar(
+            key: const Key("settings"),
+            backgroundColor: getTheme(context).surfaceContainer,
+            leading: Container(),
+            title: Text(
+              "Settings",
               style: getTextTheme(context).headlineSmall!.copyWith(
                     fontWeight: FontWeight.bold,
                   ),
