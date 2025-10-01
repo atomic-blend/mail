@@ -37,6 +37,7 @@ class TranslationsFr implements Translations {
 
 	// Translations
 	@override late final _TranslationsSettingsFr settings = _TranslationsSettingsFr._(_root);
+	@override late final _TranslationsSectionsFr sections = _TranslationsSectionsFr._(_root);
 	@override late final _TranslationsZeroInboxCardFr zero_inbox_card = _TranslationsZeroInboxCardFr._(_root);
 	@override late final _TranslationsMailCardFr mail_card = _TranslationsMailCardFr._(_root);
 	@override late final _TranslationsTrashedFr trashed = _TranslationsTrashedFr._(_root);
@@ -57,6 +58,16 @@ class _TranslationsSettingsFr implements TranslationsSettingsEn {
 	@override String get title => 'Paramètres';
 	@override late final _TranslationsSettingsAppSettingsFr app_settings = _TranslationsSettingsAppSettingsFr._(_root);
 	@override String get logout => 'Déconnexion';
+}
+
+// Path: sections
+class _TranslationsSectionsFr implements TranslationsSectionsEn {
+	_TranslationsSectionsFr._(this._root);
+
+	final TranslationsFr _root; // ignore: unused_field
+
+	// Translations
+	@override String get mail => 'Mail';
 }
 
 // Path: zero_inbox_card
@@ -230,6 +241,7 @@ extension on TranslationsFr {
 			case 'settings.app_settings.selfHostedUrl.title': return 'URL auto-hébergée';
 			case 'settings.app_settings.selfHostedUrl.not_set': return 'Non défini';
 			case 'settings.logout': return 'Déconnexion';
+			case 'sections.mail': return 'Mail';
 			case 'zero_inbox_card.title': return 'Félicitations !';
 			case 'zero_inbox_card.description': return 'Vous n\'avez aucun message non lu.';
 			case 'mail_card.no_content': return 'Aucun contenu';

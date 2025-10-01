@@ -10,6 +10,9 @@
     },
     "logout": "Logout"
   },
+  "sections": {
+    "mail": "Mail"
+  },
   "account": {
     "sections": {
       "account": "Account"
