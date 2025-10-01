@@ -158,9 +158,12 @@ class NavConstants {
         icon: LineAwesome.user_solid,
         cupertinoIcon: CupertinoIcons.person,
         label: "Account",
-        body: Account(globalApiClient: globalApiClient, encryptionService: encryptionService, prefs: prefs,),
+        body: Account(
+          globalApiClient: globalApiClient,
+          encryptionService: encryptionService,
+          prefs: prefs,
+        ),
         subItems: [],
-        desktopOnly: true,
         appBar: AppBar(
             key: const Key("account"),
             backgroundColor: getTheme(context).surfaceContainer,
@@ -184,37 +187,12 @@ class NavConstants {
         label: "Settings",
         body: Settings(),
         subItems: [],
-        desktopOnly: true,
         appBar: AppBar(
             key: const Key("settings"),
             backgroundColor: getTheme(context).surfaceContainer,
             leading: Container(),
             title: Text(
               "Settings",
-              style: getTextTheme(context).headlineSmall!.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
-            ),
-            actions: [
-              BlocBuilder<AuthBloc, AuthState>(builder: (context, authState) {
-                return Container();
-              })
-            ]),
-      ),
-      NavigationItem(
-        key: const Key("more"),
-        icon: CupertinoIcons.ellipsis_circle_fill,
-        cupertinoIcon: CupertinoIcons.ellipsis_circle_fill,
-        label: context.t.more.title,
-        body: const MoreApps(),
-        subItems: [],
-        mobileOnly: true,
-        appBar: AppBar(
-            key: const Key("more"),
-            backgroundColor: getTheme(context).surface,
-            leading: Container(),
-            title: Text(
-              context.t.more.title,
               style: getTextTheme(context).headlineSmall!.copyWith(
                     fontWeight: FontWeight.bold,
                   ),
