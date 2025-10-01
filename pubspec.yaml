@@ -36,13 +36,13 @@ dependencies:
   flutter_age:
     git:
       url: https://github.com/atomic-blend/flutter_age.git
-      ref: v0.0.5
-  ab_shared:
-    git:
-      url: https://github.com/atomic-blend/app-shared.git
-      ref: v0.1.1
-    # path: ../ab_shared
+      ref: v0.0.6
 
+  ab_shared:
+    # git:
+    #   url: https://github.com/atomic-blend/app-shared.git
+    #   ref: v0.1.1
+    path: ../ab_shared
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -63,7 +63,7 @@ dependencies:
   slang_flutter: ^4.4.0
   path_provider: ^2.1.5
   shared_preferences: ^2.3.5
-  flex_color_scheme: ^8.1.0
+  flex_color_scheme: ^8.3.0
   flutter_svg: ^2.0.16
   auto_size_text: ^3.0.0
   pointycastle: ^3.9.1
@@ -86,14 +86,14 @@ dependencies:
   device_info_plus: ^11.3.3
   flutter_local_notifications: ^19.0.0
   flutter_timezone: ^4.1.0
-  syncfusion_flutter_calendar: ^29.1.33
+  syncfusion_flutter_calendar: ^30.2.5
   device_calendar: ^4.3.3
   url_launcher: ^6.3.1
   input_quantity: ^2.5.1
   flutter_multi_select_items: ^0.4.3
   emoji_picker_flutter: ^4.3.0
   flutter_heatmap_calendar: ^1.0.5
-  syncfusion_flutter_datepicker: ^29.1.37
+  syncfusion_flutter_datepicker: ^30.2.5
   percent_indicator: ^4.2.5
   flex_color_picker: ^3.7.0
   sentry_flutter: ^9.6.0
@@ -146,8 +146,6 @@ flutter:
     - assets/configs/
     - assets/images/
     - assets/animations/
-    # ignore
-    - pkg/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

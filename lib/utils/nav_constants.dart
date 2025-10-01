@@ -1,5 +1,5 @@
 import 'package:ab_shared/blocs/auth/auth.bloc.dart';
-import 'package:ab_shared/components/app/bottom_navigation.dart';
+import 'package:ab_shared/components/app/ab_navbar.dart';
 import 'package:template/i18n/strings.g.dart';
 import 'package:template/pages/more/more.dart';
 import 'package:template/services/sync.service.dart';
@@ -14,43 +14,14 @@ final $navConstants = NavConstants();
 
 @immutable
 class NavConstants {
-  List<NavigationSection> secondaryMenuSections(BuildContext context) => [
-        const NavigationSection(
-          key: Key("notes"),
-          items: [],
-        ),
-        const NavigationSection(
-          key: Key("calendar"),
-          items: [],
-        ),
-        const NavigationSection(
-          key: Key("add_task"),
-          items: [],
-        ),
-        const NavigationSection(
-          key: Key("habits"),
-          items: [],
-        ),
-        const NavigationSection(
-          key: Key("more"),
-          items: [],
-        ),
-      ];
-
   // list of fixed items, limited to 5 on mobile
   // on mobile: the rest is added as a grid on the more apps page (last item to the right)
   // on desktop: the more apps page is moved at the end of the menu
   List<NavigationItem> primaryMenuItems(BuildContext context) => [
         NavigationItem(
           key: const Key("page_1"),
-          icon: const Icon(
-            LineAwesome.file,
-            size: 25,
-          ),
-          cupertinoIcon: const Icon(
-            CupertinoIcons.doc,
-            size: 25,
-          ),
+          icon: LineAwesome.file,
+          cupertinoIcon: CupertinoIcons.doc,
           label: "Page 1",
           body: Container(),
           appBar: AppBar(
@@ -72,14 +43,8 @@ class NavConstants {
         ),
         NavigationItem(
           key: const Key("page_2"),
-          icon: const Icon(
-            LineAwesome.search_solid,
-            size: 25,
-          ),
-          cupertinoIcon: const Icon(
-            CupertinoIcons.search,
-            size: 25,
-          ),
+          icon: LineAwesome.search_solid,
+          cupertinoIcon: CupertinoIcons.search,
           label: "Page 2",
           body: Container(),
           appBar: AppBar(
@@ -101,56 +66,16 @@ class NavConstants {
         ),
         NavigationItem(
           key: const Key("page_3"),
-          icon: Icon(
-            LineAwesome.plus_solid,
-            color: getTheme(context).tertiary,
-          ),
-          cupertinoIcon: Icon(
-            CupertinoIcons.plus_circle_fill,
-            color: getTheme(context).secondary,
-          ),
+          icon: LineAwesome.filter_solid,
+          cupertinoIcon: CupertinoIcons.square_fill_line_vertical_square,
           label: "Page 3",
-          color: getTheme(context).secondary,
-          onTap: (index) {
-            if (isDesktop(context)) {
-              showDialog(
-                  context: context,
-                  builder: (context) => Dialog(
-                        child: SizedBox(
-                          height: getSize(context).height * 0.8,
-                          width: getSize(context).width * 0.8,
-                          child: ClipRRect(
-                            borderRadius:
-                                BorderRadius.circular($constants.corners.md),
-                            child: Container(),
-                          ),
-                        ),
-                      ));
-            } else {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => Container()));
-            }
-            SyncService.sync(context);
-          },
-        ),
-        NavigationItem(
-          key: const Key("page_4"),
-          icon: const Icon(
-            LineAwesome.filter_solid,
-            size: 25,
-          ),
-          cupertinoIcon: const Icon(
-            CupertinoIcons.square_fill_line_vertical_square,
-            size: 25,
-          ),
-          label: "Page 4",
           body: Container(),
           appBar: AppBar(
-              key: const Key("page_4"),
+              key: const Key("page_3"),
               backgroundColor: getTheme(context).surface,
               leading: Container(),
               title: Text(
-                "Page 4",
+                "Page 3",
                 style: getTextTheme(context).headlineSmall!.copyWith(
                       fontWeight: FontWeight.bold,
                     ),
@@ -162,23 +87,17 @@ class NavConstants {
               ]),
         ),
         NavigationItem(
-          key: const Key("more"),
-          icon: const Icon(
-            CupertinoIcons.ellipsis_circle_fill,
-            size: 25,
-          ),
-          cupertinoIcon: const Icon(
-            CupertinoIcons.ellipsis_circle_fill,
-            size: 25,
-          ),
-          label: context.t.more.title,
-          body: const MoreApps(),
+          key: const Key("page_4"),
+          icon: LineAwesome.cog_solid,
+          cupertinoIcon: CupertinoIcons.gear,
+          label: "Page 4",
+          body: Container(),
           appBar: AppBar(
-              key: const Key("more"),
+              key: const Key("page_4"),
               backgroundColor: getTheme(context).surface,
               leading: Container(),
               title: Text(
-                context.t.more.title,
+                "Page 4",
                 style: getTextTheme(context).headlineSmall!.copyWith(
                       fontWeight: FontWeight.bold,
                     ),
