@@ -30,7 +30,6 @@ class AppLayout extends ResponsiveStatefulWidget {
 }
 
 class AppLayoutState extends ResponsiveState<AppLayout> {
-  final SideMenuController _secondarySideMenuController = SideMenuController();
   final SideMenuController _primarySideMenuController = SideMenuController();
 
   @override
@@ -410,17 +409,5 @@ class AppLayoutState extends ResponsiveState<AppLayout> {
       );
       if (isPaymentSupported()) revenueCatService?.logIn(authState.user!.id!);
     }
-  }
-
-  String _getInitials(String name) {
-    if (name.isEmpty) return '';
-
-    return name
-        .trim()
-        .split(' ')
-        .where((word) => word.isNotEmpty)
-        .take(3)
-        .map((word) => word[0].toUpperCase())
-        .join();
   }
 }
