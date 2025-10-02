@@ -160,39 +160,25 @@ class _MailCardState extends State<MailCard> {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Row(
-                        children: [
-                          SizedBox(
-                            width: constraints.maxWidth * 0.68,
-                            child: AutoSizeText(
-                              mail.getHeader("From"),
-                              style:
-                                  getTextTheme(context).headlineSmall!.copyWith(
-                                        fontWeight: mail.read != true
-                                            ? FontWeight.bold
-                                            : null,
-                                      ),
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ),
-                          if (mail.read != true) ...[
-                            SizedBox(width: $constants.insets.sm),
-                            Container(
-                              width: 8,
-                              height: 8,
-                              decoration: BoxDecoration(
-                                color: Colors.blue,
-                                borderRadius: BorderRadius.circular(
-                                    $constants.corners.full),
+                      SizedBox(
+                        width: isDesktop(context)
+                            ? constraints.maxWidth * 0.68
+                            : null,
+                        child: AutoSizeText(
+                          mail.getHeader("From"),
+                          style: getTextTheme(context).headlineSmall!.copyWith(
+                                fontWeight:
+                                    mail.read != true ? FontWeight.bold : null,
                               ),
-                            ),
-                          ]
-                        ],
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
                       ),
                       SizedBox(height: $constants.insets.xxs),
                       SizedBox(
-                        width: constraints.maxWidth * 0.68,
+                        width: isDesktop(context)
+                            ? constraints.maxWidth * 0.68
+                            : null,
                         child: AutoSizeText(
                           mail.getHeader("Subject"),
                           style: getTextTheme(context).bodyMedium!.copyWith(
