@@ -2,6 +2,7 @@ import 'package:ab_shared/components/modals/ab_modal.dart';
 import 'package:ab_shared/components/widgets/elevated_container.dart';
 import 'package:ab_shared/utils/constants.dart';
 import 'package:ab_shared/utils/shortcuts.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -34,58 +35,12 @@ class _MailCardState extends State<MailCard> {
     if (mail == null) {
       return const SizedBox.shrink();
     }
-    return Slidable(
-      endActionPane: ActionPane(motion: const ScrollMotion(), children: [
-        SizedBox(
-          width: $constants.insets.xs,
-        ),
-        Theme(
-          data: Theme.of(context).copyWith(
-              outlinedButtonTheme: const OutlinedButtonThemeData(
-            style: ButtonStyle(
-                iconColor: WidgetStatePropertyAll(Colors.white),
-                iconSize: WidgetStatePropertyAll(25)),
-          )),
-          child: SlidableAction(
-            onPressed: (context) {
-              if (widget.draft != null) {
-                showDialog(
-                    context: context,
-                    builder: (context) => ABModal(
-                          title: context.t.mail_card.delete_draft_modal.title,
-                          description: context
-                              .t.mail_card.delete_draft_modal.description,
-                          warning:
-                              context.t.mail_card.delete_draft_modal.warning,
-                          onConfirm: () {
-                            widget.onDelete?.call(widget.draft!.id!);
-                            Navigator.of(context).pop();
-                          },
-                        ));
-              } else {
-                if (mail.trashed != true) {
-                  context.read<MailBloc>().add(TrashMail(mail.id!));
-                } else {
-                  context.read<MailBloc>().add(UntrashMail(mail.id!));
-                }
-              }
-            },
-            backgroundColor: getTheme(context).error,
-            foregroundColor: Colors.white,
-            icon: widget.draft != null
-                ? CupertinoIcons.delete
-                : mail.trashed != true
-                    ? CupertinoIcons.delete
-                    : CupertinoIcons.trash_slash,
-            borderRadius: BorderRadius.circular(
-              $constants.corners.sm,
-            ),
+    return LayoutBuilder(builder: (context, constraints) {
+      return Slidable(
+        endActionPane: ActionPane(motion: const ScrollMotion(), children: [
+          SizedBox(
+            width: $constants.insets.xs,
           ),
-        ),
-        SizedBox(
-          width: $constants.insets.xs,
-        ),
-        if (widget.draft == null)
           Theme(
             data: Theme.of(context).copyWith(
                 outlinedButtonTheme: const OutlinedButtonThemeData(
@@ -95,109 +50,169 @@ class _MailCardState extends State<MailCard> {
             )),
             child: SlidableAction(
               onPressed: (context) {
-                if (mail.archived != true) {
-                  context.read<MailBloc>().add(ArchiveMail(mail.id!));
+                if (widget.draft != null) {
+                  showDialog(
+                      context: context,
+                      builder: (context) => ABModal(
+                            title: context.t.mail_card.delete_draft_modal.title,
+                            description: context
+                                .t.mail_card.delete_draft_modal.description,
+                            warning:
+                                context.t.mail_card.delete_draft_modal.warning,
+                            onConfirm: () {
+                              widget.onDelete?.call(widget.draft!.id!);
+                              Navigator.of(context).pop();
+                            },
+                          ));
                 } else {
-                  context.read<MailBloc>().add(UnarchiveMail(mail.id!));
+                  if (mail.trashed != true) {
+                    context.read<MailBloc>().add(TrashMail(mail.id!));
+                  } else {
+                    context.read<MailBloc>().add(UntrashMail(mail.id!));
+                  }
                 }
               },
-              backgroundColor: getTheme(context).tertiary,
+              backgroundColor: getTheme(context).error,
               foregroundColor: Colors.white,
-              icon: mail.archived == true
-                  ? CupertinoIcons.tray_arrow_down
-                  : CupertinoIcons.archivebox,
+              icon: widget.draft != null
+                  ? CupertinoIcons.delete
+                  : mail.trashed != true
+                      ? CupertinoIcons.delete
+                      : CupertinoIcons.trash_slash,
               borderRadius: BorderRadius.circular(
                 $constants.corners.sm,
               ),
             ),
           ),
-      ]),
-      child: MouseRegion(
-        onEnter: (event) {
-          setState(() {
-            isHovering = true;
-          });
-        },
-        onExit: (event) {
-          setState(() {
-            isHovering = false;
-          });
-        },
-        child: Container(
-          decoration: BoxDecoration(
-            color: isHovering ? getTheme(context).surfaceContainer : null,
-            borderRadius: BorderRadius.circular($constants.corners.sm),
+          SizedBox(
+            width: $constants.insets.xs,
           ),
-          padding: EdgeInsets.symmetric(
-            horizontal: $constants.insets.sm,
-            vertical: $constants.insets.xs,
-          ),
-          child: GestureDetector(
-            onTap: () async {
-              if (widget.draft == null) {
-                if (!isDesktop(context)) {
-                  await Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => MailDetailScreen(
-                            mail,
-                          )));
-                  if (!context.mounted) return;
-                  SyncService.sync(context);
+          if (widget.draft == null)
+            Theme(
+              data: Theme.of(context).copyWith(
+                  outlinedButtonTheme: const OutlinedButtonThemeData(
+                style: ButtonStyle(
+                    iconColor: WidgetStatePropertyAll(Colors.white),
+                    iconSize: WidgetStatePropertyAll(25)),
+              )),
+              child: SlidableAction(
+                onPressed: (context) {
+                  if (mail.archived != true) {
+                    context.read<MailBloc>().add(ArchiveMail(mail.id!));
+                  } else {
+                    context.read<MailBloc>().add(UnarchiveMail(mail.id!));
+                  }
+                },
+                backgroundColor: getTheme(context).tertiary,
+                foregroundColor: Colors.white,
+                icon: mail.archived == true
+                    ? CupertinoIcons.tray_arrow_down
+                    : CupertinoIcons.archivebox,
+                borderRadius: BorderRadius.circular(
+                  $constants.corners.sm,
+                ),
+              ),
+            ),
+        ]),
+        child: MouseRegion(
+          onEnter: (event) {
+            setState(() {
+              isHovering = true;
+            });
+          },
+          onExit: (event) {
+            setState(() {
+              isHovering = false;
+            });
+          },
+          child: Container(
+            decoration: BoxDecoration(
+              color: isHovering ? getTheme(context).surfaceContainer : null,
+              borderRadius: BorderRadius.circular($constants.corners.sm),
+            ),
+            padding: EdgeInsets.only(
+              left: $constants.insets.sm,
+              top: $constants.insets.xs,
+              bottom: $constants.insets.xs,
+            ),
+            child: GestureDetector(
+              onTap: () async {
+                if (widget.draft == null) {
+                  if (!isDesktop(context)) {
+                    await Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => MailDetailScreen(
+                              mail,
+                            )));
+                    if (!context.mounted) return;
+                    SyncService.sync(context);
+                  } else {
+                    //TODO: open the mail in the preview panel
+                  }
                 } else {
-                  //TODO: open the mail in the preview panel
+                  _openComposer(context);
                 }
-              } else {
-                _openComposer(context);
-              }
-            },
-            child: Row(
-              children: [
-                MailUserAvatar(value: mail.getHeader("From"), read: mail.read),
-                SizedBox(width: $constants.insets.sm),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        Text(
-                          mail.getHeader("From"),
-                          style: getTextTheme(context).headlineSmall!.copyWith(
+              },
+              child: Row(
+                children: [
+                  MailUserAvatar(
+                      value: mail.getHeader("From"), read: mail.read),
+                  SizedBox(width: $constants.insets.sm),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          SizedBox(
+                            width: constraints.maxWidth * 0.68,
+                            child: AutoSizeText(
+                              mail.getHeader("From"),
+                              style:
+                                  getTextTheme(context).headlineSmall!.copyWith(
+                                        fontWeight: mail.read != true
+                                            ? FontWeight.bold
+                                            : null,
+                                      ),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                          if (mail.read != true) ...[
+                            SizedBox(width: $constants.insets.sm),
+                            Container(
+                              width: 8,
+                              height: 8,
+                              decoration: BoxDecoration(
+                                color: Colors.blue,
+                                borderRadius: BorderRadius.circular(
+                                    $constants.corners.full),
+                              ),
+                            ),
+                          ]
+                        ],
+                      ),
+                      SizedBox(height: $constants.insets.xxs),
+                      SizedBox(
+                        width: constraints.maxWidth * 0.68,
+                        child: AutoSizeText(
+                          mail.getHeader("Subject"),
+                          style: getTextTheme(context).bodyMedium!.copyWith(
                                 fontWeight:
                                     mail.read != true ? FontWeight.bold : null,
                               ),
+                          overflow: TextOverflow.ellipsis,
+                          textAlign: TextAlign.left,
+                          maxLines: 1,
                         ),
-                        if (mail.read != true) ...[
-                          SizedBox(width: $constants.insets.sm),
-                          Container(
-                            width: 8,
-                            height: 8,
-                            decoration: BoxDecoration(
-                              color: Colors.blue,
-                              borderRadius: BorderRadius.circular(
-                                  $constants.corners.full),
-                            ),
-                          ),
-                        ]
-                      ],
-                    ),
-                    SizedBox(height: $constants.insets.xxs),
-                    Text(
-                      mail.getHeader("Subject"),
-                      style: getTextTheme(context).bodyMedium!.copyWith(
-                            fontWeight:
-                                mail.read != true ? FontWeight.bold : null,
-                          ),
-                      overflow: TextOverflow.ellipsis,
-                      textAlign: TextAlign.left,
-                      maxLines: 1,
-                    ),
-                  ],
-                ),
-              ],
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
         ),
-      ),
-    );
+      );
+    });
   }
 
   String getInitials(String name) {

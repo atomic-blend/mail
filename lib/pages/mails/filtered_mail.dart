@@ -54,8 +54,12 @@ class _FilteredMailScreenState extends State<FilteredMailScreen> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    ElevatedContainer(
-                      width: getSize(context).width * 0.65,
+                    Container(
+                      decoration: BoxDecoration(
+                        color: getTheme(context).surfaceContainer,
+                        borderRadius:
+                            BorderRadius.circular($constants.corners.sm),
+                      ),
                       padding: EdgeInsets.all($constants.insets.sm),
                       child: Column(
                         mainAxisSize: MainAxisSize.min,

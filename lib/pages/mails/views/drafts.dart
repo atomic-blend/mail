@@ -1,3 +1,5 @@
+import 'package:ab_shared/utils/shortcuts.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mail/blocs/mail/mail_bloc.dart';
@@ -20,14 +22,28 @@ class _DraftScreenState extends State<DraftScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return FilteredMailScreen(
-      drafts: true,
-      onDelete: (draftId) {
-        context.read<MailBloc>().add(DeleteDraft(draftId));
-      },
-      filterFunction: (mails) {
-        return mails ?? [];
-      },
+    return Row(
+      children: [
+        SizedBox(
+                    width: isDesktop(context) ? 300 : getSize(context).width,
+
+          child: FilteredMailScreen(
+            drafts: true,
+            onDelete: (draftId) {
+              context.read<MailBloc>().add(DeleteDraft(draftId));
+            },
+            filterFunction: (mails) {
+              return mails ?? [];
+            },
+          ),
+        ),
+        if (isDesktop(context)) ...[
+          VerticalDivider(
+            width: 1,
+          ),
+          Expanded(child: Container()),
+        ]
+      ],
     );
   }
 }

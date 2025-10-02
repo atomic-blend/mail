@@ -410,13 +410,6 @@ class AppLayoutState extends ResponsiveState<AppLayout> {
                         ),
                       ),
                     ),
-                    VerticalDivider(
-                      width: 1,
-                    ),
-                    Container(
-                      width: getSize(context).width * 0.5,
-                      child: Container(),
-                    ),
                   ],
                 ),
               )
