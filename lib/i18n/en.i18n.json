@@ -61,5 +61,8 @@
   },
   "actions": {
     "delete": "Delete"
+  },
+  "xx_mail_card": {
+    "description": "${count} mails in this folder"
   }
 }

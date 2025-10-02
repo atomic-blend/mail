@@ -46,6 +46,7 @@ class TranslationsFr implements Translations {
 	@override late final _TranslationsUnderConstructionFr under_construction = _TranslationsUnderConstructionFr._(_root);
 	@override late final _TranslationsMoreFr more = _TranslationsMoreFr._(_root);
 	@override late final _TranslationsActionsFr actions = _TranslationsActionsFr._(_root);
+	@override late final _TranslationsXxMailCardFr xx_mail_card = _TranslationsXxMailCardFr._(_root);
 }
 
 // Path: settings
@@ -162,6 +163,16 @@ class _TranslationsActionsFr implements TranslationsActionsEn {
 	@override String get delete => 'Supprimer';
 }
 
+// Path: xx_mail_card
+class _TranslationsXxMailCardFr implements TranslationsXxMailCardEn {
+	_TranslationsXxMailCardFr._(this._root);
+
+	final TranslationsFr _root; // ignore: unused_field
+
+	// Translations
+	@override String description({required Object count}) => '${count} mails dans ce dossier';
+}
+
 // Path: settings.app_settings
 class _TranslationsSettingsAppSettingsFr implements TranslationsSettingsAppSettingsEn {
 	_TranslationsSettingsAppSettingsFr._(this._root);
@@ -269,6 +280,7 @@ extension on TranslationsFr {
 			case 'actions.save': return 'Enregistrer';
 			case 'actions.cancel': return 'Annuler';
 			case 'actions.delete': return 'Supprimer';
+			case 'xx_mail_card.description': return ({required Object count}) => '${count} mails dans ce dossier';
 			default: return null;
 		}
 	}

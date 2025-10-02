@@ -63,5 +63,8 @@
     "save": "Enregistrer",
     "cancel": "Annuler",
     "delete": "Supprimer"
+  },
+  "xx_mail_card": {
+    "description": "${count} mails dans ce dossier"
   }
 }

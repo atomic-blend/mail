@@ -9,7 +9,7 @@ import 'package:mail/blocs/mail/mail_bloc.dart';
 import 'package:mail/i18n/strings.g.dart';
 import 'package:mail/pages/app_layout.dart';
 import 'package:mail/pages/mails/appbars/mail_appbar.dart';
-import 'package:mail/pages/mails/filtered_mail.dart';
+import 'package:mail/pages/mails/mail_list.dart';
 
 class TrashedScreen extends StatelessWidget {
   const TrashedScreen({super.key});
@@ -26,9 +26,10 @@ class TrashedScreen extends StatelessWidget {
                 MailAppbar(
                     sideMenuController: sideMenuController, title: "Trashed"),
                 Expanded(
-                  child: FilteredMailScreen(
-                    filterFunction: (mails) =>
-                        mails?.where((mail) => mail.trashed == true).toList() ??
+                  child: MailList(
+                    mails: mailState.mails
+                            ?.where((mail) => mail.trashed == true)
+                            .toList() ??
                         [],
                     header: ElevatedContainer(
                       border: Border.all(color: getTheme(context).error),

@@ -49,6 +49,7 @@ class Translations implements BaseTranslations<AppLocale, Translations> {
 	late final TranslationsUnderConstructionEn under_construction = TranslationsUnderConstructionEn._(_root);
 	late final TranslationsMoreEn more = TranslationsMoreEn._(_root);
 	late final TranslationsActionsEn actions = TranslationsActionsEn._(_root);
+	late final TranslationsXxMailCardEn xx_mail_card = TranslationsXxMailCardEn._(_root);
 }
 
 // Path: settings
@@ -201,6 +202,18 @@ class TranslationsActionsEn {
 	String get delete => 'Delete';
 }
 
+// Path: xx_mail_card
+class TranslationsXxMailCardEn {
+	TranslationsXxMailCardEn._(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: '${count} mails in this folder'
+	String description({required Object count}) => '${count} mails in this folder';
+}
+
 // Path: settings.app_settings
 class TranslationsSettingsAppSettingsEn {
 	TranslationsSettingsAppSettingsEn._(this._root);
@@ -335,6 +348,7 @@ extension on Translations {
 			case 'under_construction.description': return 'This feature is not yet available, but we\'re working hard to bring it to you soon.\n\nStay tuned!';
 			case 'more.title': return 'More';
 			case 'actions.delete': return 'Delete';
+			case 'xx_mail_card.description': return ({required Object count}) => '${count} mails in this folder';
 			default: return null;
 		}
 	}
