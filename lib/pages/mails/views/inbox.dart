@@ -38,6 +38,17 @@ class _InboxScreenState extends State<InboxScreen> {
                 Expanded(
                   child: MailList(
                     mails: inboxMails,
+                    onSelect: (mail) {
+                      setState(() {
+                        selectedMails.add(mail);
+                      });
+                    },
+                    onDeselect: (mail) {
+                      setState(() {
+                        selectedMails.remove(mail);
+                      });
+                    },
+                    selectedMails: selectedMails,
                   ),
                 ),
               ],

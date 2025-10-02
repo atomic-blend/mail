@@ -10,6 +10,9 @@ import 'package:mail/services/sync.service.dart';
 
 class MailList extends StatefulWidget {
   final List<dynamic>? mails;
+  final Function(dynamic)? onSelect;
+  final Function(dynamic)? onDeselect;
+  final List<dynamic>? selectedMails;
   final bool? drafts;
   final Widget? header;
   final Function(String)? onDelete;
@@ -20,6 +23,9 @@ class MailList extends StatefulWidget {
     this.onDelete,
     this.header,
     this.mails,
+    this.onSelect,
+    this.onDeselect,
+    this.selectedMails,
   });
 
   @override
@@ -109,10 +115,16 @@ class _MailListState extends State<MailList> {
                   !mail.search(searchController.text)) {
                 return const SizedBox.shrink();
               }
-              return MailCard(
-                draft: widget.drafts == true ? mail as SendMail : null,
-                mail: widget.drafts != true ? mail : null,
-                onDelete: widget.onDelete,
+              return Padding(
+                padding: EdgeInsets.only(bottom: $constants.insets.xs),
+                child: MailCard(
+                  draft: widget.drafts == true ? mail as SendMail : null,
+                  mail: widget.drafts != true ? mail : null,
+                  onDelete: widget.onDelete,
+                  onSelect: widget.onSelect,
+                  onDeselect: widget.onDeselect,
+                  selectedMails: widget.selectedMails,
+                ),
               );
             })
           ],

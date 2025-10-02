@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:mail/blocs/mail/mail_bloc.dart';
+import 'package:mail/components/avatars/checkbox_avatar.dart';
 import 'package:mail/components/avatars/mail_user_avatar.dart';
 import 'package:mail/i18n/strings.g.dart';
 import 'package:mail/models/mail/mail.dart';
@@ -20,7 +21,17 @@ class MailCard extends StatefulWidget {
   final Mail? mail;
   final send_mail.SendMail? draft;
   final Function(String)? onDelete;
-  const MailCard({super.key, this.mail, this.draft, this.onDelete});
+  final Function(dynamic)? onSelect;
+  final Function(dynamic)? onDeselect;
+  final List<dynamic>? selectedMails;
+  const MailCard(
+      {super.key,
+      this.mail,
+      this.draft,
+      this.onDelete,
+      this.onSelect,
+      this.onDeselect,
+      this.selectedMails});
 
   @override
   State<MailCard> createState() => _MailCardState();
@@ -127,7 +138,11 @@ class _MailCardState extends State<MailCard> {
           },
           child: Container(
             decoration: BoxDecoration(
-              color: isHovering ? getTheme(context).surfaceContainer : null,
+              color: isHovering ||
+                      (widget.selectedMails != null &&
+                          widget.selectedMails!.contains(mail))
+                  ? getTheme(context).surfaceContainer
+                  : null,
               borderRadius: BorderRadius.circular($constants.corners.sm),
             ),
             padding: EdgeInsets.only(
@@ -147,6 +162,12 @@ class _MailCardState extends State<MailCard> {
                     SyncService.sync(context);
                   } else {
                     //TODO: open the mail in the preview panel
+                    if (widget.selectedMails != null &&
+                        widget.selectedMails!.contains(mail)) {
+                      widget.onDeselect?.call(mail);
+                    } else {
+                      widget.onSelect?.call(mail);
+                    }
                   }
                 } else {
                   _openComposer(context);
@@ -154,8 +175,15 @@ class _MailCardState extends State<MailCard> {
               },
               child: Row(
                 children: [
-                  MailUserAvatar(
-                      value: mail.getHeader("From"), read: mail.read),
+                  if (widget.selectedMails == null ||
+                      !(widget.selectedMails!.contains(mail) &&
+                          widget.selectedMails!.length != 1))
+                    MailUserAvatar(
+                        value: mail.getHeader("From"), read: mail.read)
+                  else
+                    CheckboxAvatar(
+                      checked: widget.selectedMails!.contains(mail),
+                    ),
                   SizedBox(width: $constants.insets.sm),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
