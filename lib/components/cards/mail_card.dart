@@ -151,23 +151,31 @@ class _MailCardState extends State<MailCard> {
               bottom: $constants.insets.xs,
             ),
             child: GestureDetector(
+              onLongPress: () {
+                if (widget.selectedMails != null &&
+                    widget.selectedMails!.contains(mail)) {
+                  widget.onDeselect?.call(mail);
+                } else {
+                  widget.onSelect?.call(mail);
+                }
+              },
               onTap: () async {
                 if (widget.draft == null) {
                   if (!isDesktop(context)) {
-                    await Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => MailDetailScreen(
-                              mail,
-                            )));
+                    if (widget.selectedMails == null ||
+                        widget.selectedMails!.isEmpty) {
+                      await Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => MailDetailScreen(
+                                mail,
+                              )));
+                    } else {
+                      _toggleSelected(mail);
+                    }
                     if (!context.mounted) return;
                     SyncService.sync(context);
                   } else {
                     //TODO: open the mail in the preview panel
-                    if (widget.selectedMails != null &&
-                        widget.selectedMails!.contains(mail)) {
-                      widget.onDeselect?.call(mail);
-                    } else {
-                      widget.onSelect?.call(mail);
-                    }
+                    _toggleSelected(mail, reset: true);
                   }
                 } else {
                   _openComposer(context);
@@ -175,15 +183,27 @@ class _MailCardState extends State<MailCard> {
               },
               child: Row(
                 children: [
-                  if (widget.selectedMails == null ||
-                      !(widget.selectedMails!.contains(mail) &&
-                          widget.selectedMails!.length != 1))
-                    MailUserAvatar(
-                        value: mail.getHeader("From"), read: mail.read)
-                  else
+                  if ((isDesktop(context) &&
+                          widget.selectedMails!.contains(mail) &&
+                          widget.selectedMails!.length != 1) ||
+                      (!isDesktop(context) &&
+                          (widget.selectedMails == null ||
+                              widget.selectedMails!.contains(mail))))
                     CheckboxAvatar(
                       checked: widget.selectedMails!.contains(mail),
-                    ),
+                    )
+                  else
+                    MailUserAvatar(
+                        value: mail.getHeader("From"), read: mail.read),
+                  // if (widget.selectedMails == null ||
+                  //     !(widget.selectedMails!.contains(mail) &&
+                  //         widget.selectedMails!.length != 1))
+                  //   MailUserAvatar(
+                  //       value: mail.getHeader("From"), read: mail.read)
+                  // else
+                  //   CheckboxAvatar(
+                  //     checked: widget.selectedMails!.contains(mail),
+                  //   ),
                   SizedBox(width: $constants.insets.sm),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -227,6 +247,17 @@ class _MailCardState extends State<MailCard> {
         ),
       );
     });
+  }
+
+  void _toggleSelected(Mail mail, {bool reset = false}) {
+    if (reset) {
+      widget.selectedMails?.clear();
+    }
+    if (widget.selectedMails != null && widget.selectedMails!.contains(mail)) {
+      widget.onDeselect?.call(mail);
+    } else {
+      widget.onSelect?.call(mail);
+    }
   }
 
   String getInitials(String name) {
