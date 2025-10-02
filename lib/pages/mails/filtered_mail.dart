@@ -96,14 +96,12 @@ class _FilteredMailScreenState extends State<FilteredMailScreen> {
             padding: EdgeInsets.symmetric(horizontal: $constants.insets.xs),
             children: [
               Padding(
-                padding: EdgeInsets.symmetric(vertical: $constants.insets.xs),
-                child: ElevatedContainer(
-                  child: ABSearchBar(
-                    controller: searchController,
-                    onChanged: (p0) {
-                      setState(() {});
-                    },
-                  ),
+                padding: EdgeInsets.symmetric(vertical: $constants.insets.xxs),
+                child: ABSearchBar(
+                  controller: searchController,
+                  onChanged: (p0) {
+                    setState(() {});
+                  },
                 ),
               ),
               if (widget.header != null) ...[
