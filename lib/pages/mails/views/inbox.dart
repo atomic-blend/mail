@@ -3,13 +3,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mail/blocs/mail/mail_bloc.dart';
 import 'package:mail/i18n/strings.g.dart';
+import 'package:mail/models/mail/mail.dart';
 import 'package:mail/pages/app_layout.dart';
 import 'package:mail/pages/mails/appbars/mail_appbar.dart';
 import 'package:mail/pages/mails/mail_list.dart';
 import 'package:mail/pages/mails/no_mail_selected.dart';
 
-class InboxScreen extends StatelessWidget {
+class InboxScreen extends StatefulWidget {
   const InboxScreen({super.key});
+
+  @override
+  State<InboxScreen> createState() => _InboxScreenState();
+}
+
+class _InboxScreenState extends State<InboxScreen> {
+  List<Mail> selectedMails = [];
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +48,7 @@ class InboxScreen extends StatelessWidget {
               width: 1,
             ),
             Expanded(
-              child: inboxMails.isEmpty
+              child: inboxMails.isEmpty || selectedMails.isEmpty
                   ? NoMailSelectedScreen(
                       title: context.t.email_folders.inbox,
                       numberOfMails: inboxMails.length,
