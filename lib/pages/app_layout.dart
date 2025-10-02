@@ -22,6 +22,8 @@ import 'package:mail/pages/mails/mail_composer.dart';
 import 'package:mail/services/sync.service.dart';
 import 'package:icons_plus/icons_plus.dart';
 
+final SideMenuController sideMenuController = SideMenuController();
+
 class AppLayout extends ResponsiveStatefulWidget {
   const AppLayout({super.key});
 
@@ -30,8 +32,6 @@ class AppLayout extends ResponsiveStatefulWidget {
 }
 
 class AppLayoutState extends ResponsiveState<AppLayout> {
-  final SideMenuController _primarySideMenuController = SideMenuController();
-
   @override
   void initState() {
     context.read<AuthBloc>().add(const RefreshUser());
@@ -113,6 +113,7 @@ class AppLayoutState extends ResponsiveState<AppLayout> {
           // by default, the primary menu is selected
           Widget? body = primaryMenuItem?.body;
           AppBar? appBar = primaryMenuItem?.appBar;
+          Widget? header = primaryMenuItem?.header;
 
           // select the items if there's a secondary menu and a secondary menu item is selected
           if (secondaryItems.isNotEmpty &&
@@ -123,6 +124,13 @@ class AppLayoutState extends ResponsiveState<AppLayout> {
                     appState.secondaryMenuSelectedKey)
                 .firstOrNull
                 ?.body;
+
+            header = secondaryItems
+                .where((item) =>
+                    (item.key as ValueKey).value ==
+                    appState.secondaryMenuSelectedKey)
+                .firstOrNull
+                ?.header;
 
             final secondaryAppBar = secondaryItems
                 .where((item) =>
@@ -142,7 +150,7 @@ class AppLayoutState extends ResponsiveState<AppLayout> {
               Navigator.of(context).pop();
             },
             child: ABSideMenu(
-              controller: _primarySideMenuController,
+              controller: sideMenuController,
               primaryMenuItems: primaryMenuItems,
               primaryMenuKey: appState.primaryMenuSelectedKey,
               secondaryMenuKey: appState.secondaryMenuSelectedKey,
@@ -181,83 +189,84 @@ class AppLayoutState extends ResponsiveState<AppLayout> {
             direction: Axis.horizontal,
             children: [
               Expanded(
-                child: Stack(
-                  children: [
-                    Scaffold(
-                      // if there's secondary, show the secondary item appBar
-                      // else show the primary appBar
-                      appBar: appBar,
-                      drawer: drawer,
-                      backgroundColor: getTheme(context).surface,
-                      body: Stack(children: [
-                        body ?? Container(),
-                        Positioned(
-                          bottom: $constants.insets.lg,
-                          left: 0,
-                          right: 0,
-                          child: Padding(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: $constants.insets.md),
-                            child: ABNavbar(
-                              backgroundColor:
-                                  getTheme(context).surfaceContainer,
-                              onPrimaryMenuSelected: (key) {
-                                context
-                                    .read<AppCubit>()
-                                    .changePrimaryMenuSelectedKey(
-                                      key: key,
-                                    );
-                              },
-                              onSecondaryMenuSelected: (key) {
-                                context
-                                    .read<AppCubit>()
-                                    .changeSecondaryMenuSelectedKey(
-                                      key: key,
-                                    );
-                              },
-                              destinations:
-                                  $navConstants.primaryMenuItems(context),
-                              primaryMenuKey: appState.primaryMenuSelectedKey,
-                              centerActionEnabled: true,
-                              centerActionIcon: LineAwesome.plus_solid,
-                              centerActionCallback: () {
-                                if (isDesktop(context)) {
-                                  showDialog(
-                                      context: context,
-                                      builder: (context) => Dialog(
-                                            child: SizedBox(
-                                              height:
-                                                  getSize(context).height * 0.8,
-                                              width:
-                                                  getSize(context).width * 0.8,
-                                              child: ClipRRect(
-                                                borderRadius:
-                                                    BorderRadius.circular(
-                                                        $constants.corners.md),
-                                                child: MailComposer(),
-                                              ),
-                                            ),
-                                          ));
-                                } else {
-                                  showModalBottomSheet(
-                                    isScrollControlled: true,
-                                    context: context,
-                                    isDismissible: false,
-                                    enableDrag: false,
-                                    backgroundColor: Colors.transparent,
-                                    builder: (context) => SizedBox(
-                                        height: getSize(context).height * 0.92,
-                                        child: MailComposer()),
+                child: Scaffold(
+                  // if there's secondary, show the secondary item appBar
+                  // else show the primary appBar
+                  appBar: appBar,
+                  drawer: drawer,
+                  backgroundColor: getTheme(context).surface,
+                  body: SafeArea(
+                    child: Stack(children: [
+                      Column(
+                        children: [
+                          header ?? Container(),
+                          Expanded(child: body ?? Container()),
+                        ],
+                      ),
+                      Positioned(
+                        bottom: 0,
+                        left: 0,
+                        right: 0,
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: $constants.insets.md),
+                          child: ABNavbar(
+                            backgroundColor: getTheme(context).surfaceContainer,
+                            onPrimaryMenuSelected: (key) {
+                              context
+                                  .read<AppCubit>()
+                                  .changePrimaryMenuSelectedKey(
+                                    key: key,
                                   );
-                                }
-                                SyncService.sync(context);
-                              },
-                            ),
+                            },
+                            onSecondaryMenuSelected: (key) {
+                              context
+                                  .read<AppCubit>()
+                                  .changeSecondaryMenuSelectedKey(
+                                    key: key,
+                                  );
+                            },
+                            destinations:
+                                $navConstants.primaryMenuItems(context),
+                            primaryMenuKey: appState.primaryMenuSelectedKey,
+                            centerActionEnabled: true,
+                            centerActionIcon: LineAwesome.plus_solid,
+                            centerActionCallback: () {
+                              if (isDesktop(context)) {
+                                showDialog(
+                                    context: context,
+                                    builder: (context) => Dialog(
+                                          child: SizedBox(
+                                            height:
+                                                getSize(context).height * 0.8,
+                                            width: getSize(context).width * 0.8,
+                                            child: ClipRRect(
+                                              borderRadius:
+                                                  BorderRadius.circular(
+                                                      $constants.corners.md),
+                                              child: MailComposer(),
+                                            ),
+                                          ),
+                                        ));
+                              } else {
+                                showModalBottomSheet(
+                                  isScrollControlled: true,
+                                  context: context,
+                                  isDismissible: false,
+                                  enableDrag: false,
+                                  backgroundColor: Colors.transparent,
+                                  builder: (context) => SizedBox(
+                                      height: getSize(context).height * 0.92,
+                                      child: MailComposer()),
+                                );
+                              }
+                              SyncService.sync(context);
+                            },
                           ),
                         ),
-                      ]),
-                    ),
-                  ],
+                      ),
+                    ]),
+                  ),
                 ),
               )
             ],
@@ -291,6 +300,14 @@ class AppLayoutState extends ResponsiveState<AppLayout> {
                   appState.primaryMenuSelectedKey)
               .firstOrNull
               ?.body;
+          Widget? header = $navConstants
+              .primaryMenuItems(context)
+              .where((item) =>
+                  (item.key as ValueKey).value ==
+                  appState.primaryMenuSelectedKey)
+              .firstOrNull
+              ?.header;
+
           AppBar? appBar = $navConstants
               .primaryMenuItems(context)
               .where((item) =>
@@ -317,6 +334,13 @@ class AppLayoutState extends ResponsiveState<AppLayout> {
                 .firstOrNull
                 ?.body;
 
+            header = secondaryItems
+                .where((item) =>
+                    (item.key as ValueKey).value ==
+                    appState.secondaryMenuSelectedKey)
+                .firstOrNull
+                ?.header;
+
             final secondaryAppBar = secondaryItems
                 .where((item) =>
                     (item.key as ValueKey).value ==
@@ -335,7 +359,7 @@ class AppLayoutState extends ResponsiveState<AppLayout> {
             children: [
               // primary menu items
               ABSideMenu(
-                controller: _primarySideMenuController,
+                controller: sideMenuController,
                 primaryMenuItems: primaryMenuItems,
                 primaryMenuKey: appState.primaryMenuSelectedKey,
                 secondaryMenuKey: appState.secondaryMenuSelectedKey,
@@ -378,8 +402,20 @@ class AppLayoutState extends ResponsiveState<AppLayout> {
                         appBar: appBar,
                         // if there's secondary, show the secondary item body
                         // else show the primary item body
-                        body: body,
+                        body: Column(
+                          children: [
+                            header ?? Container(),
+                            Expanded(child: body ?? Container()),
+                          ],
+                        ),
                       ),
+                    ),
+                    VerticalDivider(
+                      width: 1,
+                    ),
+                    Container(
+                      width: getSize(context).width * 0.5,
+                      child: Container(),
                     ),
                   ],
                 ),

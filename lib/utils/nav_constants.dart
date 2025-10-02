@@ -3,6 +3,8 @@ import 'package:ab_shared/components/app/ab_navbar.dart';
 import 'package:ab_shared/pages/account/account.dart';
 import 'package:mail/blocs/app/app.bloc.dart';
 import 'package:mail/main.dart';
+import 'package:mail/pages/app_layout.dart';
+import 'package:mail/pages/mails/appbars/mail_appbar.dart';
 import 'package:mail/pages/mails/views/all_mail.dart';
 import 'package:mail/pages/mails/views/archive.dart';
 import 'package:mail/pages/mails/views/drafts.dart';
@@ -40,6 +42,11 @@ class NavConstants {
             cupertinoIcon: CupertinoIcons.envelope,
             label: "Inbox",
             body: InboxScreen(),
+            header: MailAppbar(
+              key: const Key("inbox"),
+              title: "Inbox",
+              sideMenuController: sideMenuController,
+            ),
           ),
           NavigationItem(
             key: Key("drafts"),
@@ -70,39 +77,40 @@ class NavConstants {
             body: AllMailScreen(),
           ),
         ],
-        appBar: AppBar(
-          key: const Key("inbox"),
-          backgroundColor: getTheme(context).surfaceContainer,
-          title: BlocBuilder<AppCubit, AppState>(builder: (context, appState) {
-            var selectedSecondaryItem = primaryMenuItems(context)
-                .where((element) =>
-                    (element.key as ValueKey).value ==
-                    appState.primaryMenuSelectedKey)
-                .firstOrNull
-                ?.subItems
-                ?.where((element) =>
-                    (element.key as ValueKey).value ==
-                    appState.secondaryMenuSelectedKey)
-                .firstOrNull;
-            return Text(
-              selectedSecondaryItem?.label ?? "",
-              style: getTextTheme(context).headlineSmall!.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
-            );
-          }),
-          actions: [
-            BlocBuilder<AuthBloc, AuthState>(builder: (context, authState) {
-              return Container();
-            }),
-          ],
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.only(
-              bottomLeft: Radius.circular(16.0),
-              bottomRight: Radius.circular(16.0),
-            ),
-          ),
-        ),
+
+        // appBar: AppBar(
+        //   key: const Key("inbox"),
+        //   backgroundColor: getTheme(context).surface,
+        //   title: BlocBuilder<AppCubit, AppState>(builder: (context, appState) {
+        //     var selectedSecondaryItem = primaryMenuItems(context)
+        //         .where((element) =>
+        //             (element.key as ValueKey).value ==
+        //             appState.primaryMenuSelectedKey)
+        //         .firstOrNull
+        //         ?.subItems
+        //         ?.where((element) =>
+        //             (element.key as ValueKey).value ==
+        //             appState.secondaryMenuSelectedKey)
+        //         .firstOrNull;
+        //     return Text(
+        //       selectedSecondaryItem?.label ?? "",
+        //       style: getTextTheme(context).headlineSmall!.copyWith(
+        //             fontWeight: FontWeight.bold,
+        //           ),
+        //     );
+        //   }),
+        //   actions: [
+        //     BlocBuilder<AuthBloc, AuthState>(builder: (context, authState) {
+        //       return Container();
+        //     }),
+        //   ],
+        //   shape: RoundedRectangleBorder(
+        //     borderRadius: BorderRadius.only(
+        //       bottomLeft: Radius.circular(16.0),
+        //       bottomRight: Radius.circular(16.0),
+        //     ),
+        //   ),
+        // ),
       ),
       NavigationItem(
         key: const Key("organize"),
