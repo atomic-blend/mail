@@ -128,6 +128,10 @@ class _MailCardState extends State<MailCard> {
             color: isHovering ? getTheme(context).surfaceContainer : null,
             borderRadius: BorderRadius.circular($constants.corners.sm),
           ),
+          padding: EdgeInsets.symmetric(
+            horizontal: $constants.insets.sm,
+            vertical: $constants.insets.xs,
+          ),
           child: GestureDetector(
             onTap: () async {
               if (widget.draft == null) {

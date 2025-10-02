@@ -115,15 +115,10 @@ class _FilteredMailScreenState extends State<FilteredMailScreen> {
                     !mail.search(searchController.text)) {
                   return const SizedBox.shrink();
                 }
-                return Padding(
-                  padding: EdgeInsets.symmetric(
-                    vertical: $constants.insets.sm,
-                  ),
-                  child: MailCard(
-                    draft: widget.drafts == true ? mail : null,
-                    mail: widget.drafts != true ? mail : null,
-                    onDelete: widget.onDelete,
-                  ),
+                return MailCard(
+                  draft: widget.drafts == true ? mail : null,
+                  mail: widget.drafts != true ? mail : null,
+                  onDelete: widget.onDelete,
                 );
               })
             ],
