@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mail/blocs/mail/mail_bloc.dart';
+import 'package:mail/pages/app_layout.dart';
+import 'package:mail/pages/mails/appbars/mail_appbar.dart';
 import 'package:mail/pages/mails/filtered_mail.dart';
 import 'package:mail/services/sync.service.dart';
 
@@ -25,16 +27,23 @@ class _DraftScreenState extends State<DraftScreen> {
     return Row(
       children: [
         SizedBox(
-                    width: isDesktop(context) ? 300 : getSize(context).width,
-
-          child: FilteredMailScreen(
-            drafts: true,
-            onDelete: (draftId) {
-              context.read<MailBloc>().add(DeleteDraft(draftId));
-            },
-            filterFunction: (mails) {
-              return mails ?? [];
-            },
+          width: isDesktop(context) ? 300 : getSize(context).width,
+          child: Column(
+            children: [
+              MailAppbar(
+                  sideMenuController: sideMenuController, title: "Drafts"),
+              Expanded(
+                child: FilteredMailScreen(
+                  drafts: true,
+                  onDelete: (draftId) {
+                    context.read<MailBloc>().add(DeleteDraft(draftId));
+                  },
+                  filterFunction: (mails) {
+                    return mails ?? [];
+                  },
+                ),
+              ),
+            ],
           ),
         ),
         if (isDesktop(context)) ...[

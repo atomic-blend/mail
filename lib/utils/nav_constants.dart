@@ -42,11 +42,6 @@ class NavConstants {
             cupertinoIcon: CupertinoIcons.envelope,
             label: "Inbox",
             body: InboxScreen(),
-            header: MailAppbar(
-              key: const Key("inbox"),
-              title: "Inbox",
-              sideMenuController: sideMenuController,
-            ),
           ),
           NavigationItem(
             key: Key("drafts"),
