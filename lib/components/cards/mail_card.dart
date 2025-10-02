@@ -135,65 +135,64 @@ class _MailCardState extends State<MailCard> {
           child: GestureDetector(
             onTap: () async {
               if (widget.draft == null) {
-                await Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => MailDetailScreen(
-                          mail,
-                        )));
-                if (!context.mounted) return;
-                SyncService.sync(context);
+                if (!isDesktop(context)) {
+                  await Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => MailDetailScreen(
+                            mail,
+                          )));
+                  if (!context.mounted) return;
+                  SyncService.sync(context);
+                } else {
+                  //TODO: open the mail in the preview panel
+                }
               } else {
                 _openComposer(context);
               }
             },
-            child: IntrinsicWidth(
-              child: Row(
-                children: [
-                  MailUserAvatar(
-                      value: mail.getHeader("From"), read: mail.read),
-                  SizedBox(width: $constants.insets.sm),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        children: [
-                          Text(
-                            mail.getHeader("From"),
-                            style:
-                                getTextTheme(context).headlineSmall!.copyWith(
-                                      fontWeight: mail.read != true
-                                          ? FontWeight.bold
-                                          : null,
-                                    ),
-                          ),
-                          if (mail.read != true) ...[
-                            SizedBox(width: $constants.insets.sm),
-                            Container(
-                              width: 8,
-                              height: 8,
-                              decoration: BoxDecoration(
-                                color: Colors.blue,
-                                borderRadius: BorderRadius.circular(
-                                    $constants.corners.full),
+            child: Row(
+              children: [
+                MailUserAvatar(value: mail.getHeader("From"), read: mail.read),
+                SizedBox(width: $constants.insets.sm),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Text(
+                          mail.getHeader("From"),
+                          style: getTextTheme(context).headlineSmall!.copyWith(
+                                fontWeight:
+                                    mail.read != true ? FontWeight.bold : null,
                               ),
+                        ),
+                        if (mail.read != true) ...[
+                          SizedBox(width: $constants.insets.sm),
+                          Container(
+                            width: 8,
+                            height: 8,
+                            decoration: BoxDecoration(
+                              color: Colors.blue,
+                              borderRadius: BorderRadius.circular(
+                                  $constants.corners.full),
                             ),
-                          ]
-                        ],
-                      ),
-                      SizedBox(height: $constants.insets.xxs),
-                      Text(
-                        mail.getHeader("Subject"),
-                        style: getTextTheme(context).bodyMedium!.copyWith(
-                              fontWeight:
-                                  mail.read != true ? FontWeight.bold : null,
-                            ),
-                        overflow: TextOverflow.ellipsis,
-                        textAlign: TextAlign.left,
-                        maxLines: 1,
-                      ),
-                    ],
-                  ),
-                ],
-              ),
+                          ),
+                        ]
+                      ],
+                    ),
+                    SizedBox(height: $constants.insets.xxs),
+                    Text(
+                      mail.getHeader("Subject"),
+                      style: getTextTheme(context).bodyMedium!.copyWith(
+                            fontWeight:
+                                mail.read != true ? FontWeight.bold : null,
+                          ),
+                      overflow: TextOverflow.ellipsis,
+                      textAlign: TextAlign.left,
+                      maxLines: 1,
+                    ),
+                  ],
+                ),
+              ],
             ),
           ),
         ),
