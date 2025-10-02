@@ -15,15 +15,22 @@ import 'package:mail/pages/mails/mail_details.dart';
 import 'package:mail/services/sync.service.dart';
 import 'package:mail/models/send_mail/send_mail.dart' as send_mail;
 
-class MailCard extends StatelessWidget {
+class MailCard extends StatefulWidget {
   final Mail? mail;
   final send_mail.SendMail? draft;
   final Function(String)? onDelete;
   const MailCard({super.key, this.mail, this.draft, this.onDelete});
 
   @override
+  State<MailCard> createState() => _MailCardState();
+}
+
+class _MailCardState extends State<MailCard> {
+  bool isHovering = false;
+
+  @override
   Widget build(BuildContext context) {
-    final Mail? mail = this.mail ?? draft!.mail;
+    final Mail? mail = this.widget.mail ?? widget.draft!.mail;
     if (mail == null) {
       return const SizedBox.shrink();
     }
@@ -41,16 +48,17 @@ class MailCard extends StatelessWidget {
           )),
           child: SlidableAction(
             onPressed: (context) {
-              if (draft != null) {
+              if (widget.draft != null) {
                 showDialog(
                     context: context,
                     builder: (context) => ABModal(
                           title: context.t.mail_card.delete_draft_modal.title,
-                          description:
-                              context.t.mail_card.delete_draft_modal.description,
-                          warning: context.t.mail_card.delete_draft_modal.warning,
+                          description: context
+                              .t.mail_card.delete_draft_modal.description,
+                          warning:
+                              context.t.mail_card.delete_draft_modal.warning,
                           onConfirm: () {
-                            onDelete?.call(draft!.id!);
+                            widget.onDelete?.call(widget.draft!.id!);
                             Navigator.of(context).pop();
                           },
                         ));
@@ -64,7 +72,7 @@ class MailCard extends StatelessWidget {
             },
             backgroundColor: getTheme(context).error,
             foregroundColor: Colors.white,
-            icon: draft != null
+            icon: widget.draft != null
                 ? CupertinoIcons.delete
                 : mail.trashed != true
                     ? CupertinoIcons.delete
@@ -77,7 +85,7 @@ class MailCard extends StatelessWidget {
         SizedBox(
           width: $constants.insets.xs,
         ),
-        if (draft == null)
+        if (widget.draft == null)
           Theme(
             data: Theme.of(context).copyWith(
                 outlinedButtonTheme: const OutlinedButtonThemeData(
@@ -104,74 +112,85 @@ class MailCard extends StatelessWidget {
             ),
           ),
       ]),
-      child: GestureDetector(
-        onTap: () async {
-          if (draft == null) {
-            await Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => MailDetailScreen(
-                      mail,
-                    )));
-            if (!context.mounted) return;
-            SyncService.sync(context);
-          } else {
-            _openComposer(context);
-          }
+      child: MouseRegion(
+        onEnter: (event) {
+          setState(() {
+            isHovering = true;
+          });
         },
-        child: ElevatedContainer(
-          padding: EdgeInsets.symmetric(
-              horizontal: $constants.insets.sm,
-              vertical: $constants.insets.xs + 4),
-          child: Row(
-            children: [
-              MailUserAvatar(value: mail.getHeader("From"), read: mail.read),
-              SizedBox(width: $constants.insets.sm),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+        onExit: (event) {
+          setState(() {
+            isHovering = false;
+          });
+        },
+        child: Container(
+          decoration: BoxDecoration(
+            color: isHovering ? getTheme(context).surfaceContainer : null,
+            borderRadius: BorderRadius.circular($constants.corners.sm),
+          ),
+          child: GestureDetector(
+            onTap: () async {
+              if (widget.draft == null) {
+                await Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => MailDetailScreen(
+                          mail,
+                        )));
+                if (!context.mounted) return;
+                SyncService.sync(context);
+              } else {
+                _openComposer(context);
+              }
+            },
+            child: IntrinsicWidth(
+              child: Row(
                 children: [
-                  Row(
+                  MailUserAvatar(
+                      value: mail.getHeader("From"), read: mail.read),
+                  SizedBox(width: $constants.insets.sm),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      Row(
+                        children: [
+                          Text(
+                            mail.getHeader("From"),
+                            style:
+                                getTextTheme(context).headlineSmall!.copyWith(
+                                      fontWeight: mail.read != true
+                                          ? FontWeight.bold
+                                          : null,
+                                    ),
+                          ),
+                          if (mail.read != true) ...[
+                            SizedBox(width: $constants.insets.sm),
+                            Container(
+                              width: 8,
+                              height: 8,
+                              decoration: BoxDecoration(
+                                color: Colors.blue,
+                                borderRadius: BorderRadius.circular(
+                                    $constants.corners.full),
+                              ),
+                            ),
+                          ]
+                        ],
+                      ),
+                      SizedBox(height: $constants.insets.xxs),
                       Text(
                         mail.getHeader("Subject"),
-                        style: getTextTheme(context).headlineSmall!.copyWith(
+                        style: getTextTheme(context).bodyMedium!.copyWith(
                               fontWeight:
                                   mail.read != true ? FontWeight.bold : null,
                             ),
+                        overflow: TextOverflow.ellipsis,
+                        textAlign: TextAlign.left,
+                        maxLines: 1,
                       ),
-                      if (mail.read != true) ...[
-                        SizedBox(width: $constants.insets.sm),
-                        Container(
-                          width: 8,
-                          height: 8,
-                          decoration: BoxDecoration(
-                            color: Colors.blue,
-                            borderRadius:
-                                BorderRadius.circular($constants.corners.full),
-                          ),
-                        ),
-                      ]
                     ],
-                  ),
-                  SizedBox(height: $constants.insets.xxs),
-                  SizedBox(
-                    width: getSize(context).width * 0.7,
-                    child: Text(
-                      mail.htmlContent != null && mail.htmlContent != ""
-                          ? mail.htmlContent!
-                          : mail.textContent != null && mail.textContent != ""
-                              ? mail.textContent!
-                              : context.t.mail_card.no_content,
-                      style: getTextTheme(context).bodyMedium!.copyWith(
-                            fontWeight:
-                                mail.read != true ? FontWeight.bold : null,
-                          ),
-                      overflow: TextOverflow.ellipsis,
-                      textAlign: TextAlign.left,
-                      maxLines: 1,
-                    ),
                   ),
                 ],
               ),
-            ],
+            ),
           ),
         ),
       ),
@@ -201,7 +220,7 @@ class MailCard extends StatelessWidget {
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular($constants.corners.md),
                     child: MailComposer(
-                      mail: draft,
+                      mail: widget.draft,
                     ),
                   ),
                 ),
@@ -215,7 +234,7 @@ class MailCard extends StatelessWidget {
         backgroundColor: Colors.transparent,
         builder: (context) => SizedBox(
             height: getSize(context).height * 0.92,
-            child: MailComposer(mail: draft)),
+            child: MailComposer(mail: widget.draft)),
       );
     }
   }

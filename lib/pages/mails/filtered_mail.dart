@@ -104,6 +104,7 @@ class _FilteredMailScreenState extends State<FilteredMailScreen> {
                   },
                 ),
               ),
+              SizedBox(height: $constants.insets.xs),
               if (widget.header != null) ...[
                 widget.header!,
                 SizedBox(height: $constants.insets.xxs),
@@ -115,7 +116,9 @@ class _FilteredMailScreenState extends State<FilteredMailScreen> {
                   return const SizedBox.shrink();
                 }
                 return Padding(
-                  padding: EdgeInsets.only(bottom: $constants.insets.xs),
+                  padding: EdgeInsets.symmetric(
+                    vertical: $constants.insets.sm,
+                  ),
                   child: MailCard(
                     draft: widget.drafts == true ? mail : null,
                     mail: widget.drafts != true ? mail : null,
