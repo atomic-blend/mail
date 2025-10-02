@@ -1,11 +1,12 @@
 import 'package:ab_shared/utils/shortcuts.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mail/blocs/mail/mail_bloc.dart';
+import 'package:mail/i18n/strings.g.dart';
 import 'package:mail/pages/app_layout.dart';
 import 'package:mail/pages/mails/appbars/mail_appbar.dart';
 import 'package:mail/pages/mails/mail_list.dart';
+import 'package:mail/pages/mails/no_mail_selected.dart';
 
 class AllMailScreen extends StatelessWidget {
   const AllMailScreen({super.key});
@@ -13,6 +14,7 @@ class AllMailScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<MailBloc, MailState>(builder: (context, mailState) {
+      final allMails = mailState.mails ?? [];
       return Row(
         children: [
           SizedBox(
@@ -20,10 +22,11 @@ class AllMailScreen extends StatelessWidget {
             child: Column(
               children: [
                 MailAppbar(
-                    sideMenuController: sideMenuController, title: "All Mail"),
+                    sideMenuController: sideMenuController,
+                    title: context.t.email_folders.all),
                 Expanded(
                   child: MailList(
-                    mails: mailState.mails ?? [],
+                    mails: allMails,
                   ),
                 ),
               ],
@@ -33,7 +36,14 @@ class AllMailScreen extends StatelessWidget {
             VerticalDivider(
               width: 1,
             ),
-            Expanded(child: Container()),
+            Expanded(
+              child: allMails.isEmpty
+                  ? NoMailSelectedScreen(
+                      title: context.t.email_folders.all,
+                      numberOfMails: allMails.length,
+                    )
+                  : Container(),
+            ),
           ]
         ],
       );

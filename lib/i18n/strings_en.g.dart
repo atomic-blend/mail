@@ -50,6 +50,7 @@ class Translations implements BaseTranslations<AppLocale, Translations> {
 	late final TranslationsMoreEn more = TranslationsMoreEn._(_root);
 	late final TranslationsActionsEn actions = TranslationsActionsEn._(_root);
 	late final TranslationsXxMailCardEn xx_mail_card = TranslationsXxMailCardEn._(_root);
+	late final TranslationsEmailFoldersEn email_folders = TranslationsEmailFoldersEn._(_root);
 }
 
 // Path: settings
@@ -210,8 +211,32 @@ class TranslationsXxMailCardEn {
 
 	// Translations
 
-	/// en: '${count} mails in this folder'
-	String description({required Object count}) => '${count} mails in this folder';
+	/// en: 'You have ${count} mails in this folder.'
+	String description({required Object count}) => 'You have ${count} mails in this folder.';
+}
+
+// Path: email_folders
+class TranslationsEmailFoldersEn {
+	TranslationsEmailFoldersEn._(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Inbox'
+	String get inbox => 'Inbox';
+
+	/// en: 'Drafts'
+	String get drafts => 'Drafts';
+
+	/// en: 'Archive'
+	String get archive => 'Archive';
+
+	/// en: 'Trashed'
+	String get trashed => 'Trashed';
+
+	/// en: 'All'
+	String get all => 'All';
 }
 
 // Path: settings.app_settings
@@ -348,7 +373,12 @@ extension on Translations {
 			case 'under_construction.description': return 'This feature is not yet available, but we\'re working hard to bring it to you soon.\n\nStay tuned!';
 			case 'more.title': return 'More';
 			case 'actions.delete': return 'Delete';
-			case 'xx_mail_card.description': return ({required Object count}) => '${count} mails in this folder';
+			case 'xx_mail_card.description': return ({required Object count}) => 'You have ${count} mails in this folder.';
+			case 'email_folders.inbox': return 'Inbox';
+			case 'email_folders.drafts': return 'Drafts';
+			case 'email_folders.archive': return 'Archive';
+			case 'email_folders.trashed': return 'Trashed';
+			case 'email_folders.all': return 'All';
 			default: return null;
 		}
 	}

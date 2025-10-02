@@ -10,6 +10,7 @@ import 'package:mail/i18n/strings.g.dart';
 import 'package:mail/pages/app_layout.dart';
 import 'package:mail/pages/mails/appbars/mail_appbar.dart';
 import 'package:mail/pages/mails/mail_list.dart';
+import 'package:mail/pages/mails/no_mail_selected.dart';
 
 class TrashedScreen extends StatelessWidget {
   const TrashedScreen({super.key});
@@ -17,6 +18,10 @@ class TrashedScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<MailBloc, MailState>(builder: (context, mailState) {
+      final trashedMails = mailState.mails
+              ?.where((mail) => mail.trashed == true)
+              .toList() ??
+          [];
       return Row(
         children: [
           SizedBox(
@@ -24,7 +29,7 @@ class TrashedScreen extends StatelessWidget {
             child: Column(
               children: [
                 MailAppbar(
-                    sideMenuController: sideMenuController, title: "Trashed"),
+                    sideMenuController: sideMenuController, title: context.t.email_folders.trashed),
                 Expanded(
                   child: MailList(
                     mails: mailState.mails
@@ -114,7 +119,12 @@ class TrashedScreen extends StatelessWidget {
             VerticalDivider(
               width: 1,
             ),
-            Expanded(child: Container()),
+            Expanded(child: trashedMails.isEmpty
+                  ? NoMailSelectedScreen(
+                      title: context.t.email_folders.trashed,
+                      numberOfMails: trashedMails.length,
+                    )
+                  : Container(),),
           ]
         ],
       );

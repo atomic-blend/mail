@@ -47,6 +47,7 @@ class TranslationsFr implements Translations {
 	@override late final _TranslationsMoreFr more = _TranslationsMoreFr._(_root);
 	@override late final _TranslationsActionsFr actions = _TranslationsActionsFr._(_root);
 	@override late final _TranslationsXxMailCardFr xx_mail_card = _TranslationsXxMailCardFr._(_root);
+	@override late final _TranslationsEmailFoldersFr email_folders = _TranslationsEmailFoldersFr._(_root);
 }
 
 // Path: settings
@@ -170,7 +171,21 @@ class _TranslationsXxMailCardFr implements TranslationsXxMailCardEn {
 	final TranslationsFr _root; // ignore: unused_field
 
 	// Translations
-	@override String description({required Object count}) => '${count} mails dans ce dossier';
+	@override String description({required Object count}) => 'Vous avez ${count} mails dans ce dossier.';
+}
+
+// Path: email_folders
+class _TranslationsEmailFoldersFr implements TranslationsEmailFoldersEn {
+	_TranslationsEmailFoldersFr._(this._root);
+
+	final TranslationsFr _root; // ignore: unused_field
+
+	// Translations
+	@override String get inbox => 'Boîte de réception';
+	@override String get drafts => 'Brouillons';
+	@override String get archive => 'Archive';
+	@override String get trashed => 'Corbeille';
+	@override String get all => 'Tous';
 }
 
 // Path: settings.app_settings
@@ -280,7 +295,12 @@ extension on TranslationsFr {
 			case 'actions.save': return 'Enregistrer';
 			case 'actions.cancel': return 'Annuler';
 			case 'actions.delete': return 'Supprimer';
-			case 'xx_mail_card.description': return ({required Object count}) => '${count} mails dans ce dossier';
+			case 'xx_mail_card.description': return ({required Object count}) => 'Vous avez ${count} mails dans ce dossier.';
+			case 'email_folders.inbox': return 'Boîte de réception';
+			case 'email_folders.drafts': return 'Brouillons';
+			case 'email_folders.archive': return 'Archive';
+			case 'email_folders.trashed': return 'Corbeille';
+			case 'email_folders.all': return 'Tous';
 			default: return null;
 		}
 	}

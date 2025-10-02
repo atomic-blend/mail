@@ -65,6 +65,13 @@
     "delete": "Supprimer"
   },
   "xx_mail_card": {
-    "description": "${count} mails dans ce dossier"
+    "description": "Vous avez ${count} mails dans ce dossier."
+  },
+  "email_folders": {
+    "inbox": "Boîte de réception",
+    "drafts": "Brouillons",
+    "archive": "Archive",
+    "trashed": "Corbeille",
+    "all": "Tous"
   }
 }
