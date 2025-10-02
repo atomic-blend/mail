@@ -161,6 +161,7 @@ class _MailCardState extends State<MailCard> {
               },
               onTap: () async {
                 if (widget.draft == null) {
+                  // on mobile, open the mail in the detail screen only when no mails are selected (ie not in multi-select mode)
                   if (!isDesktop(context)) {
                     if (widget.selectedMails == null ||
                         widget.selectedMails!.isEmpty) {
@@ -169,12 +170,14 @@ class _MailCardState extends State<MailCard> {
                                 mail,
                               )));
                     } else {
+                      // when in multi-select mode, toggle the selection of the mail
                       _toggleSelected(mail);
                     }
                     if (!context.mounted) return;
                     SyncService.sync(context);
                   } else {
-                    //TODO: open the mail in the preview panel
+                    // on desktop, tapping the mail opens it in the preview panel
+                    // multi-select mode enables itself when the user clicks on the avatar / checkbox
                     _toggleSelected(mail, reset: true);
                   }
                 } else {
@@ -183,27 +186,21 @@ class _MailCardState extends State<MailCard> {
               },
               child: Row(
                 children: [
-                  if ((isDesktop(context) &&
-                          widget.selectedMails!.contains(mail) &&
-                          widget.selectedMails!.length != 1) ||
-                      (!isDesktop(context) &&
-                          (widget.selectedMails == null ||
-                              widget.selectedMails!.contains(mail))))
+                  if (
+                      // on desktop, only show checkbox if there's more than one mail selected (because when there's only one, it's opened in the preview panel)
+                      (isDesktop(context) &&
+                              widget.selectedMails!.contains(mail) &&
+                              widget.selectedMails!.length != 1) ||
+                          // on mobile, show the checkbox when there's an mail selected
+                          (!isDesktop(context) &&
+                              (widget.selectedMails == null ||
+                                  widget.selectedMails!.contains(mail))))
                     CheckboxAvatar(
                       checked: widget.selectedMails!.contains(mail),
                     )
                   else
                     MailUserAvatar(
                         value: mail.getHeader("From"), read: mail.read),
-                  // if (widget.selectedMails == null ||
-                  //     !(widget.selectedMails!.contains(mail) &&
-                  //         widget.selectedMails!.length != 1))
-                  //   MailUserAvatar(
-                  //       value: mail.getHeader("From"), read: mail.read)
-                  // else
-                  //   CheckboxAvatar(
-                  //     checked: widget.selectedMails!.contains(mail),
-                  //   ),
                   SizedBox(width: $constants.insets.sm),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
