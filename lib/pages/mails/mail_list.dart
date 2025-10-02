@@ -34,6 +34,7 @@ class MailList extends StatefulWidget {
 
 class _MailListState extends State<MailList> {
   final TextEditingController searchController = TextEditingController();
+  bool? selectMode;
 
   @override
   Widget build(BuildContext context) {
@@ -118,12 +119,18 @@ class _MailListState extends State<MailList> {
               return Padding(
                 padding: EdgeInsets.only(bottom: $constants.insets.xs),
                 child: MailCard(
+                  selectMode: selectMode,
+                  setSelectMode: (value) {
+                    setState(() {
+                      selectMode = value;
+                    });
+                  },
                   draft: widget.drafts == true ? mail as SendMail : null,
                   mail: widget.drafts != true ? mail : null,
                   onDelete: widget.onDelete,
                   onSelect: widget.onSelect,
                   onDeselect: widget.onDeselect,
-                  selectedMails: widget.selectedMails,
+                  selectedMails: widget.selectedMails ?? [],
                 ),
               );
             })

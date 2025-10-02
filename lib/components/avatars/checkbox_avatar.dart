@@ -5,24 +5,28 @@ import 'package:flutter/material.dart';
 
 class CheckboxAvatar extends StatelessWidget {
   final bool? checked;
-  const CheckboxAvatar({super.key, this.checked});
+  final VoidCallback? onTap;
+  const CheckboxAvatar({super.key, this.checked, this.onTap});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: 40,
-      height: 40,
-      decoration: BoxDecoration(
-        color:
-            checked != true ? Colors.grey.shade200 : getTheme(context).primary,
-        borderRadius: BorderRadius.circular($constants.corners.lg),
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        width: 40,
+        height: 40,
+        decoration: BoxDecoration(
+          color:
+              checked != true ? Colors.grey.shade200 : getTheme(context).primary,
+          borderRadius: BorderRadius.circular($constants.corners.lg),
+        ),
+        child: Center(
+            child: Icon(
+          CupertinoIcons.checkmark,
+          size: 16,
+          color: checked != true ? Colors.grey.shade200 : Colors.white,
+        )),
       ),
-      child: Center(
-          child: Icon(
-        CupertinoIcons.checkmark,
-        size: 16,
-        color: checked != true ? Colors.grey.shade200 : Colors.white,
-      )),
     );
   }
 }

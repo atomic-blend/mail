@@ -23,7 +23,9 @@ class MailCard extends StatefulWidget {
   final Function(String)? onDelete;
   final Function(dynamic)? onSelect;
   final Function(dynamic)? onDeselect;
-  final List<dynamic>? selectedMails;
+  final List<dynamic> selectedMails;
+  final bool? selectMode;
+  final Function(bool)? setSelectMode;
   const MailCard(
       {super.key,
       this.mail,
@@ -31,7 +33,9 @@ class MailCard extends StatefulWidget {
       this.onDelete,
       this.onSelect,
       this.onDeselect,
-      this.selectedMails});
+      this.selectedMails = const [],
+      this.selectMode,
+      this.setSelectMode});
 
   @override
   State<MailCard> createState() => _MailCardState();
@@ -138,9 +142,7 @@ class _MailCardState extends State<MailCard> {
           },
           child: Container(
             decoration: BoxDecoration(
-              color: isHovering ||
-                      (widget.selectedMails != null &&
-                          widget.selectedMails!.contains(mail))
+              color: isHovering || (widget.selectedMails.contains(mail))
                   ? getTheme(context).surfaceContainer
                   : null,
               borderRadius: BorderRadius.circular($constants.corners.sm),
@@ -152,19 +154,14 @@ class _MailCardState extends State<MailCard> {
             ),
             child: GestureDetector(
               onLongPress: () {
-                if (widget.selectedMails != null &&
-                    widget.selectedMails!.contains(mail)) {
-                  widget.onDeselect?.call(mail);
-                } else {
-                  widget.onSelect?.call(mail);
-                }
+                widget.setSelectMode?.call(true);
+                _toggleSelected(mail);
               },
               onTap: () async {
                 if (widget.draft == null) {
                   // on mobile, open the mail in the detail screen only when no mails are selected (ie not in multi-select mode)
                   if (!isDesktop(context)) {
-                    if (widget.selectedMails == null ||
-                        widget.selectedMails!.isEmpty) {
+                    if (widget.selectedMails.isEmpty) {
                       await Navigator.of(context).push(MaterialPageRoute(
                           builder: (context) => MailDetailScreen(
                                 mail,
@@ -178,7 +175,11 @@ class _MailCardState extends State<MailCard> {
                   } else {
                     // on desktop, tapping the mail opens it in the preview panel
                     // multi-select mode enables itself when the user clicks on the avatar / checkbox
-                    _toggleSelected(mail, reset: true);
+
+                    _toggleSelected(
+                      mail,
+                      reset: widget.selectMode != true,
+                    );
                   }
                 } else {
                   _openComposer(context);
@@ -186,21 +187,39 @@ class _MailCardState extends State<MailCard> {
               },
               child: Row(
                 children: [
-                  if (
-                      // on desktop, only show checkbox if there's more than one mail selected (because when there's only one, it's opened in the preview panel)
-                      (isDesktop(context) &&
-                              widget.selectedMails!.contains(mail) &&
-                              widget.selectedMails!.length != 1) ||
-                          // on mobile, show the checkbox when there's an mail selected
-                          (!isDesktop(context) &&
-                              (widget.selectedMails == null ||
-                                  widget.selectedMails!.contains(mail))))
+                  if (widget.selectMode == true &&
+                      widget.selectedMails.contains(mail))
                     CheckboxAvatar(
-                      checked: widget.selectedMails!.contains(mail),
+                      checked: widget.selectedMails.contains(mail),
+                      onTap: () {
+                        if (isDesktop(context)) {
+                          if (widget.selectMode == true &&
+                              widget.selectedMails.length == 1) {
+                            widget.setSelectMode?.call(false);
+                          } else {
+                            widget.setSelectMode?.call(true);
+                          }
+                        }
+                        _toggleSelected(mail, reset: widget.selectMode != true);
+                      },
                     )
                   else
                     MailUserAvatar(
-                        value: mail.getHeader("From"), read: mail.read),
+                      value: mail.getHeader("From"),
+                      read: mail.read,
+                      onTap: () {
+                        if (isDesktop(context)) {
+                          if (widget.selectMode == true &&
+                              widget.selectedMails.length == 1 &&
+                              widget.selectedMails.contains(mail)) {
+                            widget.setSelectMode?.call(false);
+                          } else {
+                            widget.setSelectMode?.call(true);
+                          }
+                        }
+                        _toggleSelected(mail, reset: widget.selectMode != true);
+                      },
+                    ),
                   SizedBox(width: $constants.insets.sm),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -250,7 +269,7 @@ class _MailCardState extends State<MailCard> {
     if (reset) {
       widget.selectedMails?.clear();
     }
-    if (widget.selectedMails != null && widget.selectedMails!.contains(mail)) {
+    if (widget.selectedMails.contains(mail)) {
       widget.onDeselect?.call(mail);
     } else {
       widget.onSelect?.call(mail);
