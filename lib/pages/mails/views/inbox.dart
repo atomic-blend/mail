@@ -1,3 +1,4 @@
+import 'package:ab_shared/utils/constants.dart';
 import 'package:ab_shared/utils/shortcuts.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -30,7 +31,11 @@ class _InboxScreenState extends State<InboxScreen> {
       return Row(
         children: [
           SizedBox(
-            width: isDesktop(context) ? 400 : getSize(context).width,
+            width: isDesktop(context)
+                ? getSize(context).width > $constants.screenSize.md
+                    ? 300
+                    : getSize(context).width * 0.66
+                : getSize(context).width,
             child: Column(
               children: [
                 MailAppbar(
@@ -55,7 +60,8 @@ class _InboxScreenState extends State<InboxScreen> {
               ],
             ),
           ),
-          if (isDesktop(context)) ...[
+          if (isDesktop(context) &&
+              getSize(context).width > $constants.screenSize.md) ...[
             VerticalDivider(
               width: 1,
             ),
