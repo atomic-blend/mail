@@ -68,7 +68,6 @@ class BigMailCard extends StatelessWidget {
               )
             ],
           ),
-          SizedBox(height: $constants.insets.sm),
           Text(
             getContent(context, mail),
             textAlign: TextAlign.left,

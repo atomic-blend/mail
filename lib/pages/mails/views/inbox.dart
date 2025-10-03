@@ -81,6 +81,15 @@ class _InboxScreenState extends State<InboxScreen> {
                         ? MailDetailScreen(
                             selectedMails.first,
                             mode: MailScreenMode.integrated,
+                            onCancel: () {
+                              if (!isDesktop(context)) {
+                                Navigator.of(context).pop();
+                              } else {
+                                setState(() {
+                                  selectedMails.clear();
+                                });
+                              }
+                            },
                           )
                         : Container(),
               ),

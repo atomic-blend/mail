@@ -18,8 +18,9 @@ enum MailScreenMode {
 class MailDetailScreen extends ResponsiveStatefulWidget {
   final Mail mail;
   final MailScreenMode mode;
+  final VoidCallback? onCancel;
   const MailDetailScreen(this.mail,
-      {super.key, this.mode = MailScreenMode.standalone});
+      {super.key, this.mode = MailScreenMode.standalone, this.onCancel});
 
   @override
   ResponsiveState<MailDetailScreen> createState() => MailDetailScreenState();
@@ -57,19 +58,22 @@ class MailDetailScreenState extends ResponsiveState<MailDetailScreen> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     SizedBox(width: $constants.insets.md),
-                    Container(
-                      width: 25,
-                      height: 25,
-                      decoration: BoxDecoration(
-                        color: Colors.grey.shade200,
-                        borderRadius:
-                            BorderRadius.circular($constants.corners.full),
-                      ),
-                      child: Icon(
-                        widget.mode == MailScreenMode.standalone
-                            ? CupertinoIcons.chevron_back
-                            : CupertinoIcons.xmark,
-                        size: 15,
+                    GestureDetector(
+                      onTap: widget.onCancel,
+                      child: Container(
+                        width: 25,
+                        height: 25,
+                        decoration: BoxDecoration(
+                          color: Colors.grey.shade200,
+                          borderRadius:
+                              BorderRadius.circular($constants.corners.full),
+                        ),
+                        child: Icon(
+                          widget.mode == MailScreenMode.standalone
+                              ? CupertinoIcons.chevron_back
+                              : CupertinoIcons.xmark,
+                          size: 15,
+                        ),
                       ),
                     )
                   ],
@@ -181,10 +185,6 @@ class MailDetailScreenState extends ResponsiveState<MailDetailScreen> {
       }),
     );
   }
-
-  
-
-
 
   @override
   Widget buildDesktop(BuildContext context) {
