@@ -6,7 +6,7 @@ import 'package:mail/blocs/mail/mail_bloc.dart';
 import 'package:mail/i18n/strings.g.dart';
 import 'package:mail/models/mail/mail.dart';
 import 'package:mail/pages/app_layout.dart';
-import 'package:mail/pages/mails/appbars/mail_appbar.dart';
+import 'package:mail/pages/appbars/mail_appbar.dart';
 import 'package:mail/pages/mails/mail_details.dart';
 import 'package:mail/pages/mails/mail_list.dart';
 import 'package:mail/pages/mails/no_mail_selected.dart';

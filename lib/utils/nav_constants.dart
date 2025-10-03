@@ -4,7 +4,7 @@ import 'package:ab_shared/pages/account/account.dart';
 import 'package:mail/blocs/app/app.bloc.dart';
 import 'package:mail/main.dart';
 import 'package:mail/pages/app_layout.dart';
-import 'package:mail/pages/mails/appbars/mail_appbar.dart';
+import 'package:mail/pages/appbars/mail_appbar.dart';
 import 'package:mail/pages/mails/views/all_mail.dart';
 import 'package:mail/pages/mails/views/archive.dart';
 import 'package:mail/pages/mails/views/drafts.dart';

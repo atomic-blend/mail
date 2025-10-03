@@ -9,6 +9,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:mail/blocs/mail/mail_bloc.dart';
 import 'package:mail/components/avatars/mail_user_avatar.dart';
+import 'package:mail/components/cards/big_mail_card.dart';
 import 'package:mail/i18n/strings.g.dart';
 import 'package:mail/models/mail/mail.dart';
 
@@ -105,68 +106,20 @@ class MailDetailScreenState extends ResponsiveState<MailDetailScreen> {
                   ],
                 ],
               ),
+
               SizedBox(height: $constants.insets.sm),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: $constants.insets.sm),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    MailUserAvatar(
-                        value: mail.getHeader("From"), read: mail.read),
-                    SizedBox(width: $constants.insets.sm),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        buildPeopleRow(context.t.mail_composer.from,
-                            mail.getHeader("From")),
-                        buildPeopleRow(
-                            context.t.mail_composer.to, mail.getHeader("To")),
-                      ],
-                    ),
-                    Spacer(),
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        Text(
-                          Jiffy.parseFromDateTime(mail.createdAt!)
-                              .yMd
-                              .toString(),
-                          style: getTextTheme(context)
-                              .bodySmall!
-                              .copyWith(color: Colors.grey),
-                        ),
-                        Text(
-                          Jiffy.parseFromDateTime(mail.createdAt!)
-                              .Hm
-                              .toString(),
-                          style: getTextTheme(context)
-                              .bodySmall!
-                              .copyWith(color: Colors.grey),
-                        )
-                      ],
-                    )
-                  ],
-                ),
-              ),
-              SizedBox(height: $constants.insets.xs),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: $constants.insets.sm),
-                child: Divider(),
-              ),
+              // Padding(
+              //   padding: EdgeInsets.symmetric(horizontal: $constants.insets.sm),
+              //   child: Divider(),
+              // ),
               // Content section - expands to fill remaining space
-              Expanded(
-                child: Container(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: $constants.insets.md,
-                  ),
-                  width: double.infinity,
-                  child: Text(
-                    getContent(mail),
-                    textAlign: TextAlign.left,
-                    style: getTextTheme(context).bodyMedium,
-                  ),
+              Padding(
+                padding: EdgeInsets.only(
+                  left: $constants.insets.sm,
+                  right: $constants.insets.sm,
+                  bottom: $constants.insets.sm,
                 ),
+                child: BigMailCard(mail: mail),
               ),
               if (widget.mode == MailScreenMode.standalone) ...[
                 SizedBox(height: $constants.insets.sm),
@@ -232,33 +185,9 @@ class MailDetailScreenState extends ResponsiveState<MailDetailScreen> {
     );
   }
 
-  String getContent(Mail mail) {
-    if (mail.htmlContent != null && mail.htmlContent != "") {
-      return mail.htmlContent!;
-    } else if (mail.textContent != null && mail.textContent!.isNotEmpty) {
-      return mail.textContent!;
-    } else {
-      return context.t.mail_card.no_content;
-    }
-  }
+  
 
-  Widget buildPeopleRow(String label, String value) {
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Text(
-          "$label: ",
-          style: getTextTheme(context).bodyMedium!.copyWith(color: Colors.grey),
-        ),
-        SizedBox(width: $constants.insets.xs),
-        Text(
-          value,
-          style: getTextTheme(context).bodyMedium!.copyWith(
-              fontWeight: widget.mail.read != true ? FontWeight.bold : null),
-        ),
-      ],
-    );
-  }
+
 
   @override
   Widget buildDesktop(BuildContext context) {
