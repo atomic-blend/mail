@@ -12,9 +12,16 @@ import 'package:mail/components/avatars/mail_user_avatar.dart';
 import 'package:mail/i18n/strings.g.dart';
 import 'package:mail/models/mail/mail.dart';
 
+enum MailScreenMode {
+  integrated,
+  standalone,
+}
+
 class MailDetailScreen extends ResponsiveStatefulWidget {
   final Mail mail;
-  const MailDetailScreen(this.mail, {super.key});
+  final MailScreenMode mode;
+  const MailDetailScreen(this.mail,
+      {super.key, this.mode = MailScreenMode.standalone});
 
   @override
   ResponsiveState<MailDetailScreen> createState() => MailDetailScreenState();
@@ -36,133 +43,135 @@ class MailDetailScreenState extends ResponsiveState<MailDetailScreen> {
         final mail = mailState.mails
                 ?.firstWhere((element) => element.id == widget.mail.id) ??
             widget.mail;
-        return Column(
-          children: [
-            ElevatedContainer(
-              width: double.infinity,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(
-                    height: getSize(context).height * 0.05,
-                  ),
-                  IconButton(
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                      icon: Icon(CupertinoIcons.chevron_back)),
-                  SizedBox(height: $constants.insets.sm),
-                  Row(
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.symmetric(
-                            horizontal: $constants.insets.sm),
-                        child: SizedBox(
-                          width: getSize(context).width * 0.9,
-                          child: AutoSizeText(
-                            maxLines: 1,
-                            mail.getHeader("Subject"),
-                            overflow: TextOverflow.ellipsis,
-                            style: getTextTheme(context).displaySmall!.copyWith(
-                                  fontWeight: mail.read != true
-                                      ? FontWeight.bold
-                                      : null,
-                                ),
-                          ),
-                        ),
+        return ElevatedContainer(
+          width: double.infinity,
+          disableShadow: true,
+          border: Border.all(
+            color: isDarkMode(context) ? Colors.grey.shade800 : Colors.white,
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(
+                height: 60,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    SizedBox(width: $constants.insets.md),
+                    Container(
+                      width: 25,
+                      height: 25,
+                      decoration: BoxDecoration(
+                        color: Colors.grey.shade200,
+                        borderRadius:
+                            BorderRadius.circular($constants.corners.full),
                       ),
-                      if (mail.read != true) ...[
-                        Container(
-                          width: 8,
-                          height: 8,
-                          decoration: BoxDecoration(
-                            color: Colors.blue,
-                            borderRadius:
-                                BorderRadius.circular($constants.corners.full),
+                      child: Icon(
+                        widget.mode == MailScreenMode.standalone
+                            ? CupertinoIcons.chevron_back
+                            : CupertinoIcons.xmark,
+                        size: 15,
+                      ),
+                    )
+                  ],
+                ),
+              ),
+              Row(
+                children: [
+                  Padding(
+                    padding:
+                        EdgeInsets.symmetric(horizontal: $constants.insets.md),
+                    child: AutoSizeText(
+                      maxLines: 1,
+                      mail.getHeader("Subject"),
+                      overflow: TextOverflow.ellipsis,
+                      style: getTextTheme(context).headlineMedium!.copyWith(
+                            fontWeight:
+                                mail.read != true ? FontWeight.bold : null,
                           ),
-                        ),
-                      ],
-                    ],
+                    ),
                   ),
-                  SizedBox(height: $constants.insets.sm),
+                  if (mail.read != true) ...[
+                    Container(
+                      width: 8,
+                      height: 8,
+                      decoration: BoxDecoration(
+                        color: Colors.blue,
+                        borderRadius:
+                            BorderRadius.circular($constants.corners.full),
+                      ),
+                    ),
+                  ],
                 ],
               ),
-            ),
-            SizedBox(height: $constants.insets.sm),
-            Expanded(
-              child: Padding(
-                padding: EdgeInsetsGeometry.symmetric(
-                  horizontal: $constants.insets.xs,
+              SizedBox(height: $constants.insets.sm),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: $constants.insets.sm),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    MailUserAvatar(
+                        value: mail.getHeader("From"), read: mail.read),
+                    SizedBox(width: $constants.insets.sm),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        buildPeopleRow(context.t.mail_composer.from,
+                            mail.getHeader("From")),
+                        buildPeopleRow(
+                            context.t.mail_composer.to, mail.getHeader("To")),
+                      ],
+                    ),
+                    Spacer(),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        Text(
+                          Jiffy.parseFromDateTime(mail.createdAt!)
+                              .yMd
+                              .toString(),
+                          style: getTextTheme(context)
+                              .bodySmall!
+                              .copyWith(color: Colors.grey),
+                        ),
+                        Text(
+                          Jiffy.parseFromDateTime(mail.createdAt!)
+                              .Hm
+                              .toString(),
+                          style: getTextTheme(context)
+                              .bodySmall!
+                              .copyWith(color: Colors.grey),
+                        )
+                      ],
+                    )
+                  ],
                 ),
-                child: ElevatedContainer(
+              ),
+              SizedBox(height: $constants.insets.xs),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: $constants.insets.sm),
+                child: Divider(),
+              ),
+              // Content section - expands to fill remaining space
+              Expanded(
+                child: Container(
                   padding: EdgeInsets.symmetric(
-                      horizontal: $constants.insets.sm,
-                      vertical: $constants.insets.sm),
-                  child: Column(
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          MailUserAvatar(
-                              value: mail.getHeader("From"), read: mail.read),
-                          SizedBox(width: $constants.insets.sm),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              buildPeopleRow(context.t.mail_composer.from, mail.getHeader("From")),
-                              buildPeopleRow(context.t.mail_composer.to, mail.getHeader("To")),
-                            ],
-                          ),
-                          Expanded(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.end,
-                              children: [
-                                Text(
-                                  Jiffy.parseFromDateTime(mail.createdAt!)
-                                      .yMd
-                                      .toString(),
-                                  style: getTextTheme(context)
-                                      .bodySmall!
-                                      .copyWith(color: Colors.grey),
-                                ),
-                                Text(
-                                  Jiffy.parseFromDateTime(mail.createdAt!)
-                                      .Hm
-                                      .toString(),
-                                  style: getTextTheme(context)
-                                      .bodySmall!
-                                      .copyWith(color: Colors.grey),
-                                )
-                              ],
-                            ),
-                          )
-                        ],
-                      ),
-                      SizedBox(height: $constants.insets.xs),
-                      Divider(),
-                      SizedBox(height: $constants.insets.xs),
-                      Container(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: $constants.insets.sm,
-                          vertical: $constants.insets.xs,
-                        ),
-                        width: double.infinity,
-                        child: Text(
-                          getContent(mail),
-                          textAlign: TextAlign.left,
-                          style: getTextTheme(context).bodyMedium,
-                        ),
-                      ),
-                    ],
+                    horizontal: $constants.insets.md,
+                  ),
+                  width: double.infinity,
+                  child: Text(
+                    getContent(mail),
+                    textAlign: TextAlign.left,
+                    style: getTextTheme(context).bodyMedium,
                   ),
                 ),
               ),
-            ),
-            SizedBox(height: $constants.insets.sm),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: $constants.insets.xs),
-              child: ElevatedContainer(
+              if (widget.mode == MailScreenMode.standalone) ...[
+                SizedBox(height: $constants.insets.sm),
+                Divider(),
+                Container(
                   padding: EdgeInsets.symmetric(
                     horizontal: $constants.insets.sm,
                   ),
@@ -213,10 +222,11 @@ class MailDetailScreenState extends ResponsiveState<MailDetailScreen> {
                             : Icon(CupertinoIcons.trash),
                       ),
                     ],
-                  )),
-            ),
-            SizedBox(height: $constants.insets.xl),
-          ],
+                  ),
+                ),
+              ],
+            ],
+          ),
         );
       }),
     );

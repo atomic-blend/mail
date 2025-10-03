@@ -62,18 +62,28 @@ class _InboxScreenState extends State<InboxScreen> {
           ),
           if (isDesktop(context) &&
               getSize(context).width > $constants.screenSize.md) ...[
-            VerticalDivider(
-              width: 1,
-            ),
+            // VerticalDivider(
+            //   width: 1,
+            // ),
+            SizedBox(width: $constants.insets.xs),
             Expanded(
-              child: inboxMails.isEmpty || selectedMails.isEmpty
-                  ? NoMailSelectedScreen(
-                      title: context.t.email_folders.inbox,
-                      numberOfMails: inboxMails.length,
-                    )
-                  : selectedMails.length == 1
-                      ? MailDetailScreen(selectedMails.first)
-                      : Container(),
+              child: Container(
+                padding: EdgeInsets.only(
+                  right: $constants.insets.xs,
+                  bottom: $constants.insets.xs,
+                ),
+                child: inboxMails.isEmpty || selectedMails.isEmpty
+                    ? NoMailSelectedScreen(
+                        title: context.t.email_folders.inbox,
+                        numberOfMails: inboxMails.length,
+                      )
+                    : selectedMails.length == 1
+                        ? MailDetailScreen(
+                            selectedMails.first,
+                            mode: MailScreenMode.integrated,
+                          )
+                        : Container(),
+              ),
             ),
           ]
         ],
