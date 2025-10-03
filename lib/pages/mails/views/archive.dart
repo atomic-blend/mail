@@ -1,15 +1,26 @@
+import 'package:ab_shared/utils/constants.dart';
 import 'package:ab_shared/utils/shortcuts.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:mail/i18n/strings.g.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mail/blocs/mail/mail_bloc.dart';
+import 'package:mail/models/mail/mail.dart';
 import 'package:mail/pages/app_layout.dart';
 import 'package:mail/pages/appbars/mail_appbar.dart';
+import 'package:mail/pages/mails/mail_details.dart';
 import 'package:mail/pages/mails/mail_list.dart';
 import 'package:mail/pages/mails/no_mail_selected.dart';
 
-class ArchiveScreen extends StatelessWidget {
+class ArchiveScreen extends StatefulWidget {
   const ArchiveScreen({super.key});
+
+  @override
+  State<ArchiveScreen> createState() => _ArchiveScreenState();
+}
+
+class _ArchiveScreenState extends State<ArchiveScreen> {
+  List<Mail> selectedMails = [];
 
   @override
   Widget build(BuildContext context) {
@@ -29,22 +40,49 @@ class ArchiveScreen extends StatelessWidget {
                 Expanded(
                   child: MailList(
                     mails: archivedMails,
+                    onSelect: (mail) {
+                      setState(() {
+                        selectedMails.add(mail);
+                      });
+                    },
+                    onDeselect: (mail) {
+                      setState(() {
+                        selectedMails.remove(mail);
+                      });
+                    },
+                    selectedMails: selectedMails,
                   ),
                 ),
               ],
             ),
           ),
-          if (isDesktop(context)) ...[
-            VerticalDivider(
-              width: 1,
-            ),
+          if (isDesktop(context) &&
+              getSize(context).width > $constants.screenSize.md) ...[
+            SizedBox(width: $constants.insets.xs),
             Expanded(
-              child: archivedMails.isEmpty
-                  ? NoMailSelectedScreen(
-                      title: context.t.email_folders.archive,
-                      numberOfMails: archivedMails.length,
-                    )
-                  : Container(),
+              child: Container(
+                padding: EdgeInsets.only(
+                  right: $constants.insets.xs,
+                  bottom: $constants.insets.xs,
+                ),
+                child: archivedMails.isEmpty || selectedMails.isEmpty
+                    ? NoMailSelectedScreen(
+                        icon: CupertinoIcons.tray_arrow_down,
+                        title: context.t.email_folders.archive,
+                        numberOfMails: archivedMails.length,
+                      )
+                    : selectedMails.length == 1
+                        ? MailDetailScreen(
+                            selectedMails.first,
+                            mode: MailScreenMode.integrated,
+                            onCancel: () {
+                              setState(() {
+                                selectedMails.clear();
+                              });
+                            },
+                          )
+                        : Container(),
+              ),
             ),
           ]
         ],

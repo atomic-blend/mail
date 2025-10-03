@@ -1,4 +1,5 @@
 import 'package:ab_shared/utils/shortcuts.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:mail/i18n/strings.g.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -55,6 +56,7 @@ class _DraftScreenState extends State<DraftScreen> {
             Expanded(
               child: drafts.isEmpty
                   ? NoMailSelectedScreen(
+                      icon: CupertinoIcons.tray_arrow_down,
                       title: context.t.email_folders.drafts,
                       numberOfMails: drafts.length,
                     )

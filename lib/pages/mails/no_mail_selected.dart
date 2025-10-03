@@ -6,9 +6,10 @@ import 'package:mail/i18n/strings.g.dart';
 
 class NoMailSelectedScreen extends StatelessWidget {
   final String title;
-  final int numberOfMails;
+  final IconData icon;
+  final int? numberOfMails;
   const NoMailSelectedScreen(
-      {super.key, required this.numberOfMails, required this.title});
+      {super.key, this.numberOfMails, required this.title, required this.icon});
 
   @override
   Widget build(BuildContext context) {
@@ -17,8 +18,7 @@ class NoMailSelectedScreen extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(CupertinoIcons.tray_arrow_down,
-              size: 100, color: Colors.grey.shade600),
+          Icon(icon, size: 100, color: Colors.grey.shade600),
           SizedBox(height: $constants.insets.sm),
           Text(
             title,
@@ -27,7 +27,8 @@ class NoMailSelectedScreen extends StatelessWidget {
                 .copyWith(fontWeight: FontWeight.bold),
           ),
           SizedBox(height: $constants.insets.sm),
-          Text(context.t.xx_mail_card.description(count: numberOfMails)),
+          if (numberOfMails != null)
+            Text(context.t.xx_mail_card.description(count: numberOfMails!)),
         ],
       ),
     );

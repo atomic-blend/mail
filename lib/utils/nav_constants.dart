@@ -36,7 +36,7 @@ class NavConstants {
           NavigationItem(
             key: Key("inbox"),
             icon: LineAwesome.envelope,
-            cupertinoIcon: CupertinoIcons.envelope,
+            cupertinoIcon: CupertinoIcons.tray_arrow_down,
             label: "Inbox",
             body: InboxScreen(),
           ),

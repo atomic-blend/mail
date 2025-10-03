@@ -1,5 +1,6 @@
 import 'package:ab_shared/utils/constants.dart';
 import 'package:ab_shared/utils/shortcuts.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mail/blocs/mail/mail_bloc.dart';
@@ -71,6 +72,7 @@ class _InboxScreenState extends State<InboxScreen> {
                 ),
                 child: inboxMails.isEmpty || selectedMails.isEmpty
                     ? NoMailSelectedScreen(
+                        icon: CupertinoIcons.tray_arrow_down,
                         title: context.t.email_folders.inbox,
                         numberOfMails: inboxMails.length,
                       )
