@@ -164,6 +164,9 @@ class _MailCardState extends State<MailCard> {
                       await Navigator.of(context).push(MaterialPageRoute(
                           builder: (context) => MailDetailScreen(
                                 mail,
+                                onCancel: () {
+                                  Navigator.of(context).pop();
+                                },
                               )));
                     } else {
                       // when in multi-select mode, toggle the selection of the mail

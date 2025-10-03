@@ -8,7 +8,8 @@ import 'package:mail/models/mail/mail.dart';
 
 class BigMailCard extends StatelessWidget {
   final Mail mail;
-  const BigMailCard({super.key, required this.mail});
+  final Color? backgroundColor;
+  const BigMailCard({super.key, required this.mail, this.backgroundColor});
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +18,7 @@ class BigMailCard extends StatelessWidget {
         horizontal: $constants.insets.md,
       ),
       decoration: BoxDecoration(
-        color: getTheme(context).surface,
+        color: backgroundColor ?? getTheme(context).surface,
         borderRadius: BorderRadius.circular($constants.corners.md),
       ),
       width: double.infinity,
@@ -68,6 +69,7 @@ class BigMailCard extends StatelessWidget {
               )
             ],
           ),
+          SizedBox(height: $constants.insets.sm),
           Text(
             getContent(context, mail),
             textAlign: TextAlign.left,

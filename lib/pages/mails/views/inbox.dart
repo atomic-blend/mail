@@ -62,9 +62,6 @@ class _InboxScreenState extends State<InboxScreen> {
           ),
           if (isDesktop(context) &&
               getSize(context).width > $constants.screenSize.md) ...[
-            // VerticalDivider(
-            //   width: 1,
-            // ),
             SizedBox(width: $constants.insets.xs),
             Expanded(
               child: Container(
@@ -82,13 +79,9 @@ class _InboxScreenState extends State<InboxScreen> {
                             selectedMails.first,
                             mode: MailScreenMode.integrated,
                             onCancel: () {
-                              if (!isDesktop(context)) {
-                                Navigator.of(context).pop();
-                              } else {
-                                setState(() {
-                                  selectedMails.clear();
-                                });
-                              }
+                              setState(() {
+                                selectedMails.clear();
+                              });
                             },
                           )
                         : Container(),
