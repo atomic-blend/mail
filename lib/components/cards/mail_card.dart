@@ -1,5 +1,4 @@
 import 'package:ab_shared/components/modals/ab_modal.dart';
-import 'package:ab_shared/components/widgets/elevated_container.dart';
 import 'package:ab_shared/utils/constants.dart';
 import 'package:ab_shared/utils/shortcuts.dart';
 import 'package:auto_size_text/auto_size_text.dart';
@@ -46,7 +45,7 @@ class _MailCardState extends State<MailCard> {
 
   @override
   Widget build(BuildContext context) {
-    final Mail? mail = this.widget.mail ?? widget.draft!.mail;
+    final Mail? mail = widget.mail ?? widget.draft!.mail;
     if (mail == null) {
       return const SizedBox.shrink();
     }
@@ -267,7 +266,7 @@ class _MailCardState extends State<MailCard> {
 
   void _toggleSelected(Mail mail, {bool reset = false}) {
     if (reset) {
-      widget.selectedMails?.clear();
+      widget.selectedMails.clear();
     }
     if (widget.selectedMails.contains(mail)) {
       widget.onDeselect?.call(mail);
