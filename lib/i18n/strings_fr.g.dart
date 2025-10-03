@@ -48,6 +48,7 @@ class TranslationsFr implements Translations {
 	@override late final _TranslationsActionsFr actions = _TranslationsActionsFr._(_root);
 	@override late final _TranslationsXxMailCardFr xx_mail_card = _TranslationsXxMailCardFr._(_root);
 	@override late final _TranslationsEmailFoldersFr email_folders = _TranslationsEmailFoldersFr._(_root);
+	@override late final _TranslationsMailActionsFr mail_actions = _TranslationsMailActionsFr._(_root);
 }
 
 // Path: settings
@@ -188,6 +189,19 @@ class _TranslationsEmailFoldersFr implements TranslationsEmailFoldersEn {
 	@override String get all => 'Tous';
 }
 
+// Path: mail_actions
+class _TranslationsMailActionsFr implements TranslationsMailActionsEn {
+	_TranslationsMailActionsFr._(this._root);
+
+	final TranslationsFr _root; // ignore: unused_field
+
+	// Translations
+	@override String get mark_as_read => 'Marquer comme lu';
+	@override String get mark_as_unread => 'Marquer comme non lu';
+	@override String get archive => 'Archive';
+	@override String get trash => 'Corbeille';
+}
+
 // Path: settings.app_settings
 class _TranslationsSettingsAppSettingsFr implements TranslationsSettingsAppSettingsEn {
 	_TranslationsSettingsAppSettingsFr._(this._root);
@@ -301,6 +315,10 @@ extension on TranslationsFr {
 			case 'email_folders.archive': return 'Archive';
 			case 'email_folders.trashed': return 'Corbeille';
 			case 'email_folders.all': return 'Tous';
+			case 'mail_actions.mark_as_read': return 'Marquer comme lu';
+			case 'mail_actions.mark_as_unread': return 'Marquer comme non lu';
+			case 'mail_actions.archive': return 'Archive';
+			case 'mail_actions.trash': return 'Corbeille';
 			default: return null;
 		}
 	}

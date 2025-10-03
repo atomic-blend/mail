@@ -71,5 +71,11 @@
     "archive": "Archive",
     "trashed": "Trashed",
     "all": "All"
+  },
+  "mail_actions": {
+    "mark_as_read": "Mark as read",
+    "mark_as_unread": "Mark as unread",
+    "archive": "Archive",
+    "trash": "Trash"
   }
 }

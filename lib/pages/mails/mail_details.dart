@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mail/blocs/mail/mail_bloc.dart';
 import 'package:mail/components/cards/big_mail_card.dart';
+import 'package:mail/i18n/strings.g.dart';
 import 'package:mail/models/mail/mail.dart';
 
 enum MailScreenMode {
@@ -95,40 +96,99 @@ class MailDetailScreenState extends ResponsiveState<MailDetailScreen> {
                               ),
                             ),
                           ),
-                          Row(
-                            children: [
-                              Padding(
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: $constants.insets.md),
-                                child: AutoSizeText(
-                                  maxLines: 1,
-                                  mail.getHeader("Subject"),
-                                  overflow: TextOverflow.ellipsis,
-                                  style: getTextTheme(context)
-                                      .headlineMedium!
-                                      .copyWith(
-                                        fontWeight: mail.read != true
-                                            ? FontWeight.bold
-                                            : null,
+                          Expanded(
+                            child: Row(
+                              mainAxisSize: MainAxisSize.max,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Padding(
+                                      padding: EdgeInsets.symmetric(
+                                          horizontal: $constants.insets.md),
+                                      child: AutoSizeText(
+                                        maxLines: 1,
+                                        mail.getHeader("Subject"),
+                                        overflow: TextOverflow.ellipsis,
+                                        style: getTextTheme(context)
+                                            .headlineMedium!
+                                            .copyWith(
+                                              fontWeight: mail.read != true
+                                                  ? FontWeight.bold
+                                                  : null,
+                                            ),
                                       ),
+                                    ),
+                                    if (mail.read != true) ...[
+                                      Container(
+                                        width: 8,
+                                        height: 8,
+                                        decoration: BoxDecoration(
+                                          color: Colors.blue,
+                                          borderRadius: BorderRadius.circular(
+                                              $constants.corners.full),
+                                        ),
+                                      ),
+                                    ],
+                                  ],
                                 ),
-                              ),
-                              if (mail.read != true) ...[
-                                Container(
-                                  width: 8,
-                                  height: 8,
-                                  decoration: BoxDecoration(
-                                    color: Colors.blue,
-                                    borderRadius: BorderRadius.circular(
-                                        $constants.corners.full),
-                                  ),
-                                ),
+                                // Desktop only action bar
+                                if (isDesktop(context)) ...[
+                                  Expanded(
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.max,
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      children: [
+                                        SizedBox(width: $constants.insets.sm),
+                                        _buildActionPill(
+                                            context,
+                                            mail.read == true
+                                                ? context.t.mail_actions
+                                                    .mark_as_unread
+                                                : context.t.mail_actions
+                                                    .mark_as_read,
+                                            CupertinoIcons.envelope_open, () {
+                                          if (mail.read == true) {
+                                            context
+                                                .read<MailBloc>()
+                                                .add(MarkAsUnread(mail.id!));
+                                          } else {
+                                            context
+                                                .read<MailBloc>()
+                                                .add(MarkAsRead(mail.id!));
+                                          }
+                                        }),
+                                        SizedBox(width: $constants.insets.xs),
+                                        _buildActionPill(
+                                            context,
+                                            context.t.mail_actions.archive,
+                                            CupertinoIcons.archivebox, () {
+                                          context
+                                              .read<MailBloc>()
+                                              .add(ArchiveMail(mail.id!));
+                                        }),
+                                        SizedBox(width: $constants.insets.xs),
+                                        _buildActionPill(
+                                            context,
+                                            context.t.mail_actions.trash,
+                                            CupertinoIcons.trash, () {
+                                          context
+                                              .read<MailBloc>()
+                                              .add(TrashMail(mail.id!));
+                                        }),
+                                        SizedBox(width: $constants.insets.sm),
+                                      ],
+                                    ),
+                                  )
+                                ],
                               ],
-                            ],
+                            ),
                           ),
                         ],
                       ),
                     ),
+
                     SizedBox(height: $constants.insets.sm),
                     // Content section - expands to fill remaining space
                     Padding(
@@ -144,78 +204,112 @@ class MailDetailScreenState extends ResponsiveState<MailDetailScreen> {
                   ],
                 ),
               ),
-              Align(
-                alignment: Alignment.bottomCenter,
-                child: Positioned(
-                  bottom: 0,
-                  child: ElevatedContainer(
-                    border: Border.all(
-                      color: isDarkMode(context) ? Colors.grey.shade800 : Colors.white,
-                    ),
-                    padding: EdgeInsets.symmetric(
-                      horizontal: $constants.insets.sm,
-                    ),
-                    height: 60,
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      spacing: $constants.insets.xs,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        IconButton(
-                          onPressed: () {
-                            if (mail.read == true) {
-                              context
-                                  .read<MailBloc>()
-                                  .add(MarkAsUnread(mail.id!));
-                            } else {
-                              context
-                                  .read<MailBloc>()
-                                  .add(MarkAsRead(mail.id!));
-                            }
-                          },
-                          icon: mail.read == true
-                              ? Icon(CupertinoIcons.envelope_open)
-                              : Icon(CupertinoIcons.envelope),
-                        ),
-                        IconButton(
-                          onPressed: () {
-                            if (mail.archived != true) {
-                              context
-                                  .read<MailBloc>()
-                                  .add(ArchiveMail(mail.id!));
-                            } else {
-                              context
-                                  .read<MailBloc>()
-                                  .add(UnarchiveMail(mail.id!));
-                            }
-                          },
-                          icon: mail.archived == true
-                              ? Icon(CupertinoIcons.tray_arrow_down)
-                              : Icon(CupertinoIcons.archivebox),
-                        ),
-                        IconButton(
-                          onPressed: () {
-                            if (mail.trashed != true) {
-                              context.read<MailBloc>().add(TrashMail(mail.id!));
-                            } else {
-                              context
-                                  .read<MailBloc>()
-                                  .add(UntrashMail(mail.id!));
-                            }
-                            Navigator.of(context).pop();
-                          },
-                          icon: mail.trashed == true
-                              ? Icon(CupertinoIcons.trash_slash)
-                              : Icon(CupertinoIcons.trash),
-                        ),
-                      ],
+              // Mobile only action bar
+              if (!isDesktop(context))
+                Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Positioned(
+                    bottom: 0,
+                    child: ElevatedContainer(
+                      border: Border.all(
+                        color: isDarkMode(context)
+                            ? Colors.grey.shade800
+                            : Colors.white,
+                      ),
+                      padding: EdgeInsets.symmetric(
+                        horizontal: $constants.insets.sm,
+                      ),
+                      height: 60,
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        spacing: $constants.insets.xs,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          IconButton(
+                            onPressed: () {
+                              if (mail.read == true) {
+                                context
+                                    .read<MailBloc>()
+                                    .add(MarkAsUnread(mail.id!));
+                              } else {
+                                context
+                                    .read<MailBloc>()
+                                    .add(MarkAsRead(mail.id!));
+                              }
+                            },
+                            icon: mail.read == true
+                                ? Icon(CupertinoIcons.envelope_open)
+                                : Icon(CupertinoIcons.envelope),
+                          ),
+                          IconButton(
+                            onPressed: () {
+                              if (mail.archived != true) {
+                                context
+                                    .read<MailBloc>()
+                                    .add(ArchiveMail(mail.id!));
+                              } else {
+                                context
+                                    .read<MailBloc>()
+                                    .add(UnarchiveMail(mail.id!));
+                              }
+                            },
+                            icon: mail.archived == true
+                                ? Icon(CupertinoIcons.tray_arrow_down)
+                                : Icon(CupertinoIcons.archivebox),
+                          ),
+                          IconButton(
+                            onPressed: () {
+                              if (mail.trashed != true) {
+                                context
+                                    .read<MailBloc>()
+                                    .add(TrashMail(mail.id!));
+                              } else {
+                                context
+                                    .read<MailBloc>()
+                                    .add(UntrashMail(mail.id!));
+                              }
+                              Navigator.of(context).pop();
+                            },
+                            icon: mail.trashed == true
+                                ? Icon(CupertinoIcons.trash_slash)
+                                : Icon(CupertinoIcons.trash),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
-              ),
             ],
           );
         }),
+      ),
+    );
+  }
+
+  Widget _buildActionPill(BuildContext context, String label, IconData icon,
+      VoidCallback onPressed) {
+    return GestureDetector(
+      onTap: onPressed,
+      child: Container(
+        padding: EdgeInsets.symmetric(
+            horizontal: $constants.insets.xs, vertical: $constants.insets.xxs),
+        decoration: BoxDecoration(
+          color: Colors.grey.shade200,
+          border: Border.all(
+            color: isDarkMode(context)
+                ? Colors.grey.shade600
+                : Colors.grey.shade300,
+            width: 1,
+          ),
+          borderRadius: BorderRadius.circular($constants.corners.sm),
+        ),
+        child: Row(
+          children: [
+            Icon(icon, size: 15),
+            SizedBox(width: $constants.insets.xs),
+            Text(label),
+          ],
+        ),
       ),
     );
   }

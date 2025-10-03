@@ -51,6 +51,7 @@ class Translations implements BaseTranslations<AppLocale, Translations> {
 	late final TranslationsActionsEn actions = TranslationsActionsEn._(_root);
 	late final TranslationsXxMailCardEn xx_mail_card = TranslationsXxMailCardEn._(_root);
 	late final TranslationsEmailFoldersEn email_folders = TranslationsEmailFoldersEn._(_root);
+	late final TranslationsMailActionsEn mail_actions = TranslationsMailActionsEn._(_root);
 }
 
 // Path: settings
@@ -239,6 +240,27 @@ class TranslationsEmailFoldersEn {
 	String get all => 'All';
 }
 
+// Path: mail_actions
+class TranslationsMailActionsEn {
+	TranslationsMailActionsEn._(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Mark as read'
+	String get mark_as_read => 'Mark as read';
+
+	/// en: 'Mark as unread'
+	String get mark_as_unread => 'Mark as unread';
+
+	/// en: 'Archive'
+	String get archive => 'Archive';
+
+	/// en: 'Trash'
+	String get trash => 'Trash';
+}
+
 // Path: settings.app_settings
 class TranslationsSettingsAppSettingsEn {
 	TranslationsSettingsAppSettingsEn._(this._root);
@@ -379,6 +401,10 @@ extension on Translations {
 			case 'email_folders.archive': return 'Archive';
 			case 'email_folders.trashed': return 'Trashed';
 			case 'email_folders.all': return 'All';
+			case 'mail_actions.mark_as_read': return 'Mark as read';
+			case 'mail_actions.mark_as_unread': return 'Mark as unread';
+			case 'mail_actions.archive': return 'Archive';
+			case 'mail_actions.trash': return 'Trash';
 			default: return null;
 		}
 	}

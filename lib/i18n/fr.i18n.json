@@ -73,5 +73,11 @@
     "archive": "Archive",
     "trashed": "Corbeille",
     "all": "Tous"
+  },
+  "mail_actions": {
+    "mark_as_read": "Marquer comme lu",
+    "mark_as_unread": "Marquer comme non lu",
+    "archive": "Archive",
+    "trash": "Corbeille"
   }
 }
