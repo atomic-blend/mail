@@ -2,6 +2,7 @@ import 'package:ab_shared/components/modals/ab_modal.dart';
 import 'package:ab_shared/utils/constants.dart';
 import 'package:ab_shared/utils/shortcuts.dart';
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:flex_color_scheme/flex_color_scheme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -25,6 +26,8 @@ class MailCard extends StatefulWidget {
   final List<dynamic> selectedMails;
   final bool? selectMode;
   final Function(bool)? setSelectMode;
+  final bool? enabled;
+  final Color? backgroundColor;
   const MailCard(
       {super.key,
       this.mail,
@@ -34,7 +37,9 @@ class MailCard extends StatefulWidget {
       this.onDeselect,
       this.selectedMails = const [],
       this.selectMode,
-      this.setSelectMode});
+      this.setSelectMode,
+      this.enabled = true,
+      this.backgroundColor});
 
   @override
   State<MailCard> createState() => _MailCardState();
@@ -51,6 +56,7 @@ class _MailCardState extends State<MailCard> {
     }
     return LayoutBuilder(builder: (context, constraints) {
       return Slidable(
+        enabled: widget.enabled ?? true,
         endActionPane: ActionPane(motion: const ScrollMotion(), children: [
           SizedBox(
             width: $constants.insets.xs,
@@ -130,11 +136,13 @@ class _MailCardState extends State<MailCard> {
         ]),
         child: MouseRegion(
           onEnter: (event) {
+            if (widget.enabled == false) return;
             setState(() {
               isHovering = true;
             });
           },
           onExit: (event) {
+            if (widget.enabled == false) return;
             setState(() {
               isHovering = false;
             });
@@ -142,8 +150,9 @@ class _MailCardState extends State<MailCard> {
           child: Container(
             decoration: BoxDecoration(
               color: isHovering || (widget.selectedMails.contains(mail))
-                  ? getTheme(context).surfaceContainer
-                  : null,
+                  ? widget.backgroundColor?.darken(3) ??
+                      getTheme(context).surfaceContainer
+                  : widget.backgroundColor,
               borderRadius: BorderRadius.circular($constants.corners.sm),
             ),
             padding: EdgeInsets.only(
