@@ -9,12 +9,18 @@ import 'package:mail/components/cards/mail_card.dart';
 import 'package:mail/i18n/strings.g.dart';
 import 'package:mail/models/mail/mail.dart';
 
+enum SelectedListMode {
+  inbox,
+  drafts,
+  all,
+  archive,
+  trash,
+}
+
 class SelectedListScreen extends StatelessWidget {
   final List<Mail> mails;
-  final bool? archive;
-  final bool? trash;
-  const SelectedListScreen(
-      {super.key, required this.mails, this.archive, this.trash});
+  final SelectedListMode? mode;
+  const SelectedListScreen({super.key, required this.mails, this.mode});
 
   @override
   Widget build(BuildContext context) {
@@ -63,7 +69,8 @@ class SelectedListScreen extends StatelessWidget {
                       _markReadUnreadBulk(context, mails, false);
                     },
                   ),
-                  if (archive != true)
+                  if ([SelectedListMode.inbox, SelectedListMode.all]
+                      .contains(mode))
                     _buildActionButton(
                       context,
                       context.t.mail_actions.archive,
@@ -72,7 +79,8 @@ class SelectedListScreen extends StatelessWidget {
                         _archiveBulk(context, mails);
                       },
                     ),
-                  if (trash != true)
+                  if ([SelectedListMode.inbox, SelectedListMode.all]
+                      .contains(mode))
                     _buildActionButton(
                       context,
                       context.t.mail_actions.trash,
@@ -81,13 +89,22 @@ class SelectedListScreen extends StatelessWidget {
                         _trashBulk(context, mails);
                       },
                     ),
-                  if (archive == true)
+                  if ([SelectedListMode.archive].contains(mode))
                     _buildActionButton(
                       context,
                       context.t.mail_actions.unarchive,
                       CupertinoIcons.archivebox,
                       () {
                         _unarchiveBulk(context, mails);
+                      },
+                    ),
+                  if ([SelectedListMode.trash].contains(mode))
+                    _buildActionButton(
+                      context,
+                      context.t.mail_actions.untrash,
+                      CupertinoIcons.trash,
+                      () {
+                        _untrashBulk(context, mails);
                       },
                     ),
                 ],
@@ -136,6 +153,12 @@ class SelectedListScreen extends StatelessWidget {
     context
         .read<MailBloc>()
         .add(TrashMail(mailIds: mails.map((mail) => mail.id!).toList()));
+  }
+
+  void _untrashBulk(BuildContext context, List<Mail> mails) {
+    context
+        .read<MailBloc>()
+        .add(UntrashMail(mailIds: mails.map((mail) => mail.id!).toList()));
   }
 
   Widget _buildActionButton(

@@ -83,7 +83,9 @@ class _ArchiveScreenState extends State<ArchiveScreen> {
                             },
                           )
                         : SelectedListScreen(
-                            mails: selectedMails, archive: true),
+                            mails: selectedMails,
+                            mode: SelectedListMode.archive,
+                          ),
               ),
             ),
           ]

@@ -201,6 +201,7 @@ class _TranslationsMailActionsFr implements TranslationsMailActionsEn {
 	@override String get archive => 'Archive';
 	@override String get unarchive => 'Désarchiver';
 	@override String get trash => 'Corbeille';
+	@override String get untrash => 'Restaurer';
 }
 
 // Path: settings.app_settings
@@ -321,6 +322,7 @@ extension on TranslationsFr {
 			case 'mail_actions.archive': return 'Archive';
 			case 'mail_actions.unarchive': return 'Désarchiver';
 			case 'mail_actions.trash': return 'Corbeille';
+			case 'mail_actions.untrash': return 'Restaurer';
 			default: return null;
 		}
 	}

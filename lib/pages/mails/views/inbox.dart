@@ -22,6 +22,7 @@ class InboxScreen extends StatefulWidget {
 
 class _InboxScreenState extends State<InboxScreen> {
   List<Mail> selectedMails = [];
+  bool? isSelecting = true;
 
   @override
   Widget build(BuildContext context) {
@@ -57,6 +58,11 @@ class _InboxScreenState extends State<InboxScreen> {
                       });
                     },
                     selectedMails: selectedMails,
+                    setIsSelecting: (value) {
+                      setState(() {
+                        isSelecting = value;
+                      });
+                    },
                   ),
                 ),
               ],
@@ -77,7 +83,7 @@ class _InboxScreenState extends State<InboxScreen> {
                         title: context.t.email_folders.inbox,
                         numberOfMails: inboxMails.length,
                       )
-                    : selectedMails.length == 1
+                    : selectedMails.length == 1 && isSelecting != true
                         ? MailDetailScreen(
                             selectedMails.first,
                             mode: MailScreenMode.integrated,

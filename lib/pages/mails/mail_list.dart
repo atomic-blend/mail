@@ -16,6 +16,7 @@ class MailList extends StatefulWidget {
   final bool? drafts;
   final Widget? header;
   final Function(String)? onDelete;
+  final Function(bool)? setIsSelecting;
 
   const MailList({
     super.key,
@@ -26,7 +27,8 @@ class MailList extends StatefulWidget {
     this.onSelect,
     this.onDeselect,
     this.selectedMails,
-  });
+    this.setIsSelecting,
+    });
 
   @override
   State<MailList> createState() => _MailListState();
@@ -124,6 +126,7 @@ class _MailListState extends State<MailList> {
                     setState(() {
                       selectMode = value;
                     });
+                    widget.setIsSelecting?.call(value);
                   },
                   draft: widget.drafts == true ? mail as SendMail : null,
                   mail: widget.drafts != true ? mail : null,

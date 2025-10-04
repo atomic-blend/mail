@@ -262,6 +262,9 @@ class TranslationsMailActionsEn {
 
 	/// en: 'Trash'
 	String get trash => 'Trash';
+
+	/// en: 'Untrash'
+	String get untrash => 'Untrash';
 }
 
 // Path: settings.app_settings
@@ -409,6 +412,7 @@ extension on Translations {
 			case 'mail_actions.archive': return 'Archive';
 			case 'mail_actions.unarchive': return 'Unarchive';
 			case 'mail_actions.trash': return 'Trash';
+			case 'mail_actions.untrash': return 'Untrash';
 			default: return null;
 		}
 	}
