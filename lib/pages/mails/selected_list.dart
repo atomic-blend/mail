@@ -3,13 +3,18 @@ import 'package:ab_shared/utils/shortcuts.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:ab_shared/components/buttons/ab_button.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mail/blocs/mail/mail_bloc.dart';
 import 'package:mail/components/cards/mail_card.dart';
 import 'package:mail/i18n/strings.g.dart';
 import 'package:mail/models/mail/mail.dart';
 
 class SelectedListScreen extends StatelessWidget {
   final List<Mail> mails;
-  const SelectedListScreen({super.key, required this.mails});
+  final bool? archive;
+  final bool? trash;
+  const SelectedListScreen(
+      {super.key, required this.mails, this.archive, this.trash});
 
   @override
   Widget build(BuildContext context) {
@@ -43,25 +48,48 @@ class SelectedListScreen extends StatelessWidget {
                 spacing: $constants.insets.xs,
                 children: [
                   _buildActionButton(
-                      context,
-                      context.t.mail_actions.mark_as_read,
-                      CupertinoIcons.envelope_open, () {
-                    print("Mark as read");
-                  }),
+                    context,
+                    context.t.mail_actions.mark_as_read,
+                    CupertinoIcons.envelope_open,
+                    () {
+                      _markReadUnreadBulk(context, mails, true);
+                    },
+                  ),
                   _buildActionButton(
+                    context,
+                    context.t.mail_actions.mark_as_unread,
+                    CupertinoIcons.envelope,
+                    () {
+                      _markReadUnreadBulk(context, mails, false);
+                    },
+                  ),
+                  if (archive != true)
+                    _buildActionButton(
                       context,
-                      context.t.mail_actions.mark_as_unread,
-                      CupertinoIcons.envelope, () {
-                    print("Mark as unread");
-                  }),
-                  _buildActionButton(context, context.t.mail_actions.archive,
-                      CupertinoIcons.archivebox, () {
-                    print("Archive");
-                  }),
-                  _buildActionButton(context, context.t.mail_actions.trash,
-                      CupertinoIcons.trash, () {
-                    print("Trash");
-                  }),
+                      context.t.mail_actions.archive,
+                      CupertinoIcons.archivebox,
+                      () {
+                        _archiveBulk(context, mails);
+                      },
+                    ),
+                  if (trash != true)
+                    _buildActionButton(
+                      context,
+                      context.t.mail_actions.trash,
+                      CupertinoIcons.trash,
+                      () {
+                        _trashBulk(context, mails);
+                      },
+                    ),
+                  if (archive == true)
+                    _buildActionButton(
+                      context,
+                      context.t.mail_actions.unarchive,
+                      CupertinoIcons.archivebox,
+                      () {
+                        _unarchiveBulk(context, mails);
+                      },
+                    ),
                 ],
               ),
               SizedBox(height: $constants.insets.sm),
@@ -78,6 +106,36 @@ class SelectedListScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  void _markReadUnreadBulk(BuildContext context, List<Mail> mails, bool read) {
+    if (read) {
+      context
+          .read<MailBloc>()
+          .add(MarkAsRead(mailIds: mails.map((mail) => mail.id!).toList()));
+    } else {
+      context
+          .read<MailBloc>()
+          .add(MarkAsUnread(mailIds: mails.map((mail) => mail.id!).toList()));
+    }
+  }
+
+  void _archiveBulk(BuildContext context, List<Mail> mails) {
+    context
+        .read<MailBloc>()
+        .add(ArchiveMail(mailIds: mails.map((mail) => mail.id!).toList()));
+  }
+
+  void _unarchiveBulk(BuildContext context, List<Mail> mails) {
+    context
+        .read<MailBloc>()
+        .add(UnarchiveMail(mailIds: mails.map((mail) => mail.id!).toList()));
+  }
+
+  void _trashBulk(BuildContext context, List<Mail> mails) {
+    context
+        .read<MailBloc>()
+        .add(TrashMail(mailIds: mails.map((mail) => mail.id!).toList()));
   }
 
   Widget _buildActionButton(

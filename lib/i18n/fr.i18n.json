@@ -78,6 +78,7 @@
     "mark_as_read": "Marquer comme lu",
     "mark_as_unread": "Marquer comme non lu",
     "archive": "Archive",
+    "unarchive": "Désarchiver",
     "trash": "Corbeille"
   }
 }

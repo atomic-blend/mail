@@ -11,6 +11,7 @@ import 'package:mail/pages/appbars/mail_appbar.dart';
 import 'package:mail/pages/mails/mail_details.dart';
 import 'package:mail/pages/mails/mail_list.dart';
 import 'package:mail/pages/mails/no_mail_selected.dart';
+import 'package:mail/pages/mails/selected_list.dart';
 
 class ArchiveScreen extends StatefulWidget {
   const ArchiveScreen({super.key});
@@ -81,7 +82,8 @@ class _ArchiveScreenState extends State<ArchiveScreen> {
                               });
                             },
                           )
-                        : Container(),
+                        : SelectedListScreen(
+                            mails: selectedMails, archive: true),
               ),
             ),
           ]

@@ -249,15 +249,15 @@ class _OrganizeScreenState extends State<OrganizeScreen> {
   }
 
   void _onArchive(Mail mail) {
-    context.read<MailBloc>().add(ArchiveMail(mail.id!));
+    context.read<MailBloc>().add(ArchiveMail(mailId: mail.id!));
   }
 
   void _onTrash(Mail mail) {
-    context.read<MailBloc>().add(TrashMail(mail.id!));
+    context.read<MailBloc>().add(TrashMail(mailId: mail.id!));
   }
 
   void _onRead(Mail mail) {
-    context.read<MailBloc>().add(MarkAsRead(mail.id!));
+    context.read<MailBloc>().add(MarkAsRead(mailId: mail.id!));
   }
 
   void _onMove(Mail mail) {

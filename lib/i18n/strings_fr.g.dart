@@ -199,6 +199,7 @@ class _TranslationsMailActionsFr implements TranslationsMailActionsEn {
 	@override String get mark_as_read => 'Marquer comme lu';
 	@override String get mark_as_unread => 'Marquer comme non lu';
 	@override String get archive => 'Archive';
+	@override String get unarchive => 'Désarchiver';
 	@override String get trash => 'Corbeille';
 }
 
@@ -318,6 +319,7 @@ extension on TranslationsFr {
 			case 'mail_actions.mark_as_read': return 'Marquer comme lu';
 			case 'mail_actions.mark_as_unread': return 'Marquer comme non lu';
 			case 'mail_actions.archive': return 'Archive';
+			case 'mail_actions.unarchive': return 'Désarchiver';
 			case 'mail_actions.trash': return 'Corbeille';
 			default: return null;
 		}

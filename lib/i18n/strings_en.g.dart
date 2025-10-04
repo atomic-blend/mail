@@ -257,6 +257,9 @@ class TranslationsMailActionsEn {
 	/// en: 'Archive'
 	String get archive => 'Archive';
 
+	/// en: 'Unarchive'
+	String get unarchive => 'Unarchive';
+
 	/// en: 'Trash'
 	String get trash => 'Trash';
 }
@@ -404,6 +407,7 @@ extension on Translations {
 			case 'mail_actions.mark_as_read': return 'Mark as read';
 			case 'mail_actions.mark_as_unread': return 'Mark as unread';
 			case 'mail_actions.archive': return 'Archive';
+			case 'mail_actions.unarchive': return 'Unarchive';
 			case 'mail_actions.trash': return 'Trash';
 			default: return null;
 		}

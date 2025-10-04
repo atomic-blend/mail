@@ -31,7 +31,7 @@ class MailDetailScreenState extends ResponsiveState<MailDetailScreen> {
   @override
   void initState() {
     if (widget.mail.read != true) {
-      context.read<MailBloc>().add(MarkAsRead(widget.mail.id!));
+      context.read<MailBloc>().add(MarkAsRead(mailId: widget.mail.id!));
     }
     super.initState();
   }
@@ -152,11 +152,11 @@ class MailDetailScreenState extends ResponsiveState<MailDetailScreen> {
                                           if (mail.read == true) {
                                             context
                                                 .read<MailBloc>()
-                                                .add(MarkAsUnread(mail.id!));
+                                                .add(MarkAsUnread(mailId: mail.id!));
                                           } else {
                                             context
                                                 .read<MailBloc>()
-                                                .add(MarkAsRead(mail.id!));
+                                                .add(MarkAsRead(mailId: mail.id!));
                                           }
                                         }),
                                         SizedBox(width: $constants.insets.xs),
@@ -166,7 +166,7 @@ class MailDetailScreenState extends ResponsiveState<MailDetailScreen> {
                                             CupertinoIcons.archivebox, () {
                                           context
                                               .read<MailBloc>()
-                                              .add(ArchiveMail(mail.id!));
+                                              .add(ArchiveMail(mailId: mail.id!));
                                         }),
                                         SizedBox(width: $constants.insets.xs),
                                         _buildActionPill(
@@ -175,7 +175,7 @@ class MailDetailScreenState extends ResponsiveState<MailDetailScreen> {
                                             CupertinoIcons.trash, () {
                                           context
                                               .read<MailBloc>()
-                                              .add(TrashMail(mail.id!));
+                                              .add(TrashMail(mailId: mail.id!));
                                         }),
                                         SizedBox(width: $constants.insets.sm),
                                       ],
@@ -230,11 +230,11 @@ class MailDetailScreenState extends ResponsiveState<MailDetailScreen> {
                               if (mail.read == true) {
                                 context
                                     .read<MailBloc>()
-                                    .add(MarkAsUnread(mail.id!));
+                                    .add(MarkAsUnread(mailId: mail.id!));
                               } else {
                                 context
                                     .read<MailBloc>()
-                                    .add(MarkAsRead(mail.id!));
+                                    .add(MarkAsRead(mailId: mail.id!));
                               }
                             },
                             icon: mail.read == true
@@ -246,11 +246,11 @@ class MailDetailScreenState extends ResponsiveState<MailDetailScreen> {
                               if (mail.archived != true) {
                                 context
                                     .read<MailBloc>()
-                                    .add(ArchiveMail(mail.id!));
+                                    .add(ArchiveMail(mailId: mail.id!));
                               } else {
                                 context
                                     .read<MailBloc>()
-                                    .add(UnarchiveMail(mail.id!));
+                                    .add(UnarchiveMail(mailId: mail.id!));
                               }
                             },
                             icon: mail.archived == true
@@ -262,11 +262,11 @@ class MailDetailScreenState extends ResponsiveState<MailDetailScreen> {
                               if (mail.trashed != true) {
                                 context
                                     .read<MailBloc>()
-                                    .add(TrashMail(mail.id!));
+                                    .add(TrashMail(mailId: mail.id!));
                               } else {
                                 context
                                     .read<MailBloc>()
-                                    .add(UntrashMail(mail.id!));
+                                    .add(UntrashMail(mailId: mail.id!));
                               }
                               Navigator.of(context).pop();
                             },

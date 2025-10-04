@@ -86,9 +86,9 @@ class _MailCardState extends State<MailCard> {
                           ));
                 } else {
                   if (mail.trashed != true) {
-                    context.read<MailBloc>().add(TrashMail(mail.id!));
+                    context.read<MailBloc>().add(TrashMail(mailId: mail.id!));
                   } else {
-                    context.read<MailBloc>().add(UntrashMail(mail.id!));
+                    context.read<MailBloc>().add(UntrashMail(mailId: mail.id!));
                   }
                 }
               },
@@ -118,9 +118,9 @@ class _MailCardState extends State<MailCard> {
               child: SlidableAction(
                 onPressed: (context) {
                   if (mail.archived != true) {
-                    context.read<MailBloc>().add(ArchiveMail(mail.id!));
+                    context.read<MailBloc>().add(ArchiveMail(mailId: mail.id!));
                   } else {
-                    context.read<MailBloc>().add(UnarchiveMail(mail.id!));
+                    context.read<MailBloc>().add(UnarchiveMail(mailId: mail.id!));
                   }
                 },
                 backgroundColor: getTheme(context).tertiary,

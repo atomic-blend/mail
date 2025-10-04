@@ -63,11 +63,16 @@ class MailBloc extends HydratedBloc<MailEvent, MailState> {
 
   void _onMarkAsRead(MarkAsRead event, Emitter<MailState> emit) async {
     final prevState = state;
-    if (prevState.readMails.contains(event.mailId)) {
+    if (prevState.readMails.contains(event.mailId ?? "")) {
       return;
     }
     prevState.unreadMails.remove(event.mailId);
-    prevState.readMails.add(event.mailId);
+    if (event.mailId != null) {
+    prevState.readMails.add(event.mailId!);
+    }
+    if (event.mailIds != null) {
+      prevState.readMails.addAll(event.mailIds!);
+    }
     emit(MailState.transform(MailMarkAsReadSuccess.new, prevState));
     add(SyncMailActions());
   }
@@ -78,7 +83,12 @@ class MailBloc extends HydratedBloc<MailEvent, MailState> {
       return;
     }
     prevState.readMails.remove(event.mailId);
-    prevState.unreadMails.add(event.mailId);
+    if (event.mailId != null) {
+    prevState.unreadMails.add(event.mailId!);
+    }
+    if (event.mailIds != null) {
+      prevState.unreadMails.addAll(event.mailIds!);
+    }
     emit(MailState.transform(MailMarkAsUnreadSuccess.new, prevState));
     add(SyncMailActions());
   }
@@ -98,6 +108,10 @@ class MailBloc extends HydratedBloc<MailEvent, MailState> {
       if (result.success) {
         state.readMails.clear();
         state.unreadMails.clear();
+        state.archivedMails.clear();  
+        state.unarchivedMails.clear();
+        state.trashedMails.clear();
+        state.untrashedMails.clear();
         emit(MailState.transform(MailLoaded.new, prevState));
       } else {
         emit(MailState.transformError(MailLoadingError.new, prevState, result.message ?? "Unknown error"));
@@ -159,7 +173,12 @@ class MailBloc extends HydratedBloc<MailEvent, MailState> {
         return;
       }
       prevState.unarchivedMails.remove(event.mailId);
-      prevState.archivedMails.add(event.mailId);
+      if (event.mailId != null) {
+      prevState.archivedMails.add(event.mailId!);
+      }
+      if (event.mailIds != null) {
+        prevState.archivedMails.addAll(event.mailIds!);
+      }
       emit(MailState.transform(MailArchiveSuccess.new, prevState));
       add(SyncMailActions());
     } catch (e) {
@@ -174,7 +193,12 @@ class MailBloc extends HydratedBloc<MailEvent, MailState> {
         return;
       }
       prevState.archivedMails.remove(event.mailId);
-      prevState.unarchivedMails.add(event.mailId);
+      if (event.mailId != null) {
+      prevState.unarchivedMails.add(event.mailId!);
+      }
+      if (event.mailIds != null) {
+        prevState.unarchivedMails.addAll(event.mailIds!);
+      }
       emit(MailState.transform(MailUnarchiveSuccess.new, prevState));
       add(SyncMailActions());
     } catch (e) {
@@ -189,7 +213,12 @@ class MailBloc extends HydratedBloc<MailEvent, MailState> {
         return;
       }
       prevState.untrashedMails.remove(event.mailId);
-      prevState.trashedMails.add(event.mailId);
+      if (event.mailId != null) {
+      prevState.trashedMails.add(event.mailId!);
+      }
+      if (event.mailIds != null) {
+        prevState.trashedMails.addAll(event.mailIds!);
+      }
       emit(MailState.transform(MailTrashSuccess.new, prevState));
       add(SyncMailActions());
     } catch (e) {
@@ -204,7 +233,12 @@ class MailBloc extends HydratedBloc<MailEvent, MailState> {
         return;
       }
       prevState.trashedMails.remove(event.mailId);
-      prevState.untrashedMails.add(event.mailId);
+      if (event.mailId != null) {
+      prevState.untrashedMails.add(event.mailId!);
+      }
+      if (event.mailIds != null) {
+        prevState.untrashedMails.addAll(event.mailIds!);
+      }
       emit(MailState.transform(MailUntrashSuccess.new, prevState));
       add(SyncMailActions());
     } catch (e) {
