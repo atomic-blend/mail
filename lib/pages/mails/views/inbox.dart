@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mail/blocs/mail/mail_bloc.dart';
 import 'package:mail/i18n/strings.g.dart';
 import 'package:mail/models/mail/mail.dart';
+import 'package:mail/pages/ab_toast.dart';
 import 'package:mail/pages/app_layout.dart';
 import 'package:mail/pages/appbars/mail_appbar.dart';
 import 'package:mail/pages/mails/mail_details.dart';
@@ -31,6 +32,20 @@ class _InboxScreenState extends State<InboxScreen> {
               ?.where((mail) => mail.archived != true && mail.trashed != true)
               .toList() ??
           [];
+      if (selectedMails.isNotEmpty && isSelecting == true) {
+        abToastController.replaceNotification(
+          ABToastNotification(
+            key: ValueKey("selected_mails"),
+            content: Text(
+              '${selectedMails.length} ${context.t.email_folders.inbox}',
+            ),
+          ),
+        );
+      } else {
+        abToastController.removeNotification(
+          ValueKey("selected_mails"),
+        );
+      }
       return Row(
         children: [
           SizedBox(

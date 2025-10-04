@@ -150,13 +150,11 @@ class MailDetailScreenState extends ResponsiveState<MailDetailScreen> {
                                                     .mark_as_read,
                                             CupertinoIcons.envelope_open, () {
                                           if (mail.read == true) {
-                                            context
-                                                .read<MailBloc>()
-                                                .add(MarkAsUnread(mailId: mail.id!));
+                                            context.read<MailBloc>().add(
+                                                MarkAsUnread(mailId: mail.id!));
                                           } else {
-                                            context
-                                                .read<MailBloc>()
-                                                .add(MarkAsRead(mailId: mail.id!));
+                                            context.read<MailBloc>().add(
+                                                MarkAsRead(mailId: mail.id!));
                                           }
                                         }),
                                         SizedBox(width: $constants.insets.xs),
@@ -164,9 +162,8 @@ class MailDetailScreenState extends ResponsiveState<MailDetailScreen> {
                                             context,
                                             context.t.mail_actions.archive,
                                             CupertinoIcons.archivebox, () {
-                                          context
-                                              .read<MailBloc>()
-                                              .add(ArchiveMail(mailId: mail.id!));
+                                          context.read<MailBloc>().add(
+                                              ArchiveMail(mailId: mail.id!));
                                         }),
                                         SizedBox(width: $constants.insets.xs),
                                         _buildActionPill(
@@ -208,74 +205,71 @@ class MailDetailScreenState extends ResponsiveState<MailDetailScreen> {
               if (!isDesktop(context))
                 Align(
                   alignment: Alignment.bottomCenter,
-                  child: Positioned(
-                    bottom: 0,
-                    child: ElevatedContainer(
-                      border: Border.all(
-                        color: isDarkMode(context)
-                            ? Colors.grey.shade800
-                            : Colors.white,
-                      ),
-                      padding: EdgeInsets.symmetric(
-                        horizontal: $constants.insets.sm,
-                      ),
-                      height: 60,
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        spacing: $constants.insets.xs,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          IconButton(
-                            onPressed: () {
-                              if (mail.read == true) {
-                                context
-                                    .read<MailBloc>()
-                                    .add(MarkAsUnread(mailId: mail.id!));
-                              } else {
-                                context
-                                    .read<MailBloc>()
-                                    .add(MarkAsRead(mailId: mail.id!));
-                              }
-                            },
-                            icon: mail.read == true
-                                ? Icon(CupertinoIcons.envelope_open)
-                                : Icon(CupertinoIcons.envelope),
-                          ),
-                          IconButton(
-                            onPressed: () {
-                              if (mail.archived != true) {
-                                context
-                                    .read<MailBloc>()
-                                    .add(ArchiveMail(mailId: mail.id!));
-                              } else {
-                                context
-                                    .read<MailBloc>()
-                                    .add(UnarchiveMail(mailId: mail.id!));
-                              }
-                            },
-                            icon: mail.archived == true
-                                ? Icon(CupertinoIcons.tray_arrow_down)
-                                : Icon(CupertinoIcons.archivebox),
-                          ),
-                          IconButton(
-                            onPressed: () {
-                              if (mail.trashed != true) {
-                                context
-                                    .read<MailBloc>()
-                                    .add(TrashMail(mailId: mail.id!));
-                              } else {
-                                context
-                                    .read<MailBloc>()
-                                    .add(UntrashMail(mailId: mail.id!));
-                              }
-                              Navigator.of(context).pop();
-                            },
-                            icon: mail.trashed == true
-                                ? Icon(CupertinoIcons.trash_slash)
-                                : Icon(CupertinoIcons.trash),
-                          ),
-                        ],
-                      ),
+                  child: ElevatedContainer(
+                    border: Border.all(
+                      color: isDarkMode(context)
+                          ? Colors.grey.shade800
+                          : Colors.white,
+                    ),
+                    padding: EdgeInsets.symmetric(
+                      horizontal: $constants.insets.sm,
+                    ),
+                    height: 60,
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      spacing: $constants.insets.xs,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        IconButton(
+                          onPressed: () {
+                            if (mail.read == true) {
+                              context
+                                  .read<MailBloc>()
+                                  .add(MarkAsUnread(mailId: mail.id!));
+                            } else {
+                              context
+                                  .read<MailBloc>()
+                                  .add(MarkAsRead(mailId: mail.id!));
+                            }
+                          },
+                          icon: mail.read == true
+                              ? Icon(CupertinoIcons.envelope_open)
+                              : Icon(CupertinoIcons.envelope),
+                        ),
+                        IconButton(
+                          onPressed: () {
+                            if (mail.archived != true) {
+                              context
+                                  .read<MailBloc>()
+                                  .add(ArchiveMail(mailId: mail.id!));
+                            } else {
+                              context
+                                  .read<MailBloc>()
+                                  .add(UnarchiveMail(mailId: mail.id!));
+                            }
+                          },
+                          icon: mail.archived == true
+                              ? Icon(CupertinoIcons.tray_arrow_down)
+                              : Icon(CupertinoIcons.archivebox),
+                        ),
+                        IconButton(
+                          onPressed: () {
+                            if (mail.trashed != true) {
+                              context
+                                  .read<MailBloc>()
+                                  .add(TrashMail(mailId: mail.id!));
+                            } else {
+                              context
+                                  .read<MailBloc>()
+                                  .add(UntrashMail(mailId: mail.id!));
+                            }
+                            Navigator.of(context).pop();
+                          },
+                          icon: mail.trashed == true
+                              ? Icon(CupertinoIcons.trash_slash)
+                              : Icon(CupertinoIcons.trash),
+                        ),
+                      ],
                     ),
                   ),
                 ),
