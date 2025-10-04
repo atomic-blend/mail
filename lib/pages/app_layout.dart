@@ -17,12 +17,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_side_menu/flutter_side_menu.dart';
 import 'package:macos_window_utils/widgets/titlebar_safe_area.dart';
 import 'package:mail/main.dart';
+import 'package:mail/pages/ab_toast.dart';
 import 'package:mail/utils/nav_constants.dart';
 import 'package:mail/pages/mails/mail_composer.dart';
 import 'package:mail/services/sync.service.dart';
 import 'package:icons_plus/icons_plus.dart';
 
 final SideMenuController sideMenuController = SideMenuController();
+final ABToastController abToastController = ABToastController();
 
 class AppLayout extends ResponsiveStatefulWidget {
   const AppLayout({super.key});
@@ -203,6 +205,13 @@ class AppLayoutState extends ResponsiveState<AppLayout> {
                           Expanded(child: body ?? Container()),
                         ],
                       ),
+                      Align(
+                        alignment: Alignment.bottomCenter,
+                        child: Padding(
+                          padding: EdgeInsets.only(bottom: 80),
+                          child: ABToastDisplay(controller: abToastController),
+                        ),
+                      ),
                       Positioned(
                         bottom: 0,
                         left: 0,
@@ -211,7 +220,7 @@ class AppLayoutState extends ResponsiveState<AppLayout> {
                           padding: EdgeInsets.symmetric(
                               horizontal: $constants.insets.md),
                           child: ABNavbar(
-                            backgroundColor: getTheme(context).surfaceContainer,
+                            backgroundColor: getTheme(context).surface,
                             onPrimaryMenuSelected: (key) {
                               context
                                   .read<AppCubit>()
