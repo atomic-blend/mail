@@ -8,6 +8,7 @@ import 'package:mail/blocs/mail/mail_bloc.dart';
 import 'package:mail/components/cards/mail_card.dart';
 import 'package:mail/i18n/strings.g.dart';
 import 'package:mail/models/mail/mail.dart';
+import 'package:mail/pages/app_layout.dart';
 
 enum SelectedListMode {
   inbox,
@@ -20,7 +21,14 @@ enum SelectedListMode {
 class SelectedListScreen extends StatelessWidget {
   final List<Mail> mails;
   final SelectedListMode? mode;
-  const SelectedListScreen({super.key, required this.mails, this.mode});
+  final bool? windowed;
+  final Function? onClearSelection;
+  const SelectedListScreen(
+      {super.key,
+      required this.mails,
+      this.mode,
+      this.windowed = false,
+      this.onClearSelection});
 
   @override
   Widget build(BuildContext context) {
@@ -135,30 +143,45 @@ class SelectedListScreen extends StatelessWidget {
           .read<MailBloc>()
           .add(MarkAsUnread(mailIds: mails.map((mail) => mail.id!).toList()));
     }
+    _clearSelection(context);
+  }
+
+  void _clearSelection(BuildContext context) {
+    if (windowed == true) {
+      Navigator.pop(context);
+    }
+    abToastController.removeNotification(
+      ValueKey("selected_mails"),
+    );
+    onClearSelection?.call();
   }
 
   void _archiveBulk(BuildContext context, List<Mail> mails) {
     context
         .read<MailBloc>()
         .add(ArchiveMail(mailIds: mails.map((mail) => mail.id!).toList()));
+    _clearSelection(context);
   }
 
   void _unarchiveBulk(BuildContext context, List<Mail> mails) {
     context
         .read<MailBloc>()
         .add(UnarchiveMail(mailIds: mails.map((mail) => mail.id!).toList()));
+    _clearSelection(context);
   }
 
   void _trashBulk(BuildContext context, List<Mail> mails) {
     context
         .read<MailBloc>()
         .add(TrashMail(mailIds: mails.map((mail) => mail.id!).toList()));
+    _clearSelection(context);
   }
 
   void _untrashBulk(BuildContext context, List<Mail> mails) {
     context
         .read<MailBloc>()
         .add(UntrashMail(mailIds: mails.map((mail) => mail.id!).toList()));
+    _clearSelection(context);
   }
 
   Widget _buildActionButton(

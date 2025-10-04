@@ -1,9 +1,11 @@
+import 'package:ab_shared/components/ab_toast.dart';
 import 'package:ab_shared/utils/constants.dart';
 import 'package:ab_shared/utils/shortcuts.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mail/blocs/mail/mail_bloc.dart';
+import 'package:mail/components/toast_notifications/selected_mails.dart';
 import 'package:mail/i18n/strings.g.dart';
 import 'package:mail/models/mail/mail.dart';
 import 'package:mail/pages/app_layout.dart';
@@ -28,6 +30,45 @@ class _AllMailScreenState extends State<AllMailScreen> {
   Widget build(BuildContext context) {
     return BlocBuilder<MailBloc, MailState>(builder: (context, mailState) {
       final allMails = mailState.mails ?? [];
+
+      if (!isDesktop(context) &&
+          selectedMails.isNotEmpty &&
+          isSelecting == true) {
+        abToastController.replaceNotification(
+          ABToastNotification(
+            key: ValueKey("selected_mails"),
+            content: SelectedMailsToastNotification(mails: selectedMails),
+            onTap: () {
+              showModalBottomSheet(
+                context: context,
+                isScrollControlled: true,
+                builder: (context) => SizedBox(
+                    height: getSize(context).height * 0.8,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular($constants.corners.lg),
+                        topRight: Radius.circular($constants.corners.lg),
+                      ),
+                      child: SelectedListScreen(
+                        mails: selectedMails,
+                        windowed: true,
+                        onClearSelection: () {
+                          setState(() {
+                            selectedMails.clear();
+                          });
+                        },
+                      ),
+                    )),
+              );
+            },
+          ),
+        );
+      } else {
+        abToastController.removeNotification(
+          ValueKey("selected_mails"),
+        );
+      }
+
       return Row(
         children: [
           SizedBox(
@@ -89,6 +130,11 @@ class _AllMailScreenState extends State<AllMailScreen> {
                         : SelectedListScreen(
                             mails: selectedMails,
                             mode: SelectedListMode.all,
+                            onClearSelection: () {
+                              setState(() {
+                                selectedMails.clear();
+                              });
+                            },
                           ),
               ),
             ),

@@ -52,6 +52,7 @@ class Translations implements BaseTranslations<AppLocale, Translations> {
 	late final TranslationsXxMailCardEn xx_mail_card = TranslationsXxMailCardEn._(_root);
 	late final TranslationsEmailFoldersEn email_folders = TranslationsEmailFoldersEn._(_root);
 	late final TranslationsMailActionsEn mail_actions = TranslationsMailActionsEn._(_root);
+	late final TranslationsToastNotificationsEn toast_notifications = TranslationsToastNotificationsEn._(_root);
 }
 
 // Path: settings
@@ -267,6 +268,16 @@ class TranslationsMailActionsEn {
 	String get untrash => 'Untrash';
 }
 
+// Path: toast_notifications
+class TranslationsToastNotificationsEn {
+	TranslationsToastNotificationsEn._(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+	late final TranslationsToastNotificationsSelectedMailsEn selected_mails = TranslationsToastNotificationsSelectedMailsEn._(_root);
+}
+
 // Path: settings.app_settings
 class TranslationsSettingsAppSettingsEn {
 	TranslationsSettingsAppSettingsEn._(this._root);
@@ -350,6 +361,21 @@ class TranslationsMailComposerSaveDraftModalEn {
 	String get cancel_text => 'Discard';
 }
 
+// Path: toast_notifications.selected_mails
+class TranslationsToastNotificationsSelectedMailsEn {
+	TranslationsToastNotificationsSelectedMailsEn._(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: '${count} mails selected'
+	String title({required Object count}) => '${count} mails selected';
+
+	/// en: 'Click here to perform action.'
+	String get description => 'Click here to perform action.';
+}
+
 // Path: settings.app_settings.selfHostedUrl
 class TranslationsSettingsAppSettingsSelfHostedUrlEn {
 	TranslationsSettingsAppSettingsSelfHostedUrlEn._(this._root);
@@ -413,6 +439,8 @@ extension on Translations {
 			case 'mail_actions.unarchive': return 'Unarchive';
 			case 'mail_actions.trash': return 'Trash';
 			case 'mail_actions.untrash': return 'Untrash';
+			case 'toast_notifications.selected_mails.title': return ({required Object count}) => '${count} mails selected';
+			case 'toast_notifications.selected_mails.description': return 'Click here to perform action.';
 			default: return null;
 		}
 	}

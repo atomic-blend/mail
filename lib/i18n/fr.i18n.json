@@ -81,5 +81,11 @@
     "unarchive": "Désarchiver",
     "trash": "Corbeille",
     "untrash": "Restaurer"
+  },
+  "toast_notifications": {
+    "selected_mails": {
+      "title": "${count} mails sélectionnés",
+      "description": "Cliquez ici pour effectuer une action."
+    } 
   }
 }

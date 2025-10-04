@@ -170,6 +170,11 @@ class _TrashedScreenState extends State<TrashedScreen> {
                         : SelectedListScreen(
                             mails: selectedMails,
                             mode: SelectedListMode.trash,
+                            onClearSelection: () {
+                              setState(() {
+                                selectedMails.clear();
+                              });
+                            },
                           ),
               ),
             ),

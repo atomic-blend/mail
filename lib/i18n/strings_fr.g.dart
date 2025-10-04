@@ -49,6 +49,7 @@ class TranslationsFr implements Translations {
 	@override late final _TranslationsXxMailCardFr xx_mail_card = _TranslationsXxMailCardFr._(_root);
 	@override late final _TranslationsEmailFoldersFr email_folders = _TranslationsEmailFoldersFr._(_root);
 	@override late final _TranslationsMailActionsFr mail_actions = _TranslationsMailActionsFr._(_root);
+	@override late final _TranslationsToastNotificationsFr toast_notifications = _TranslationsToastNotificationsFr._(_root);
 }
 
 // Path: settings
@@ -204,6 +205,16 @@ class _TranslationsMailActionsFr implements TranslationsMailActionsEn {
 	@override String get untrash => 'Restaurer';
 }
 
+// Path: toast_notifications
+class _TranslationsToastNotificationsFr implements TranslationsToastNotificationsEn {
+	_TranslationsToastNotificationsFr._(this._root);
+
+	final TranslationsFr _root; // ignore: unused_field
+
+	// Translations
+	@override late final _TranslationsToastNotificationsSelectedMailsFr selected_mails = _TranslationsToastNotificationsSelectedMailsFr._(_root);
+}
+
 // Path: settings.app_settings
 class _TranslationsSettingsAppSettingsFr implements TranslationsSettingsAppSettingsEn {
 	_TranslationsSettingsAppSettingsFr._(this._root);
@@ -260,6 +271,17 @@ class _TranslationsAccountSectionsFr implements TranslationsAccountSectionsEn {
 
 	// Translations
 	@override String get account => 'Compte';
+}
+
+// Path: toast_notifications.selected_mails
+class _TranslationsToastNotificationsSelectedMailsFr implements TranslationsToastNotificationsSelectedMailsEn {
+	_TranslationsToastNotificationsSelectedMailsFr._(this._root);
+
+	final TranslationsFr _root; // ignore: unused_field
+
+	// Translations
+	@override String title({required Object count}) => '${count} mails sélectionnés';
+	@override String get description => 'Cliquez ici pour effectuer une action.';
 }
 
 // Path: settings.app_settings.selfHostedUrl
@@ -323,6 +345,8 @@ extension on TranslationsFr {
 			case 'mail_actions.unarchive': return 'Désarchiver';
 			case 'mail_actions.trash': return 'Corbeille';
 			case 'mail_actions.untrash': return 'Restaurer';
+			case 'toast_notifications.selected_mails.title': return ({required Object count}) => '${count} mails sélectionnés';
+			case 'toast_notifications.selected_mails.description': return 'Cliquez ici pour effectuer une action.';
 			default: return null;
 		}
 	}

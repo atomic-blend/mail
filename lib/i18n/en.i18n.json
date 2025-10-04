@@ -79,5 +79,11 @@
     "unarchive": "Unarchive",
     "trash": "Trash",
     "untrash": "Untrash"
+  },
+  "toast_notifications": {
+    "selected_mails": {
+      "title": "${count} mails selected",
+      "description": "Click here to perform action."
+    }
   }
 }

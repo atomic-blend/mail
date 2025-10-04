@@ -363,65 +363,78 @@ class AppLayoutState extends ResponsiveState<AppLayout> {
             }
           }
 
-          final renderedBody = Flex(
-            direction: Axis.horizontal,
+          final renderedBody = Stack(
             children: [
-              // primary menu items
-              ABSideMenu(
-                controller: sideMenuController,
-                primaryMenuItems: primaryMenuItems,
-                primaryMenuKey: appState.primaryMenuSelectedKey,
-                secondaryMenuKey: appState.secondaryMenuSelectedKey,
-                onItemTap: (item) {
-                  if (item.onTap != null) {
-                    item.onTap!(0);
-                    return;
-                  }
-                  context.read<AppCubit>().changePrimaryMenuSelectedKey(
-                        key: (item.key as ValueKey).value,
-                      );
-                  if (item.mainSecondaryKey != null) {
-                    context.read<AppCubit>().changeSecondaryMenuSelectedKey(
-                          key: item.mainSecondaryKey!,
-                        );
-                  }
-                },
-                onSubItemTap: (item, subItem) {
-                  if (item.onTap != null) {
-                    subItem.onTap!(0);
-                    return;
-                  }
-                  context.read<AppCubit>().changePrimaryMenuSelectedKey(
-                        key: (item.key as ValueKey).value,
-                      );
-                  context.read<AppCubit>().changeSecondaryMenuSelectedKey(
-                        key: (subItem.key as ValueKey).value,
-                      );
-                },
-              ),
-              Expanded(
-                child: Flex(
-                  direction: Axis.horizontal,
-                  children: [
-                    // secondary menu items
-                    Expanded(
-                      child: Scaffold(
-                        // if there's secondary, show the secondary item appBar
-                        // else show the primary appBar
-                        appBar: appBar,
-                        // if there's secondary, show the secondary item body
-                        // else show the primary item body
-                        body: Column(
-                          children: [
-                            header ?? Container(),
-                            Expanded(child: body ?? Container()),
-                          ],
+              Flex(
+                direction: Axis.horizontal,
+                children: [
+                  // primary menu items
+                  ABSideMenu(
+                    controller: sideMenuController,
+                    primaryMenuItems: primaryMenuItems,
+                    primaryMenuKey: appState.primaryMenuSelectedKey,
+                    secondaryMenuKey: appState.secondaryMenuSelectedKey,
+                    onItemTap: (item) {
+                      if (item.onTap != null) {
+                        item.onTap!(0);
+                        return;
+                      }
+                      context.read<AppCubit>().changePrimaryMenuSelectedKey(
+                            key: (item.key as ValueKey).value,
+                          );
+                      if (item.mainSecondaryKey != null) {
+                        context.read<AppCubit>().changeSecondaryMenuSelectedKey(
+                              key: item.mainSecondaryKey!,
+                            );
+                      }
+                    },
+                    onSubItemTap: (item, subItem) {
+                      if (item.onTap != null) {
+                        subItem.onTap!(0);
+                        return;
+                      }
+                      context.read<AppCubit>().changePrimaryMenuSelectedKey(
+                            key: (item.key as ValueKey).value,
+                          );
+                      context.read<AppCubit>().changeSecondaryMenuSelectedKey(
+                            key: (subItem.key as ValueKey).value,
+                          );
+                    },
+                  ),
+                  Expanded(
+                    child: Flex(
+                      direction: Axis.horizontal,
+                      children: [
+                        // secondary menu items
+                        Expanded(
+                          child: Scaffold(
+                            // if there's secondary, show the secondary item appBar
+                            // else show the primary appBar
+                            appBar: appBar,
+                            // if there's secondary, show the secondary item body
+                            // else show the primary item body
+                            body: Column(
+                              children: [
+                                header ?? Container(),
+                                Expanded(child: body ?? Container()),
+                              ],
+                            ),
+                          ),
                         ),
-                      ),
+                      ],
                     ),
-                  ],
+                  )
+                ],
+              ),
+              Align(
+                alignment: Alignment.bottomRight,
+                child: Padding(
+                  padding: EdgeInsets.only(
+                      bottom: $constants.insets.sm,
+                      right: $constants.insets.sm),
+                  child: ABToastDisplay(controller: abToastController),
                 ),
-              )
+              ),
             ],
           );
 

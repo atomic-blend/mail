@@ -2,8 +2,10 @@ import 'package:ab_shared/components/ab_toast.dart';
 import 'package:ab_shared/utils/constants.dart';
 import 'package:ab_shared/utils/shortcuts.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mail/blocs/mail/mail_bloc.dart';
+import 'package:mail/components/toast_notifications/selected_mails.dart';
 import 'package:mail/i18n/strings.g.dart';
 import 'package:mail/models/mail/mail.dart';
 import 'package:mail/pages/app_layout.dart';
@@ -31,13 +33,36 @@ class _InboxScreenState extends State<InboxScreen> {
               ?.where((mail) => mail.archived != true && mail.trashed != true)
               .toList() ??
           [];
-      if (selectedMails.isNotEmpty && isSelecting == true) {
+      if (!isDesktop(context) &&
+          selectedMails.isNotEmpty &&
+          isSelecting == true) {
         abToastController.replaceNotification(
           ABToastNotification(
             key: ValueKey("selected_mails"),
-            content: Text(
-              '${selectedMails.length} ${context.t.email_folders.inbox}',
-            ),
+            content: SelectedMailsToastNotification(mails: selectedMails),
+            onTap: () {
+              showModalBottomSheet(
+                context: context,
+                isScrollControlled: true,
+                builder: (context) => SizedBox(
+                    height: getSize(context).height * 0.8,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular($constants.corners.lg),
+                        topRight: Radius.circular($constants.corners.lg),
+                      ),
+                      child: SelectedListScreen(
+                        mails: selectedMails,
+                        windowed: true,
+                        onClearSelection: () {
+                          setState(() {
+                            selectedMails.clear();
+                          });
+                        },
+                      ),
+                    )),
+              );
+            },
           ),
         );
       } else {
@@ -107,7 +132,14 @@ class _InboxScreenState extends State<InboxScreen> {
                               });
                             },
                           )
-                        : SelectedListScreen(mails: selectedMails),
+                        : SelectedListScreen(
+                            mails: selectedMails,
+                            onClearSelection: () {
+                              setState(() {
+                                selectedMails.clear();
+                              });
+                            },
+                          ),
               ),
             ),
           ]
