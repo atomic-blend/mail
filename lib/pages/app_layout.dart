@@ -17,11 +17,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_side_menu/flutter_side_menu.dart';
 import 'package:macos_window_utils/widgets/titlebar_safe_area.dart';
 import 'package:mail/main.dart';
-import 'package:mail/pages/ab_toast.dart';
 import 'package:mail/utils/nav_constants.dart';
 import 'package:mail/pages/mails/mail_composer.dart';
 import 'package:mail/services/sync.service.dart';
 import 'package:icons_plus/icons_plus.dart';
+import 'package:ab_shared/components/ab_toast.dart';
 
 final SideMenuController sideMenuController = SideMenuController();
 final ABToastController abToastController = ABToastController();

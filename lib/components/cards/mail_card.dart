@@ -120,7 +120,9 @@ class _MailCardState extends State<MailCard> {
                   if (mail.archived != true) {
                     context.read<MailBloc>().add(ArchiveMail(mailId: mail.id!));
                   } else {
-                    context.read<MailBloc>().add(UnarchiveMail(mailId: mail.id!));
+                    context
+                        .read<MailBloc>()
+                        .add(UnarchiveMail(mailId: mail.id!));
                   }
                 },
                 backgroundColor: getTheme(context).tertiary,
@@ -210,6 +212,8 @@ class _MailCardState extends State<MailCard> {
                           } else {
                             widget.setSelectMode?.call(true);
                           }
+                        } else {
+                          widget.setSelectMode?.call(true);
                         }
                         _toggleSelected(mail, reset: widget.selectMode != true);
                       },
@@ -227,6 +231,8 @@ class _MailCardState extends State<MailCard> {
                           } else {
                             widget.setSelectMode?.call(true);
                           }
+                        } else {
+                          widget.setSelectMode?.call(true);
                         }
                         _toggleSelected(mail, reset: widget.selectMode != true);
                       },
