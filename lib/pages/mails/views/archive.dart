@@ -22,7 +22,8 @@ class ArchiveScreen extends StatefulWidget {
 
 class _ArchiveScreenState extends State<ArchiveScreen> {
   List<Mail> selectedMails = [];
-
+  bool? isSelecting = true;
+  
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<MailBloc, MailState>(builder: (context, mailState) {
@@ -52,6 +53,11 @@ class _ArchiveScreenState extends State<ArchiveScreen> {
                       });
                     },
                     selectedMails: selectedMails,
+                    setIsSelecting: (value) {
+                      setState(() {
+                        isSelecting = value;
+                      });
+                    },
                   ),
                 ),
               ],
@@ -72,7 +78,7 @@ class _ArchiveScreenState extends State<ArchiveScreen> {
                         title: context.t.email_folders.archive,
                         numberOfMails: archivedMails.length,
                       )
-                    : selectedMails.length == 1
+                    : selectedMails.length == 1 && isSelecting != true
                         ? MailDetailScreen(
                             selectedMails.first,
                             mode: MailScreenMode.integrated,

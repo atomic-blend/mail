@@ -13,6 +13,7 @@ import 'package:mail/pages/appbars/mail_appbar.dart';
 import 'package:mail/pages/mails/mail_details.dart';
 import 'package:mail/pages/mails/mail_list.dart';
 import 'package:mail/pages/mails/no_mail_selected.dart';
+import 'package:mail/pages/mails/selected_list.dart';
 
 class TrashedScreen extends StatefulWidget {
   const TrashedScreen({super.key});
@@ -23,6 +24,7 @@ class TrashedScreen extends StatefulWidget {
 
 class _TrashedScreenState extends State<TrashedScreen> {
   List<Mail> selectedMails = [];
+  bool? isSelecting = true;
 
   @override
   Widget build(BuildContext context) {
@@ -52,6 +54,11 @@ class _TrashedScreenState extends State<TrashedScreen> {
                       });
                     },
                     selectedMails: selectedMails,
+                    setIsSelecting: (value) {
+                      setState(() {
+                        isSelecting = value;
+                      });
+                    },
                     header: ElevatedContainer(
                       border: Border.all(color: getTheme(context).error),
                       padding: EdgeInsets.symmetric(
@@ -150,7 +157,7 @@ class _TrashedScreenState extends State<TrashedScreen> {
                         title: context.t.email_folders.trashed,
                         numberOfMails: trashedMails.length,
                       )
-                    : selectedMails.length == 1
+                    : selectedMails.length == 1 && isSelecting != true
                         ? MailDetailScreen(
                             selectedMails.first,
                             mode: MailScreenMode.integrated,
@@ -160,7 +167,10 @@ class _TrashedScreenState extends State<TrashedScreen> {
                               });
                             },
                           )
-                        : Container(),
+                        : SelectedListScreen(
+                            mails: selectedMails,
+                            mode: SelectedListMode.trash,
+                          ),
               ),
             ),
           ]

@@ -11,6 +11,7 @@ import 'package:mail/pages/appbars/mail_appbar.dart';
 import 'package:mail/pages/mails/mail_details.dart';
 import 'package:mail/pages/mails/mail_list.dart';
 import 'package:mail/pages/mails/no_mail_selected.dart';
+import 'package:mail/pages/mails/selected_list.dart';
 
 class AllMailScreen extends StatefulWidget {
   const AllMailScreen({super.key});
@@ -21,6 +22,7 @@ class AllMailScreen extends StatefulWidget {
 
 class _AllMailScreenState extends State<AllMailScreen> {
   List<Mail> selectedMails = [];
+  bool? isSelecting = true;
 
   @override
   Widget build(BuildContext context) {
@@ -49,6 +51,11 @@ class _AllMailScreenState extends State<AllMailScreen> {
                       });
                     },
                     selectedMails: selectedMails,
+                    setIsSelecting: (value) {
+                      setState(() {
+                        isSelecting = value;
+                      });
+                    },
                   ),
                 ),
               ],
@@ -69,7 +76,7 @@ class _AllMailScreenState extends State<AllMailScreen> {
                         title: context.t.email_folders.all,
                         numberOfMails: allMails.length,
                       )
-                    : selectedMails.length == 1
+                    : selectedMails.length == 1 && isSelecting != true
                         ? MailDetailScreen(
                             selectedMails.first,
                             mode: MailScreenMode.integrated,
@@ -79,7 +86,10 @@ class _AllMailScreenState extends State<AllMailScreen> {
                               });
                             },
                           )
-                        : Container(),
+                        : SelectedListScreen(
+                            mails: selectedMails,
+                            mode: SelectedListMode.all,
+                          ),
               ),
             ),
           ]
