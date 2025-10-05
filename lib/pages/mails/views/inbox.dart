@@ -97,6 +97,7 @@ class _InboxScreenState extends State<InboxScreen> {
                       });
                     },
                     selectedMails: selectedMails,
+                    isSelecting: isSelecting,
                     setIsSelecting: (value) {
                       setState(() {
                         isSelecting = value;

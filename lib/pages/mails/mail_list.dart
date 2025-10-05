@@ -16,6 +16,7 @@ class MailList extends StatefulWidget {
   final bool? drafts;
   final Widget? header;
   final Function(String)? onDelete;
+  final bool? isSelecting;
   final Function(bool)? setIsSelecting;
 
   const MailList({
@@ -28,7 +29,8 @@ class MailList extends StatefulWidget {
     this.onDeselect,
     this.selectedMails,
     this.setIsSelecting,
-    });
+    this.isSelecting = false,
+  });
 
   @override
   State<MailList> createState() => _MailListState();
@@ -36,7 +38,6 @@ class MailList extends StatefulWidget {
 
 class _MailListState extends State<MailList> {
   final TextEditingController searchController = TextEditingController();
-  bool? selectMode;
 
   @override
   Widget build(BuildContext context) {
@@ -121,11 +122,8 @@ class _MailListState extends State<MailList> {
               return Padding(
                 padding: EdgeInsets.only(bottom: $constants.insets.xs),
                 child: MailCard(
-                  selectMode: selectMode,
+                  selectMode: widget.isSelecting,
                   setSelectMode: (value) {
-                    setState(() {
-                      selectMode = value;
-                    });
                     widget.setIsSelecting?.call(value);
                   },
                   draft: widget.drafts == true ? mail as SendMail : null,
