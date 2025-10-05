@@ -24,7 +24,7 @@ class InboxScreen extends StatefulWidget {
 
 class _InboxScreenState extends State<InboxScreen> {
   List<Mail> selectedMails = [];
-  bool? isSelecting = true;
+  bool? isSelecting = false;
 
   @override
   Widget build(BuildContext context) {

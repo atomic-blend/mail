@@ -24,7 +24,7 @@ class TrashedScreen extends StatefulWidget {
 
 class _TrashedScreenState extends State<TrashedScreen> {
   List<Mail> selectedMails = [];
-  bool? isSelecting = true;
+  bool? isSelecting = false;
 
   @override
   Widget build(BuildContext context) {

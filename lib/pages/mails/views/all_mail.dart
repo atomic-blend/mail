@@ -24,7 +24,7 @@ class AllMailScreen extends StatefulWidget {
 
 class _AllMailScreenState extends State<AllMailScreen> {
   List<Mail> selectedMails = [];
-  bool? isSelecting = true;
+  bool? isSelecting = false;
 
   @override
   Widget build(BuildContext context) {

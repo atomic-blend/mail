@@ -24,7 +24,7 @@ class ArchiveScreen extends StatefulWidget {
 
 class _ArchiveScreenState extends State<ArchiveScreen> {
   List<Mail> selectedMails = [];
-  bool? isSelecting = true;
+  bool? isSelecting = false;
 
   @override
   Widget build(BuildContext context) {
