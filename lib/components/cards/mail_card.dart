@@ -277,15 +277,41 @@ class _MailCardState extends State<MailCard> {
                     Spacer(),
                     GestureDetector(
                       onTap: () {
-                        showDialog(
-                          context: context,
-                          builder: (context) => Dialog(
-                            child: SizedBox(
-                              width: getSize(context).width * 0.8,
+                        if (isDesktop(context)) {
+                          showDialog(
+                            context: context,
+                            builder: (context) => Dialog(
+                              insetPadding: EdgeInsets.zero,
+                              child: SizedBox(
+                                width: getSize(context).width * 0.8,
+                                height: getSize(context).height * 0.8,
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(
+                                      $constants.corners.lg),
+                                  child: MailDetailScreen(
+                                    mail,
+                                    mode: MailScreenMode.integrated,
+                                    onCancel: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                  ),
+                                ),
+                              ),
+                            ),
+                          );
+                        } else {
+                          showModalBottomSheet(
+                            context: context,
+                            isScrollControlled: true,
+                            builder: (context) => SizedBox(
                               height: getSize(context).height * 0.8,
                               child: ClipRRect(
-                                borderRadius: BorderRadius.circular(
-                                    $constants.corners.lg),
+                                borderRadius: BorderRadius.only(
+                                  topLeft:
+                                      Radius.circular($constants.corners.lg),
+                                  topRight:
+                                      Radius.circular($constants.corners.lg),
+                                ),
                                 child: MailDetailScreen(
                                   mail,
                                   mode: MailScreenMode.integrated,
@@ -295,8 +321,8 @@ class _MailCardState extends State<MailCard> {
                                 ),
                               ),
                             ),
-                          ),
-                        );
+                          );
+                        }
                       },
                       child: Container(
                         padding: EdgeInsets.all($constants.insets.xs),
