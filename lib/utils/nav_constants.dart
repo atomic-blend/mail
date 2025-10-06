@@ -143,13 +143,18 @@ class NavConstants {
         subItems: [],
         appBar: AppBar(
             key: const Key("search"),
-            backgroundColor: getTheme(context).surfaceContainer,
-            leading: Container(),
-            title: Text(
-              "Search",
-              style: getTextTheme(context).headlineSmall!.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
+            backgroundColor: getTheme(context).surface,
+            title: Row(
+              children: [
+                const Icon(LineAwesome.search_solid),
+                SizedBox(width: $constants.insets.sm),
+                Text(
+                  "Search",
+                  style: getTextTheme(context).headlineSmall!.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
+                ),
+              ],
             ),
             actions: [
               BlocBuilder<AuthBloc, AuthState>(builder: (context, authState) {
