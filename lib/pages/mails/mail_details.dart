@@ -1,3 +1,4 @@
+import 'package:ab_shared/components/buttons/ab_button.dart';
 import 'package:ab_shared/components/responsive_stateful_widget.dart';
 import 'package:ab_shared/components/widgets/elevated_container.dart';
 import 'package:ab_shared/utils/constants.dart';
@@ -101,37 +102,28 @@ class MailDetailScreenState extends ResponsiveState<MailDetailScreen> {
                               mainAxisSize: MainAxisSize.max,
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Padding(
-                                      padding: EdgeInsets.symmetric(
-                                          horizontal: $constants.insets.md),
-                                      child: AutoSizeText(
-                                        maxLines: 1,
-                                        mail.getHeader("Subject"),
-                                        overflow: TextOverflow.ellipsis,
-                                        style: getTextTheme(context)
-                                            .headlineMedium!
-                                            .copyWith(
-                                              fontWeight: mail.read != true
-                                                  ? FontWeight.bold
-                                                  : null,
-                                            ),
-                                      ),
+                                ConstrainedBox(
+                                  constraints: BoxConstraints(
+                                    maxWidth: isDesktop(context)
+                                        ? getSize(context).width * 0.68
+                                        : getSize(context).width,
+                                  ),
+                                  child: Padding(
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: $constants.insets.md),
+                                    child: AutoSizeText(
+                                      maxLines: 1,
+                                      mail.getHeader("Subject"),
+                                      overflow: TextOverflow.ellipsis,
+                                      style: getTextTheme(context)
+                                          .headlineMedium!
+                                          .copyWith(
+                                            fontWeight: mail.read != true
+                                                ? FontWeight.bold
+                                                : null,
+                                          ),
                                     ),
-                                    if (mail.read != true) ...[
-                                      Container(
-                                        width: 8,
-                                        height: 8,
-                                        decoration: BoxDecoration(
-                                          color: Colors.blue,
-                                          borderRadius: BorderRadius.circular(
-                                              $constants.corners.full),
-                                        ),
-                                      ),
-                                    ],
-                                  ],
+                                  ),
                                 ),
                                 // Desktop only action bar
                                 if (isDesktop(context)) ...[
@@ -282,28 +274,13 @@ class MailDetailScreenState extends ResponsiveState<MailDetailScreen> {
 
   Widget _buildActionPill(BuildContext context, String label, IconData icon,
       VoidCallback onPressed) {
-    return GestureDetector(
+    return ABButton(
       onTap: onPressed,
-      child: Container(
-        padding: EdgeInsets.symmetric(
-            horizontal: $constants.insets.xs, vertical: $constants.insets.xxs),
-        decoration: BoxDecoration(
-          color: Colors.grey.shade200,
-          border: Border.all(
-            color: isDarkMode(context)
-                ? Colors.grey.shade600
-                : Colors.grey.shade300,
-            width: 1,
-          ),
-          borderRadius: BorderRadius.circular($constants.corners.sm),
-        ),
-        child: Row(
-          children: [
-            Icon(icon, size: 15),
-            SizedBox(width: $constants.insets.xs),
-            Text(label),
-          ],
-        ),
+      icon: icon,
+      iconSize: 18,
+      padding: EdgeInsets.symmetric(
+        horizontal: $constants.insets.xs,
+        vertical: $constants.insets.xs,
       ),
     );
   }
