@@ -26,19 +26,22 @@ class _OrganizeScreenState extends State<OrganizeScreen> {
   bool ended = false;
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<MailBloc, MailState>(builder: (context, mailState) {
-      final inboxMails = mailState.mails
-              ?.where((mail) =>
-                  mail.archived != true &&
-                  mail.trashed != true &&
-                  !organizedMails.contains(mail.id))
-              .toList() ??
-          [];
-      if (inboxMails.isEmpty || ended) {
-        return _buildNothingToOrganize();
-      }
-      return _buildOrganizer(inboxMails);
-    });
+    return SizedBox(
+      width: isDesktop(context) ? getSize(context).width * 0.5 : null,
+      child: BlocBuilder<MailBloc, MailState>(builder: (context, mailState) {
+        final inboxMails = mailState.mails
+                ?.where((mail) =>
+                    mail.archived != true &&
+                    mail.trashed != true &&
+                    !organizedMails.contains(mail.id))
+                .toList() ??
+            [];
+        if (inboxMails.isEmpty || ended) {
+          return _buildNothingToOrganize();
+        }
+        return _buildOrganizer(inboxMails);
+      }),
+    );
   }
 
   Widget _buildNothingToOrganize() {
