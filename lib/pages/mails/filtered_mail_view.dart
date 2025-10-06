@@ -76,7 +76,7 @@ class _FliteredMailViewState extends State<FliteredMailView> {
           SizedBox(
             width: isDesktop(context)
                 ? getSize(context).width > $constants.screenSize.md
-                    ? 300
+                    ? 350
                     : getSize(context).width * 0.66
                 : getSize(context).width,
             child: Column(

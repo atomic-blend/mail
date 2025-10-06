@@ -243,7 +243,7 @@ class _MailCardState extends State<MailCard> {
                     children: [
                       SizedBox(
                         width: isDesktop(context)
-                            ? constraints.maxWidth * 0.68
+                            ? constraints.maxWidth * 0.63
                             : null,
                         child: AutoSizeText(
                           mail.getHeader("From"),
@@ -258,7 +258,7 @@ class _MailCardState extends State<MailCard> {
                       SizedBox(height: $constants.insets.xxs),
                       SizedBox(
                         width: isDesktop(context)
-                            ? constraints.maxWidth * 0.68
+                            ? constraints.maxWidth * 0.63
                             : null,
                         child: AutoSizeText(
                           mail.getHeader("Subject"),
@@ -273,6 +273,46 @@ class _MailCardState extends State<MailCard> {
                       ),
                     ],
                   ),
+                  if (widget.selectMode == true) ...[
+                    Spacer(),
+                    GestureDetector(
+                      onTap: () {
+                        showDialog(
+                          context: context,
+                          builder: (context) => Dialog(
+                            child: SizedBox(
+                              width: getSize(context).width * 0.8,
+                              height: getSize(context).height * 0.8,
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(
+                                    $constants.corners.lg),
+                                child: MailDetailScreen(
+                                  mail,
+                                  mode: MailScreenMode.integrated,
+                                  onCancel: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                ),
+                              ),
+                            ),
+                          ),
+                        );
+                      },
+                      child: Container(
+                        padding: EdgeInsets.all($constants.insets.xs),
+                        decoration: BoxDecoration(
+                          color: getTheme(context).surfaceContainer.lighten(10),
+                          borderRadius:
+                              BorderRadius.circular($constants.corners.sm),
+                        ),
+                        child: Icon(
+                          CupertinoIcons.eye,
+                          size: 17,
+                        ),
+                      ),
+                    ),
+                    SizedBox(width: $constants.insets.xs),
+                  ]
                 ],
               ),
             ),
