@@ -7,7 +7,6 @@ import 'package:mail/blocs/mail/mail_bloc.dart';
 import 'package:mail/pages/app_layout.dart';
 import 'package:mail/pages/appbars/mail_appbar.dart';
 import 'package:mail/pages/mails/mail_list.dart';
-import 'package:mail/pages/mails/no_mail_selected.dart';
 import 'package:mail/services/sync.service.dart';
 
 class DraftScreen extends StatefulWidget {
@@ -49,20 +48,20 @@ class _DraftScreenState extends State<DraftScreen> {
               ],
             ),
           ),
-          if (isDesktop(context)) ...[
-            VerticalDivider(
-              width: 1,
-            ),
-            Expanded(
-              child: drafts.isEmpty
-                  ? NoMailSelectedScreen(
-                      icon: CupertinoIcons.tray_arrow_down,
-                      title: context.t.email_folders.drafts,
-                      numberOfMails: drafts.length,
-                    )
-                  : Container(),
-            ),
-          ]
+          // if (isDesktop(context)) ...[
+          //   VerticalDivider(
+          //     width: 1,
+          //   ),
+          //   Expanded(
+          //     child: drafts.isEmpty
+          //         ? NoMailSelectedScreen(
+          //             icon: CupertinoIcons.tray_arrow_down,
+          //             title: context.t.email_folders.drafts,
+          //             numberOfMails: drafts.length,
+          //           )
+          //         : Container(),
+          //   ),
+          // ]
         ],
       );
     });

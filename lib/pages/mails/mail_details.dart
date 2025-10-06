@@ -154,17 +154,27 @@ class MailDetailScreenState extends ResponsiveState<MailDetailScreen> {
                                             context,
                                             context.t.mail_actions.archive,
                                             CupertinoIcons.archivebox, () {
+                                          if (mail.archived != true) {  
                                           context.read<MailBloc>().add(
                                               ArchiveMail(mailId: mail.id!));
+                                          } else {
+                                            context.read<MailBloc>().add(
+                                                UnarchiveMail(mailId: mail.id!));
+                                          }
                                         }),
                                         SizedBox(width: $constants.insets.xs),
                                         _buildActionPill(
                                             context,
                                             context.t.mail_actions.trash,
                                             CupertinoIcons.trash, () {
+                                          if (mail.trashed != true) {
                                           context
                                               .read<MailBloc>()
                                               .add(TrashMail(mailId: mail.id!));
+                                          } else {
+                                            context.read<MailBloc>().add(
+                                                UntrashMail(mailId: mail.id!));
+                                          }
                                         }),
                                         SizedBox(width: $constants.insets.sm),
                                       ],
