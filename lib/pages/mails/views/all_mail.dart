@@ -92,6 +92,7 @@ class _AllMailScreenState extends State<AllMailScreen> {
                       });
                     },
                     selectedMails: selectedMails,
+                    isSelecting: isSelecting,
                     setIsSelecting: (value) {
                       setState(() {
                         isSelecting = value;

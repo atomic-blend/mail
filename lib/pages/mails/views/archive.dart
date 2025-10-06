@@ -92,6 +92,7 @@ class _ArchiveScreenState extends State<ArchiveScreen> {
                       });
                     },
                     selectedMails: selectedMails,
+                    isSelecting: isSelecting,
                     setIsSelecting: (value) {
                       setState(() {
                         isSelecting = value;

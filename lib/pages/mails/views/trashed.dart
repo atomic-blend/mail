@@ -54,6 +54,7 @@ class _TrashedScreenState extends State<TrashedScreen> {
                       });
                     },
                     selectedMails: selectedMails,
+                    isSelecting: isSelecting,
                     setIsSelecting: (value) {
                       setState(() {
                         isSelecting = value;
