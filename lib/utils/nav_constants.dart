@@ -1,6 +1,7 @@
 import 'package:ab_shared/blocs/auth/auth.bloc.dart';
 import 'package:ab_shared/components/app/ab_navbar.dart';
 import 'package:ab_shared/pages/account/account.dart';
+import 'package:ab_shared/utils/constants.dart';
 import 'package:mail/main.dart';
 import 'package:mail/pages/mails/views/all_mail.dart';
 import 'package:mail/pages/mails/views/archive.dart';
@@ -186,20 +187,21 @@ class NavConstants {
         body: Settings(),
         subItems: [],
         appBar: AppBar(
-            key: const Key("settings"),
-            backgroundColor: getTheme(context).surfaceContainer,
-            leading: Container(),
-            title: Text(
-              "Settings",
-              style: getTextTheme(context).headlineSmall!.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
-            ),
-            actions: [
-              BlocBuilder<AuthBloc, AuthState>(builder: (context, authState) {
-                return Container();
-              })
-            ]),
+          key: const Key("settings"),
+          title: Row(
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              const Icon(LineAwesome.cog_solid),
+              SizedBox(width: $constants.insets.sm),
+              Text(
+                "Settings",
+                style: getTextTheme(context).headlineSmall!.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
+              ),
+            ],
+          ),
+        ),
       ),
     ];
     return allItems;
