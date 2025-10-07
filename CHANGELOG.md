@@ -2,6 +2,14 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## 0.1.1 - 2025-10-07
+#### Bug Fixes
+- update flutter_age and ab_shared to be 16kb safe + update to latest android config - (f9f09ca) - Brandon Guigo
+#### Miscellaneous Chores
+- **(release)** 0.1.0 [skip ci] - (6669936) - GitHub Actions
+
+- - -
+
 ## 0.1.0 - 2025-10-07
 #### Bug Fixes
 - replace app_layout and settings with shared items - (67e0ff7) - Brandon Guigo
