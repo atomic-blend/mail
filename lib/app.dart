@@ -8,14 +8,11 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:mail/utils/nav_constants.dart';
-import 'package:mail/pages/mails/mail_composer.dart';
-import 'package:mail/services/sync.service.dart';
 import 'package:mail/blocs/app/app.bloc.dart';
 import 'package:ab_shared/blocs/auth/auth.bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_side_menu/flutter_side_menu.dart';
 import 'package:ab_shared/components/ab_toast.dart';
-import 'package:icons_plus/icons_plus.dart';
 
 final ABToastController abToastController = ABToastController();
 final SideMenuController sideMenuController = SideMenuController();
@@ -58,15 +55,6 @@ class App extends StatelessWidget {
                   userKey: userKey,
                   agePublicKey: agePublicKey,
                   revenueCatService: revenueCatService,
-                  centerActionCallback: () {
-                    SyncService.sync(context);
-                  },
-                  centerActionIcon: LineAwesome.plus_solid,
-                  composerWidget: const MailComposer(),
-                  syncCallback: () {
-                    SyncService.sync(context);
-                  },
-                  centerActionEnabled: true,
                 );
               },
             );

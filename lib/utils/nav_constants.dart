@@ -3,6 +3,7 @@ import 'package:ab_shared/components/app/ab_navbar.dart';
 import 'package:ab_shared/pages/account/account.dart';
 import 'package:ab_shared/utils/constants.dart';
 import 'package:mail/main.dart';
+import 'package:mail/pages/mails/mail_composer.dart';
 import 'package:mail/pages/mails/views/all_mail.dart';
 import 'package:mail/pages/mails/views/archive.dart';
 import 'package:mail/pages/mails/views/drafts.dart';
@@ -33,6 +34,24 @@ class NavConstants {
         label: "Mail",
         body: AllMailScreen(),
         mainSecondaryKey: "inbox",
+        action: NavigationAction(
+          icon: LineAwesome.plus_solid,
+          label: "New Mail",
+          onTap: () {
+            if (isDesktop(context)) {
+              showDialog(
+                  context: context,
+                  builder: (context) => const Dialog(child: MailComposer()));
+            } else {
+              showModalBottomSheet(
+                  isScrollControlled: true,
+                  context: context,
+                  builder: (context) => SizedBox(
+                      height: getSize(context).height * 0.88,
+                      child: const MailComposer()));
+            }
+          },
+        ),
         subItems: [
           NavigationItem(
             key: Key("inbox"),
@@ -111,7 +130,6 @@ class NavConstants {
         cupertinoIcon: CupertinoIcons.square_fill_line_vertical_square,
         label: "Organize",
         body: OrganizeScreen(),
-        subItems: [],
         appBar: AppBar(
             key: const Key("organize"),
             backgroundColor: getTheme(context).surface,
@@ -133,6 +151,25 @@ class NavConstants {
                 return Container();
               })
             ]),
+        action: NavigationAction(
+          icon: LineAwesome.plus_solid,
+          label: "New Mail",
+          onTap: () {
+            if (isDesktop(context)) {
+              showDialog(
+                  context: context,
+                  builder: (context) => const Dialog(child: MailComposer()));
+            } else {
+              showModalBottomSheet(
+                  isScrollControlled: true,
+                  context: context,
+                  builder: (context) => SizedBox(
+                      height: getSize(context).height * 0.88,
+                      child: const MailComposer()));
+            }
+          },
+        ),
+        subItems: [],
       ),
       NavigationItem(
         key: const Key("search"),
@@ -140,7 +177,6 @@ class NavConstants {
         cupertinoIcon: CupertinoIcons.search,
         label: "Search",
         body: SearchScreen(),
-        subItems: [],
         appBar: AppBar(
             key: const Key("search"),
             backgroundColor: getTheme(context).surface,
@@ -161,6 +197,25 @@ class NavConstants {
                 return Container();
               })
             ]),
+        action: NavigationAction(
+          icon: LineAwesome.plus_solid,
+          label: "New Mail",
+          onTap: () {
+            if (isDesktop(context)) {
+              showDialog(
+                  context: context,
+                  builder: (context) => const Dialog(child: MailComposer()));
+            } else {
+              showModalBottomSheet(
+                  isScrollControlled: true,
+                  context: context,
+                  builder: (context) => SizedBox(
+                      height: getSize(context).height * 0.88,
+                      child: const MailComposer()));
+            }
+          },
+        ),
+        subItems: [],
       ),
       NavigationItem(
         key: const Key("account"),
