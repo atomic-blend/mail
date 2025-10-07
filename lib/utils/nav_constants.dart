@@ -1,8 +1,9 @@
 import 'package:ab_shared/blocs/auth/auth.bloc.dart';
 import 'package:ab_shared/components/app/ab_navbar.dart';
 import 'package:ab_shared/pages/account/account.dart';
-import 'package:mail/blocs/app/app.bloc.dart';
+import 'package:ab_shared/utils/constants.dart';
 import 'package:mail/main.dart';
+import 'package:mail/pages/mails/mail_composer.dart';
 import 'package:mail/pages/mails/views/all_mail.dart';
 import 'package:mail/pages/mails/views/archive.dart';
 import 'package:mail/pages/mails/views/drafts.dart';
@@ -15,7 +16,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:icons_plus/icons_plus.dart';
-import 'package:mail/pages/settings/settings.dart';
+import 'package:ab_shared/pages/settings/settings.dart';
 
 final $navConstants = NavConstants();
 
@@ -33,11 +34,29 @@ class NavConstants {
         label: "Mail",
         body: AllMailScreen(),
         mainSecondaryKey: "inbox",
+        action: NavigationAction(
+          icon: LineAwesome.plus_solid,
+          label: "New Mail",
+          onTap: () {
+            if (isDesktop(context)) {
+              showDialog(
+                  context: context,
+                  builder: (context) => const Dialog(child: MailComposer()));
+            } else {
+              showModalBottomSheet(
+                  isScrollControlled: true,
+                  context: context,
+                  builder: (context) => SizedBox(
+                      height: getSize(context).height * 0.88,
+                      child: const MailComposer()));
+            }
+          },
+        ),
         subItems: [
           NavigationItem(
             key: Key("inbox"),
             icon: LineAwesome.envelope,
-            cupertinoIcon: CupertinoIcons.envelope,
+            cupertinoIcon: CupertinoIcons.tray_arrow_down,
             label: "Inbox",
             body: InboxScreen(),
           ),
@@ -70,39 +89,40 @@ class NavConstants {
             body: AllMailScreen(),
           ),
         ],
-        appBar: AppBar(
-          key: const Key("inbox"),
-          backgroundColor: getTheme(context).surfaceContainer,
-          title: BlocBuilder<AppCubit, AppState>(builder: (context, appState) {
-            var selectedSecondaryItem = primaryMenuItems(context)
-                .where((element) =>
-                    (element.key as ValueKey).value ==
-                    appState.primaryMenuSelectedKey)
-                .firstOrNull
-                ?.subItems
-                ?.where((element) =>
-                    (element.key as ValueKey).value ==
-                    appState.secondaryMenuSelectedKey)
-                .firstOrNull;
-            return Text(
-              selectedSecondaryItem?.label ?? "",
-              style: getTextTheme(context).headlineSmall!.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
-            );
-          }),
-          actions: [
-            BlocBuilder<AuthBloc, AuthState>(builder: (context, authState) {
-              return Container();
-            }),
-          ],
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.only(
-              bottomLeft: Radius.circular(16.0),
-              bottomRight: Radius.circular(16.0),
-            ),
-          ),
-        ),
+
+        // appBar: AppBar(
+        //   key: const Key("inbox"),
+        //   backgroundColor: getTheme(context).surface,
+        //   title: BlocBuilder<AppCubit, AppState>(builder: (context, appState) {
+        //     var selectedSecondaryItem = primaryMenuItems(context)
+        //         .where((element) =>
+        //             (element.key as ValueKey).value ==
+        //             appState.primaryMenuSelectedKey)
+        //         .firstOrNull
+        //         ?.subItems
+        //         ?.where((element) =>
+        //             (element.key as ValueKey).value ==
+        //             appState.secondaryMenuSelectedKey)
+        //         .firstOrNull;
+        //     return Text(
+        //       selectedSecondaryItem?.label ?? "",
+        //       style: getTextTheme(context).headlineSmall!.copyWith(
+        //             fontWeight: FontWeight.bold,
+        //           ),
+        //     );
+        //   }),
+        //   actions: [
+        //     BlocBuilder<AuthBloc, AuthState>(builder: (context, authState) {
+        //       return Container();
+        //     }),
+        //   ],
+        //   shape: RoundedRectangleBorder(
+        //     borderRadius: BorderRadius.only(
+        //       bottomLeft: Radius.circular(16.0),
+        //       bottomRight: Radius.circular(16.0),
+        //     ),
+        //   ),
+        // ),
       ),
       NavigationItem(
         key: const Key("organize"),
@@ -110,23 +130,46 @@ class NavConstants {
         cupertinoIcon: CupertinoIcons.square_fill_line_vertical_square,
         label: "Organize",
         body: OrganizeScreen(),
-        subItems: [],
         appBar: AppBar(
             key: const Key("organize"),
-            backgroundColor: getTheme(context).surfaceContainer,
-            surfaceTintColor: getTheme(context).surface,
-            leading: Container(),
-            title: Text(
-              "Organize",
-              style: getTextTheme(context).headlineSmall!.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
+            backgroundColor: getTheme(context).surface,
+            title: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                const Icon(LineAwesome.filter_solid),
+                SizedBox(width: $constants.insets.sm),
+                Text(
+                  "Organize",
+                  style: getTextTheme(context).headlineSmall!.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
+                ),
+              ],
             ),
             actions: [
               BlocBuilder<AuthBloc, AuthState>(builder: (context, authState) {
                 return Container();
               })
             ]),
+        action: NavigationAction(
+          icon: LineAwesome.plus_solid,
+          label: "New Mail",
+          onTap: () {
+            if (isDesktop(context)) {
+              showDialog(
+                  context: context,
+                  builder: (context) => const Dialog(child: MailComposer()));
+            } else {
+              showModalBottomSheet(
+                  isScrollControlled: true,
+                  context: context,
+                  builder: (context) => SizedBox(
+                      height: getSize(context).height * 0.88,
+                      child: const MailComposer()));
+            }
+          },
+        ),
+        subItems: [],
       ),
       NavigationItem(
         key: const Key("search"),
@@ -134,22 +177,45 @@ class NavConstants {
         cupertinoIcon: CupertinoIcons.search,
         label: "Search",
         body: SearchScreen(),
-        subItems: [],
         appBar: AppBar(
             key: const Key("search"),
-            backgroundColor: getTheme(context).surfaceContainer,
-            leading: Container(),
-            title: Text(
-              "Search",
-              style: getTextTheme(context).headlineSmall!.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
+            backgroundColor: getTheme(context).surface,
+            title: Row(
+              children: [
+                const Icon(LineAwesome.search_solid),
+                SizedBox(width: $constants.insets.sm),
+                Text(
+                  "Search",
+                  style: getTextTheme(context).headlineSmall!.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
+                ),
+              ],
             ),
             actions: [
               BlocBuilder<AuthBloc, AuthState>(builder: (context, authState) {
                 return Container();
               })
             ]),
+        action: NavigationAction(
+          icon: LineAwesome.plus_solid,
+          label: "New Mail",
+          onTap: () {
+            if (isDesktop(context)) {
+              showDialog(
+                  context: context,
+                  builder: (context) => const Dialog(child: MailComposer()));
+            } else {
+              showModalBottomSheet(
+                  isScrollControlled: true,
+                  context: context,
+                  builder: (context) => SizedBox(
+                      height: getSize(context).height * 0.88,
+                      child: const MailComposer()));
+            }
+          },
+        ),
+        subItems: [],
       ),
       NavigationItem(
         key: const Key("account"),
@@ -164,13 +230,19 @@ class NavConstants {
         subItems: [],
         appBar: AppBar(
             key: const Key("account"),
-            backgroundColor: getTheme(context).surfaceContainer,
-            leading: Container(),
-            title: Text(
-              "Account",
-              style: getTextTheme(context).headlineSmall!.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
+            backgroundColor: getTheme(context).surface,
+            title: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                const Icon(LineAwesome.user_solid),
+                SizedBox(width: $constants.insets.sm),
+                Text(
+                  "Account",
+                  style: getTextTheme(context).headlineSmall!.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
+                ),
+              ],
             ),
             actions: [
               BlocBuilder<AuthBloc, AuthState>(builder: (context, authState) {
@@ -186,20 +258,21 @@ class NavConstants {
         body: Settings(),
         subItems: [],
         appBar: AppBar(
-            key: const Key("settings"),
-            backgroundColor: getTheme(context).surfaceContainer,
-            leading: Container(),
-            title: Text(
-              "Settings",
-              style: getTextTheme(context).headlineSmall!.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
-            ),
-            actions: [
-              BlocBuilder<AuthBloc, AuthState>(builder: (context, authState) {
-                return Container();
-              })
-            ]),
+          key: const Key("settings"),
+          title: Row(
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              const Icon(LineAwesome.cog_solid),
+              SizedBox(width: $constants.insets.sm),
+              Text(
+                "Settings",
+                style: getTextTheme(context).headlineSmall!.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
+              ),
+            ],
+          ),
+        ),
       ),
     ];
     return allItems;

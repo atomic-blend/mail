@@ -61,5 +61,29 @@
   },
   "actions": {
     "delete": "Delete"
+  },
+  "xx_mail_card": {
+    "description": "You have ${count} mails in this folder."
+  },
+  "email_folders": {
+    "inbox": "Inbox",
+    "drafts": "Drafts",
+    "archive": "Archive",
+    "trashed": "Trashed",
+    "all": "All"
+  },
+  "mail_actions": {
+    "mark_as_read": "Mark as read",
+    "mark_as_unread": "Mark as unread",
+    "archive": "Archive",
+    "unarchive": "Unarchive",
+    "trash": "Trash",
+    "untrash": "Untrash"
+  },
+  "toast_notifications": {
+    "selected_mails": {
+      "title": "${count} mails selected",
+      "description": "Click here to perform action."
+    }
   }
 }

@@ -49,6 +49,10 @@ class Translations implements BaseTranslations<AppLocale, Translations> {
 	late final TranslationsUnderConstructionEn under_construction = TranslationsUnderConstructionEn._(_root);
 	late final TranslationsMoreEn more = TranslationsMoreEn._(_root);
 	late final TranslationsActionsEn actions = TranslationsActionsEn._(_root);
+	late final TranslationsXxMailCardEn xx_mail_card = TranslationsXxMailCardEn._(_root);
+	late final TranslationsEmailFoldersEn email_folders = TranslationsEmailFoldersEn._(_root);
+	late final TranslationsMailActionsEn mail_actions = TranslationsMailActionsEn._(_root);
+	late final TranslationsToastNotificationsEn toast_notifications = TranslationsToastNotificationsEn._(_root);
 }
 
 // Path: settings
@@ -201,6 +205,79 @@ class TranslationsActionsEn {
 	String get delete => 'Delete';
 }
 
+// Path: xx_mail_card
+class TranslationsXxMailCardEn {
+	TranslationsXxMailCardEn._(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'You have ${count} mails in this folder.'
+	String description({required Object count}) => 'You have ${count} mails in this folder.';
+}
+
+// Path: email_folders
+class TranslationsEmailFoldersEn {
+	TranslationsEmailFoldersEn._(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Inbox'
+	String get inbox => 'Inbox';
+
+	/// en: 'Drafts'
+	String get drafts => 'Drafts';
+
+	/// en: 'Archive'
+	String get archive => 'Archive';
+
+	/// en: 'Trashed'
+	String get trashed => 'Trashed';
+
+	/// en: 'All'
+	String get all => 'All';
+}
+
+// Path: mail_actions
+class TranslationsMailActionsEn {
+	TranslationsMailActionsEn._(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Mark as read'
+	String get mark_as_read => 'Mark as read';
+
+	/// en: 'Mark as unread'
+	String get mark_as_unread => 'Mark as unread';
+
+	/// en: 'Archive'
+	String get archive => 'Archive';
+
+	/// en: 'Unarchive'
+	String get unarchive => 'Unarchive';
+
+	/// en: 'Trash'
+	String get trash => 'Trash';
+
+	/// en: 'Untrash'
+	String get untrash => 'Untrash';
+}
+
+// Path: toast_notifications
+class TranslationsToastNotificationsEn {
+	TranslationsToastNotificationsEn._(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+	late final TranslationsToastNotificationsSelectedMailsEn selected_mails = TranslationsToastNotificationsSelectedMailsEn._(_root);
+}
+
 // Path: settings.app_settings
 class TranslationsSettingsAppSettingsEn {
 	TranslationsSettingsAppSettingsEn._(this._root);
@@ -284,6 +361,21 @@ class TranslationsMailComposerSaveDraftModalEn {
 	String get cancel_text => 'Discard';
 }
 
+// Path: toast_notifications.selected_mails
+class TranslationsToastNotificationsSelectedMailsEn {
+	TranslationsToastNotificationsSelectedMailsEn._(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: '${count} mails selected'
+	String title({required Object count}) => '${count} mails selected';
+
+	/// en: 'Click here to perform action.'
+	String get description => 'Click here to perform action.';
+}
+
 // Path: settings.app_settings.selfHostedUrl
 class TranslationsSettingsAppSettingsSelfHostedUrlEn {
 	TranslationsSettingsAppSettingsSelfHostedUrlEn._(this._root);
@@ -335,6 +427,20 @@ extension on Translations {
 			case 'under_construction.description': return 'This feature is not yet available, but we\'re working hard to bring it to you soon.\n\nStay tuned!';
 			case 'more.title': return 'More';
 			case 'actions.delete': return 'Delete';
+			case 'xx_mail_card.description': return ({required Object count}) => 'You have ${count} mails in this folder.';
+			case 'email_folders.inbox': return 'Inbox';
+			case 'email_folders.drafts': return 'Drafts';
+			case 'email_folders.archive': return 'Archive';
+			case 'email_folders.trashed': return 'Trashed';
+			case 'email_folders.all': return 'All';
+			case 'mail_actions.mark_as_read': return 'Mark as read';
+			case 'mail_actions.mark_as_unread': return 'Mark as unread';
+			case 'mail_actions.archive': return 'Archive';
+			case 'mail_actions.unarchive': return 'Unarchive';
+			case 'mail_actions.trash': return 'Trash';
+			case 'mail_actions.untrash': return 'Untrash';
+			case 'toast_notifications.selected_mails.title': return ({required Object count}) => '${count} mails selected';
+			case 'toast_notifications.selected_mails.description': return 'Click here to perform action.';
 			default: return null;
 		}
 	}

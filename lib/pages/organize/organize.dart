@@ -26,19 +26,22 @@ class _OrganizeScreenState extends State<OrganizeScreen> {
   bool ended = false;
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<MailBloc, MailState>(builder: (context, mailState) {
-      final inboxMails = mailState.mails
-              ?.where((mail) =>
-                  mail.archived != true &&
-                  mail.trashed != true &&
-                  !organizedMails.contains(mail.id))
-              .toList() ??
-          [];
-      if (inboxMails.isEmpty || ended) {
-        return _buildNothingToOrganize();
-      }
-      return _buildOrganizer(inboxMails);
-    });
+    return SizedBox(
+      width: isDesktop(context) ? getSize(context).width * 0.5 : null,
+      child: BlocBuilder<MailBloc, MailState>(builder: (context, mailState) {
+        final inboxMails = mailState.mails
+                ?.where((mail) =>
+                    mail.archived != true &&
+                    mail.trashed != true &&
+                    !organizedMails.contains(mail.id))
+                .toList() ??
+            [];
+        if (inboxMails.isEmpty || ended) {
+          return _buildNothingToOrganize();
+        }
+        return _buildOrganizer(inboxMails);
+      }),
+    );
   }
 
   Widget _buildNothingToOrganize() {
@@ -249,15 +252,15 @@ class _OrganizeScreenState extends State<OrganizeScreen> {
   }
 
   void _onArchive(Mail mail) {
-    context.read<MailBloc>().add(ArchiveMail(mail.id!));
+    context.read<MailBloc>().add(ArchiveMail(mailId: mail.id!));
   }
 
   void _onTrash(Mail mail) {
-    context.read<MailBloc>().add(TrashMail(mail.id!));
+    context.read<MailBloc>().add(TrashMail(mailId: mail.id!));
   }
 
   void _onRead(Mail mail) {
-    context.read<MailBloc>().add(MarkAsRead(mail.id!));
+    context.read<MailBloc>().add(MarkAsRead(mailId: mail.id!));
   }
 
   void _onMove(Mail mail) {
