@@ -15,7 +15,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:icons_plus/icons_plus.dart';
-import 'package:mail/pages/settings/settings.dart';
+import 'package:ab_shared/pages/settings/settings.dart';
 
 final $navConstants = NavConstants();
 
