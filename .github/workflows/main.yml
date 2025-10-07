@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
 
 env:
-  FLUTTER_VERSION: "3.32.5"
+  FLUTTER_VERSION: "3.35.4"
   COCOGITTO_VERSION: "6.2.0"
 
 jobs:
@@ -164,12 +164,12 @@ jobs:
           if [ -f "CHANGELOG.md" ]; then
             # First try exact match with the tag format in the file
             CHANGELOG=$(sed -n "/^## $TAG - /,/^## /p" CHANGELOG.md | sed '1d;$d')
-          
+
             # If nothing found, try without the 'v' prefix
             if [ -z "$CHANGELOG" ]; then
               CHANGELOG=$(sed -n "/^## $CLEAN_TAG - /,/^## /p" CHANGELOG.md | sed '1d;$d')
             fi
-          
+
             # If still nothing, look for formats like [x.y.z]
             if [ -z "$CHANGELOG" ]; then
               CHANGELOG=$(sed -n "/^## \[$CLEAN_TAG\] - /,/^## /p" CHANGELOG.md | sed '1d;$d')
@@ -190,4 +190,3 @@ jobs:
             --target ${{ github.sha }}
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
