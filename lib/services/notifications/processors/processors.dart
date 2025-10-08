@@ -3,10 +3,8 @@ import 'package:mail/services/notifications/processors/received_mail_processor.d
 
 class Processors {
   static processAndNotify(RemoteMessage message) async {
-    print('Processing message: ${message.data['type']}');
     switch (message.data['type']) {
       case 'MAIL_RECEIVED':
-        print('Received mail: ${message.data['subject']}');
         await ReceivedMailProcessor.process(message);
         break;
       default:
