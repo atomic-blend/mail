@@ -1,5 +1,6 @@
 import 'package:ab_shared/components/app/ab_navbar.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:icons_plus/icons_plus.dart';
 
 final $navConstants = NavConstants();
@@ -16,6 +17,17 @@ class NavConstants {
           cupertinoIcon: CupertinoIcons.doc,
           label: "Page 1",
           location: "/page1",
+          action: NavigationAction(
+            icon: LineAwesome.plus_solid,
+            label: "Action",
+            onTap: () {
+              showDialog(
+                  context: context,
+                  builder: (context) => AlertDialog(
+                        title: Text("Page 1"),
+                      ));
+            },
+          ),
         ),
         NavigationItem(
           key: const Key("page_2"),

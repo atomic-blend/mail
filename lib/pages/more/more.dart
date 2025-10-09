@@ -1,5 +1,6 @@
 import 'package:ab_shared/components/buttons/icon_text_button.dart';
 import 'package:ab_shared/components/widgets/elevated_container.dart';
+import 'package:go_router/go_router.dart';
 import 'package:template/i18n/strings.g.dart';
 import 'package:ab_shared/pages/account/account.dart';
 import 'package:template/main.dart';
@@ -21,8 +22,7 @@ class MoreApps extends StatefulWidget {
 class _MoreAppsState extends State<MoreApps> {
   @override
   Widget build(BuildContext context) {
-    final restOfNavigation =
-        $navConstants.primaryMenuItems(context).sublist(4);
+    final restOfNavigation = $navConstants.primaryMenuItems(context).sublist(4);
     return SafeArea(
       child: Padding(
         padding: isDesktop(context)
@@ -49,16 +49,7 @@ class _MoreAppsState extends State<MoreApps> {
                     mainAxisCellCount: 0.6,
                     child: GestureDetector(
                       onTap: () {
-                        if (e.onTap != null) {
-                          e.onTap!(0);
-                          return;
-                        }
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => e.body ?? Container(),
-                          ),
-                        );
+                        context.go(e.location ?? '/');
                       },
                       child: ElevatedContainer(
                         child: Column(
@@ -68,7 +59,9 @@ class _MoreAppsState extends State<MoreApps> {
                             SizedBox(
                               height: $constants.insets.sm,
                             ),
-                            isDesktop(context) ? Icon(e.icon) : Icon(e.cupertinoIcon),
+                            isDesktop(context)
+                                ? Icon(e.icon)
+                                : Icon(e.cupertinoIcon),
                             SizedBox(
                               height: $constants.insets.xxs,
                             ),
