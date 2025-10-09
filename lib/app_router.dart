@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:template/app_layout_screen.dart';
+import 'package:ab_shared/components/app/app_layout.dart';
+import 'package:template/app.dart';
 import 'package:template/main.dart';
 import 'package:template/pages/page1/page1.dart';
 import 'package:template/pages/page2/page2.dart';
 import 'package:template/pages/page3/page3.dart';
 import 'package:template/pages/page4/page4.dart';
+import 'package:template/utils/nav_constants.dart';
 
 part 'app_router.g.dart';
 
@@ -27,11 +29,16 @@ class AppRouter extends ShellRouteData {
 
   @override
   Widget builder(BuildContext context, GoRouterState state, Widget navigator) {
-    return AppLayoutScreen(
+    return AppLayout(
+      items: $navConstants.primaryMenuItems(context),
+      sideMenuController: sideMenuController,
+      abToastController: abToastController,
       env: env,
       prefs: prefs,
       globalApiClient: globalApiClient,
       encryptionService: encryptionService,
+      homeRouteLocation: '/page1',
+      child: navigator,
     );
   }
 }
