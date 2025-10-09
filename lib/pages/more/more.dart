@@ -22,7 +22,10 @@ class MoreApps extends StatefulWidget {
 class _MoreAppsState extends State<MoreApps> {
   @override
   Widget build(BuildContext context) {
-    final restOfNavigation = $navConstants.primaryMenuItems(context).sublist(4);
+    final restOfNavigation = $navConstants
+        .primaryMenuItems(context,
+            prefs: prefs, globalApiClient: globalApiClient)
+        .sublist(4);
     return SafeArea(
       child: Padding(
         padding: isDesktop(context)
@@ -128,8 +131,10 @@ class _MoreAppsState extends State<MoreApps> {
                         icon: CupertinoIcons.gear,
                         iconSize: 25,
                         onTap: () {
-                          Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) => const Settings()));
+                          SettingsRoute(SettingsParams(
+                            prefs: prefs,
+                            globalApiClient: globalApiClient,
+                          )).go(context);
                         },
                       ),
                     ),

@@ -15,29 +15,29 @@ RouteBase get $appRouter => ShellRouteData.$route(
       factory: $AppRouterExtension._fromState,
       routes: [
         GoRouteData.$route(
-          path: '/section1/page1',
-          name: 'section1_page1',
+          path: '/',
+          name: 'page1',
           factory: _$Page1Route._fromState,
-        ),
-        GoRouteData.$route(
-          path: '/section1/page2',
-          name: 'section1_page2',
-          factory: _$Section1Page2._fromState,
         ),
         GoRouteData.$route(
           path: '/page2',
           name: 'page2',
-          factory: _$Page2._fromState,
+          factory: _$Section1Page2._fromState,
         ),
         GoRouteData.$route(
           path: '/page3',
           name: 'page3',
-          factory: _$Page3._fromState,
+          factory: _$Page2._fromState,
         ),
         GoRouteData.$route(
           path: '/page4',
           name: 'page4',
-          factory: _$Page4._fromState,
+          factory: _$Page3._fromState,
+        ),
+        GoRouteData.$route(
+          path: '/settings',
+          name: 'settings',
+          factory: _$SettingsRoute._fromState,
         ),
       ],
     );
@@ -55,7 +55,7 @@ mixin _$Page1Route on GoRouteData {
 
   @override
   String get location => GoRouteData.$location(
-        '/section1/page1',
+        '/',
         queryParams: {
           if (_self.from != null) 'from': _self.from,
         },
@@ -84,7 +84,7 @@ mixin _$Section1Page2 on GoRouteData {
 
   @override
   String get location => GoRouteData.$location(
-        '/section1/page2',
+        '/page2',
         queryParams: {
           if (_self.from != null) 'from': _self.from,
         },
@@ -113,7 +113,7 @@ mixin _$Page2 on GoRouteData {
 
   @override
   String get location => GoRouteData.$location(
-        '/page2',
+        '/page3',
         queryParams: {
           if (_self.from != null) 'from': _self.from,
         },
@@ -142,7 +142,7 @@ mixin _$Page3 on GoRouteData {
 
   @override
   String get location => GoRouteData.$location(
-        '/page3',
+        '/page4',
         queryParams: {
           if (_self.from != null) 'from': _self.from,
         },
@@ -162,31 +162,30 @@ mixin _$Page3 on GoRouteData {
   void replace(BuildContext context) => context.replace(location);
 }
 
-mixin _$Page4 on GoRouteData {
-  static Page4 _fromState(GoRouterState state) => Page4(
-        from: state.uri.queryParameters['from'],
+mixin _$SettingsRoute on GoRouteData {
+  static SettingsRoute _fromState(GoRouterState state) => SettingsRoute(
+        state.extra as SettingsParams?,
       );
 
-  Page4 get _self => this as Page4;
+  SettingsRoute get _self => this as SettingsRoute;
 
   @override
   String get location => GoRouteData.$location(
-        '/page4',
-        queryParams: {
-          if (_self.from != null) 'from': _self.from,
-        },
+        '/settings',
       );
 
   @override
-  void go(BuildContext context) => context.go(location);
+  void go(BuildContext context) => context.go(location, extra: _self.$extra);
 
   @override
-  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+  Future<T?> push<T>(BuildContext context) =>
+      context.push<T>(location, extra: _self.$extra);
 
   @override
   void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
+      context.pushReplacement(location, extra: _self.$extra);
 
   @override
-  void replace(BuildContext context) => context.replace(location);
+  void replace(BuildContext context) =>
+      context.replace(location, extra: _self.$extra);
 }

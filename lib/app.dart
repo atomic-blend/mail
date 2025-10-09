@@ -44,7 +44,7 @@ class App extends StatelessWidget {
       ...$appRoutes,
       ...auth_routes.$appRoutes,
     ],
-    initialLocation: '/page1',
+    initialLocation: '/',
     navigatorKey: rootNavigatorKey,
   );
 }
