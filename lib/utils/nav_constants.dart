@@ -1,5 +1,6 @@
 import 'package:ab_shared/blocs/auth/auth.bloc.dart';
 import 'package:ab_shared/components/app/ab_navbar.dart';
+import 'package:ab_shared/pages/settings/settings.dart';
 import 'package:ab_shared/utils/shortcuts.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -87,7 +88,7 @@ class NavConstants {
           icon: LineAwesome.cog_solid,
           cupertinoIcon: CupertinoIcons.gear,
           label: "Page 4",
-          body: Container(),
+          body: Settings(),
           appBar: AppBar(
               key: const Key("page_4"),
               backgroundColor: getTheme(context).surface,
