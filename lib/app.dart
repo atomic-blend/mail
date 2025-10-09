@@ -1,6 +1,6 @@
 import 'package:ab_shared/components/ab_toast.dart';
 import 'package:ab_shared/flavors.dart';
-import 'package:ab_shared/pages/auth/sso_module.dart' as sso_module;
+import 'package:ab_shared/pages/auth/screens/auth_routes.dart' as auth_routes;
 import 'package:flutter_side_menu/flutter_side_menu.dart';
 import 'package:go_router/go_router.dart';
 import 'package:template/app_router.dart';
@@ -40,9 +40,11 @@ class App extends StatelessWidget {
   }
 
   final GoRouter _router = GoRouter(
-    routes: [...$appRoutes, ...sso_module.$appRoutes],
+    routes: [
+      ...$appRoutes,
+      ...auth_routes.$appRoutes,
+    ],
     initialLocation: '/page1',
     navigatorKey: rootNavigatorKey,
   );
-
 }

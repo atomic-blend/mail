@@ -1,5 +1,5 @@
 import 'package:ab_shared/blocs/auth/auth.bloc.dart';
-import 'package:ab_shared/pages/auth/sso_module.dart';
+import 'package:ab_shared/pages/auth/screens/login.dart';
 import 'package:ab_shared/services/encryption.service.dart';
 import 'package:ab_shared/utils/api_client.dart';
 import 'package:ab_shared/utils/env/env.dart';
@@ -26,7 +26,7 @@ class AppLayoutScreen extends StatelessWidget {
     return BlocBuilder<AuthBloc, AuthState>(builder: (context, authState) {
       if (authState is! LoggedIn) {
         WidgetsBinding.instance.addPostFrameCallback((_) {
-          SsoModuleRoute(SsoModuleParams(
+          LoginRoute(LoginParams(
             onAuthSuccess: () {
               Page1Route().go(context);
             },
@@ -40,5 +40,4 @@ class AppLayoutScreen extends StatelessWidget {
       return Placeholder();
     });
   }
-
 }
