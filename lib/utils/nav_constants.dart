@@ -12,11 +12,11 @@ class NavConstants {
   // on desktop: the more apps page is moved at the end of the menu
   List<NavigationItem> primaryMenuItems(BuildContext context) => [
         NavigationItem(
-          key: const Key("page_1"),
+          key: const Key("section_1"),
           icon: LineAwesome.file,
           cupertinoIcon: CupertinoIcons.doc,
-          label: "Page 1",
-          location: "/page1",
+          label: "Section1",
+          location: "/section1/page1",
           action: NavigationAction(
             icon: LineAwesome.plus_solid,
             label: "Action",
@@ -24,10 +24,26 @@ class NavConstants {
               showDialog(
                   context: context,
                   builder: (context) => AlertDialog(
-                        title: Text("Page 1"),
+                        title: Text("Section 1"),
                       ));
             },
           ),
+          subItems: [
+            NavigationItem(
+              key: const Key("page_1"),
+              icon: LineAwesome.file,
+              cupertinoIcon: CupertinoIcons.doc,
+              label: "Page 1",
+              location: "/section1/page1",
+            ),
+            NavigationItem(
+              key: const Key("page_2"),
+              icon: LineAwesome.search_solid,
+              cupertinoIcon: CupertinoIcons.search,
+              label: "Page 2",
+              location: "/section1/page2",
+            ),
+          ],
         ),
         NavigationItem(
           key: const Key("page_2"),

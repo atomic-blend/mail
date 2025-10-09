@@ -1,31 +1,30 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'page1.dart';
+part of 'page2.dart';
 
 // **************************************************************************
 // GoRouterGenerator
 // **************************************************************************
 
 List<RouteBase> get $appRoutes => [
-      $page1Route,
+      $section1Page2,
     ];
 
-RouteBase get $page1Route => GoRouteData.$route(
-      path: '/sso',
-      name: 'sso',
-      factory: _$Page1Route._fromState,
+RouteBase get $section1Page2 => GoRouteData.$route(
+      path: '',
+      factory: _$Section1Page2._fromState,
     );
 
-mixin _$Page1Route on GoRouteData {
-  static Page1Route _fromState(GoRouterState state) => Page1Route(
+mixin _$Section1Page2 on GoRouteData {
+  static Section1Page2 _fromState(GoRouterState state) => Section1Page2(
         from: state.uri.queryParameters['from'],
       );
 
-  Page1Route get _self => this as Page1Route;
+  Section1Page2 get _self => this as Section1Page2;
 
   @override
   String get location => GoRouteData.$location(
-        '/sso',
+        '',
         queryParams: {
           if (_self.from != null) 'from': _self.from,
         },

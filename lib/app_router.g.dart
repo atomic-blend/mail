@@ -15,9 +15,14 @@ RouteBase get $appRouter => ShellRouteData.$route(
       factory: $AppRouterExtension._fromState,
       routes: [
         GoRouteData.$route(
-          path: '/page1',
-          name: 'page1',
+          path: '/section1/page1',
+          name: 'section1_page1',
           factory: _$Page1Route._fromState,
+        ),
+        GoRouteData.$route(
+          path: '/section1/page2',
+          name: 'section1_page2',
+          factory: _$Section1Page2._fromState,
         ),
         GoRouteData.$route(
           path: '/page2',
@@ -50,7 +55,36 @@ mixin _$Page1Route on GoRouteData {
 
   @override
   String get location => GoRouteData.$location(
-        '/page1',
+        '/section1/page1',
+        queryParams: {
+          if (_self.from != null) 'from': _self.from,
+        },
+      );
+
+  @override
+  void go(BuildContext context) => context.go(location);
+
+  @override
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  @override
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  @override
+  void replace(BuildContext context) => context.replace(location);
+}
+
+mixin _$Section1Page2 on GoRouteData {
+  static Section1Page2 _fromState(GoRouterState state) => Section1Page2(
+        from: state.uri.queryParameters['from'],
+      );
+
+  Section1Page2 get _self => this as Section1Page2;
+
+  @override
+  String get location => GoRouteData.$location(
+        '/section1/page2',
         queryParams: {
           if (_self.from != null) 'from': _self.from,
         },
