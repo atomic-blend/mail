@@ -1,22 +1,9 @@
-import 'package:ab_shared/blocs/auth/auth.bloc.dart';
 import 'package:ab_shared/components/app/ab_navbar.dart';
-import 'package:ab_shared/pages/account/account.dart';
-import 'package:ab_shared/utils/constants.dart';
-import 'package:mail/main.dart';
 import 'package:mail/pages/mails/mail_composer.dart';
-import 'package:mail/pages/mails/views/all_mail.dart';
-import 'package:mail/pages/mails/views/archive.dart';
-import 'package:mail/pages/mails/views/drafts.dart';
-import 'package:mail/pages/mails/views/inbox.dart';
-import 'package:mail/pages/mails/views/trashed.dart';
-import 'package:mail/pages/organize/organize.dart';
-import 'package:mail/pages/search/search.dart';
 import 'package:ab_shared/utils/shortcuts.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:icons_plus/icons_plus.dart';
-import 'package:ab_shared/pages/settings/settings.dart';
 
 final $navConstants = NavConstants();
 
@@ -32,8 +19,7 @@ class NavConstants {
         icon: LineAwesome.envelope,
         cupertinoIcon: CupertinoIcons.envelope,
         label: "Mail",
-        body: AllMailScreen(),
-        mainSecondaryKey: "inbox",
+        location: "/inbox",
         action: NavigationAction(
           icon: LineAwesome.plus_solid,
           label: "New Mail",
@@ -58,35 +44,35 @@ class NavConstants {
             icon: LineAwesome.envelope,
             cupertinoIcon: CupertinoIcons.tray_arrow_down,
             label: "Inbox",
-            body: InboxScreen(),
+            location: "/inbox",
           ),
           NavigationItem(
             key: Key("drafts"),
             icon: LineAwesome.envelope,
             cupertinoIcon: CupertinoIcons.square_pencil,
             label: "Drafts",
-            body: DraftScreen(),
+            location: "/drafts",
           ),
           NavigationItem(
             key: Key("archive"),
             icon: LineAwesome.box_solid,
             cupertinoIcon: CupertinoIcons.archivebox,
             label: "Archive",
-            body: ArchiveScreen(),
+            location: "/archive",
           ),
           NavigationItem(
             key: Key("trashed"),
             icon: LineAwesome.trash_solid,
             cupertinoIcon: CupertinoIcons.bin_xmark_fill,
             label: "Trashed",
-            body: TrashedScreen(),
+            location: "/trashed",
           ),
           NavigationItem(
             key: Key("all"),
             icon: LineAwesome.envelope_open_solid,
             cupertinoIcon: CupertinoIcons.envelope_open_fill,
             label: "All",
-            body: AllMailScreen(),
+            location: "/all",
           ),
         ],
 
@@ -129,28 +115,7 @@ class NavConstants {
         icon: LineAwesome.filter_solid,
         cupertinoIcon: CupertinoIcons.square_fill_line_vertical_square,
         label: "Organize",
-        body: OrganizeScreen(),
-        appBar: AppBar(
-            key: const Key("organize"),
-            backgroundColor: getTheme(context).surface,
-            title: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                const Icon(LineAwesome.filter_solid),
-                SizedBox(width: $constants.insets.sm),
-                Text(
-                  "Organize",
-                  style: getTextTheme(context).headlineSmall!.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
-                ),
-              ],
-            ),
-            actions: [
-              BlocBuilder<AuthBloc, AuthState>(builder: (context, authState) {
-                return Container();
-              })
-            ]),
+        location: "/organize",
         action: NavigationAction(
           icon: LineAwesome.plus_solid,
           label: "New Mail",
@@ -176,27 +141,7 @@ class NavConstants {
         icon: LineAwesome.search_solid,
         cupertinoIcon: CupertinoIcons.search,
         label: "Search",
-        body: SearchScreen(),
-        appBar: AppBar(
-            key: const Key("search"),
-            backgroundColor: getTheme(context).surface,
-            title: Row(
-              children: [
-                const Icon(LineAwesome.search_solid),
-                SizedBox(width: $constants.insets.sm),
-                Text(
-                  "Search",
-                  style: getTextTheme(context).headlineSmall!.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
-                ),
-              ],
-            ),
-            actions: [
-              BlocBuilder<AuthBloc, AuthState>(builder: (context, authState) {
-                return Container();
-              })
-            ]),
+        location: "/search",
         action: NavigationAction(
           icon: LineAwesome.plus_solid,
           label: "New Mail",
@@ -222,57 +167,16 @@ class NavConstants {
         icon: LineAwesome.user_solid,
         cupertinoIcon: CupertinoIcons.person,
         label: "Account",
-        body: Account(
-          globalApiClient: globalApiClient,
-          encryptionService: encryptionService,
-          prefs: prefs,
-        ),
+        location: "/account",
         subItems: [],
-        appBar: AppBar(
-            key: const Key("account"),
-            backgroundColor: getTheme(context).surface,
-            title: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                const Icon(LineAwesome.user_solid),
-                SizedBox(width: $constants.insets.sm),
-                Text(
-                  "Account",
-                  style: getTextTheme(context).headlineSmall!.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
-                ),
-              ],
-            ),
-            actions: [
-              BlocBuilder<AuthBloc, AuthState>(builder: (context, authState) {
-                return Container();
-              })
-            ]),
       ),
       NavigationItem(
         key: const Key("settings"),
         icon: LineAwesome.cog_solid,
         cupertinoIcon: CupertinoIcons.gear,
         label: "Settings",
-        body: Settings(),
+        location: "/settings",
         subItems: [],
-        appBar: AppBar(
-          key: const Key("settings"),
-          title: Row(
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              const Icon(LineAwesome.cog_solid),
-              SizedBox(width: $constants.insets.sm),
-              Text(
-                "Settings",
-                style: getTextTheme(context).headlineSmall!.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
-              ),
-            ],
-          ),
-        ),
       ),
     ];
     return allItems;

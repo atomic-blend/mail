@@ -1,10 +1,10 @@
 import 'package:ab_shared/utils/shortcuts.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_side_menu/flutter_side_menu.dart';
 import 'package:mail/i18n/strings.g.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mail/blocs/mail/mail_bloc.dart';
-import 'package:mail/app.dart';
 import 'package:mail/pages/appbars/mail_appbar.dart';
 import 'package:mail/pages/mails/mail_list.dart';
 import 'package:mail/services/sync.service.dart';
@@ -34,7 +34,6 @@ class _DraftScreenState extends State<DraftScreen> {
             child: Column(
               children: [
                 MailAppbar(
-                    sideMenuController: sideMenuController,
                     title: context.t.email_folders.drafts),
                 Expanded(
                   child: MailList(

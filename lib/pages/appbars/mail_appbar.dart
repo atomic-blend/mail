@@ -3,12 +3,15 @@ import 'package:ab_shared/utils/shortcuts.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_side_menu/flutter_side_menu.dart';
+import 'package:get_it/get_it.dart';
 
 class MailAppbar extends StatelessWidget {
-  final SideMenuController sideMenuController;
+  final getIt = GetIt.instance;
   final String title;
-  const MailAppbar(
-      {super.key, required this.sideMenuController, required this.title});
+  late final SideMenuController sideMenuController;
+  MailAppbar({super.key, required this.title}) {
+    sideMenuController = getIt<SideMenuController>();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,11 +28,13 @@ class MailAppbar extends StatelessWidget {
               highlightColor: getTheme(context).surfaceContainer,
               onPressed: () {
                 if (isDesktop(context)) {
+                  print("openDesktopDrawer");
                   sideMenuController.isCollapsed()
                       ? sideMenuController.open()
                       : sideMenuController.close();
                 } else {
-                  Scaffold.of(context).openDrawer();
+                  print("openDrawer");
+                  getIt<GlobalKey<ScaffoldState>>(instanceName: 'layoutScaffoldKey').currentState?.openDrawer();
                 }
               },
               icon: const Icon(
