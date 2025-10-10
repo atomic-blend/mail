@@ -1,6 +1,6 @@
 import 'package:ab_shared/utils/shortcuts.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_side_menu/flutter_side_menu.dart';
+import 'package:go_router/go_router.dart';
 import 'package:mail/i18n/strings.g.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -8,6 +8,16 @@ import 'package:mail/blocs/mail/mail_bloc.dart';
 import 'package:mail/pages/appbars/mail_appbar.dart';
 import 'package:mail/pages/mails/mail_list.dart';
 import 'package:mail/services/sync.service.dart';
+
+part 'drafts.g.dart';
+
+@TypedGoRoute<DraftRoute>(path: '/drafts', name: "drafts")
+class DraftRoute extends GoRouteData with _$DraftRoute {
+  @override
+  Widget build(BuildContext context, GoRouterState state) {
+    return DraftScreen();
+  }
+}
 
 class DraftScreen extends StatefulWidget {
   const DraftScreen({super.key});

@@ -3,10 +3,21 @@ import 'package:ab_shared/components/widgets/elevated_container.dart';
 import 'package:ab_shared/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:mail/blocs/mail/mail_bloc.dart';
 import 'package:mail/blocs/search/search_bloc.dart';
 import 'package:mail/components/cards/mail_card.dart';
 import 'package:mail/models/mail/mail.dart';
+
+part 'search.g.dart';
+
+@TypedGoRoute<SearchRoute>(path: '/search', name: "search")
+class SearchRoute extends GoRouteData with _$SearchRoute {
+  @override
+  Widget build(BuildContext context, GoRouterState state) {
+    return SearchScreen();
+  }
+}
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});

@@ -7,10 +7,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_card_swiper/flutter_card_swiper.dart';
 import 'package:flutter_html/flutter_html.dart';
+import 'package:go_router/go_router.dart';
 import 'package:mail/blocs/mail/mail_bloc.dart';
 import 'package:mail/i18n/strings.g.dart';
 import 'package:mail/models/mail/mail.dart';
 import 'package:mail/services/sync.service.dart';
+
+part 'organize.g.dart';
+
+@TypedGoRoute<OrganizeRoute>(path: '/organize', name: "organize")
+class OrganizeRoute extends GoRouteData with _$OrganizeRoute {
+  @override
+  Widget build(BuildContext context, GoRouterState state) {
+    return OrganizeScreen();
+  }
+}
 
 class OrganizeScreen extends StatefulWidget {
   const OrganizeScreen({super.key});

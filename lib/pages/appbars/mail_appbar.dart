@@ -28,12 +28,10 @@ class MailAppbar extends StatelessWidget {
               highlightColor: getTheme(context).surfaceContainer,
               onPressed: () {
                 if (isDesktop(context)) {
-                  print("openDesktopDrawer");
                   sideMenuController.isCollapsed()
                       ? sideMenuController.open()
                       : sideMenuController.close();
                 } else {
-                  print("openDrawer");
                   getIt<GlobalKey<ScaffoldState>>(instanceName: 'layoutScaffoldKey').currentState?.openDrawer();
                 }
               },

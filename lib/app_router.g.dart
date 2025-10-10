@@ -25,6 +25,36 @@ RouteBase get $appRouter => ShellRouteData.$route(
           factory: _$InboxRoute._fromState,
         ),
         GoRouteData.$route(
+          path: '/drafts',
+          name: 'drafts',
+          factory: _$DraftRoute._fromState,
+        ),
+        GoRouteData.$route(
+          path: '/archive',
+          name: 'archive',
+          factory: _$ArchiveRoute._fromState,
+        ),
+        GoRouteData.$route(
+          path: '/all',
+          name: 'all',
+          factory: _$AllMailRoute._fromState,
+        ),
+        GoRouteData.$route(
+          path: '/trashed',
+          name: 'trashed',
+          factory: _$TrashedRoute._fromState,
+        ),
+        GoRouteData.$route(
+          path: '/organize',
+          name: 'organize',
+          factory: _$OrganizeRoute._fromState,
+        ),
+        GoRouteData.$route(
+          path: '/search',
+          name: 'search',
+          factory: _$SearchRoute._fromState,
+        ),
+        GoRouteData.$route(
           path: '/account',
           name: 'account',
           factory: _$AccountRoute._fromState,
@@ -69,6 +99,138 @@ mixin _$InboxRoute on GoRouteData {
   @override
   String get location => GoRouteData.$location(
         '/inbox',
+      );
+
+  @override
+  void go(BuildContext context) => context.go(location);
+
+  @override
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  @override
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  @override
+  void replace(BuildContext context) => context.replace(location);
+}
+
+mixin _$DraftRoute on GoRouteData {
+  static DraftRoute _fromState(GoRouterState state) => DraftRoute();
+
+  @override
+  String get location => GoRouteData.$location(
+        '/drafts',
+      );
+
+  @override
+  void go(BuildContext context) => context.go(location);
+
+  @override
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  @override
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  @override
+  void replace(BuildContext context) => context.replace(location);
+}
+
+mixin _$ArchiveRoute on GoRouteData {
+  static ArchiveRoute _fromState(GoRouterState state) => ArchiveRoute();
+
+  @override
+  String get location => GoRouteData.$location(
+        '/archive',
+      );
+
+  @override
+  void go(BuildContext context) => context.go(location);
+
+  @override
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  @override
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  @override
+  void replace(BuildContext context) => context.replace(location);
+}
+
+mixin _$AllMailRoute on GoRouteData {
+  static AllMailRoute _fromState(GoRouterState state) => AllMailRoute();
+
+  @override
+  String get location => GoRouteData.$location(
+        '/all',
+      );
+
+  @override
+  void go(BuildContext context) => context.go(location);
+
+  @override
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  @override
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  @override
+  void replace(BuildContext context) => context.replace(location);
+}
+
+mixin _$TrashedRoute on GoRouteData {
+  static TrashedRoute _fromState(GoRouterState state) => TrashedRoute();
+
+  @override
+  String get location => GoRouteData.$location(
+        '/trashed',
+      );
+
+  @override
+  void go(BuildContext context) => context.go(location);
+
+  @override
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  @override
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  @override
+  void replace(BuildContext context) => context.replace(location);
+}
+
+mixin _$OrganizeRoute on GoRouteData {
+  static OrganizeRoute _fromState(GoRouterState state) => OrganizeRoute();
+
+  @override
+  String get location => GoRouteData.$location(
+        '/organize',
+      );
+
+  @override
+  void go(BuildContext context) => context.go(location);
+
+  @override
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  @override
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  @override
+  void replace(BuildContext context) => context.replace(location);
+}
+
+mixin _$SearchRoute on GoRouteData {
+  static SearchRoute _fromState(GoRouterState state) => SearchRoute();
+
+  @override
+  String get location => GoRouteData.$location(
+        '/search',
       );
 
   @override

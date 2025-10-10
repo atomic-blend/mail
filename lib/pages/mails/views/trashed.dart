@@ -3,6 +3,17 @@ import 'package:flutter/material.dart';
 import 'package:mail/i18n/strings.g.dart';
 import 'package:mail/models/mail/mail.dart';
 import 'package:mail/pages/mails/filtered_mail_view.dart';
+import 'package:go_router/go_router.dart';
+
+part 'trashed.g.dart';
+
+@TypedGoRoute<TrashedRoute>(path: '/trashed', name: "trashed")
+class TrashedRoute extends GoRouteData with _$TrashedRoute {
+  @override
+  Widget build(BuildContext context, GoRouterState state) {
+    return TrashedScreen();
+  }
+}
 
 class TrashedScreen extends StatefulWidget {
   const TrashedScreen({super.key});
