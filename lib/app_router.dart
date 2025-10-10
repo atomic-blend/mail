@@ -31,6 +31,7 @@ class AppRouter extends ShellRouteData {
   @override
   Widget builder(BuildContext context, GoRouterState state, Widget navigator) {
     return AppLayout(
+      key: state.pageKey,
       items: $navConstants.primaryMenuItems(
         context,
         prefs: prefs,

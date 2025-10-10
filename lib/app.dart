@@ -11,28 +11,13 @@ import 'package:ab_shared/utils/app_theme.dart';
 import 'package:fleather/l10n/fleather_localizations.g.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-
-final getIt = GetIt.instance;
-
-final GlobalKey<NavigatorState> rootNavigatorKey = GlobalKey<NavigatorState>();
+import 'package:template/utils/get_it.dart';
 
 class App extends StatelessWidget {
   App({super.key});
 
   @override
   Widget build(BuildContext context) {
-    if (!getIt.isRegistered<ABToastController>()) {
-      getIt.registerSingleton<ABToastController>(ABToastController());
-    }
-    if (!getIt.isRegistered<SideMenuController>()) {
-      getIt.registerSingleton<SideMenuController>(SideMenuController());
-    }
-    if (!getIt.isRegistered<GlobalKey<NavigatorState>>(
-        instanceName: 'rootNavigatorKey')) {
-      getIt.registerSingleton<GlobalKey<NavigatorState>>(rootNavigatorKey,
-          instanceName: 'rootNavigatorKey');
-    }
-
     return MaterialApp.router(
       theme: AppTheme.light,
       darkTheme: AppTheme.dark,
@@ -58,6 +43,8 @@ class App extends StatelessWidget {
       ...auth_routes.$appRoutes,
     ],
     initialLocation: '/',
-    navigatorKey: rootNavigatorKey,
+    navigatorKey: getIt<GlobalKey<NavigatorState>>(
+      instanceName: 'rootNavigatorKey',
+    ),
   );
 }

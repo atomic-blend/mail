@@ -8,6 +8,7 @@ import 'package:ab_shared/utils/api_client.dart';
 import 'package:ab_shared/utils/env/env.dart';
 import 'package:ab_shared/utils/shortcuts.dart';
 import 'package:flutter_age/flutter_age.dart';
+import 'package:get_it/get_it.dart';
 import 'package:template/blocs/app/app.bloc.dart';
 import 'package:ab_shared/blocs/auth/auth.bloc.dart';
 import 'package:ab_shared/i18n/strings.g.dart' as ab_shared_translations;
@@ -27,6 +28,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer/sizer.dart';
+import 'package:template/utils/get_it.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:toastification/toastification.dart';
 
@@ -35,7 +37,6 @@ import 'firebase_options.dart';
 
 EnvModel? env;
 SharedPreferences? prefs;
-FcmService? fcmService;
 Map<String, dynamic>? userData;
 String? userKey;
 String? agePublicKey;
@@ -59,6 +60,8 @@ FutureOr<void> main() async {
     options.sendDefaultPii = true;
   }, appRunner: () async {
     tz.initializeTimeZones();
+
+    setupGetIt();
 
     env = await EnvModel.create();
     prefs = await SharedPreferences.getInstance();
@@ -104,8 +107,7 @@ FutureOr<void> main() async {
       await Firebase.initializeApp(
         options: DefaultFirebaseOptions.currentPlatform,
       );
-      fcmService = FcmService();
-      fcmService!.initFCM();
+      FcmService().initFCM();
 
       // Register background handler
       FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
