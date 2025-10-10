@@ -35,6 +35,11 @@ RouteBase get $appRouter => ShellRouteData.$route(
           factory: _$Page3._fromState,
         ),
         GoRouteData.$route(
+          path: '/account',
+          name: 'account',
+          factory: _$AccountRoute._fromState,
+        ),
+        GoRouteData.$route(
           path: '/settings',
           name: 'settings',
           factory: _$SettingsRoute._fromState,
@@ -146,6 +151,28 @@ mixin _$Page3 on GoRouteData {
         queryParams: {
           if (_self.from != null) 'from': _self.from,
         },
+      );
+
+  @override
+  void go(BuildContext context) => context.go(location);
+
+  @override
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  @override
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  @override
+  void replace(BuildContext context) => context.replace(location);
+}
+
+mixin _$AccountRoute on GoRouteData {
+  static AccountRoute _fromState(GoRouterState state) => AccountRoute();
+
+  @override
+  String get location => GoRouteData.$location(
+        '/account',
       );
 
   @override

@@ -1,7 +1,6 @@
+import 'package:ab_shared/pages/account/account.dart';
 import 'package:ab_shared/pages/settings/settings.dart';
-import 'package:ab_shared/services/encryption.service.dart';
 import 'package:ab_shared/utils/api_client.dart';
-import 'package:ab_shared/utils/env/env.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
@@ -24,6 +23,7 @@ final GlobalKey<NavigatorState> appLayoutNavigatorKey =
     TypedGoRoute<Section1Page2>(path: '/page2', name: "page2"),
     TypedGoRoute<Page2>(path: '/page3', name: "page3"),
     TypedGoRoute<Page3>(path: '/page4', name: "page4"),
+    TypedGoRoute<AccountRoute>(path: '/account', name: "account"),
     TypedGoRoute<SettingsRoute>(path: '/settings', name: "settings"),
   ],
 )
@@ -42,10 +42,6 @@ class AppRouter extends ShellRouteData {
         prefs: getIt<SharedPreferences>(),
         globalApiClient: getIt<ApiClient>(),
       ),
-      env: getIt<EnvModel>(),
-      prefs: getIt<SharedPreferences>(),
-      globalApiClient: getIt<ApiClient>(),
-      encryptionService: getIt<EncryptionService>(),
       homeRouteLocation: '/',
       child: navigator,
     );

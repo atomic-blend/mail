@@ -1,17 +1,13 @@
 import 'package:ab_shared/components/buttons/icon_text_button.dart';
 import 'package:ab_shared/components/widgets/elevated_container.dart';
-import 'package:ab_shared/services/encryption.service.dart';
-import 'package:ab_shared/services/revenue_cat_service.dart';
 import 'package:ab_shared/utils/api_client.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:template/i18n/strings.g.dart';
-import 'package:ab_shared/pages/account/account.dart';
 import 'package:ab_shared/pages/settings/settings.dart';
 import 'package:ab_shared/utils/constants.dart';
 import 'package:ab_shared/utils/shortcuts.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:template/utils/get_it.dart';
 import 'package:template/utils/nav_constants.dart';
@@ -108,16 +104,7 @@ class _MoreAppsState extends State<MoreApps> {
                         icon: CupertinoIcons.person,
                         iconSize: 25,
                         onTap: () {
-                          showModalBottomSheet(
-                            context: context,
-                            isScrollControlled: true,
-                            builder: (context) => Account(
-                              globalApiClient: getIt<ApiClient>(),
-                              encryptionService: getIt<EncryptionService>(),
-                              revenueCatService: getIt<RevenueCatService>(),
-                              prefs: getIt<SharedPreferences>(),
-                            ),
-                          );
+                          context.go("/account");
                         },
                       ),
                     ),

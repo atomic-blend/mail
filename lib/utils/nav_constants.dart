@@ -1,9 +1,7 @@
 import 'package:ab_shared/components/app/ab_navbar.dart';
-import 'package:ab_shared/pages/settings/settings.dart';
 import 'package:ab_shared/utils/api_client.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:icons_plus/icons_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -66,21 +64,18 @@ class NavConstants {
           location: "/page4",
         ),
         NavigationItem(
+          key: const Key("account"),
+          icon: LineAwesome.user,
+          cupertinoIcon: CupertinoIcons.person,
+          label: "Account",
+          location: "/account",
+        ),
+        NavigationItem(
           key: const Key("settings"),
           icon: LineAwesome.cog_solid,
           cupertinoIcon: CupertinoIcons.gear,
           label: "Settings",
-          onTap: () {
-            if (prefs != null && globalApiClient != null) {
-              SettingsRoute(SettingsParams(
-                prefs: prefs,
-                globalApiClient: globalApiClient,
-              )).go(context);
-            } else {
-              // Fallback to basic navigation if variables are not available
-              context.go('/settings');
-            }
-          },
+          location: "/settings",
         ),
       ];
 }
