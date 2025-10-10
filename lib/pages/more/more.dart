@@ -124,8 +124,6 @@ class _MoreAppsState extends State<MoreApps> {
                         iconSize: 25,
                         onTap: () {
                           SettingsRoute(SettingsParams(
-                            prefs: getIt<SharedPreferences>(),
-                            globalApiClient: getIt<ApiClient>(),
                           )).go(context);
                         },
                       ),
