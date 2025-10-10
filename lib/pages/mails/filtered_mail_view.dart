@@ -4,7 +4,6 @@ import 'package:ab_shared/utils/shortcuts.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mail/app.dart';
 import 'package:mail/blocs/mail/mail_bloc.dart';
 import 'package:mail/components/toast_notifications/selected_mails.dart';
 import 'package:mail/models/mail/mail.dart';
@@ -13,6 +12,7 @@ import 'package:mail/pages/mails/mail_details.dart';
 import 'package:mail/pages/mails/mail_list.dart';
 import 'package:mail/pages/mails/no_mail_selected.dart';
 import 'package:mail/pages/mails/selected_list.dart';
+import 'package:mail/utils/get_it.dart';
 
 class FliteredMailView extends StatefulWidget {
   final String title;
@@ -24,6 +24,7 @@ class FliteredMailView extends StatefulWidget {
 }
 
 class _FliteredMailViewState extends State<FliteredMailView> {
+  final abToastController = getIt<ABToastController>();
   List<Mail> selectedMails = [];
   bool? isSelecting = false;
 
@@ -81,9 +82,7 @@ class _FliteredMailViewState extends State<FliteredMailView> {
                 : getSize(context).width,
             child: Column(
               children: [
-                MailAppbar(
-                    sideMenuController: sideMenuController,
-                    title: widget.title),
+                MailAppbar(title: widget.title),
                 Expanded(
                   child: MailList(
                     mails: filteredMails,

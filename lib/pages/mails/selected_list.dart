@@ -1,3 +1,4 @@
+import 'package:ab_shared/components/ab_toast.dart';
 import 'package:ab_shared/utils/constants.dart';
 import 'package:ab_shared/utils/shortcuts.dart';
 import 'package:flutter/cupertino.dart';
@@ -8,7 +9,7 @@ import 'package:mail/blocs/mail/mail_bloc.dart';
 import 'package:mail/components/cards/mail_card.dart';
 import 'package:mail/i18n/strings.g.dart';
 import 'package:mail/models/mail/mail.dart';
-import 'package:mail/app.dart';
+import 'package:mail/utils/get_it.dart';
 
 enum SelectedListMode {
   inbox,
@@ -19,11 +20,12 @@ enum SelectedListMode {
 }
 
 class SelectedListScreen extends StatelessWidget {
+  final abToastController = getIt<ABToastController>();
   final List<Mail> mails;
   final SelectedListMode? mode;
   final bool? windowed;
   final Function? onClearSelection;
-  const SelectedListScreen(
+  SelectedListScreen(
       {super.key,
       required this.mails,
       this.mode,
