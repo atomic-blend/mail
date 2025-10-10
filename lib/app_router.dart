@@ -3,6 +3,7 @@ import 'package:ab_shared/services/encryption.service.dart';
 import 'package:ab_shared/utils/api_client.dart';
 import 'package:ab_shared/utils/env/env.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 import 'package:ab_shared/components/app/app_layout.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -27,6 +28,7 @@ final GlobalKey<NavigatorState> appLayoutNavigatorKey =
   ],
 )
 class AppRouter extends ShellRouteData {
+  final getIt = GetIt.instance;
   AppRouter();
 
   static final GlobalKey<NavigatorState> $navigatorKey = appLayoutNavigatorKey;
@@ -44,7 +46,7 @@ class AppRouter extends ShellRouteData {
       prefs: getIt<SharedPreferences>(),
       globalApiClient: getIt<ApiClient>(),
       encryptionService: getIt<EncryptionService>(),
-      homeRouteLocation: '/page1',
+      homeRouteLocation: '/',
       child: navigator,
     );
   }

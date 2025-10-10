@@ -36,10 +36,7 @@ Future<void> setupGetIt() async {
   }
   if (!getIt.isRegistered<ApiClient>()) {
     getIt.registerSingletonWithDependencies<ApiClient>(
-      () => ApiClient(
-        env: getIt<EnvModel>(),
-        prefs: getIt<SharedPreferences>(),
-      ),
+      () => ApiClient().init(),
       dependsOn: [EnvModel, SharedPreferences],
     );
   }
@@ -48,7 +45,7 @@ Future<void> setupGetIt() async {
     getIt.registerSingletonWithDependencies<Map<String, dynamic>>(
       () {
         final rawUserData = getIt<SharedPreferences>().getString("user");
-        return rawUserData != null ? json.decode(rawUserData) : null;
+        return rawUserData != null ? json.decode(rawUserData) : {};
       },
       dependsOn: [SharedPreferences],
       instanceName: 'userData',

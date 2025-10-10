@@ -97,9 +97,6 @@ FutureOr<void> main() async {
               BlocProvider(create: (context) => AppCubit()),
               BlocProvider(
                   create: (context) => AuthBloc(
-                        prefs: getIt<SharedPreferences>(),
-                        globalApiClient: getIt<ApiClient>(),
-                        encryptionService: getIt<EncryptionService>(),
                         onLogout: () {
                           getIt<SharedPreferences>().clear();
                           getIt<ApiClient>().setIdToken(null);

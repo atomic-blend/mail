@@ -15,6 +15,9 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (!getIt.isRegistered<GoRouter>()) {
+      getIt.registerSingleton<GoRouter>(_router);
+    }
     return MaterialApp.router(
       theme: AppTheme.light,
       darkTheme: AppTheme.dark,
