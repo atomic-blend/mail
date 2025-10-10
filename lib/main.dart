@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:ab_shared/services/encryption.service.dart';
@@ -8,7 +7,6 @@ import 'package:ab_shared/utils/api_client.dart';
 import 'package:ab_shared/utils/env/env.dart';
 import 'package:ab_shared/utils/shortcuts.dart';
 import 'package:flutter_age/flutter_age.dart';
-import 'package:get_it/get_it.dart';
 import 'package:template/blocs/app/app.bloc.dart';
 import 'package:ab_shared/blocs/auth/auth.bloc.dart';
 import 'package:ab_shared/i18n/strings.g.dart' as ab_shared_translations;
@@ -35,17 +33,10 @@ import 'package:toastification/toastification.dart';
 import 'app.dart';
 import 'firebase_options.dart';
 
-EnvModel? env;
-SharedPreferences? prefs;
-Map<String, dynamic>? userData;
-String? userKey;
-String? agePublicKey;
-EncryptionService? encryptionService;
-RevenueCatService? revenueCatService;
-ApiClient? globalApiClient;
-
 FutureOr<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  await setupGetIt();
 
   await SentryFlutter.init((options) {
     String? dsn = const String.fromEnvironment(
@@ -53,7 +44,7 @@ FutureOr<void> main() async {
     );
 
     options.dsn = dsn;
-    options.environment = env?.env;
+    options.environment = getIt<EnvModel>().env;
 
     // Adds request headers and IP for users,
     // visit: https://docs.sentry.io/platforms/dart/data-management/data-collected/ for more info
@@ -61,18 +52,9 @@ FutureOr<void> main() async {
   }, appRunner: () async {
     tz.initializeTimeZones();
 
-    setupGetIt();
-
-    env = await EnvModel.create();
-    prefs = await SharedPreferences.getInstance();
     await LocaleSettings.useDeviceLocale();
 
     await FlutterAge.init();
-
-    globalApiClient = ApiClient(
-      env: env!,
-      prefs: prefs!,
-    ).init();
 
     if (!kIsWeb && Platform.isMacOS) {
       await WindowManipulator.initialize();
@@ -80,27 +62,8 @@ FutureOr<void> main() async {
       WindowManipulator.enableFullSizeContentView();
     }
 
-    final rawUserData = prefs?.getString("user");
-    userData = rawUserData != null ? json.decode(rawUserData) : null;
-    userKey = prefs?.getString("key");
-    agePublicKey = prefs?.getString("agePublicKey");
-
-    // Only create encryption service if user data exists
-    if (userData != null && userData!['keySet'] != null) {
-      encryptionService = EncryptionService(
-        userSalt: userData?['keySet']['salt'],
-        prefs: prefs!,
-        userKey: userKey,
-        agePublicKey: agePublicKey,
-      );
-    }
-
     if (isPaymentSupported()) {
-      revenueCatService = RevenueCatService(
-        googleRevenueCatApiKey: env!.googleRevenueCatApiKey,
-        appleRevenueCatApiKey: env!.appleRevenueCatApiKey,
-      );
-      await revenueCatService!.initPlatformState();
+      await getIt<RevenueCatService>().initPlatformState();
     }
 
     if (kIsWeb || !Platform.isLinux) {
@@ -134,22 +97,20 @@ FutureOr<void> main() async {
               BlocProvider(create: (context) => AppCubit()),
               BlocProvider(
                   create: (context) => AuthBloc(
-                        prefs: prefs!,
+                        prefs: getIt<SharedPreferences>(),
+                        globalApiClient: getIt<ApiClient>(),
+                        encryptionService: getIt<EncryptionService>(),
                         onLogout: () {
-                          userKey = null;
-                          userData = null;
-                          prefs?.clear();
-                          globalApiClient?.setIdToken(null);
+                          getIt<SharedPreferences>().clear();
+                          getIt<ApiClient>().setIdToken(null);
                           Sentry.configureScope(
                             (scope) => scope.setUser(SentryUser(id: null)),
                           );
-                          encryptionService = null;
+                          getIt.unregister<EncryptionService>();
                         },
                         onLogin: (e) {
-                          encryptionService = e;
+                          getIt.registerSingleton<EncryptionService>(e);
                         },
-                        globalApiClient: globalApiClient!,
-                        encryptionService: encryptionService,
                       )),
             ],
             child: ab_shared_translations.TranslationProvider(

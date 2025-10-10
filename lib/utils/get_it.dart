@@ -9,10 +9,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_side_menu/flutter_side_menu.dart';
 import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:template/services/notifications/fcm_service.dart';
 
 final getIt = GetIt.instance;
-void setupGetIt() async {
+Future<void> setupGetIt() async {
   // Allow getIt elements to be reassigned
   getIt.allowReassignment = true;
   if (!getIt.isRegistered<ABToastController>()) {
@@ -87,7 +86,6 @@ void setupGetIt() async {
         );
       },
       dependsOn: [SharedPreferences],
-      instanceName: 'encryptionService',
     );
   }
 
@@ -100,7 +98,6 @@ void setupGetIt() async {
         );
       },
       dependsOn: [EnvModel],
-      instanceName: 'revenueCatService',
     );
   }
 }

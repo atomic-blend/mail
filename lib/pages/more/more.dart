@@ -1,15 +1,19 @@
 import 'package:ab_shared/components/buttons/icon_text_button.dart';
 import 'package:ab_shared/components/widgets/elevated_container.dart';
+import 'package:ab_shared/services/encryption.service.dart';
+import 'package:ab_shared/services/revenue_cat_service.dart';
+import 'package:ab_shared/utils/api_client.dart';
 import 'package:go_router/go_router.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:template/i18n/strings.g.dart';
 import 'package:ab_shared/pages/account/account.dart';
-import 'package:template/main.dart';
 import 'package:ab_shared/pages/settings/settings.dart';
 import 'package:ab_shared/utils/constants.dart';
 import 'package:ab_shared/utils/shortcuts.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:template/utils/get_it.dart';
 import 'package:template/utils/nav_constants.dart';
 
 class MoreApps extends StatefulWidget {
@@ -24,7 +28,8 @@ class _MoreAppsState extends State<MoreApps> {
   Widget build(BuildContext context) {
     final restOfNavigation = $navConstants
         .primaryMenuItems(context,
-            prefs: prefs, globalApiClient: globalApiClient)
+            prefs: getIt<SharedPreferences>(),
+            globalApiClient: getIt<ApiClient>())
         .sublist(4);
     return SafeArea(
       child: Padding(
@@ -107,10 +112,10 @@ class _MoreAppsState extends State<MoreApps> {
                             context: context,
                             isScrollControlled: true,
                             builder: (context) => Account(
-                              globalApiClient: globalApiClient!,
-                              encryptionService: encryptionService!,
-                              revenueCatService: revenueCatService!,
-                              prefs: prefs!,
+                              globalApiClient: getIt<ApiClient>(),
+                              encryptionService: getIt<EncryptionService>(),
+                              revenueCatService: getIt<RevenueCatService>(),
+                              prefs: getIt<SharedPreferences>(),
                             ),
                           );
                         },
@@ -132,8 +137,8 @@ class _MoreAppsState extends State<MoreApps> {
                         iconSize: 25,
                         onTap: () {
                           SettingsRoute(SettingsParams(
-                            prefs: prefs,
-                            globalApiClient: globalApiClient,
+                            prefs: getIt<SharedPreferences>(),
+                            globalApiClient: getIt<ApiClient>(),
                           )).go(context);
                         },
                       ),

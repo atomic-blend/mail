@@ -1,8 +1,11 @@
 import 'package:ab_shared/pages/settings/settings.dart';
+import 'package:ab_shared/services/encryption.service.dart';
+import 'package:ab_shared/utils/api_client.dart';
+import 'package:ab_shared/utils/env/env.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:ab_shared/components/app/app_layout.dart';
-import 'package:template/main.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:template/pages/section1/page1/page1.dart';
 import 'package:template/pages/section1/page2/page2.dart';
 import 'package:template/pages/page2/page2.dart';
@@ -34,13 +37,13 @@ class AppRouter extends ShellRouteData {
       key: state.pageKey,
       items: $navConstants.primaryMenuItems(
         context,
-        prefs: prefs,
-        globalApiClient: globalApiClient,
+        prefs: getIt<SharedPreferences>(),
+        globalApiClient: getIt<ApiClient>(),
       ),
-      env: env,
-      prefs: prefs,
-      globalApiClient: globalApiClient,
-      encryptionService: encryptionService,
+      env: getIt<EnvModel>(),
+      prefs: getIt<SharedPreferences>(),
+      globalApiClient: getIt<ApiClient>(),
+      encryptionService: getIt<EncryptionService>(),
       homeRouteLocation: '/page1',
       child: navigator,
     );

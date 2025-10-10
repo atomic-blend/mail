@@ -1,12 +1,9 @@
-import 'package:ab_shared/components/ab_toast.dart';
 import 'package:ab_shared/flavors.dart';
 import 'package:ab_shared/pages/auth/screens/auth_routes.dart' as auth_routes;
-import 'package:flutter_side_menu/flutter_side_menu.dart';
-import 'package:get_it/get_it.dart';
+import 'package:ab_shared/utils/env/env.dart';
 import 'package:go_router/go_router.dart';
 import 'package:template/app_router.dart';
 import 'package:template/i18n/strings.g.dart';
-import 'package:template/main.dart';
 import 'package:ab_shared/utils/app_theme.dart';
 import 'package:fleather/l10n/fleather_localizations.g.dart';
 import 'package:flutter/material.dart';
@@ -31,7 +28,7 @@ class App extends StatelessWidget {
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
       ],
-      debugShowCheckedModeBanner: env!.debugShowCheckedModeBanner,
+      debugShowCheckedModeBanner: getIt<EnvModel>().debugShowCheckedModeBanner,
       title: F.title,
       routerConfig: _router,
     );
