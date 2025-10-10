@@ -2,7 +2,6 @@ import 'package:ab_shared/pages/settings/settings.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:ab_shared/components/app/app_layout.dart';
-import 'package:template/app.dart';
 import 'package:template/main.dart';
 import 'package:template/pages/section1/page1/page1.dart';
 import 'package:template/pages/section1/page2/page2.dart';
@@ -37,8 +36,6 @@ class AppRouter extends ShellRouteData {
         prefs: prefs,
         globalApiClient: globalApiClient,
       ),
-      sideMenuController: sideMenuController,
-      abToastController: abToastController,
       env: env,
       prefs: prefs,
       globalApiClient: globalApiClient,

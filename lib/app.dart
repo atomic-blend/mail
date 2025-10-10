@@ -2,6 +2,7 @@ import 'package:ab_shared/components/ab_toast.dart';
 import 'package:ab_shared/flavors.dart';
 import 'package:ab_shared/pages/auth/screens/auth_routes.dart' as auth_routes;
 import 'package:flutter_side_menu/flutter_side_menu.dart';
+import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 import 'package:template/app_router.dart';
 import 'package:template/i18n/strings.g.dart';
@@ -11,8 +12,8 @@ import 'package:fleather/l10n/fleather_localizations.g.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
-final SideMenuController sideMenuController = SideMenuController();
-final ABToastController abToastController = ABToastController();
+final getIt = GetIt.instance;
+
 final GlobalKey<NavigatorState> rootNavigatorKey = GlobalKey<NavigatorState>();
 
 class App extends StatelessWidget {
@@ -20,6 +21,18 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (!getIt.isRegistered<ABToastController>()) {
+      getIt.registerSingleton<ABToastController>(ABToastController());
+    }
+    if (!getIt.isRegistered<SideMenuController>()) {
+      getIt.registerSingleton<SideMenuController>(SideMenuController());
+    }
+    if (!getIt.isRegistered<GlobalKey<NavigatorState>>(
+        instanceName: 'rootNavigatorKey')) {
+      getIt.registerSingleton<GlobalKey<NavigatorState>>(rootNavigatorKey,
+          instanceName: 'rootNavigatorKey');
+    }
+
     return MaterialApp.router(
       theme: AppTheme.light,
       darkTheme: AppTheme.dark,
