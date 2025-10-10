@@ -46,7 +46,7 @@ class AppRouter extends ShellRouteData {
       items: $navConstants.primaryMenuItems(
         context,
       ),
-      homeRouteLocation: '/inbox',
+      homeRouteLocation: '/',
       child: navigator,
     );
   }
