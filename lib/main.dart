@@ -25,7 +25,6 @@ import 'package:macos_window_utils/window_manipulator.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:sizer/sizer.dart';
 import 'package:template/utils/get_it.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:toastification/toastification.dart';
@@ -90,31 +89,29 @@ FutureOr<void> main() async {
     await LocaleSettings.useDeviceLocale();
     Jiffy.setLocale(LocaleSettings.currentLocale.languageCode);
 
-    runApp(Sizer(builder: (context, orientation, screenType) {
-      return SentryWidget(
-        child: MultiBlocProvider(
-            providers: [
-              BlocProvider(create: (context) => AppCubit()),
-              BlocProvider(
-                  create: (context) => AuthBloc(
-                        onLogout: () {
-                          getIt<SharedPreferences>().clear();
-                          getIt<ApiClient>().setIdToken(null);
-                          Sentry.configureScope(
-                            (scope) => scope.setUser(SentryUser(id: null)),
-                          );
-                          getIt.unregister<EncryptionService>();
-                        },
-                        onLogin: (e) {
-                          getIt.registerSingleton<EncryptionService>(e);
-                        },
-                      )),
-            ],
-            child: ab_shared_translations.TranslationProvider(
-              child: TranslationProvider(
-                  child: ToastificationWrapper(child: App())),
-            )),
-      );
-    }));
+    runApp(SentryWidget(
+      child: MultiBlocProvider(
+          providers: [
+            BlocProvider(create: (context) => AppCubit()),
+            BlocProvider(
+                create: (context) => AuthBloc(
+                      onLogout: () {
+                        getIt<SharedPreferences>().clear();
+                        getIt<ApiClient>().setIdToken(null);
+                        Sentry.configureScope(
+                          (scope) => scope.setUser(SentryUser(id: null)),
+                        );
+                        getIt.unregister<EncryptionService>();
+                      },
+                      onLogin: (e) {
+                        getIt.registerSingleton<EncryptionService>(e);
+                      },
+                    )),
+          ],
+          child: ab_shared_translations.TranslationProvider(
+            child:
+                TranslationProvider(child: ToastificationWrapper(child: App())),
+          )),
+    ));
   });
 }

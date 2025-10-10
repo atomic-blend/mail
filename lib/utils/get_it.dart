@@ -77,7 +77,6 @@ Future<void> setupGetIt() async {
       () {
         return EncryptionService(
           userSalt: getIt<SharedPreferences>().getString("userSalt") ?? "",
-          prefs: getIt<SharedPreferences>(),
           userKey: getIt<SharedPreferences>().getString("key"),
           agePublicKey: getIt<SharedPreferences>().getString("agePublicKey"),
         );
