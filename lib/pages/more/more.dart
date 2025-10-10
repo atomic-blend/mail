@@ -1,14 +1,15 @@
 import 'package:ab_shared/components/buttons/icon_text_button.dart';
 import 'package:ab_shared/components/widgets/elevated_container.dart';
+import 'package:ab_shared/utils/api_client.dart';
+import 'package:go_router/go_router.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:template/i18n/strings.g.dart';
-import 'package:ab_shared/pages/account/account.dart';
-import 'package:template/main.dart';
 import 'package:ab_shared/pages/settings/settings.dart';
 import 'package:ab_shared/utils/constants.dart';
 import 'package:ab_shared/utils/shortcuts.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:template/utils/get_it.dart';
 import 'package:template/utils/nav_constants.dart';
 
 class MoreApps extends StatefulWidget {
@@ -21,8 +22,11 @@ class MoreApps extends StatefulWidget {
 class _MoreAppsState extends State<MoreApps> {
   @override
   Widget build(BuildContext context) {
-    final restOfNavigation =
-        $navConstants.primaryMenuItems(context).sublist(4);
+    final restOfNavigation = $navConstants
+        .primaryMenuItems(context,
+            prefs: getIt<SharedPreferences>(),
+            globalApiClient: getIt<ApiClient>())
+        .sublist(4);
     return SafeArea(
       child: Padding(
         padding: isDesktop(context)
@@ -49,16 +53,7 @@ class _MoreAppsState extends State<MoreApps> {
                     mainAxisCellCount: 0.6,
                     child: GestureDetector(
                       onTap: () {
-                        if (e.onTap != null) {
-                          e.onTap!(0);
-                          return;
-                        }
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => e.body ?? Container(),
-                          ),
-                        );
+                        context.go(e.location ?? '/');
                       },
                       child: ElevatedContainer(
                         child: Column(
@@ -68,7 +63,9 @@ class _MoreAppsState extends State<MoreApps> {
                             SizedBox(
                               height: $constants.insets.sm,
                             ),
-                            isDesktop(context) ? Icon(e.icon) : Icon(e.cupertinoIcon),
+                            isDesktop(context)
+                                ? Icon(e.icon)
+                                : Icon(e.cupertinoIcon),
                             SizedBox(
                               height: $constants.insets.xxs,
                             ),
@@ -107,16 +104,7 @@ class _MoreAppsState extends State<MoreApps> {
                         icon: CupertinoIcons.person,
                         iconSize: 25,
                         onTap: () {
-                          showModalBottomSheet(
-                            context: context,
-                            isScrollControlled: true,
-                            builder: (context) => Account(
-                              globalApiClient: globalApiClient!,
-                              encryptionService: encryptionService!,
-                              revenueCatService: revenueCatService!,
-                              prefs: prefs!,
-                            ),
-                          );
+                          context.go("/account");
                         },
                       ),
                     ),
@@ -135,8 +123,8 @@ class _MoreAppsState extends State<MoreApps> {
                         icon: CupertinoIcons.gear,
                         iconSize: 25,
                         onTap: () {
-                          Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) => const Settings()));
+                          SettingsRoute(SettingsParams(
+                          )).go(context);
                         },
                       ),
                     ),
