@@ -1,4 +1,5 @@
 import 'package:ab_shared/components/app/ab_navbar.dart';
+import 'package:ab_shared/components/app/ab_header.dart';
 import 'package:mail/pages/mails/mail_composer.dart';
 import 'package:ab_shared/utils/shortcuts.dart';
 import 'package:flutter/cupertino.dart';
@@ -45,6 +46,7 @@ class NavConstants {
             cupertinoIcon: CupertinoIcons.tray_arrow_down,
             label: "Inbox",
             location: "/inbox",
+            header: ABHeader(title: "Inbox"),
           ),
           NavigationItem(
             key: Key("drafts"),
@@ -52,6 +54,7 @@ class NavConstants {
             cupertinoIcon: CupertinoIcons.square_pencil,
             label: "Drafts",
             location: "/drafts",
+            header: ABHeader(title: "Drafts"),
           ),
           NavigationItem(
             key: Key("archive"),
@@ -59,6 +62,7 @@ class NavConstants {
             cupertinoIcon: CupertinoIcons.archivebox,
             label: "Archive",
             location: "/archive",
+            header: ABHeader(title: "Archive"),
           ),
           NavigationItem(
             key: Key("trashed"),
@@ -66,6 +70,7 @@ class NavConstants {
             cupertinoIcon: CupertinoIcons.bin_xmark_fill,
             label: "Trashed",
             location: "/trashed",
+            header: ABHeader(title: "Trashed"),
           ),
           NavigationItem(
             key: Key("all"),
@@ -73,42 +78,9 @@ class NavConstants {
             cupertinoIcon: CupertinoIcons.envelope_open_fill,
             label: "All",
             location: "/all",
+            header: ABHeader(title: "All"),
           ),
         ],
-
-        // appBar: AppBar(
-        //   key: const Key("inbox"),
-        //   backgroundColor: getTheme(context).surface,
-        //   title: BlocBuilder<AppCubit, AppState>(builder: (context, appState) {
-        //     var selectedSecondaryItem = primaryMenuItems(context)
-        //         .where((element) =>
-        //             (element.key as ValueKey).value ==
-        //             appState.primaryMenuSelectedKey)
-        //         .firstOrNull
-        //         ?.subItems
-        //         ?.where((element) =>
-        //             (element.key as ValueKey).value ==
-        //             appState.secondaryMenuSelectedKey)
-        //         .firstOrNull;
-        //     return Text(
-        //       selectedSecondaryItem?.label ?? "",
-        //       style: getTextTheme(context).headlineSmall!.copyWith(
-        //             fontWeight: FontWeight.bold,
-        //           ),
-        //     );
-        //   }),
-        //   actions: [
-        //     BlocBuilder<AuthBloc, AuthState>(builder: (context, authState) {
-        //       return Container();
-        //     }),
-        //   ],
-        //   shape: RoundedRectangleBorder(
-        //     borderRadius: BorderRadius.only(
-        //       bottomLeft: Radius.circular(16.0),
-        //       bottomRight: Radius.circular(16.0),
-        //     ),
-        //   ),
-        // ),
       ),
       NavigationItem(
         key: const Key("organize"),
@@ -134,6 +106,7 @@ class NavConstants {
             }
           },
         ),
+        header: ABHeader(title: "Organize"),
         subItems: [],
       ),
       NavigationItem(
@@ -141,6 +114,7 @@ class NavConstants {
         icon: LineAwesome.search_solid,
         cupertinoIcon: CupertinoIcons.search,
         label: "Search",
+        header: ABHeader(title: "Search"),
         location: "/search",
         action: NavigationAction(
           icon: LineAwesome.plus_solid,
@@ -169,6 +143,7 @@ class NavConstants {
         label: "Account",
         location: "/account",
         subItems: [],
+        header: ABHeader(title: "Account"),
       ),
       NavigationItem(
         key: const Key("settings"),
@@ -177,6 +152,7 @@ class NavConstants {
         label: "Settings",
         location: "/settings",
         subItems: [],
+        header: ABHeader(title: "Settings"),
       ),
     ];
     return allItems;
