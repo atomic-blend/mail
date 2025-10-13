@@ -1,4 +1,3 @@
-import 'package:ab_shared/components/forms/search_bar.dart';
 import 'package:ab_shared/utils/constants.dart';
 import 'package:ab_shared/utils/shortcuts.dart';
 import 'package:flutter/cupertino.dart';
@@ -37,8 +36,6 @@ class MailList extends StatefulWidget {
 }
 
 class _MailListState extends State<MailList> {
-  final TextEditingController searchController = TextEditingController();
-
   @override
   Widget build(BuildContext context) {
     if (widget.mails?.isEmpty ?? true) {
@@ -99,26 +96,12 @@ class _MailListState extends State<MailList> {
         child: ListView(
           padding: EdgeInsets.symmetric(horizontal: $constants.insets.xs),
           children: [
-            Padding(
-              padding: EdgeInsets.symmetric(vertical: $constants.insets.xxs),
-              child: ABSearchBar(
-                controller: searchController,
-                onChanged: (p0) {
-                  setState(() {});
-                },
-              ),
-            ),
-            SizedBox(height: $constants.insets.xs),
             if (widget.header != null) ...[
               widget.header!,
               SizedBox(height: $constants.insets.xxs),
             ],
             SizedBox(height: $constants.insets.xxs),
             ...(widget.mails ?? []).map((mail) {
-              if (searchController.text.isNotEmpty &&
-                  !mail.search(searchController.text)) {
-                return const SizedBox.shrink();
-              }
               return Padding(
                 padding: EdgeInsets.only(bottom: $constants.insets.xs),
                 child: MailCard(

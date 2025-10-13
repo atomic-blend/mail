@@ -7,7 +7,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mail/blocs/mail/mail_bloc.dart';
 import 'package:mail/components/toast_notifications/selected_mails.dart';
 import 'package:mail/models/mail/mail.dart';
-import 'package:mail/pages/appbars/mail_appbar.dart';
 import 'package:mail/pages/mails/mail_details.dart';
 import 'package:mail/pages/mails/mail_list.dart';
 import 'package:mail/pages/mails/no_mail_selected.dart';
@@ -82,7 +81,6 @@ class _FliteredMailViewState extends State<FliteredMailView> {
                 : getSize(context).width,
             child: Column(
               children: [
-                MailAppbar(title: widget.title),
                 Expanded(
                   child: MailList(
                     mails: filteredMails,

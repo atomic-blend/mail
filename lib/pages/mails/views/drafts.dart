@@ -1,11 +1,9 @@
 import 'package:ab_shared/utils/shortcuts.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:go_router/go_router.dart';
-import 'package:mail/i18n/strings.g.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mail/blocs/mail/mail_bloc.dart';
-import 'package:mail/pages/appbars/mail_appbar.dart';
 import 'package:mail/pages/mails/mail_list.dart';
 import 'package:mail/services/sync.service.dart';
 
@@ -43,8 +41,6 @@ class _DraftScreenState extends State<DraftScreen> {
             width: isDesktop(context) ? 300 : getSize(context).width,
             child: Column(
               children: [
-                MailAppbar(
-                    title: context.t.email_folders.drafts),
                 Expanded(
                   child: MailList(
                     drafts: true,

@@ -23,6 +23,7 @@ class MailCard extends StatefulWidget {
   final Function(String)? onDelete;
   final Function(dynamic)? onSelect;
   final Function(dynamic)? onDeselect;
+  final Function(dynamic)? onTap;
   final List<dynamic> selectedMails;
   final bool? selectMode;
   final Function(bool)? setSelectMode;
@@ -39,7 +40,8 @@ class MailCard extends StatefulWidget {
       this.selectMode,
       this.setSelectMode,
       this.enabled = true,
-      this.backgroundColor});
+      this.backgroundColor,
+      this.onTap});
 
   @override
   State<MailCard> createState() => _MailCardState();
@@ -168,6 +170,10 @@ class _MailCardState extends State<MailCard> {
                 _toggleSelected(mail);
               },
               onTap: () async {
+                if (widget.onTap != null) {
+                  widget.onTap?.call(mail);
+                  return;
+                }
                 if (widget.draft == null) {
                   // on mobile, open the mail in the detail screen only when no mails are selected (ie not in multi-select mode)
                   if (!isDesktop(context)) {
