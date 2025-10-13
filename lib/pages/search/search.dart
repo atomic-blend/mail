@@ -85,9 +85,19 @@ class _SearchScreenState extends State<SearchScreen> {
                           child: MailCard(
                             mail: result,
                             onTap: (dynamic mail) {
-                              setState(() {
-                                previewed = mail;
-                              });
+                              if (isDesktop(context)) {
+                                setState(() {
+                                  previewed = mail;
+                                });
+                              } else {
+                                Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (context) => MailDetailScreen(
+                                          mail,
+                                          onCancel: () {
+                                            Navigator.of(context).pop();
+                                          },
+                                        )));
+                              }
                             },
                           ),
                         );
@@ -123,9 +133,13 @@ class _SearchScreenState extends State<SearchScreen> {
         previewed as Mail,
         mode: MailScreenMode.integrated,
         onCancel: () {
-          setState(() {
-            previewed = null;
-          });
+          if (isDesktop(context)) {
+            setState(() {
+              previewed = null;
+            });
+          } else {
+            Navigator.of(context).pop();
+          }
         },
       );
     }
