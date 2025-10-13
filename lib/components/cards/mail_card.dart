@@ -186,13 +186,26 @@ class _MailCardState extends State<MailCard> {
                     if (!context.mounted) return;
                     SyncService.sync(context);
                   } else {
-                    // on desktop, tapping the mail opens it in the preview panel
-                    // multi-select mode enables itself when the user clicks on the avatar / checkbox
-
-                    _toggleSelected(
-                      mail,
-                      reset: widget.selectMode != true,
-                    );
+                    if (getSize(context).width < $constants.screenSize.md) {
+                      // on mobile, tapping the mail opens it in the detail screen
+                      await Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => MailDetailScreen(
+                            mail,
+                            onCancel: () {
+                              Navigator.of(context).pop();
+                            },
+                          ),
+                        ),
+                      );
+                    } else {
+                      // on desktop, tapping the mail opens it in the preview panel
+                      // multi-select mode enables itself when the user clicks on the avatar / checkbox
+                      _toggleSelected(
+                        mail,
+                        reset: widget.selectMode != true,
+                      );
+                    }
                   }
                 } else {
                   _openComposer(context);
