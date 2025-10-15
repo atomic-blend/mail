@@ -318,10 +318,7 @@ class _MailComposerState extends ResponsiveState<MailComposer> {
     //TODO: add attachements and create a raw mail entity like it's done in the backend
     final mail = Mail();
     mail.headers = [
-      {
-        "Key": "To",
-        "Value": [toController.text]
-      },
+      {"Key": "To", "Value": to},
       {"Key": "From", "Value": from},
       {"Key": "Subject", "Value": subjectController.text},
     ];
