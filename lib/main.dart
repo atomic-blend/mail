@@ -61,10 +61,6 @@ FutureOr<void> main() async {
       WindowManipulator.enableFullSizeContentView();
     }
 
-    if (isPaymentSupported()) {
-      await getIt<RevenueCatService>().initPlatformState();
-    }
-
     if (kIsWeb || !Platform.isLinux) {
       await Firebase.initializeApp(
         options: DefaultFirebaseOptions.currentPlatform,
