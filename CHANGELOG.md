@@ -2,6 +2,15 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## 0.1.3 - 2025-10-16
+#### Bug Fixes
+- remove init of revenue cat service in app - (84e32d4) - Brandon Guigo
+#### Miscellaneous Chores
+- **(release)** 0.1.2 [skip ci] - (c17a170) - GitHub Actions
+- update to latest shared - (2995a6e) - Brandon Guigo
+
+- - -
+
 ## 0.1.2 - 2025-10-10
 #### Bug Fixes
 - settings don't need args - (5fb8935) - Brandon Guigo
