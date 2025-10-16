@@ -2,10 +2,8 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:ab_shared/services/encryption.service.dart';
-import 'package:ab_shared/services/revenue_cat_service.dart';
 import 'package:ab_shared/utils/api_client.dart';
 import 'package:ab_shared/utils/env/env.dart';
-import 'package:ab_shared/utils/shortcuts.dart';
 import 'package:flutter_age/flutter_age.dart';
 import 'package:template/blocs/app/app.bloc.dart';
 import 'package:ab_shared/blocs/auth/auth.bloc.dart';
