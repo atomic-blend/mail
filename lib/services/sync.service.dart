@@ -9,7 +9,7 @@ class SyncService {
 
     // Sync data
     context.read<MailBloc>().add(const SyncMailActions());
-    context.read<MailBloc>().add(const LoadMails());
+    context.read<MailBloc>().add(const SyncAllMailsPaginated());
   }
 
   static void syncUserData(BuildContext context) {

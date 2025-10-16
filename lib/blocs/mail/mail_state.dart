@@ -11,7 +11,14 @@ sealed class MailState extends Equatable {
   final List<String> untrashedMails;
   final DateTime? latestSync;
   MailState(this.mails,
-      {this.latestSync, List<String>? readMails, List<String>? unreadMails, List<send_mail.SendMail>? drafts, List<String>? archivedMails, List<String>? unarchivedMails, List<String>? trashedMails, List<String>? untrashedMails})
+      {this.latestSync,
+      List<String>? readMails,
+      List<String>? unreadMails,
+      List<send_mail.SendMail>? drafts,
+      List<String>? archivedMails,
+      List<String>? unarchivedMails,
+      List<String>? trashedMails,
+      List<String>? untrashedMails})
       : readMails = readMails ?? [],
         unreadMails = unreadMails ?? [],
         drafts = drafts ?? [],
@@ -21,19 +28,30 @@ sealed class MailState extends Equatable {
         untrashedMails = untrashedMails ?? [];
 
   @override
-  List<Object?> get props => [mails, latestSync, readMails, unreadMails, drafts, archivedMails, unarchivedMails];
+  List<Object?> get props => [
+        mails,
+        latestSync,
+        readMails,
+        unreadMails,
+        drafts,
+        archivedMails,
+        unarchivedMails
+      ];
 
   /// Transforms one MailState to another while preserving all properties
-  static T transform<T extends MailState>(T Function(List<Mail>? mails, {
-    DateTime? latestSync,
-    List<String>? readMails,
-    List<String>? unreadMails,
-    List<send_mail.SendMail>? drafts,
-    List<String>? archivedMails,
-    List<String>? unarchivedMails,
-    List<String>? trashedMails,
-    List<String>? untrashedMails,
-  }) constructor, MailState fromState, {
+  static T transform<T extends MailState>(
+    T Function(
+      List<Mail>? mails, {
+      DateTime? latestSync,
+      List<String>? readMails,
+      List<String>? unreadMails,
+      List<send_mail.SendMail>? drafts,
+      List<String>? archivedMails,
+      List<String>? unarchivedMails,
+      List<String>? trashedMails,
+      List<String>? untrashedMails,
+    }) constructor,
+    MailState fromState, {
     List<Mail>? mails,
     DateTime? latestSync,
     List<String>? readMails,
@@ -58,16 +76,21 @@ sealed class MailState extends Equatable {
   }
 
   /// Transforms one MailState to an error state while preserving all properties
-  static T transformError<T extends MailState>(T Function(List<Mail>? mails, String message, {
-    DateTime? latestSync,
-    List<String>? readMails,
-    List<String>? unreadMails,
-    List<send_mail.SendMail>? drafts,
-    List<String>? archivedMails,
-    List<String>? unarchivedMails,
-    List<String>? trashedMails,
-    List<String>? untrashedMails,
-  }) constructor, MailState fromState, String message) {
+  static T transformError<T extends MailState>(
+      T Function(
+        List<Mail>? mails,
+        String message, {
+        DateTime? latestSync,
+        List<String>? readMails,
+        List<String>? unreadMails,
+        List<send_mail.SendMail>? drafts,
+        List<String>? archivedMails,
+        List<String>? unarchivedMails,
+        List<String>? trashedMails,
+        List<String>? untrashedMails,
+      }) constructor,
+      MailState fromState,
+      String message) {
     return constructor(
       fromState.mails,
       message,
@@ -84,214 +107,556 @@ sealed class MailState extends Equatable {
 }
 
 class MailInitial extends MailState {
-  MailInitial() : super(null, readMails: [], unreadMails: [], drafts: [], archivedMails: [], unarchivedMails: []);
+  MailInitial()
+      : super(null,
+            readMails: [],
+            unreadMails: [],
+            drafts: [],
+            archivedMails: [],
+            unarchivedMails: []);
 }
 
 class MailLoading extends MailState {
   MailLoading(super.mails,
-      {super.readMails, super.unreadMails, super.latestSync, super.drafts, super.archivedMails, super.unarchivedMails, super.trashedMails, super.untrashedMails});
+      {super.readMails,
+      super.unreadMails,
+      super.latestSync,
+      super.drafts,
+      super.archivedMails,
+      super.unarchivedMails,
+      super.trashedMails,
+      super.untrashedMails});
 }
 
 class MailLoaded extends MailState {
   MailLoaded(super.mails,
-      {super.readMails, super.unreadMails, super.latestSync, super.drafts, super.archivedMails, super.unarchivedMails, super.trashedMails, super.untrashedMails});
+      {super.readMails,
+      super.unreadMails,
+      super.latestSync,
+      super.drafts,
+      super.archivedMails,
+      super.unarchivedMails,
+      super.trashedMails,
+      super.untrashedMails});
 
   @override
-  List<Object?> get props => [mails, latestSync, drafts, archivedMails, unarchivedMails];
+  List<Object?> get props =>
+      [mails, latestSync, drafts, archivedMails, unarchivedMails];
 }
 
 class MailLoadingError extends MailState {
   MailLoadingError(super.mails, this.message,
-      {super.readMails, super.unreadMails, super.latestSync, super.drafts, super.archivedMails, super.unarchivedMails, super.trashedMails, super.untrashedMails});
+      {super.readMails,
+      super.unreadMails,
+      super.latestSync,
+      super.drafts,
+      super.archivedMails,
+      super.unarchivedMails,
+      super.trashedMails,
+      super.untrashedMails});
   final String message;
 
   @override
-  List<Object?> get props => [message, latestSync, drafts, archivedMails, unarchivedMails];
+  List<Object?> get props =>
+      [message, latestSync, drafts, archivedMails, unarchivedMails];
 }
 
 class MailMarkAsReadSuccess extends MailState {
   MailMarkAsReadSuccess(super.mails,
-      {super.latestSync, super.readMails, super.unreadMails, super.drafts, super.archivedMails, super.unarchivedMails, super.trashedMails, super.untrashedMails});
+      {super.latestSync,
+      super.readMails,
+      super.unreadMails,
+      super.drafts,
+      super.archivedMails,
+      super.unarchivedMails,
+      super.trashedMails,
+      super.untrashedMails});
 
   @override
-  List<Object?> get props => [mails, latestSync, readMails, unreadMails, drafts, archivedMails, unarchivedMails];
+  List<Object?> get props => [
+        mails,
+        latestSync,
+        readMails,
+        unreadMails,
+        drafts,
+        archivedMails,
+        unarchivedMails
+      ];
 }
 
 class MailMarkAsReadError extends MailState {
   MailMarkAsReadError(super.mails, this.message,
-      {super.latestSync, super.readMails, super.drafts, super.archivedMails, super.unarchivedMails, super.trashedMails, super.untrashedMails});
+      {super.latestSync,
+      super.readMails,
+      super.drafts,
+      super.archivedMails,
+      super.unarchivedMails,
+      super.trashedMails,
+      super.untrashedMails});
   final String message;
 
   @override
-  List<Object?> get props => [message, latestSync, readMails, drafts, archivedMails, unarchivedMails];
+  List<Object?> get props =>
+      [message, latestSync, readMails, drafts, archivedMails, unarchivedMails];
 }
 
 class MailMarkAsUnreadSuccess extends MailState {
   MailMarkAsUnreadSuccess(super.mails,
-      {super.latestSync, super.unreadMails, super.readMails, super.drafts, super.archivedMails, super.unarchivedMails, super.trashedMails, super.untrashedMails});
+      {super.latestSync,
+      super.unreadMails,
+      super.readMails,
+      super.drafts,
+      super.archivedMails,
+      super.unarchivedMails,
+      super.trashedMails,
+      super.untrashedMails});
 
   @override
-  List<Object?> get props => [mails, latestSync, unreadMails, drafts, archivedMails, unarchivedMails];
+  List<Object?> get props =>
+      [mails, latestSync, unreadMails, drafts, archivedMails, unarchivedMails];
 }
 
 class MailMarkAsUnreadError extends MailState {
   MailMarkAsUnreadError(super.mails, this.message,
-      {super.latestSync, super.unreadMails, super.drafts, super.archivedMails, super.unarchivedMails, super.trashedMails, super.untrashedMails});
+      {super.latestSync,
+      super.unreadMails,
+      super.drafts,
+      super.archivedMails,
+      super.unarchivedMails,
+      super.trashedMails,
+      super.untrashedMails});
   final String message;
 
   @override
-  List<Object?> get props => [message, latestSync, unreadMails, drafts, archivedMails, unarchivedMails];
+  List<Object?> get props => [
+        message,
+        latestSync,
+        unreadMails,
+        drafts,
+        archivedMails,
+        unarchivedMails
+      ];
 }
 
 class MailSendSuccess extends MailState {
   MailSendSuccess(super.mails,
-      {super.latestSync, super.readMails, super.unreadMails, super.drafts, super.archivedMails, super.unarchivedMails, super.trashedMails, super.untrashedMails});
+      {super.latestSync,
+      super.readMails,
+      super.unreadMails,
+      super.drafts,
+      super.archivedMails,
+      super.unarchivedMails,
+      super.trashedMails,
+      super.untrashedMails});
 
   @override
-  List<Object?> get props => [mails, latestSync, readMails, unreadMails, drafts, archivedMails, unarchivedMails];
+  List<Object?> get props => [
+        mails,
+        latestSync,
+        readMails,
+        unreadMails,
+        drafts,
+        archivedMails,
+        unarchivedMails
+      ];
 }
 
-class MailSendError extends MailState { 
+class MailSendError extends MailState {
   MailSendError(super.mails, this.message,
-      {super.latestSync, super.readMails, super.unreadMails, super.drafts, super.archivedMails, super.unarchivedMails, super.trashedMails, super.untrashedMails});
+      {super.latestSync,
+      super.readMails,
+      super.unreadMails,
+      super.drafts,
+      super.archivedMails,
+      super.unarchivedMails,
+      super.trashedMails,
+      super.untrashedMails});
   final String message;
 
   @override
-  List<Object?> get props => [message, latestSync, readMails, unreadMails, drafts, archivedMails, unarchivedMails];
+  List<Object?> get props => [
+        message,
+        latestSync,
+        readMails,
+        unreadMails,
+        drafts,
+        archivedMails,
+        unarchivedMails
+      ];
 }
 
 class MailSaveDraftSuccess extends MailState {
   MailSaveDraftSuccess(super.mails,
-      {super.latestSync, super.readMails, super.unreadMails, super.drafts, super.archivedMails, super.unarchivedMails, super.trashedMails, super.untrashedMails});
+      {super.latestSync,
+      super.readMails,
+      super.unreadMails,
+      super.drafts,
+      super.archivedMails,
+      super.unarchivedMails,
+      super.trashedMails,
+      super.untrashedMails});
 
   @override
-  List<Object?> get props => [mails, latestSync, readMails, unreadMails, drafts, archivedMails, unarchivedMails];
+  List<Object?> get props => [
+        mails,
+        latestSync,
+        readMails,
+        unreadMails,
+        drafts,
+        archivedMails,
+        unarchivedMails
+      ];
 }
 
 class MailSaveDraftError extends MailState {
   MailSaveDraftError(super.mails, this.message,
-      {super.latestSync, super.readMails, super.unreadMails, super.drafts, super.archivedMails, super.unarchivedMails, super.trashedMails, super.untrashedMails});
+      {super.latestSync,
+      super.readMails,
+      super.unreadMails,
+      super.drafts,
+      super.archivedMails,
+      super.unarchivedMails,
+      super.trashedMails,
+      super.untrashedMails});
   final String message;
 
   @override
-  List<Object?> get props => [message, latestSync, readMails, unreadMails, drafts, archivedMails, unarchivedMails];
+  List<Object?> get props => [
+        message,
+        latestSync,
+        readMails,
+        unreadMails,
+        drafts,
+        archivedMails,
+        unarchivedMails
+      ];
 }
 
 class MailDeleteDraftSuccess extends MailState {
   MailDeleteDraftSuccess(super.mails,
-      {super.latestSync, super.readMails, super.unreadMails, super.drafts, super.archivedMails, super.unarchivedMails, super.trashedMails, super.untrashedMails});
+      {super.latestSync,
+      super.readMails,
+      super.unreadMails,
+      super.drafts,
+      super.archivedMails,
+      super.unarchivedMails,
+      super.trashedMails,
+      super.untrashedMails});
 
   @override
-  List<Object?> get props => [mails, latestSync, readMails, unreadMails, drafts, archivedMails, unarchivedMails];
+  List<Object?> get props => [
+        mails,
+        latestSync,
+        readMails,
+        unreadMails,
+        drafts,
+        archivedMails,
+        unarchivedMails
+      ];
 }
 
-class MailDeleteDraftError extends MailState {  
+class MailDeleteDraftError extends MailState {
   MailDeleteDraftError(super.mails, this.message,
-      {super.latestSync, super.readMails, super.unreadMails, super.drafts, super.archivedMails, super.unarchivedMails, super.trashedMails, super.untrashedMails});
+      {super.latestSync,
+      super.readMails,
+      super.unreadMails,
+      super.drafts,
+      super.archivedMails,
+      super.unarchivedMails,
+      super.trashedMails,
+      super.untrashedMails});
   final String message;
 
   @override
-  List<Object?> get props => [message, latestSync, readMails, unreadMails, drafts, archivedMails, unarchivedMails];
+  List<Object?> get props => [
+        message,
+        latestSync,
+        readMails,
+        unreadMails,
+        drafts,
+        archivedMails,
+        unarchivedMails
+      ];
 }
 
 class MailUpdateDraftSuccess extends MailState {
   MailUpdateDraftSuccess(super.mails,
-      {super.latestSync, super.readMails, super.unreadMails, super.drafts, super.archivedMails, super.unarchivedMails, super.trashedMails, super.untrashedMails});
+      {super.latestSync,
+      super.readMails,
+      super.unreadMails,
+      super.drafts,
+      super.archivedMails,
+      super.unarchivedMails,
+      super.trashedMails,
+      super.untrashedMails});
 
   @override
-  List<Object?> get props => [mails, latestSync, readMails, unreadMails, drafts, archivedMails, unarchivedMails];
+  List<Object?> get props => [
+        mails,
+        latestSync,
+        readMails,
+        unreadMails,
+        drafts,
+        archivedMails,
+        unarchivedMails
+      ];
 }
 
 class MailUpdateDraftError extends MailState {
   MailUpdateDraftError(super.mails, this.message,
-      {super.latestSync, super.readMails, super.unreadMails, super.drafts, super.archivedMails, super.unarchivedMails, super.trashedMails, super.untrashedMails});
+      {super.latestSync,
+      super.readMails,
+      super.unreadMails,
+      super.drafts,
+      super.archivedMails,
+      super.unarchivedMails,
+      super.trashedMails,
+      super.untrashedMails});
   final String message;
 
   @override
-  List<Object?> get props => [message, latestSync, readMails, unreadMails, drafts, archivedMails, unarchivedMails];
+  List<Object?> get props => [
+        message,
+        latestSync,
+        readMails,
+        unreadMails,
+        drafts,
+        archivedMails,
+        unarchivedMails
+      ];
 }
 
 class MailArchiveSuccess extends MailState {
   MailArchiveSuccess(super.mails,
-      {super.latestSync, super.readMails, super.unreadMails, super.drafts, super.archivedMails, super.unarchivedMails, super.trashedMails, super.untrashedMails});
+      {super.latestSync,
+      super.readMails,
+      super.unreadMails,
+      super.drafts,
+      super.archivedMails,
+      super.unarchivedMails,
+      super.trashedMails,
+      super.untrashedMails});
 
   @override
-  List<Object?> get props => [mails, latestSync, readMails, unreadMails, drafts, archivedMails, unarchivedMails];
+  List<Object?> get props => [
+        mails,
+        latestSync,
+        readMails,
+        unreadMails,
+        drafts,
+        archivedMails,
+        unarchivedMails
+      ];
 }
 
-class MailArchiveError extends MailState {  
-  MailArchiveError(super.mails, this.message, 
-      {super.latestSync, super.readMails, super.unreadMails, super.drafts, super.archivedMails, super.unarchivedMails, super.trashedMails, super.untrashedMails});
+class MailArchiveError extends MailState {
+  MailArchiveError(super.mails, this.message,
+      {super.latestSync,
+      super.readMails,
+      super.unreadMails,
+      super.drafts,
+      super.archivedMails,
+      super.unarchivedMails,
+      super.trashedMails,
+      super.untrashedMails});
   final String message;
 
   @override
-  List<Object?> get props => [message, latestSync, readMails, unreadMails, drafts, archivedMails, unarchivedMails];
+  List<Object?> get props => [
+        message,
+        latestSync,
+        readMails,
+        unreadMails,
+        drafts,
+        archivedMails,
+        unarchivedMails
+      ];
 }
 
 class MailUnarchiveSuccess extends MailState {
-  MailUnarchiveSuccess(super.mails, 
-      {super.latestSync, super.readMails, super.unreadMails, super.drafts, super.archivedMails, super.unarchivedMails, super.trashedMails, super.untrashedMails});
+  MailUnarchiveSuccess(super.mails,
+      {super.latestSync,
+      super.readMails,
+      super.unreadMails,
+      super.drafts,
+      super.archivedMails,
+      super.unarchivedMails,
+      super.trashedMails,
+      super.untrashedMails});
 
   @override
-  List<Object?> get props => [mails, latestSync, readMails, unreadMails, drafts, archivedMails, unarchivedMails];
+  List<Object?> get props => [
+        mails,
+        latestSync,
+        readMails,
+        unreadMails,
+        drafts,
+        archivedMails,
+        unarchivedMails
+      ];
 }
 
-class MailUnarchiveError extends MailState {  
-  MailUnarchiveError(super.mails, this.message, 
-      {super.latestSync, super.readMails, super.unreadMails, super.drafts, super.archivedMails, super.unarchivedMails, super.trashedMails, super.untrashedMails});
+class MailUnarchiveError extends MailState {
+  MailUnarchiveError(super.mails, this.message,
+      {super.latestSync,
+      super.readMails,
+      super.unreadMails,
+      super.drafts,
+      super.archivedMails,
+      super.unarchivedMails,
+      super.trashedMails,
+      super.untrashedMails});
   final String message;
 
   @override
-  List<Object?> get props => [message, latestSync, readMails, unreadMails, drafts, archivedMails, unarchivedMails];
+  List<Object?> get props => [
+        message,
+        latestSync,
+        readMails,
+        unreadMails,
+        drafts,
+        archivedMails,
+        unarchivedMails
+      ];
 }
 
 class MailTrashSuccess extends MailState {
   MailTrashSuccess(super.mails,
-      {super.latestSync, super.readMails, super.unreadMails, super.drafts, super.archivedMails, super.unarchivedMails, super.trashedMails, super.untrashedMails});
+      {super.latestSync,
+      super.readMails,
+      super.unreadMails,
+      super.drafts,
+      super.archivedMails,
+      super.unarchivedMails,
+      super.trashedMails,
+      super.untrashedMails});
 
   @override
-  List<Object?> get props => [mails, latestSync, readMails, unreadMails, drafts, archivedMails, unarchivedMails];
+  List<Object?> get props => [
+        mails,
+        latestSync,
+        readMails,
+        unreadMails,
+        drafts,
+        archivedMails,
+        unarchivedMails
+      ];
 }
 
 class MailTrashError extends MailState {
   MailTrashError(super.mails, this.message,
-      {super.latestSync, super.readMails, super.unreadMails, super.drafts, super.archivedMails, super.unarchivedMails, super.trashedMails, super.untrashedMails});
+      {super.latestSync,
+      super.readMails,
+      super.unreadMails,
+      super.drafts,
+      super.archivedMails,
+      super.unarchivedMails,
+      super.trashedMails,
+      super.untrashedMails});
   final String message;
 
   @override
-  List<Object?> get props => [message, latestSync, readMails, unreadMails, drafts, archivedMails, unarchivedMails];
+  List<Object?> get props => [
+        message,
+        latestSync,
+        readMails,
+        unreadMails,
+        drafts,
+        archivedMails,
+        unarchivedMails
+      ];
 }
 
 class MailUntrashSuccess extends MailState {
   MailUntrashSuccess(super.mails,
-      {super.latestSync, super.readMails, super.unreadMails, super.drafts, super.archivedMails, super.unarchivedMails, super.trashedMails, super.untrashedMails});
+      {super.latestSync,
+      super.readMails,
+      super.unreadMails,
+      super.drafts,
+      super.archivedMails,
+      super.unarchivedMails,
+      super.trashedMails,
+      super.untrashedMails});
 
   @override
-  List<Object?> get props => [mails, latestSync, readMails, unreadMails, drafts, archivedMails, unarchivedMails];
+  List<Object?> get props => [
+        mails,
+        latestSync,
+        readMails,
+        unreadMails,
+        drafts,
+        archivedMails,
+        unarchivedMails
+      ];
 }
 
 class MailUntrashError extends MailState {
   MailUntrashError(super.mails, this.message,
-      {super.latestSync, super.readMails, super.unreadMails, super.drafts, super.archivedMails, super.unarchivedMails, super.trashedMails, super.untrashedMails});
+      {super.latestSync,
+      super.readMails,
+      super.unreadMails,
+      super.drafts,
+      super.archivedMails,
+      super.unarchivedMails,
+      super.trashedMails,
+      super.untrashedMails});
   final String message;
 
   @override
-  List<Object?> get props => [message, latestSync, readMails, unreadMails, drafts, archivedMails, unarchivedMails];
+  List<Object?> get props => [
+        message,
+        latestSync,
+        readMails,
+        unreadMails,
+        drafts,
+        archivedMails,
+        unarchivedMails
+      ];
 }
 
 class MailEmptyTrashSuccess extends MailState {
   MailEmptyTrashSuccess(super.mails,
-      {super.latestSync, super.readMails, super.unreadMails, super.drafts, super.archivedMails, super.unarchivedMails, super.trashedMails, super.untrashedMails});
+      {super.latestSync,
+      super.readMails,
+      super.unreadMails,
+      super.drafts,
+      super.archivedMails,
+      super.unarchivedMails,
+      super.trashedMails,
+      super.untrashedMails});
 
   @override
-  List<Object?> get props => [mails, latestSync, readMails, unreadMails, drafts, archivedMails, unarchivedMails];
+  List<Object?> get props => [
+        mails,
+        latestSync,
+        readMails,
+        unreadMails,
+        drafts,
+        archivedMails,
+        unarchivedMails
+      ];
 }
 
-class MailEmptyTrashError extends MailState { 
+class MailEmptyTrashError extends MailState {
   MailEmptyTrashError(super.mails, this.message,
-      {super.latestSync, super.readMails, super.unreadMails, super.drafts, super.archivedMails, super.unarchivedMails, super.trashedMails, super.untrashedMails});
+      {super.latestSync,
+      super.readMails,
+      super.unreadMails,
+      super.drafts,
+      super.archivedMails,
+      super.unarchivedMails,
+      super.trashedMails,
+      super.untrashedMails});
   final String message;
 
   @override
-  List<Object?> get props => [message, latestSync, readMails, unreadMails, drafts, archivedMails, unarchivedMails];
+  List<Object?> get props => [
+        message,
+        latestSync,
+        readMails,
+        unreadMails,
+        drafts,
+        archivedMails,
+        unarchivedMails
+      ];
 }

@@ -11,6 +11,7 @@ import 'package:mail/pages/mails/mail_details.dart';
 import 'package:mail/pages/mails/mail_list.dart';
 import 'package:mail/pages/mails/no_mail_selected.dart';
 import 'package:mail/pages/mails/selected_list.dart';
+import 'package:mail/services/sync.service.dart';
 import 'package:mail/utils/get_it.dart';
 
 class FliteredMailView extends StatefulWidget {
@@ -26,6 +27,12 @@ class _FliteredMailViewState extends State<FliteredMailView> {
   final abToastController = getIt<ABToastController>();
   List<Mail> selectedMails = [];
   bool? isSelecting = false;
+
+  @override
+  void initState() {
+    super.initState();
+    SyncService.sync(context);
+  }
 
   @override
   Widget build(BuildContext context) {
