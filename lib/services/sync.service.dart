@@ -9,7 +9,11 @@ class SyncService {
 
     // Sync data
     context.read<MailBloc>().add(const SyncMailActions());
-    context.read<MailBloc>().add(const SyncAllMailsPaginated());
+    if (context.read<MailBloc>().state is MailInitial) {
+      context.read<MailBloc>().add(const SyncAllMailsPaginated());
+    } else {
+      context.read<MailBloc>().add(const SyncSince());
+    }
   }
 
   static void syncUserData(BuildContext context) {

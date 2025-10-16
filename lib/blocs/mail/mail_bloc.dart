@@ -14,6 +14,7 @@ class MailBloc extends HydratedBloc<MailEvent, MailState> {
 
   MailBloc() : super(MailInitial()) {
     on<SyncAllMailsPaginated>(_onSyncAllMailsPaginated);
+    on<SyncSince>(_onSyncSince);
     on<MarkAsRead>(_onMarkAsRead);
     on<MarkAsUnread>(_onMarkAsUnread);
     on<SyncMailActions>(_onSyncMailActions);
@@ -36,6 +37,9 @@ class MailBloc extends HydratedBloc<MailEvent, MailState> {
         drafts: (json["drafts"] as List)
             .map((e) => send_mail.SendMail.fromJson(e))
             .toList(),
+        latestSync: json["latestSync"] != null
+            ? DateTime.parse(json["latestSync"])
+            : null,
       );
     }
     return MailInitial();
@@ -46,7 +50,8 @@ class MailBloc extends HydratedBloc<MailEvent, MailState> {
     if (state is MailLoaded && state.mails != null) {
       return {
         "mails": state.mails!.map((e) => e.toJson()).toList(),
-        "drafts": state.drafts!.map((e) => e.toJson()).toList()
+        "drafts": state.drafts!.map((e) => e.toJson()).toList(),
+        "latestSync": state.latestSync?.toIso8601String(),
       };
     }
     return null;
@@ -90,7 +95,85 @@ class MailBloc extends HydratedBloc<MailEvent, MailState> {
 
       // Emit final state with all mails and drafts
       final newState = MailState.transform(MailLoaded.new, prevState,
-          mails: allMails, drafts: drafts);
+          mails: allMails, drafts: drafts, latestSync: DateTime.now());
+
+      emit(newState);
+    } catch (e) {
+      emit(MailState.transformError(
+          MailLoadingError.new, prevState, e.toString()));
+    }
+  }
+
+  void _onSyncSince(SyncSince event, Emitter<MailState> emit) async {
+    final prevState = state;
+    emit(MailState.transform(MailLoading.new, prevState));
+
+    try {
+      // Load mails since the given date
+      List<Mail> newMails = [];
+      int currentPage = 1;
+      int totalPages = 1;
+      bool hasMorePages = true;
+
+      while (hasMorePages && currentPage <= totalPages) {
+        final paginationResult = await _mailService.getMailsSince(
+            since: prevState.latestSync ?? DateTime.now(),
+            page: currentPage,
+            size: 10);
+
+        final List<Mail> pageMails = paginationResult['mails'] as List<Mail>;
+        totalPages = paginationResult['total_pages'] as int;
+
+        // Add all mails from this page to our collection
+        newMails.addAll(pageMails);
+
+        // Check if we have more pages to load
+        hasMorePages = currentPage < totalPages;
+        currentPage++;
+
+        // Emit intermediate state to show progress
+        if (hasMorePages) {
+          final mergedMails = _mergeMails(prevState.mails ?? [], newMails);
+          final intermediateState = MailState.transform(
+            MailLoaded.new,
+            prevState,
+            mails: mergedMails,
+          );
+          emit(intermediateState);
+        }
+      }
+
+      // Load drafts since the given date
+      List<send_mail.SendMail> newDrafts = [];
+      currentPage = 1;
+      totalPages = 1;
+      hasMorePages = true;
+
+      while (hasMorePages && currentPage <= totalPages) {
+        final paginationResult = await _mailService.getDraftsSince(
+            since: prevState.latestSync ?? DateTime.now(),
+            page: currentPage,
+            size: 10);
+
+        final List<send_mail.SendMail> pageDrafts =
+            paginationResult['drafts'] as List<send_mail.SendMail>;
+        totalPages = paginationResult['total_pages'] as int;
+
+        // Add all drafts from this page to our collection
+        newDrafts.addAll(pageDrafts);
+
+        // Check if we have more pages to load
+        hasMorePages = currentPage < totalPages;
+        currentPage++;
+      }
+
+      // Merge with existing state
+      final mergedMails = _mergeMails(prevState.mails ?? [], newMails);
+      final mergedDrafts = _mergeDrafts(prevState.drafts ?? [], newDrafts);
+
+      // Emit final state with merged mails and drafts
+      final newState = MailState.transform(MailLoaded.new, prevState,
+          mails: mergedMails, drafts: mergedDrafts, latestSync: DateTime.now());
 
       emit(newState);
     } catch (e) {
@@ -159,7 +242,7 @@ class MailBloc extends HydratedBloc<MailEvent, MailState> {
       emit(MailState.transformError(
           MailLoadingError.new, prevState, e.toString()));
     }
-    add(const SyncAllMailsPaginated());
+    add(const SyncSince());
   }
 
   void _onSendMail(SendMail event, Emitter<MailState> emit) async {
@@ -310,5 +393,54 @@ class MailBloc extends HydratedBloc<MailEvent, MailState> {
       emit(MailState.transformError(
           MailEmptyTrashError.new, prevState, e.toString()));
     }
+  }
+
+  /// Merges new mails with existing mails, updating existing ones or adding new ones
+  List<Mail> _mergeMails(List<Mail> existingMails, List<Mail> newMails) {
+    final Map<String, Mail> mailMap = {};
+
+    // Add existing mails to map
+    for (final mail in existingMails) {
+      if (mail.id != null) {
+        mailMap[mail.id!] = mail;
+      }
+    }
+
+    // Update or add new mails
+    for (final mail in newMails) {
+      if (mail.id != null) {
+        mailMap[mail.id!] = mail;
+      }
+    }
+
+    // Convert back to list and sort by date (newest first)
+    return mailMap.values.toList()
+      ..sort((a, b) => (b.createdAt ?? DateTime(1970))
+          .compareTo(a.createdAt ?? DateTime(1970)));
+  }
+
+  /// Merges new drafts with existing drafts, updating existing ones or adding new ones
+  List<send_mail.SendMail> _mergeDrafts(List<send_mail.SendMail> existingDrafts,
+      List<send_mail.SendMail> newDrafts) {
+    final Map<String, send_mail.SendMail> draftMap = {};
+
+    // Add existing drafts to map
+    for (final draft in existingDrafts) {
+      if (draft.id != null) {
+        draftMap[draft.id!] = draft;
+      }
+    }
+
+    // Update or add new drafts
+    for (final draft in newDrafts) {
+      if (draft.id != null) {
+        draftMap[draft.id!] = draft;
+      }
+    }
+
+    // Convert back to list and sort by date (newest first)
+    return draftMap.values.toList()
+      ..sort((a, b) => (b.mail?.createdAt ?? DateTime(1970))
+          .compareTo(a.mail?.createdAt ?? DateTime(1970)));
   }
 }

@@ -8,6 +8,10 @@ final class SyncAllMailsPaginated extends MailEvent {
   const SyncAllMailsPaginated();
 }
 
+final class SyncSince extends MailEvent {
+  const SyncSince();
+}
+
 final class MarkAsRead extends MailEvent {
   const MarkAsRead({this.mailId, this.mailIds});
   final String? mailId;
