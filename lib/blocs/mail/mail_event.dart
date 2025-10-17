@@ -4,8 +4,12 @@ sealed class MailEvent {
   const MailEvent();
 }
 
-final class LoadMails extends MailEvent {
-  const LoadMails();
+final class SyncAllMailsPaginated extends MailEvent {
+  const SyncAllMailsPaginated();
+}
+
+final class SyncSince extends MailEvent {
+  const SyncSince();
 }
 
 final class MarkAsRead extends MailEvent {
@@ -35,7 +39,9 @@ final class SaveDraft extends MailEvent {
 }
 
 final class DeleteDraft extends MailEvent {
-  const DeleteDraft(this.draftId,);
+  const DeleteDraft(
+    this.draftId,
+  );
   final String draftId;
 }
 

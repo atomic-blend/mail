@@ -1,10 +1,14 @@
+import 'package:ab_shared/blocs/auth/auth.bloc.dart';
 import 'package:ab_shared/components/app/ab_navbar.dart';
 import 'package:ab_shared/components/app/ab_header.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mail/blocs/mail/mail_bloc.dart';
 import 'package:mail/pages/mails/mail_composer.dart';
 import 'package:ab_shared/utils/shortcuts.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:icons_plus/icons_plus.dart';
+import 'package:mail/services/sync.service.dart';
 
 final $navConstants = NavConstants();
 
@@ -46,7 +50,7 @@ class NavConstants {
             cupertinoIcon: CupertinoIcons.tray_arrow_down,
             label: "Inbox",
             location: "/inbox",
-            header: ABHeader(title: "Inbox"),
+            header: _buildHeader(context, "Inbox"),
           ),
           NavigationItem(
             key: Key("drafts"),
@@ -54,7 +58,7 @@ class NavConstants {
             cupertinoIcon: CupertinoIcons.square_pencil,
             label: "Drafts",
             location: "/drafts",
-            header: ABHeader(title: "Drafts"),
+            header: _buildHeader(context, "Drafts"),
           ),
           NavigationItem(
             key: Key("archive"),
@@ -62,7 +66,7 @@ class NavConstants {
             cupertinoIcon: CupertinoIcons.archivebox,
             label: "Archive",
             location: "/archive",
-            header: ABHeader(title: "Archive"),
+            header: _buildHeader(context, "Archive"),
           ),
           NavigationItem(
             key: Key("trashed"),
@@ -70,7 +74,7 @@ class NavConstants {
             cupertinoIcon: CupertinoIcons.bin_xmark_fill,
             label: "Trashed",
             location: "/trashed",
-            header: ABHeader(title: "Trashed"),
+            header: _buildHeader(context, "Trashed"),
           ),
           NavigationItem(
             key: Key("all"),
@@ -78,7 +82,7 @@ class NavConstants {
             cupertinoIcon: CupertinoIcons.envelope_open_fill,
             label: "All",
             location: "/all",
-            header: ABHeader(title: "All"),
+            header: _buildHeader(context, "All"),
           ),
         ],
       ),
@@ -106,7 +110,7 @@ class NavConstants {
             }
           },
         ),
-        header: ABHeader(title: "Organize"),
+        header: _buildHeader(context, "Organize"),
         subItems: [],
       ),
       NavigationItem(
@@ -114,7 +118,7 @@ class NavConstants {
         icon: LineAwesome.search_solid,
         cupertinoIcon: CupertinoIcons.search,
         label: "Search",
-        header: ABHeader(title: "Search"),
+        header: _buildHeader(context, "Search"),
         location: "/search",
         action: NavigationAction(
           icon: LineAwesome.plus_solid,
@@ -143,7 +147,7 @@ class NavConstants {
         label: "Account",
         location: "/account",
         subItems: [],
-        header: ABHeader(title: "Account"),
+        header: _buildHeader(context, "Account"),
       ),
       NavigationItem(
         key: const Key("settings"),
@@ -152,9 +156,29 @@ class NavConstants {
         label: "Settings",
         location: "/settings",
         subItems: [],
-        header: ABHeader(title: "Settings"),
+        header: _buildHeader(context, "Settings"),
       ),
     ];
     return allItems;
+  }
+
+  Widget _buildHeader(BuildContext context, String title) {
+    return BlocBuilder<AuthBloc, AuthState>(builder: (context, authState) {
+      return BlocBuilder<MailBloc, MailState>(
+        builder: (context, mailState) {
+          return ABHeader(
+            title: title,
+            syncedElements: SyncService.getSyncedElements(
+              mailState: mailState,
+              authState: authState,
+            ),
+            isSyncing: SyncService.isSyncing(
+              mailState: mailState,
+              authState: authState,
+            ),
+          );
+        },
+      );
+    });
   }
 }
