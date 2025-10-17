@@ -1,4 +1,5 @@
 import 'package:ab_shared/blocs/auth/auth.bloc.dart';
+import 'package:ab_shared/components/app/ab_header.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -14,5 +15,17 @@ class SyncService {
 
     // Sync user data
     context.read<AuthBloc>().add(const RefreshUser());
+  }
+
+  static List<SyncedElement> getSyncedElements({
+    required AuthState authState,
+  }) {
+    return [];
+  }
+
+  static bool isSyncing({
+    required AuthState authState,
+  }) {
+    return authState is Loading;
   }
 }

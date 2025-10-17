@@ -1,9 +1,13 @@
+import 'package:ab_shared/blocs/auth/auth.bloc.dart';
+import 'package:ab_shared/components/app/ab_header.dart';
 import 'package:ab_shared/components/app/ab_navbar.dart';
 import 'package:ab_shared/utils/api_client.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:icons_plus/icons_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:template/services/sync.service.dart';
 
 final $navConstants = NavConstants();
 
@@ -39,6 +43,7 @@ class NavConstants {
               cupertinoIcon: CupertinoIcons.doc,
               label: "Page 1",
               location: "/",
+              header: _buildHeader(context, "Page 1"),
             ),
             NavigationItem(
               key: const Key("page_2"),
@@ -46,6 +51,7 @@ class NavConstants {
               cupertinoIcon: CupertinoIcons.search,
               label: "Page 2",
               location: "/page2",
+              header: _buildHeader(context, "Page 2"),
             ),
           ],
         ),
@@ -55,6 +61,7 @@ class NavConstants {
           cupertinoIcon: CupertinoIcons.search,
           label: "Page 3",
           location: "/page3",
+          header: _buildHeader(context, "Page 3"),
         ),
         NavigationItem(
           key: const Key("page_4"),
@@ -62,6 +69,7 @@ class NavConstants {
           cupertinoIcon: CupertinoIcons.square_fill_line_vertical_square,
           label: "Page 4",
           location: "/page4",
+          header: _buildHeader(context, "Page 4"),
         ),
         NavigationItem(
           key: const Key("account"),
@@ -69,6 +77,7 @@ class NavConstants {
           cupertinoIcon: CupertinoIcons.person,
           label: "Account",
           location: "/account",
+          header: _buildHeader(context, "Account"),
         ),
         NavigationItem(
           key: const Key("settings"),
@@ -76,6 +85,21 @@ class NavConstants {
           cupertinoIcon: CupertinoIcons.gear,
           label: "Settings",
           location: "/settings",
+          header: _buildHeader(context, "Settings"),
         ),
       ];
+}
+
+Widget _buildHeader(BuildContext context, String title) {
+  return BlocBuilder<AuthBloc, AuthState>(builder: (context, authState) {
+    return ABHeader(
+      title: title,
+      syncedElements: SyncService.getSyncedElements(
+        authState: authState,
+      ),
+      isSyncing: SyncService.isSyncing(
+        authState: authState,
+      ),
+    );
+  });
 }
