@@ -9,3 +9,7 @@ final class Search extends SearchEvent {
   final String query;
   final MailBloc mailBloc;
 }
+
+final class SearchLogout extends SearchEvent {
+  const SearchLogout();
+}

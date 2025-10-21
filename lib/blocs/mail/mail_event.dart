@@ -78,3 +78,7 @@ final class UntrashMail extends MailEvent {
 final class EmptyTrash extends MailEvent {
   const EmptyTrash();
 }
+
+final class MailLogout extends MailEvent {
+  const MailLogout();
+}
