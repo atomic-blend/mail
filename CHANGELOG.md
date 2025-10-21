@@ -2,6 +2,14 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## 0.1.5 - 2025-10-21
+#### Bug Fixes
+- update shared to latest version - (33b918f) - Brandon Guigo
+#### Miscellaneous Chores
+- **(release)** 0.1.4 [skip ci] - (e124d73) - GitHub Actions
+
+- - -
+
 ## 0.1.4 - 2025-10-17
 #### Bug Fixes
 - add sync status - (6c1915e) - Brandon Guigo
