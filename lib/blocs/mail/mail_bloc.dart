@@ -27,6 +27,7 @@ class MailBloc extends HydratedBloc<MailEvent, MailState> {
     on<TrashMail>(_onTrashMail);
     on<UntrashMail>(_onUntrashMail);
     on<EmptyTrash>(_onEmptyTrash);
+    on<MailLogout>(_onLogout);
   }
 
   @override
@@ -443,4 +444,8 @@ class MailBloc extends HydratedBloc<MailEvent, MailState> {
       ..sort((a, b) => (b.mail?.createdAt ?? DateTime(1970))
           .compareTo(a.mail?.createdAt ?? DateTime(1970)));
   }
+
+  FutureOr<void> _onLogout(MailLogout event, Emitter<MailState> emit) {
+    emit(MailInitial());
+  } 
 }

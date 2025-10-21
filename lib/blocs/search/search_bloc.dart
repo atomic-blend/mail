@@ -9,6 +9,7 @@ part 'search_state.dart';
 class SearchBloc extends HydratedBloc<SearchEvent, SearchState> {
   SearchBloc() : super(SearchInitial()) {
     on<Search>(_onSearch);
+    on<SearchLogout>(_onLogout);
   }
 
   @override
@@ -31,5 +32,9 @@ class SearchBloc extends HydratedBloc<SearchEvent, SearchState> {
     } catch (e) {
       emit(SearchError(e.toString()));
     }
+  }
+
+  void _onLogout(SearchLogout event, Emitter<SearchState> emit) {
+    emit(SearchInitial());
   }
 }
