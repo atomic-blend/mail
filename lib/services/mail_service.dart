@@ -1,6 +1,8 @@
-import 'package:mail/main.dart';
+import 'package:ab_shared/services/encryption.service.dart';
+import 'package:ab_shared/utils/api_client.dart';
 import 'package:mail/models/mail/mail.dart';
 import 'package:mail/models/send_mail/send_mail.dart' as send_mail;
+import 'package:mail/utils/get_it.dart';
 
 class MailSyncResult {
   final bool success;
@@ -10,17 +12,19 @@ class MailSyncResult {
 }
 
 class MailService {
+  final globalApiClient = getIt<ApiClient>();
+  final encryptionService = getIt<EncryptionService>();
   MailService();
 
   Future<List<Mail>> getAllMails({int page = 1, int size = 10}) async {
-    final result = await globalApiClient?.get('/mail/?page=$page&size=$size');
+    final result = await globalApiClient.get('/mail/?page=$page&size=$size');
     if (result != null && result.statusCode == 200) {
       final List<Mail> decryptedMails = [];
       final mails = result.data["mails"];
 
       for (var mail in (mails ?? [])) {
-        final decryptedMail = await Mail.decrypt(
-            mail as Map<String, dynamic>, encryptionService!);
+        final decryptedMail =
+            await Mail.decrypt(mail as Map<String, dynamic>, encryptionService);
         decryptedMails.add(decryptedMail);
       }
       return decryptedMails;
@@ -29,16 +33,41 @@ class MailService {
     }
   }
 
-  Future<MailSyncResult> syncMailActions(
-      {required List<String> readMailIds,
-      required List<String> unreadMailIds,
-      required List<String> archivedMailIds,
-      required List<String> unarchivedMailIds,
-      required List<String> trashedMailIds,
-      required List<String> untrashedMailIds,
-      }) async {
+  Future<Map<String, dynamic>> getAllMailsWithPagination(
+      {int page = 1, int size = 10}) async {
+    final result = await globalApiClient.get('/mail/?page=$page&size=$size');
+    if (result != null && result.statusCode == 200) {
+      final List<Mail> decryptedMails = [];
+      final mails = result.data["mails"];
+
+      for (var mail in (mails ?? [])) {
+        final decryptedMail =
+            await Mail.decrypt(mail as Map<String, dynamic>, encryptionService);
+        decryptedMails.add(decryptedMail);
+      }
+
+      return {
+        'mails': decryptedMails,
+        'total_count': result.data['total_count'],
+        'page': result.data['page'],
+        'size': result.data['size'],
+        'total_pages': result.data['total_pages'],
+      };
+    } else {
+      throw Exception('Failed to load mails');
+    }
+  }
+
+  Future<MailSyncResult> syncMailActions({
+    required List<String> readMailIds,
+    required List<String> unreadMailIds,
+    required List<String> archivedMailIds,
+    required List<String> unarchivedMailIds,
+    required List<String> trashedMailIds,
+    required List<String> untrashedMailIds,
+  }) async {
     try {
-      await globalApiClient?.put('/mail/actions', data: {
+      await globalApiClient.put('/mail/actions', data: {
         'read': readMailIds,
         'unread': unreadMailIds,
         'archived': archivedMailIds,
@@ -53,7 +82,8 @@ class MailService {
   }
 
   Future<bool> sendMail(Mail mail) async {
-    final result = await globalApiClient?.post('/mail/send', data: mail.toRawMail());
+    final result =
+        await globalApiClient.post('/mail/send', data: mail.toRawMail());
     if (result != null && result.statusCode == 200) {
       return true;
     } else {
@@ -62,7 +92,8 @@ class MailService {
   }
 
   Future<bool> saveDraft(Mail mail) async {
-    final result = await globalApiClient?.post('/mail/draft', data: mail.toRawMail());
+    final result =
+        await globalApiClient.post('/mail/draft', data: mail.toRawMail());
     if (result != null && result.statusCode == 200) {
       return true;
     } else {
@@ -70,16 +101,18 @@ class MailService {
     }
   }
 
-  Future<List<send_mail.SendMail>> getDrafts({int page = 1, int size = 10}) async {
-    final result = await globalApiClient?.get('/mail/draft?page=$page&size=$size');
+  Future<List<send_mail.SendMail>> getDrafts(
+      {int page = 1, int size = 10}) async {
+    final result =
+        await globalApiClient.get('/mail/draft?page=$page&size=$size');
     if (result != null && result.statusCode == 200) {
       final List<send_mail.SendMail> decryptedDrafts = [];
       final drafts = result.data["draft_mails"];
 
       for (var draft in (drafts ?? [])) {
         final decryptedDraft = await send_mail.SendMail.decrypt(
-            draft as Map<String, dynamic>, encryptionService!);
-            decryptedDraft.mail!.read = true;
+            draft as Map<String, dynamic>, encryptionService);
+        decryptedDraft.mail!.read = true;
         decryptedDrafts.add(decryptedDraft);
       }
       return decryptedDrafts;
@@ -89,7 +122,7 @@ class MailService {
   }
 
   Future<bool> deleteDraft(String draftId) async {
-    final result = await globalApiClient?.delete('/mail/draft/$draftId');
+    final result = await globalApiClient.delete('/mail/draft/$draftId');
     if (result != null && result.statusCode == 204) {
       return true;
     } else {
@@ -98,7 +131,8 @@ class MailService {
   }
 
   Future<bool> updateDraft(Mail mail, String draftId) async {
-    final result = await globalApiClient?.put('/mail/draft/$draftId', data: mail.toRawMail());
+    final result = await globalApiClient.put('/mail/draft/$draftId',
+        data: mail.toRawMail());
     if (result != null && result.statusCode == 200) {
       return true;
     } else {
@@ -107,11 +141,76 @@ class MailService {
   }
 
   Future<bool> emptyTrash() async {
-    final result = await globalApiClient?.post('/mail/trash/empty');
+    final result = await globalApiClient.post('/mail/trash/empty');
     if (result != null && result.statusCode == 200) {
       return true;
     } else {
       throw Exception('Failed to empty trash');
+    }
+  }
+
+  Future<Map<String, dynamic>> getMailsSince({
+    required DateTime since,
+    int page = 1,
+    int size = 10,
+  }) async {
+    final sinceFormatted =
+        since.toUtc().toIso8601String().replaceAll('.000Z', 'Z');
+    final result = await globalApiClient
+        .get('/mail/since?since=$sinceFormatted&page=$page&size=$size');
+
+    if (result != null && result.statusCode == 200) {
+      final List<Mail> decryptedMails = [];
+      final mails = result.data["mails"];
+
+      for (var mail in (mails ?? [])) {
+        final decryptedMail =
+            await Mail.decrypt(mail as Map<String, dynamic>, encryptionService);
+        decryptedMails.add(decryptedMail);
+      }
+
+      return {
+        'mails': decryptedMails,
+        'total_count': result.data['total_count'],
+        'page': result.data['page'],
+        'size': result.data['size'],
+        'total_pages': result.data['total_pages'],
+      };
+    } else {
+      throw Exception('Failed to load mails since $sinceFormatted');
+    }
+  }
+
+  Future<Map<String, dynamic>> getDraftsSince({
+    required DateTime since,
+    int page = 1,
+    int size = 10,
+  }) async {
+    final sinceFormatted =
+        since.toUtc().toIso8601String().replaceAll('.000Z', 'Z');
+    final result = await globalApiClient
+        .get('/mail/draft/since?since=$sinceFormatted&page=$page&size=$size');
+
+    if (result != null && result.statusCode == 200) {
+      final List<send_mail.SendMail> decryptedDrafts = [];
+      final drafts = result.data["draft_mails"];
+
+      for (var draft in (drafts ?? [])) {
+        final decryptedDraft = await send_mail.SendMail.decrypt(
+            draft as Map<String, dynamic>, encryptionService);
+        decryptedDraft.mail!.read = true;
+        decryptedDrafts.add(decryptedDraft);
+      }
+
+      return {
+        'drafts': decryptedDrafts,
+        'total_count': result.data['total_count'],
+        'page': result.data['page'],
+        'size': result.data['size'],
+        'total_pages': result.data['total_pages'],
+      };
+    } else {
+      throw Exception('Failed to load drafts since $sinceFormatted');
     }
   }
 }

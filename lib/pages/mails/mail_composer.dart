@@ -32,21 +32,54 @@ class _MailComposerState extends ResponsiveState<MailComposer> {
 
   String? subject;
   String? from;
-  List<String> availableFrom = [];
   List<String>? to = [];
 
   @override
   void initState() {
     if (widget.mail?.mail != null) {
       subjectController.text = widget.mail!.mail!.getHeader("Subject") ?? "";
-      to = List<String>.from(widget.mail!.mail!.getHeader("To") ?? []);
+
+      // Safely handle To field - it might be a string or list
+      final toHeader = widget.mail!.mail!.getHeader("To");
+      if (toHeader is List) {
+        to = List<String>.from(toHeader);
+      } else if (toHeader is String && toHeader.isNotEmpty) {
+        to = [toHeader];
+      } else {
+        to = [];
+      }
+
       from = widget.mail!.mail!.getHeader("From") ?? "";
-      editorState = FleatherController(
-          document: parchmentHtml.decode(widget.mail!.mail!.textContent ?? ""));
+
+      // Safely decode HTML content to prevent stack overflow
+      try {
+        final textContent = widget.mail!.mail!.textContent ?? "";
+        if (textContent.isNotEmpty) {
+          editorState =
+              FleatherController(document: parchmentHtml.decode(textContent));
+        } else {
+          editorState = FleatherController(document: ParchmentDocument());
+        }
+      } catch (e) {
+        // If decoding fails, create empty document
+        editorState = FleatherController(document: ParchmentDocument());
+      }
     } else {
       editorState = FleatherController(document: ParchmentDocument());
     }
     super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // Initialize from field with current user's email if not already set
+    if (from == null) {
+      final authState = context.read<AuthBloc>().state;
+      if (authState.user != null) {
+        from = authState.user!.email!;
+      }
+    }
   }
 
   @override
@@ -57,12 +90,6 @@ class _MailComposerState extends ResponsiveState<MailComposer> {
   @override
   Widget buildMobile(BuildContext context) {
     return BlocBuilder<AuthBloc, AuthState>(builder: (context, authState) {
-      if (authState.user != null &&
-          !availableFrom.contains(authState.user!.email!)) {
-        availableFrom.add(authState.user!.email!);
-        from = availableFrom.first;
-      }
-
       return ElevatedContainer(
         padding: EdgeInsets.only(
           top: $constants.insets.xs,
@@ -291,10 +318,7 @@ class _MailComposerState extends ResponsiveState<MailComposer> {
     //TODO: add attachements and create a raw mail entity like it's done in the backend
     final mail = Mail();
     mail.headers = [
-      {
-        "Key": "To",
-        "Value": [toController.text]
-      },
+      {"Key": "To", "Value": to},
       {"Key": "From", "Value": from},
       {"Key": "Subject", "Value": subjectController.text},
     ];
@@ -337,9 +361,12 @@ class _MailComposerState extends ResponsiveState<MailComposer> {
           context: context,
           builder: (context) => ABModal(
                 title: context.t.mail_composer.save_draft_modal.title,
-                description: context.t.mail_composer.save_draft_modal.description,
-                confirmText: context.t.mail_composer.save_draft_modal.confirm_text,
-                cancelText: context.t.mail_composer.save_draft_modal.cancel_text,
+                description:
+                    context.t.mail_composer.save_draft_modal.description,
+                confirmText:
+                    context.t.mail_composer.save_draft_modal.confirm_text,
+                cancelText:
+                    context.t.mail_composer.save_draft_modal.cancel_text,
                 onConfirm: () {
                   Navigator.pop(context, true);
                 },

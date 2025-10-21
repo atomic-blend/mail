@@ -10,6 +10,9 @@
     },
     "logout": "Déconnexion"
   },
+  "sections": {
+    "mail": "Mail"
+  },
   "zero_inbox_card": {
     "title": "Félicitations !",
     "description": "Vous n'avez aucun message non lu."
@@ -60,5 +63,29 @@
     "save": "Enregistrer",
     "cancel": "Annuler",
     "delete": "Supprimer"
+  },
+  "xx_mail_card": {
+    "description": "Vous avez ${count} mails dans ce dossier."
+  },
+  "email_folders": {
+    "inbox": "Boîte de réception",
+    "drafts": "Brouillons",
+    "archive": "Archive",
+    "trashed": "Corbeille",
+    "all": "Tous"
+  },
+  "mail_actions": {
+    "mark_as_read": "Marquer comme lu",
+    "mark_as_unread": "Marquer comme non lu",
+    "archive": "Archive",
+    "unarchive": "Désarchiver",
+    "trash": "Corbeille",
+    "untrash": "Restaurer"
+  },
+  "toast_notifications": {
+    "selected_mails": {
+      "title": "${count} mails sélectionnés",
+      "description": "Cliquez ici pour effectuer une action."
+    } 
   }
 }

@@ -5,24 +5,45 @@ import 'package:flutter/material.dart';
 class MailUserAvatar extends StatelessWidget {
   final String value;
   final bool? read;
-  const MailUserAvatar({super.key, required this.value, required this.read});
+  final VoidCallback? onTap;
+  const MailUserAvatar({super.key, required this.value, required this.read, this.onTap});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: 50,
-      height: 50,
-      decoration: BoxDecoration(
-        color: Colors.grey.shade200,
-        borderRadius: BorderRadius.circular($constants.corners.full),
-      ),
-      child: Center(
-        child: Text(
-          getInitials(value),
-          style: getTextTheme(context).bodyLarge!.copyWith(
-                fontWeight: read != true ? FontWeight.bold : null,
+    return GestureDetector(
+      onTap: onTap,
+      child: Stack(
+        children: [
+          Container(
+            width: 40,
+            height: 40,
+            decoration: BoxDecoration(
+              color: Colors.grey.shade200,
+              borderRadius: BorderRadius.circular($constants.corners.lg),
+            ),
+            child: Center(
+              child: Text(
+                getInitials(value),
+                style: getTextTheme(context).bodyLarge!.copyWith(
+                      fontWeight: read != true ? FontWeight.bold : null,
+                    ),
               ),
-        ),
+            ),
+          ),
+          if (read != true)
+            Positioned(
+              bottom: 0,
+              right: 0,
+              child: Container(
+                width: 8,
+                height: 8,
+                decoration: BoxDecoration(
+                  color: Colors.blue,
+                  borderRadius: BorderRadius.circular($constants.corners.full),
+                ),
+              ),
+            ),
+        ],
       ),
     );
   }

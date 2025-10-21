@@ -1,3 +1,4 @@
+import 'package:ab_shared/components/buttons/ab_button.dart';
 import 'package:ab_shared/components/responsive_stateful_widget.dart';
 import 'package:ab_shared/components/widgets/elevated_container.dart';
 import 'package:ab_shared/utils/constants.dart';
@@ -6,15 +7,22 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:jiffy/jiffy.dart';
 import 'package:mail/blocs/mail/mail_bloc.dart';
-import 'package:mail/components/avatars/mail_user_avatar.dart';
+import 'package:mail/components/cards/big_mail_card.dart';
 import 'package:mail/i18n/strings.g.dart';
 import 'package:mail/models/mail/mail.dart';
 
+enum MailScreenMode {
+  integrated,
+  standalone,
+}
+
 class MailDetailScreen extends ResponsiveStatefulWidget {
   final Mail mail;
-  const MailDetailScreen(this.mail, {super.key});
+  final MailScreenMode mode;
+  final VoidCallback? onCancel;
+  const MailDetailScreen(this.mail,
+      {super.key, this.mode = MailScreenMode.standalone, this.onCancel});
 
   @override
   ResponsiveState<MailDetailScreen> createState() => MailDetailScreenState();
@@ -24,7 +32,7 @@ class MailDetailScreenState extends ResponsiveState<MailDetailScreen> {
   @override
   void initState() {
     if (widget.mail.read != true) {
-      context.read<MailBloc>().add(MarkAsRead(widget.mail.id!));
+      context.read<MailBloc>().add(MarkAsRead(mailId: widget.mail.id!));
     }
     super.initState();
   }
@@ -32,221 +40,258 @@ class MailDetailScreenState extends ResponsiveState<MailDetailScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: BlocBuilder<MailBloc, MailState>(builder: (context, mailState) {
-        final mail = mailState.mails
-                ?.firstWhere((element) => element.id == widget.mail.id) ??
-            widget.mail;
-        return Column(
-          children: [
-            ElevatedContainer(
-              width: double.infinity,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(
-                    height: getSize(context).height * 0.05,
-                  ),
-                  IconButton(
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                      icon: Icon(CupertinoIcons.chevron_back)),
-                  SizedBox(height: $constants.insets.sm),
-                  Row(
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.symmetric(
-                            horizontal: $constants.insets.sm),
-                        child: SizedBox(
-                          width: getSize(context).width * 0.9,
-                          child: AutoSizeText(
-                            maxLines: 1,
-                            mail.getHeader("Subject"),
-                            overflow: TextOverflow.ellipsis,
-                            style: getTextTheme(context).displaySmall!.copyWith(
-                                  fontWeight: mail.read != true
-                                      ? FontWeight.bold
-                                      : null,
-                                ),
-                          ),
-                        ),
-                      ),
-                      if (mail.read != true) ...[
-                        Container(
-                          width: 8,
-                          height: 8,
-                          decoration: BoxDecoration(
-                            color: Colors.blue,
-                            borderRadius:
-                                BorderRadius.circular($constants.corners.full),
-                          ),
-                        ),
-                      ],
-                    ],
-                  ),
-                  SizedBox(height: $constants.insets.sm),
-                ],
-              ),
-            ),
-            SizedBox(height: $constants.insets.sm),
-            Expanded(
-              child: Padding(
-                padding: EdgeInsetsGeometry.symmetric(
-                  horizontal: $constants.insets.xs,
+      backgroundColor: getTheme(context).surface,
+      body: SafeArea(
+        left: false,
+        right: false,
+        bottom: !isDesktop(context),
+        top: !isDesktop(context),
+        child: BlocBuilder<MailBloc, MailState>(builder: (context, mailState) {
+          final mail = mailState.mails
+                  ?.firstWhere((element) => element.id == widget.mail.id) ??
+              widget.mail;
+          return Stack(
+            children: [
+              ElevatedContainer(
+                width: double.infinity,
+                color: getTheme(context).surface,
+                disableShadow: true,
+                border: Border.all(
+                  color:
+                      isDarkMode(context) ? Colors.grey.shade800 : Colors.white,
                 ),
-                child: ElevatedContainer(
-                  padding: EdgeInsets.symmetric(
-                      horizontal: $constants.insets.sm,
-                      vertical: $constants.insets.sm),
-                  child: Column(
-                    children: [
-                      Row(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.only(
+                        left: isDesktop(context)
+                            ? $constants.insets.md
+                            : $constants.insets.sm,
+                        top: isDesktop(context)
+                            ? $constants.insets.md
+                            : $constants.insets.sm,
+                      ),
+                      child: Flex(
                         mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        direction: Axis.horizontal,
                         children: [
-                          MailUserAvatar(
-                              value: mail.getHeader("From"), read: mail.read),
-                          SizedBox(width: $constants.insets.sm),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              buildPeopleRow(context.t.mail_composer.from, mail.getHeader("From")),
-                              buildPeopleRow(context.t.mail_composer.to, mail.getHeader("To")),
-                            ],
+                          GestureDetector(
+                            onTap: () {
+                              widget.onCancel?.call();
+                            },
+                            child: Container(
+                              width: isDesktop(context) ? 25 : 40,
+                              height: isDesktop(context) ? 25 : 40,
+                              decoration: BoxDecoration(
+                                color: Colors.grey.shade200,
+                                borderRadius: BorderRadius.circular(
+                                    $constants.corners.full),
+                              ),
+                              child: Icon(
+                                widget.mode == MailScreenMode.standalone
+                                    ? CupertinoIcons.chevron_back
+                                    : CupertinoIcons.xmark,
+                                size: 15,
+                              ),
+                            ),
                           ),
                           Expanded(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.end,
+                            child: Row(
+                              mainAxisSize: MainAxisSize.max,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text(
-                                  Jiffy.parseFromDateTime(mail.createdAt!)
-                                      .yMd
-                                      .toString(),
-                                  style: getTextTheme(context)
-                                      .bodySmall!
-                                      .copyWith(color: Colors.grey),
+                                ConstrainedBox(
+                                  constraints: BoxConstraints(
+                                    maxWidth: isDesktop(context)
+                                        ? getSize(context).width * 0.68
+                                        : getSize(context).width,
+                                  ),
+                                  child: Padding(
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: $constants.insets.md),
+                                    child: AutoSizeText(
+                                      maxLines: 1,
+                                      mail.getHeader("Subject"),
+                                      overflow: TextOverflow.ellipsis,
+                                      style: getTextTheme(context)
+                                          .headlineMedium!
+                                          .copyWith(
+                                            fontWeight: mail.read != true
+                                                ? FontWeight.bold
+                                                : null,
+                                          ),
+                                    ),
+                                  ),
                                 ),
-                                Text(
-                                  Jiffy.parseFromDateTime(mail.createdAt!)
-                                      .Hm
-                                      .toString(),
-                                  style: getTextTheme(context)
-                                      .bodySmall!
-                                      .copyWith(color: Colors.grey),
-                                )
+                                // Desktop only action bar
+                                if (isDesktop(context)) ...[
+                                  Expanded(
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.max,
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      children: [
+                                        SizedBox(width: $constants.insets.sm),
+                                        _buildActionPill(
+                                            context,
+                                            mail.read == true
+                                                ? context.t.mail_actions
+                                                    .mark_as_unread
+                                                : context.t.mail_actions
+                                                    .mark_as_read,
+                                            CupertinoIcons.envelope_open, () {
+                                          if (mail.read == true) {
+                                            context.read<MailBloc>().add(
+                                                MarkAsUnread(mailId: mail.id!));
+                                          } else {
+                                            context.read<MailBloc>().add(
+                                                MarkAsRead(mailId: mail.id!));
+                                          }
+                                        }),
+                                        SizedBox(width: $constants.insets.xs),
+                                        _buildActionPill(
+                                            context,
+                                            context.t.mail_actions.archive,
+                                            CupertinoIcons.archivebox, () {
+                                          if (mail.archived != true) {  
+                                          context.read<MailBloc>().add(
+                                              ArchiveMail(mailId: mail.id!));
+                                          } else {
+                                            context.read<MailBloc>().add(
+                                                UnarchiveMail(mailId: mail.id!));
+                                          }
+                                        }),
+                                        SizedBox(width: $constants.insets.xs),
+                                        _buildActionPill(
+                                            context,
+                                            context.t.mail_actions.trash,
+                                            CupertinoIcons.trash, () {
+                                          if (mail.trashed != true) {
+                                          context
+                                              .read<MailBloc>()
+                                              .add(TrashMail(mailId: mail.id!));
+                                          } else {
+                                            context.read<MailBloc>().add(
+                                                UntrashMail(mailId: mail.id!));
+                                          }
+                                        }),
+                                        SizedBox(width: $constants.insets.sm),
+                                      ],
+                                    ),
+                                  )
+                                ],
                               ],
                             ),
-                          )
+                          ),
                         ],
                       ),
-                      SizedBox(height: $constants.insets.xs),
-                      Divider(),
-                      SizedBox(height: $constants.insets.xs),
-                      Container(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: $constants.insets.sm,
-                          vertical: $constants.insets.xs,
-                        ),
-                        width: double.infinity,
-                        child: Text(
-                          getContent(mail),
-                          textAlign: TextAlign.left,
-                          style: getTextTheme(context).bodyMedium,
-                        ),
+                    ),
+
+                    SizedBox(height: $constants.insets.sm),
+                    // Content section - expands to fill remaining space
+                    Padding(
+                      padding: EdgeInsets.only(
+                        left: $constants.insets.sm,
+                        right: $constants.insets.sm,
+                        bottom: $constants.insets.sm,
                       ),
-                    ],
-                  ),
+                      child: BigMailCard(
+                          mail: mail,
+                          backgroundColor: getTheme(context).surfaceContainer),
+                    ),
+                  ],
                 ),
               ),
-            ),
-            SizedBox(height: $constants.insets.sm),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: $constants.insets.xs),
-              child: ElevatedContainer(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: $constants.insets.sm,
+              // Mobile only action bar
+              if (!isDesktop(context))
+                Align(
+                  alignment: Alignment.bottomCenter,
+                  child: ElevatedContainer(
+                    border: Border.all(
+                      color: isDarkMode(context)
+                          ? Colors.grey.shade800
+                          : Colors.white,
+                    ),
+                    padding: EdgeInsets.symmetric(
+                      horizontal: $constants.insets.sm,
+                    ),
+                    height: 60,
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      spacing: $constants.insets.xs,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        IconButton(
+                          onPressed: () {
+                            if (mail.read == true) {
+                              context
+                                  .read<MailBloc>()
+                                  .add(MarkAsUnread(mailId: mail.id!));
+                            } else {
+                              context
+                                  .read<MailBloc>()
+                                  .add(MarkAsRead(mailId: mail.id!));
+                            }
+                          },
+                          icon: mail.read == true
+                              ? Icon(CupertinoIcons.envelope_open)
+                              : Icon(CupertinoIcons.envelope),
+                        ),
+                        IconButton(
+                          onPressed: () {
+                            if (mail.archived != true) {
+                              context
+                                  .read<MailBloc>()
+                                  .add(ArchiveMail(mailId: mail.id!));
+                            } else {
+                              context
+                                  .read<MailBloc>()
+                                  .add(UnarchiveMail(mailId: mail.id!));
+                            }
+                          },
+                          icon: mail.archived == true
+                              ? Icon(CupertinoIcons.tray_arrow_down)
+                              : Icon(CupertinoIcons.archivebox),
+                        ),
+                        IconButton(
+                          onPressed: () {
+                            if (mail.trashed != true) {
+                              context
+                                  .read<MailBloc>()
+                                  .add(TrashMail(mailId: mail.id!));
+                            } else {
+                              context
+                                  .read<MailBloc>()
+                                  .add(UntrashMail(mailId: mail.id!));
+                            }
+                            Navigator.of(context).pop();
+                          },
+                          icon: mail.trashed == true
+                              ? Icon(CupertinoIcons.trash_slash)
+                              : Icon(CupertinoIcons.trash),
+                        ),
+                      ],
+                    ),
                   ),
-                  height: 60,
-                  child: Row(
-                    spacing: $constants.insets.xs,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      IconButton(
-                        onPressed: () {
-                          if (mail.read == true) {
-                            context
-                                .read<MailBloc>()
-                                .add(MarkAsUnread(mail.id!));
-                          } else {
-                            context.read<MailBloc>().add(MarkAsRead(mail.id!));
-                          }
-                        },
-                        icon: mail.read == true
-                            ? Icon(CupertinoIcons.envelope_open)
-                            : Icon(CupertinoIcons.envelope),
-                      ),
-                      IconButton(
-                        onPressed: () {
-                          if (mail.archived != true) {
-                            context.read<MailBloc>().add(ArchiveMail(mail.id!));
-                          } else {
-                            context
-                                .read<MailBloc>()
-                                .add(UnarchiveMail(mail.id!));
-                          }
-                        },
-                        icon: mail.archived == true
-                            ? Icon(CupertinoIcons.tray_arrow_down)
-                            : Icon(CupertinoIcons.archivebox),
-                      ),
-                      IconButton(
-                        onPressed: () {
-                          if (mail.trashed != true) {
-                            context.read<MailBloc>().add(TrashMail(mail.id!));
-                          } else {
-                            context.read<MailBloc>().add(UntrashMail(mail.id!));
-                          }
-                          Navigator.of(context).pop();
-                        },
-                        icon: mail.trashed == true
-                            ? Icon(CupertinoIcons.trash_slash)
-                            : Icon(CupertinoIcons.trash),
-                      ),
-                    ],
-                  )),
-            ),
-            SizedBox(height: $constants.insets.xl),
-          ],
-        );
-      }),
+                ),
+            ],
+          );
+        }),
+      ),
     );
   }
 
-  String getContent(Mail mail) {
-    if (mail.htmlContent != null && mail.htmlContent != "") {
-      return mail.htmlContent!;
-    } else if (mail.textContent != null && mail.textContent!.isNotEmpty) {
-      return mail.textContent!;
-    } else {
-      return context.t.mail_card.no_content;
-    }
-  }
-
-  Widget buildPeopleRow(String label, String value) {
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Text(
-          "$label: ",
-          style: getTextTheme(context).bodyMedium!.copyWith(color: Colors.grey),
-        ),
-        SizedBox(width: $constants.insets.xs),
-        Text(
-          value,
-          style: getTextTheme(context).bodyMedium!.copyWith(
-              fontWeight: widget.mail.read != true ? FontWeight.bold : null),
-        ),
-      ],
+  Widget _buildActionPill(BuildContext context, String label, IconData icon,
+      VoidCallback onPressed) {
+    return ABButton(
+      onTap: onPressed,
+      icon: icon,
+      iconSize: 18,
+      padding: EdgeInsets.symmetric(
+        horizontal: $constants.insets.xs,
+        vertical: $constants.insets.xs,
+      ),
     );
   }
 

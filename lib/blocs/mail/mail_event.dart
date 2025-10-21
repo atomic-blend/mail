@@ -4,18 +4,24 @@ sealed class MailEvent {
   const MailEvent();
 }
 
-final class LoadMails extends MailEvent {
-  const LoadMails();
+final class SyncAllMailsPaginated extends MailEvent {
+  const SyncAllMailsPaginated();
+}
+
+final class SyncSince extends MailEvent {
+  const SyncSince();
 }
 
 final class MarkAsRead extends MailEvent {
-  const MarkAsRead(this.mailId);
-  final String mailId;
+  const MarkAsRead({this.mailId, this.mailIds});
+  final String? mailId;
+  final List<String>? mailIds;
 }
 
 final class MarkAsUnread extends MailEvent {
-  const MarkAsUnread(this.mailId);
-  final String mailId;
+  const MarkAsUnread({this.mailId, this.mailIds});
+  final String? mailId;
+  final List<String>? mailIds;
 }
 
 final class SyncMailActions extends MailEvent {
@@ -33,7 +39,9 @@ final class SaveDraft extends MailEvent {
 }
 
 final class DeleteDraft extends MailEvent {
-  const DeleteDraft(this.draftId);
+  const DeleteDraft(
+    this.draftId,
+  );
   final String draftId;
 }
 
@@ -44,25 +52,33 @@ final class UpdateDraft extends MailEvent {
 }
 
 final class ArchiveMail extends MailEvent {
-  const ArchiveMail(this.mailId);
-  final String mailId;
+  const ArchiveMail({this.mailId, this.mailIds});
+  final List<String>? mailIds;
+  final String? mailId;
 }
 
 final class UnarchiveMail extends MailEvent {
-  const UnarchiveMail(this.mailId);
-  final String mailId;
+  const UnarchiveMail({this.mailId, this.mailIds});
+  final List<String>? mailIds;
+  final String? mailId;
 }
 
 final class TrashMail extends MailEvent {
-  const TrashMail(this.mailId);
-  final String mailId;
+  const TrashMail({this.mailId, this.mailIds});
+  final List<String>? mailIds;
+  final String? mailId;
 }
 
 final class UntrashMail extends MailEvent {
-  const UntrashMail(this.mailId);
-  final String mailId;
+  const UntrashMail({this.mailId, this.mailIds});
+  final List<String>? mailIds;
+  final String? mailId;
 }
 
 final class EmptyTrash extends MailEvent {
   const EmptyTrash();
+}
+
+final class MailLogout extends MailEvent {
+  const MailLogout();
 }
