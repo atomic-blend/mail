@@ -2,6 +2,102 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## 0.3.0 - 2025-10-21
+#### Bug Fixes
+- docker image and windows build issues - (7824356) - Brandon Guigo
+- reset blocs when login out of the app - (0729584) - Brandon Guigo
+- update mac os icon for mail app - (93a921e) - Brandon Guigo
+- support new cloud sync status - (294eb40) - Brandon Guigo
+- add sync since event for draft and mails (sync only items updated / created between lastSync and now) - (35192ed) - Brandon Guigo
+- convert loadMails to syncAllPaginated - (bd31881) - Brandon Guigo
+- don't init revenuecat when app starts - (2dd7492) - Brandon Guigo
+- send email doesn't send all to to the backend - (746d70c) - Brandon Guigo
+- update shared package - (4b2e41b) - Brandon Guigo
+- integrate new header - (361cfba) - Brandon Guigo
+- open the email via navigator when on tablet - (4bd8182) - Brandon Guigo
+- change home location - (02e56c4) - Brandon Guigo
+- add the rest of the routes - (072a18e) - Brandon Guigo
+- initial conversion to getIt and go_router - (3350079) - Brandon Guigo
+- linter - (5cde3a0) - Brandon Guigo
+- bug when loading a draft into the composer make a stack overflow exception - (8ea833b) - Brandon Guigo
+- update flutter_age and ab_shared to be 16kb safe - (c047b15) - Brandon Guigo
+- setup the action per navigation item - (78ef84c) - Brandon Guigo
+- remove unused settings screen - (fd30cb5) - Brandon Guigo
+- email preview button ui on mobile - (84367a0) - Brandon Guigo
+- search app bar - (10dae1c) - Brandon Guigo
+- organize screen width for desktop - (e637d72) - Brandon Guigo
+- refactor mail views into a single widget that handles the split view - (7bae772) - Brandon Guigo
+- ui for account screen - (c72acfa) - Brandon Guigo
+- desktop ui for settings screen - (b80da9c) - Brandon Guigo
+- pass is selected in other mail pages - (3a2bff9) - Brandon Guigo
+- use ab button + remove labels on header actions - (fd65123) - Brandon Guigo
+- remove double state for select mode in mail list - (257f594) - Brandon Guigo
+- start the widget in non-editing mode - (44cf253) - Brandon Guigo
+- refactor ab_toast and enable select mode when clicking on initials - (af1b4fd) - Brandon Guigo
+- display select page when user enters select mode even with 1 item - (1e7c55e) - Brandon Guigo
+- convert other screens to use the split view - (5a6b0c9) - Brandon Guigo
+- adapt mail detail for mobile - (6e06a0a) - Brandon Guigo
+- linter - (051ccd3) - Brandon Guigo
+- new integrated mode for the mail detail screen - (06535ec) - Brandon Guigo
+- hide preview when window is too small - (7ade8f9) - Brandon Guigo
+- bugs on multi select in special cases - (60c6bd4) - Brandon Guigo
+- select mecanic for desktop and ios - (7681bc4) - Brandon Guigo
+- migrate the bloc operations into page instead of the view - (66c7238) - Brandon Guigo
+- for split pages, move the header into the pages directly - (4a1188c) - Brandon Guigo
+- move the read badge to the bottom right avatar corner - (b8bb454) - Brandon Guigo
+- move 2 part screen directly into the pages instead of layout - (83676ca) - Brandon Guigo
+- remove intrinsict width - (3654b0e) - Brandon Guigo
+- padding mail card - (849009c) - Brandon Guigo
+- mail card design + hover - (3ca3cd6) - Brandon Guigo
+- remove elevation on search bar - (6f75d32) - Brandon Guigo
+- new header without appbar - (c698aac) - Brandon Guigo
+- remove more section - (e5e49e3) - Brandon Guigo
+- linter - (57ee371) - Brandon Guigo
+- refactor nav constants to use the new centerAction properties - (a505238) - Brandon Guigo
+- refactor nav constants to store everything in a single value - (13f8ef3) - Brandon Guigo
+- refactor the side menu into a shared component - (f919005) - Brandon Guigo
+- refactor app_layout to return the SSOModule at one place only - (0587518) - Brandon Guigo
+- update ab_shared dependency to use newly released sso - (e6fe57d) - Brandon Guigo
+- use the new SSOModule - (9c47e1e) - Brandon Guigo
+- make revenue cat service optional in account page + delegate sso state to shared - (67f7010) - Brandon Guigo
+- handle auth redirection  and loading screens inside AppLayout - (74c40ec) - Brandon Guigo
+- show the sso as page and not modal - (fc9b4ed) - Brandon Guigo
+- show the sso as page and not modal - (f34dfed) - Brandon Guigo
+#### Features
+- add notifications for received emails - (2494bb9) - Brandon Guigo
+- add a button for previewing the email in select mode - (adf8f51) - Brandon Guigo
+- use shared app_layout instead of having one per app - (e19f781) - Brandon Guigo
+- add the toast display into the other pages + desktop - (cd31cdf) - Brandon Guigo
+- display the toasts inside a carousel - (5c608fd) - Brandon Guigo
+- setup custom ab toast display - (504650e) - Brandon Guigo
+- add bulk edit screen to all the other mail screens - (04eea1a) - Brandon Guigo
+- support bulk actions in mail bloc - (3cbe715) - Brandon Guigo
+- add actions on bulk edit list - (456552d) - Brandon Guigo
+- add bulk edit recap - (118c8c3) - Brandon Guigo
+- add actions on mail detail for desktop - (6a9a9fb) - Brandon Guigo
+- add the action on close for mail details - (982bd2d) - Brandon Guigo
+- add card for email entry in email detail (to reuse for threads) - (5a15cc0) - Brandon Guigo
+- display the mail detail screen in the preview space - (4460f26) - Brandon Guigo
+- add the ability to select one or multiple emails - (65f65a9) - Brandon Guigo
+- add list of selected emails - (f1304cb) - Brandon Guigo
+- setup the no mail selected container - (24125fc) - Brandon Guigo
+- add desktop only side menu items - (11bd780) - Brandon Guigo
+- give the side menu the current keys - (7a79604) - Brandon Guigo
+- setup for mobile + remove old secodary side menu in desktop - (3afb972) - Brandon Guigo
+- display mnemonic key when necessary - (d8a6234) - Brandon Guigo
+#### Miscellaneous Chores
+- **(release)** 0.2.50 [skip ci] - (e84b148) - GitHub Actions
+- update shared to latest version - (c5ce33f) - Brandon Guigo
+- update shared package - (bb49746) - Brandon Guigo
+- update to latest shared - (7d62456) - Brandon Guigo
+- update to latest shared version - (a3e1ceb) - Brandon Guigo
+- fix beta release issue - (e5e32f8) - Brandon Guigo
+- update the ab_shared package to latest - (7ffbeaf) - Brandon Guigo
+- add comments - (05eb12d) - Brandon Guigo
+- update dependency to latest shared package - (3d02839) - Brandon Guigo
+
+- - -
+
 ## 0.2.50 - 2025-09-25
 #### Bug Fixes
 - linter - (cf1b58e) - Brandon Guigo
