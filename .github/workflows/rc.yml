@@ -68,7 +68,7 @@ jobs:
       - test-coverage
     runs-on: [self-hosted, Linux]
     outputs:
-      tag: ${{ steps.bump-versions.outputs.tags_to_push }}
+      tag: ${{ steps.bump-versions.outputs.tag_to_push }}
     steps:
       - name: Configure git
         run: |
@@ -119,16 +119,18 @@ jobs:
           echo "DEBUG: Extracted NEW_TAG: '$NEW_TAG'"
 
           if [ -n "$NEW_TAG" ]; then
-            TAGS_TO_PUSH="$NEW_TAG"
+            TAG_TO_PUSH="$NEW_TAG"
             SUCCESSFUL_DIRS='.'
           else
             echo "No NEW_TAG found in bump script output."
             exit 1
           fi
+          
+          # pushing the tags to github
+          git push https://${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git tag "$TAG_TO_PUSH"
 
-          echo "DEBUG: Final TAGS_TO_PUSH = '$TAGS_TO_PUSH'"
-          echo "tags_to_push=$TAGS_TO_PUSH" >> $GITHUB_OUTPUT
-          echo "successful_dirs=$SUCCESSFUL_DIRS" >> $GITHUB_OUTPUT
+          echo "DEBUG: Final TAG_TO_PUSH = '$TAG_TO_PUSH'"
+          echo "tag_to_push=$TAG_TO_PUSH" >> $GITHUB_OUTPUT
       - name: Upload Changelog
         uses: actions/upload-artifact@v4
         with:
