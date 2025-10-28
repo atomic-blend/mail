@@ -317,7 +317,7 @@ jobs:
           gh release create $TAG \
             --title "v$TAG" \
             --notes "$(cat release_notes.md)" \
-            --target "${{ github.sha }}" \  
+            --target "${{ github.sha }}" \
             --prerelease
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
