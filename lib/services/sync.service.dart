@@ -11,11 +11,15 @@ class SyncService {
 
     // Sync data
     context.read<MailBloc>().add(const SyncMailActions());
-    if (context.read<MailBloc>().state is MailInitial) {
+    if (context.read<MailBloc>().state is MailInitial ||
+        context.read<MailBloc>().state.mails == null ||
+        context.read<MailBloc>().state.mails!.isEmpty) {
       context.read<MailBloc>().add(const SyncAllMailsPaginated());
     } else {
       context.read<MailBloc>().add(const SyncSince());
     }
+
+    context.read<AuthBloc>().add(RefreshUser());
   }
 
   static void syncUserData(BuildContext context) {
