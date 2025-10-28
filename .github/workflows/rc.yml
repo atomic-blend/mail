@@ -68,7 +68,7 @@ jobs:
       - test-coverage
     runs-on: [self-hosted, Linux]
     outputs:
-      tag: ${{ steps.push-and-prepare.outputs.docker_version }}
+      tag: ${{ steps.bump-versions.outputs.tags_to_push }}
     steps:
       - name: Configure git
         run: |
@@ -113,58 +113,22 @@ jobs:
           output=$(./.github/scripts/bump_rc_single.sh 2>&1) || true
           echo "$output"
 
-          # Extract NEW_TAG from script output (if present)
-          NEW_TAG=$(echo "$output" | grep -E "^NEW_TAG:" | sed 's/^NEW_TAG://g' | tr -d '[:space:]') || true
+          # Extract NEW_TAG from script output (if present) using the simpler/canonical pattern
+          # Matches lines starting with NEW_TAG: then cuts the value after the first ':' and trims whitespace.
+          NEW_TAG=$(echo "$output" | grep "^NEW_TAG:" | cut -d: -f2 | tr -d '[:space:]') || true
           echo "DEBUG: Extracted NEW_TAG: '$NEW_TAG'"
 
           if [ -n "$NEW_TAG" ]; then
             TAGS_TO_PUSH="$NEW_TAG"
             SUCCESSFUL_DIRS='.'
           else
-            TAGS_TO_PUSH=""
-            SUCCESSFUL_DIRS=""
+            echo "No NEW_TAG found in bump script output."
+            exit 1
           fi
 
           echo "DEBUG: Final TAGS_TO_PUSH = '$TAGS_TO_PUSH'"
           echo "tags_to_push=$TAGS_TO_PUSH" >> $GITHUB_OUTPUT
           echo "successful_dirs=$SUCCESSFUL_DIRS" >> $GITHUB_OUTPUT
-
-      - name: Push tags and prepare docker tag
-        id: push-and-prepare
-        run: |
-          set -euo pipefail
-
-          TAGS_TO_PUSH="${{ steps.bump-versions.outputs.tags_to_push }}"
-
-          if [ -z "$TAGS_TO_PUSH" ]; then
-            echo "No tags to push"
-            echo "docker_tag=" >> $GITHUB_OUTPUT
-            echo "docker_version=" >> $GITHUB_OUTPUT
-            exit 0
-          fi
-
-          echo "Pushing tags: $TAGS_TO_PUSH"
-          FIRST_TAG=""
-          for tag in $TAGS_TO_PUSH; do
-            echo "Pushing tag: $tag"
-            git push https://${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git tag "$tag"
-            if [ -z "$FIRST_TAG" ]; then
-              FIRST_TAG="$tag"
-            fi
-          done
-
-          # Use the first pushed tag to determine docker tag/version
-          docker_tag="$FIRST_TAG"
-          # Extract version: remove any dir prefix and leading 'v'
-          if echo "$docker_tag" | grep -q '/v'; then
-            docker_version=$(echo "$docker_tag" | sed 's:.*/v::')
-          else
-            docker_version=$(echo "$docker_tag" | sed 's/^v//')
-          fi
-
-          echo "DEBUG: docker_tag=$docker_tag docker_version=$docker_version"
-          echo "docker_tag=$docker_tag" >> $GITHUB_OUTPUT
-          echo "docker_version=$docker_version" >> $GITHUB_OUTPUT
       - name: Upload Changelog
         uses: actions/upload-artifact@v4
         with:
