@@ -110,7 +110,7 @@ jobs:
           echo "Running bump script for single-repo..."
 
           # Run the bump script and capture output
-          output=$(./bump_rc_single.sh 2>&1) || true
+          output=$(./.github/scripts/bump_rc_single.sh 2>&1) || true
           echo "$output"
 
           # Extract NEW_TAG from script output (if present)
