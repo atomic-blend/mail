@@ -74,7 +74,6 @@ jobs:
     runs-on: [self-hosted, Linux]
     outputs:
       tag: ${{ steps.bump-versions.outputs.tag_to_push }}
-      release_commit_sha: ${{ steps.push-changes.outputs.release_commit_sha }}
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v5
@@ -153,8 +152,6 @@ jobs:
           fi
           git push https://${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git dev
           git push https://${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git tag $TAG
-
-          echo "release_commit_sha=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
       - name: Upload Changelog
         uses: actions/upload-artifact@v4
         with:
@@ -320,7 +317,7 @@ jobs:
           gh release create $TAG \
             --title "v$TAG" \
             --notes "$(cat release_notes.md)" \
-            --target ${{ needs.release-rc.outputs.release_commit_sha }}
+            --target ${{ github.sha }} \  
             --prerelease
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
