@@ -1,4 +1,4 @@
-name: Build and Test
+name: Pre-release dev
 
 on:
   push:
@@ -74,6 +74,7 @@ jobs:
     runs-on: [self-hosted, Linux]
     outputs:
       tag: ${{ steps.bump-versions.outputs.tag_to_push }}
+      release_commit_sha: ${{ steps.push-changes.outputs.release_commit_sha }}
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v5
@@ -135,11 +136,25 @@ jobs:
             exit 1
           fi
 
-          # pushing the tags to github
-          git push https://${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git tag "$TAG_TO_PUSH"
-
           echo "DEBUG: Final TAG_TO_PUSH = '$TAG_TO_PUSH'"
           echo "tag_to_push=$TAG_TO_PUSH" >> $GITHUB_OUTPUT
+      - name: Commit and Push Changes
+        id: push-changes
+        run: |
+          TAG=${{ steps.bump-versions.outputs.tag_to_push }}
+          # Check if there are changes to commit
+          if git diff --quiet HEAD; then
+            echo "No changes to commit"
+          else
+            ./cog_bump.sh $TAG
+            git add pubspec.yaml
+            git add CHANGELOG.md
+            git commit -m "chore(release): $TAG [skip ci]"
+          fi
+          git push https://${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git main
+          git push https://${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git tag $TAG
+
+          echo "release_commit_sha=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
       - name: Upload Changelog
         uses: actions/upload-artifact@v4
         with:
@@ -305,6 +320,7 @@ jobs:
           gh release create $TAG \
             --title "v$TAG" \
             --notes "$(cat release_notes.md)" \
-            --target ${{ github.sha }}
+            --target ${{ needs.release-rc.outputs.release_commit_sha }}
+            --prerelease
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
