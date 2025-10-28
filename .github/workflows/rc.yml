@@ -151,7 +151,7 @@ jobs:
             git add CHANGELOG.md
             git commit -m "chore(release): $TAG [skip ci]"
           fi
-          git push https://${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git main
+          git push https://${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git dev
           git push https://${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git tag $TAG
 
           echo "release_commit_sha=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
