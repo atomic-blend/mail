@@ -75,6 +75,10 @@ jobs:
     outputs:
       tag: ${{ steps.bump-versions.outputs.tag_to_push }}
     steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
       - name: Configure git
         run: |
           git config user.email "pro@brandonguigo.com"
