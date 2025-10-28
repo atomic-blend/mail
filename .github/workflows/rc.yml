@@ -10,6 +10,11 @@ env:
   COCOGITTO_VERSION: "6.3.0" # Specify the version of Cocogitto to use
   FLUTTER_VERSION: "3.35.4"
 
+permissions:
+  contents: write
+  packages: write
+  actions: write
+
 jobs:
   test-coverage:
     runs-on: [self-hosted, Linux]
@@ -125,7 +130,7 @@ jobs:
             echo "No NEW_TAG found in bump script output."
             exit 1
           fi
-          
+
           # pushing the tags to github
           git push https://${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git tag "$TAG_TO_PUSH"
 
