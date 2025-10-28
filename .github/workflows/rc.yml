@@ -92,7 +92,13 @@ jobs:
       - name: Install Cocogitto
         if: steps.cache-cocogitto.outputs.cache-hit != 'true'
         run: |
-          cargo install cocogitto --version ${{ env.COCOGITTO_VERSION }}
+          # Skip install if `cog` is already present on the runner
+          if command -v cog >/dev/null 2>&1; then
+            echo "cog already installed at $(command -v cog) - skipping cargo install"
+            cog --version || true
+          else
+            cargo install cocogitto --version ${{ env.COCOGITTO_VERSION }}
+          fi
         env:
           RUSTFLAGS: --cfg procmacro2_semver_exempt
 
