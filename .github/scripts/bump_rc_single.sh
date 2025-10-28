@@ -37,15 +37,10 @@ if [[ $dry_run_exit_code -ne 0 ]]; then
   exit 1
 fi
 
-# Extract tag like v1.2.3-rc-abc1234 or 1.2.3-rc-abc1234 or dir/v1.2.3-rc-abc1234
-# Normalize to remove any directory prefix and any leading 'v' so we only return the version
-raw_tag=$(echo "$dry_run_output" | grep -E "([[:alnum:]_\-]+/)*v?[0-9]+\.[0-9]+\.[0-9]+(-[A-Za-z0-9_.-]+)*-${RC_IDENTIFIER}" | tail -n 1 | tr -d '\n' )
-if [[ -n "$raw_tag" ]]; then
-  # remove directory prefix (anything before last '/') and leading 'v'
-  expected_tag=$(echo "$raw_tag" | sed 's:.*/::' | sed 's/^v//')
-else
-  expected_tag=""
-fi
+# Extract tag like v1.2.3-rc-abc1234
+expected_tag=$(echo "$dry_run_output" | grep -E "[0-9]+\.[0-9]+\.[0-9]+-${RC_IDENTIFIER}" | tail -n 1 | tr -d '\n')
+
+echo "Extracted tag from dry run: $expected_tag"
 
 echo "Running actual bump..."
 if ! output=$("$COG_EXEC" bump --auto --pre "$RC_IDENTIFIER" 2>&1); then
@@ -61,14 +56,13 @@ if ! output=$("$COG_EXEC" bump --auto --pre "$RC_IDENTIFIER" 2>&1); then
 fi
 
 echo "Version bumped successfully"
-# prefer the normalized expected_tag from dry-run, otherwise try to parse the actual output
 if [[ -n "$expected_tag" ]]; then
   echo "NEW_TAG:$expected_tag"
 else
-  tag_from_output=$(echo "$output" | grep -E "([[:alnum:]_\-]+/)*v?[0-9]+\.[0-9]+\.[0-9]+(-[A-Za-z0-9_.-]+)*-${RC_IDENTIFIER}" | tail -n 1 | tr -d '\n') || true
+  # Fallback: try to parse tag from actual output if dry-run didn't contain it
+  tag_from_output=$(echo "$output" | grep -E "v[0-9]+\.[0-9]+\.[0-9]+-${RC_IDENTIFIER}" | tail -n 1 | tr -d '\n') || true
   if [[ -n "$tag_from_output" ]]; then
-    normalized=$(echo "$tag_from_output" | sed 's:.*/::' | sed 's/^v//')
-    echo "NEW_TAG:$normalized"
+    echo "NEW_TAG:$tag_from_output"
   else
     echo "NEW_TAG:unknown"
   fi
