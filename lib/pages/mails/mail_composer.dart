@@ -87,7 +87,6 @@ class _MailComposerState extends ResponsiveState<MailComposer> {
   Widget build(BuildContext context) {
     return BlocListener<MailBloc, MailState>(
         listener: (context, mailState) {
-          print("Mail state changed: $mailState");
           if (mailState is MailSendSuccess) {
             Navigator.pop(context);
           } else if (mailState is MailSendError) {
