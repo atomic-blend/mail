@@ -7,6 +7,7 @@ import 'package:ab_shared/components/responsive_stateful_widget.dart';
 import 'package:ab_shared/components/widgets/elevated_container.dart';
 import 'package:ab_shared/utils/constants.dart';
 import 'package:ab_shared/utils/shortcuts.dart';
+import 'package:ab_shared/utils/toast_helper.dart';
 import 'package:fleather/fleather.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -80,6 +81,22 @@ class _MailComposerState extends ResponsiveState<MailComposer> {
         from = authState.user!.email!;
       }
     }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocListener<MailBloc, MailState>(
+        listener: (context, mailState) {
+          print("Mail state changed: $mailState");
+          if (mailState is MailSendSuccess) {
+            Navigator.pop(context);
+          } else if (mailState is MailSendError) {
+            ToastHelper.showError(
+                context: context,
+                title: context.t.mail_composer.errors["error_sending_email"]!);
+          }
+        },
+        child: super.build(context));
   }
 
   @override
@@ -333,8 +350,6 @@ class _MailComposerState extends ResponsiveState<MailComposer> {
     final mail = _generateMailEntity();
 
     context.read<MailBloc>().add(SendMail(mail));
-
-    Navigator.pop(context);
   }
 
   String _markdownToPlainText(String mdContent) {

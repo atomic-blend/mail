@@ -50,6 +50,9 @@
       "description": "Do you want to save the draft?",
       "confirm_text": "Save",
       "cancel_text": "Discard"
+    },
+    "errors(map)": {
+      "error_sending_email": "An error occurred while sending the email. Please try again."
     }
   },
   "under_construction": {
