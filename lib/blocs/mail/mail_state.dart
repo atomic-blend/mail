@@ -238,6 +238,29 @@ class MailMarkAsUnreadError extends MailState {
       ];
 }
 
+class MailSending extends MailState {
+  MailSending(super.mails,
+      {super.latestSync,
+      super.readMails,
+      super.unreadMails,
+      super.drafts,
+      super.archivedMails,
+      super.unarchivedMails,
+      super.trashedMails,
+      super.untrashedMails});
+
+  @override
+  List<Object?> get props => [
+        mails,
+        latestSync,
+        readMails,
+        unreadMails,
+        drafts,
+        archivedMails,
+        unarchivedMails
+      ];
+}
+
 class MailSendSuccess extends MailState {
   MailSendSuccess(super.mails,
       {super.latestSync,

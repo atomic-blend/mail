@@ -248,6 +248,7 @@ class MailBloc extends HydratedBloc<MailEvent, MailState> {
 
   void _onSendMail(SendMail event, Emitter<MailState> emit) async {
     final prevState = state;
+    emit(MailState.transform(MailSending.new, prevState));
     try {
       await _mailService.sendMail(event.mail);
       emit(MailState.transform(MailSendSuccess.new, prevState));

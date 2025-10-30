@@ -45,6 +45,9 @@
       "description": "Voulez-vous enregistrer le brouillon ?",
       "confirm_text": "Enregistrer",
       "cancel_text": "Annuler"
+    },
+    "errors(map)": {
+      "error_sending_email": "Une erreur s'est produite lors de l'envoi de l'e-mail. Veuillez réessayer."
     }
   },
   "account": {
@@ -86,6 +89,6 @@
     "selected_mails": {
       "title": "${count} mails sélectionnés",
       "description": "Cliquez ici pour effectuer une action."
-    } 
+    }
   }
 }

@@ -7,6 +7,7 @@ import 'package:ab_shared/components/responsive_stateful_widget.dart';
 import 'package:ab_shared/components/widgets/elevated_container.dart';
 import 'package:ab_shared/utils/constants.dart';
 import 'package:ab_shared/utils/shortcuts.dart';
+import 'package:ab_shared/utils/toast_helper.dart';
 import 'package:fleather/fleather.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -83,103 +84,131 @@ class _MailComposerState extends ResponsiveState<MailComposer> {
   }
 
   @override
+  Widget build(BuildContext context) {
+    return BlocListener<MailBloc, MailState>(
+        listener: (context, mailState) {
+          if (mailState is MailSendSuccess) {
+            Navigator.pop(context);
+          } else if (mailState is MailSendError) {
+            ToastHelper.showError(
+                context: context,
+                title: context.t.mail_composer.errors["error_sending_email"]!);
+          }
+        },
+        child: super.build(context));
+  }
+
+  @override
   Widget buildDesktop(BuildContext context) {
     return buildMobile(context);
   }
 
   @override
   Widget buildMobile(BuildContext context) {
-    return BlocBuilder<AuthBloc, AuthState>(builder: (context, authState) {
-      return ElevatedContainer(
-        padding: EdgeInsets.only(
-          top: $constants.insets.xs,
-        ),
-        width: double.infinity,
-        child: Stack(
-          children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                IconButton(
-                  onPressed: () {
-                    _draftAndPop(context);
-                  },
-                  icon: Icon(CupertinoIcons.chevron_back),
-                ),
-                SizedBox(height: $constants.insets.xs),
-                Padding(
-                  padding:
-                      EdgeInsets.symmetric(horizontal: $constants.insets.sm),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        context.t.mail_composer.title,
-                        style: getTextTheme(context)
-                            .displaySmall!
-                            .copyWith(fontWeight: FontWeight.bold),
-                      ),
-                      IconButton(
-                        onPressed: () {
-                          _sendMail();
-                        },
-                        icon: Icon(
-                          CupertinoIcons.arrow_up_circle_fill,
-                          size: 30,
-                          color: getTheme(context).primary,
+    return BlocBuilder<MailBloc, MailState>(builder: (context, mailState) {
+      return BlocBuilder<AuthBloc, AuthState>(builder: (context, authState) {
+        return ElevatedContainer(
+          padding: EdgeInsets.only(
+            top: $constants.insets.xs,
+          ),
+          width: double.infinity,
+          child: Stack(
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  IconButton(
+                    onPressed: () {
+                      _draftAndPop(context);
+                    },
+                    icon: Icon(CupertinoIcons.chevron_back),
+                  ),
+                  SizedBox(height: $constants.insets.xs),
+                  Padding(
+                    padding:
+                        EdgeInsets.symmetric(horizontal: $constants.insets.sm),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          context.t.mail_composer.title,
+                          style: getTextTheme(context)
+                              .displaySmall!
+                              .copyWith(fontWeight: FontWeight.bold),
                         ),
-                      ),
-                    ],
+                        if (mailState is MailSending)
+                          Padding(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: $constants.insets.sm,
+                            ),
+                            child: CircularProgressIndicator.adaptive(
+                              strokeWidth: 2,
+                            ),
+                          ),
+                        if (mailState is! MailSending)
+                          IconButton(
+                            onPressed: () {
+                              _sendMail();
+                            },
+                            icon: Icon(
+                              CupertinoIcons.arrow_up_circle_fill,
+                              size: 30,
+                              color: getTheme(context).primary,
+                            ),
+                          ),
+                      ],
+                    ),
                   ),
-                ),
-                SizedBox(height: $constants.insets.xs),
-                _buildPaddedDivider(),
-                _buildToField(toController, to),
-                _buildPaddedDivider(),
-                _buildEmailFields(
-                  context.t.mail_composer.from,
-                  null,
-                  enabled: false,
-                  value: from,
-                  onTap: () {
-                    // _showFromSelector();
-                  },
-                ),
-                _buildPaddedDivider(),
-                _buildEmailFields(
-                    context.t.mail_composer.subject, subjectController),
-                _buildPaddedDivider(),
-                SizedBox(height: $constants.insets.xs),
-                Expanded(
-                  child: SizedBox(
-                    width: double.infinity,
-                    child: ABEditor(editorState: editorState!),
+                  SizedBox(height: $constants.insets.xs),
+                  _buildPaddedDivider(),
+                  _buildToField(toController, to),
+                  _buildPaddedDivider(),
+                  _buildEmailFields(
+                    context.t.mail_composer.from,
+                    null,
+                    enabled: false,
+                    value: from,
+                    onTap: () {
+                      // _showFromSelector();
+                    },
                   ),
-                ),
-                SizedBox(
-                    height: isDesktop(context)
-                        ? 85
-                        : MediaQuery.of(context).viewInsets.bottom == 0
-                            ? 85
-                            : 60 + MediaQuery.of(context).viewInsets.bottom),
-              ],
-            ),
-            Positioned(
-              bottom: MediaQuery.of(context).viewInsets.bottom == 0
-                  ? $constants.insets.lg
-                  : MediaQuery.of(context).viewInsets.bottom +
-                      $constants.insets.xs,
-              left: 0,
-              right: 0,
-              child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: $constants.insets.md),
-                child: ABEditorToolbar(editorState: editorState!),
+                  _buildPaddedDivider(),
+                  _buildEmailFields(
+                      context.t.mail_composer.subject, subjectController),
+                  _buildPaddedDivider(),
+                  SizedBox(height: $constants.insets.xs),
+                  Expanded(
+                    child: SizedBox(
+                      width: double.infinity,
+                      child: ABEditor(editorState: editorState!),
+                    ),
+                  ),
+                  SizedBox(
+                      height: isDesktop(context)
+                          ? 85
+                          : MediaQuery.of(context).viewInsets.bottom == 0
+                              ? 85
+                              : 60 + MediaQuery.of(context).viewInsets.bottom),
+                ],
               ),
-            ),
-          ],
-        ),
-      );
+              Positioned(
+                bottom: MediaQuery.of(context).viewInsets.bottom == 0
+                    ? $constants.insets.lg
+                    : MediaQuery.of(context).viewInsets.bottom +
+                        $constants.insets.xs,
+                left: 0,
+                right: 0,
+                child: Padding(
+                  padding:
+                      EdgeInsets.symmetric(horizontal: $constants.insets.md),
+                  child: ABEditorToolbar(editorState: editorState!),
+                ),
+              ),
+            ],
+          ),
+        );
+      });
     });
   }
 
@@ -333,8 +362,6 @@ class _MailComposerState extends ResponsiveState<MailComposer> {
     final mail = _generateMailEntity();
 
     context.read<MailBloc>().add(SendMail(mail));
-
-    Navigator.pop(context);
   }
 
   String _markdownToPlainText(String mdContent) {
