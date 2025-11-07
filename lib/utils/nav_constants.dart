@@ -146,7 +146,7 @@ class NavConstants {
         cupertinoIcon: CupertinoIcons.settings,
         label: "Account & Settings",
         location: "/account",
-        subItems: [],
+        subItems: const [],
         header: _buildHeader(context, "Account & Settings"),
       ),
     ];
