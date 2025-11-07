@@ -142,21 +142,12 @@ class NavConstants {
       ),
       NavigationItem(
         key: const Key("account"),
-        icon: LineAwesome.user_solid,
-        cupertinoIcon: CupertinoIcons.person,
-        label: "Account",
-        location: "/account",
-        subItems: [],
-        header: _buildHeader(context, "Account"),
-      ),
-      NavigationItem(
-        key: const Key("settings"),
         icon: LineAwesome.cog_solid,
-        cupertinoIcon: CupertinoIcons.gear,
-        label: "Settings",
-        location: "/settings",
-        subItems: [],
-        header: _buildHeader(context, "Settings"),
+        cupertinoIcon: CupertinoIcons.settings,
+        label: "Account & Settings",
+        location: "/account",
+        subItems: const [],
+        header: _buildHeader(context, "Account & Settings"),
       ),
     ];
     return allItems;
