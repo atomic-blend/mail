@@ -257,7 +257,7 @@ class _MailComposerState extends ResponsiveState<MailComposer> {
   }) {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: $constants.insets.sm),
-      child: Column(
+      child: Wrap(
         children: [
           if (to != null && to.isNotEmpty)
             Padding(

@@ -144,7 +144,7 @@ class NavConstants {
         key: const Key("account"),
         icon: LineAwesome.cog_solid,
         cupertinoIcon: CupertinoIcons.settings,
-        label: "Account & Settings",
+        label: "Settings",
         location: "/account",
         subItems: const [],
         header: _buildHeader(context, "Account & Settings"),
