@@ -3,11 +3,11 @@ import 'package:ab_shared/utils/shortcuts.dart';
 import 'package:animated_custom_dropdown/custom_dropdown.dart';
 import 'package:flutter/material.dart';
 
-class ComposerFromSelector extends StatelessWidget {
+class ComposerFromField extends StatelessWidget {
   final List<String> emails;
   final String? initialValue;
   final Function(String)? onSelected;
-  const ComposerFromSelector(
+  const ComposerFromField(
       {super.key, required this.emails, this.initialValue, this.onSelected});
 
   @override

@@ -17,7 +17,8 @@ import 'package:mail/blocs/mail/mail_bloc.dart';
 import 'package:mail/i18n/strings.g.dart';
 import 'package:mail/models/mail/mail.dart';
 import 'package:mail/models/send_mail/send_mail.dart' as send_mail;
-import 'package:mail/pages/mails/composer/composer_from_selector.dart';
+import 'package:mail/pages/mails/composer/composer_from_field.dart';
+import 'package:mail/pages/mails/composer/composer_to_field.dart';
 import 'package:parchment/codecs.dart';
 
 class MailComposer extends ResponsiveStatefulWidget {
@@ -156,12 +157,17 @@ class _MailComposerState extends ResponsiveState<MailComposer> {
                     ],
                   ),
                   SizedBox(height: $constants.insets.xs),
-                  _buildPaddedDivider(),
-                  _buildToField(toController, to),
+                  _buildFieldWithLabel(
+                    context.t.mail_composer.to,
+                    ComposerToField(
+                      emails: to,
+                    ),
+                  ),
+                  // _buildToField(toController, to),
                   _buildPaddedDivider(),
                   _buildFieldWithLabel(
                     context.t.mail_composer.from,
-                    ComposerFromSelector(
+                    ComposerFromField(
                       emails: userEmails!,
                       initialValue: from,
                       onSelected: (value) {
@@ -171,15 +177,6 @@ class _MailComposerState extends ResponsiveState<MailComposer> {
                       },
                     ),
                   ),
-                  // _buildEmailFields(
-                  //   context.t.mail_composer.from,
-                  //   null,
-                  //   enabled: false,
-                  //   value: from,
-                  //   onTap: () {
-                  //     // _showFromSelector();
-                  //   },
-                  // ),
                   _buildPaddedDivider(),
                   _buildEmailFields(
                       context.t.mail_composer.subject, subjectController),
