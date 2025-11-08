@@ -156,14 +156,22 @@ class _MailComposerState extends ResponsiveState<MailComposer> {
                       ),
                     ],
                   ),
-                  SizedBox(height: $constants.insets.xs),
                   _buildFieldWithLabel(
                     context.t.mail_composer.to,
                     ComposerToField(
                       emails: to,
+                      onSelected: (value) {
+                        setState(() {
+                          to?.add(value);
+                        });
+                      },
+                      onRemoved: (value) {
+                        setState(() {
+                          to?.remove(value);
+                        });
+                      },
                     ),
                   ),
-                  // _buildToField(toController, to),
                   _buildPaddedDivider(),
                   _buildFieldWithLabel(
                     context.t.mail_composer.from,
@@ -178,8 +186,16 @@ class _MailComposerState extends ResponsiveState<MailComposer> {
                     ),
                   ),
                   _buildPaddedDivider(),
-                  _buildEmailFields(
-                      context.t.mail_composer.subject, subjectController),
+                  _buildFieldWithLabel(
+                      context.t.mail_composer.subject,
+                      AppTextFormField(
+                        textStyle: getTextTheme(context)
+                            .bodyMedium!
+                            .copyWith(fontWeight: FontWeight.bold),
+                        controller: subjectController,
+                        value: subject,
+                        backgroundColor: null,
+                      )),
                   _buildPaddedDivider(),
                   SizedBox(height: $constants.insets.xs),
                   Expanded(
@@ -233,128 +249,8 @@ class _MailComposerState extends ResponsiveState<MailComposer> {
             style:
                 getTextTheme(context).bodyMedium!.copyWith(color: Colors.grey),
           ),
-          SizedBox(width: $constants.insets.xs),
+          SizedBox(width: $constants.insets.xxs),
           Expanded(child: field),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildEmailFields(
-    String label,
-    TextEditingController? controller, {
-    String? value,
-    bool? enabled = true,
-    VoidCallback? onTap,
-  }) {
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: $constants.insets.sm),
-      child: GestureDetector(
-        onTap: () {
-          if (onTap != null && enabled == false) {
-            onTap();
-          }
-        },
-        child: AppTextFormField(
-          height: 25,
-          labelText: "$label:",
-          rowLayout: true,
-          labelStyle:
-              getTextTheme(context).bodyMedium!.copyWith(color: Colors.grey),
-          controller: controller,
-          value: value,
-          backgroundColor: null,
-        ),
-      ),
-    );
-  }
-
-  Widget _buildToField(
-    TextEditingController? controller,
-    List<String>? to, {
-    String? value,
-    bool? enabled = true,
-    VoidCallback? onTap,
-  }) {
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: $constants.insets.sm),
-      child: Wrap(
-        children: [
-          if (to != null && to.isNotEmpty)
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: $constants.insets.xl),
-              child: Wrap(
-                children: [
-                  ...to.map((to) => Padding(
-                        padding: EdgeInsets.symmetric(
-                            horizontal: $constants.insets.xs,
-                            vertical: $constants.insets.xxs),
-                        child: Container(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: $constants.insets.sm),
-                          decoration: BoxDecoration(
-                            color: Colors.grey.shade200,
-                            borderRadius:
-                                BorderRadius.circular($constants.insets.sm),
-                          ),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Text(to),
-                              SizedBox(width: $constants.insets.xs),
-                              GestureDetector(
-                                child: Icon(
-                                  CupertinoIcons.xmark_circle_fill,
-                                  size: 15,
-                                ),
-                                onTap: () {
-                                  setState(() {
-                                    this.to?.remove(to);
-                                  });
-                                },
-                              ),
-                            ],
-                          ),
-                        ),
-                      )),
-                ],
-              ),
-            ),
-          GestureDetector(
-            onTap: () {
-              if (onTap != null && enabled == false) {
-                onTap();
-              }
-            },
-            child: AppTextFormField(
-              height: 25,
-              labelText: "${context.t.mail_composer.to}:",
-              rowLayout: true,
-              labelStyle: getTextTheme(context)
-                  .bodyMedium!
-                  .copyWith(color: Colors.grey),
-              controller: controller,
-              value: value,
-              backgroundColor: null,
-              onChange: () {
-                // detect spaces in the controller text and add them to the to list + clear the controller text
-                final spaces = controller?.text.split(" ");
-                if (spaces!.length > 1) {
-                  setState(() {
-                    to?.add(spaces.first);
-                    controller?.clear();
-                  });
-                }
-              },
-              onSubmitted: () {
-                // store the email to the list + clear the controller text when the user presses enter
-                setState(() {
-                  to?.add(controller?.text ?? "");
-                  controller?.clear();
-                });
-              },
-            ),
-          ),
         ],
       ),
     );

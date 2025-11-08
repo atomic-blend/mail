@@ -119,6 +119,7 @@ dependencies:
   flutter_stripe: ^11.5.0
   flutter_stripe_web: ^6.5.1
   animated_custom_dropdown: ^3.1.1
+  super_tag_editor: ^1.1.0
 dependency_overrides:
   flutter_secure_storage_web: ^2.0.0
   flutter_secure_storage_platform_interface: ^2.0.1
