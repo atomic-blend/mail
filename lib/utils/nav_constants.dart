@@ -3,7 +3,7 @@ import 'package:ab_shared/components/app/ab_navbar.dart';
 import 'package:ab_shared/components/app/ab_header.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mail/blocs/mail/mail_bloc.dart';
-import 'package:mail/pages/mails/mail_composer.dart';
+import 'package:mail/pages/mails/composer/mail_composer.dart';
 import 'package:ab_shared/utils/shortcuts.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';

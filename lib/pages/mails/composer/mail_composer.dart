@@ -17,6 +17,7 @@ import 'package:mail/blocs/mail/mail_bloc.dart';
 import 'package:mail/i18n/strings.g.dart';
 import 'package:mail/models/mail/mail.dart';
 import 'package:mail/models/send_mail/send_mail.dart' as send_mail;
+import 'package:mail/pages/mails/composer/composer_from_selector.dart';
 import 'package:parchment/codecs.dart';
 
 class MailComposer extends ResponsiveStatefulWidget {
@@ -34,6 +35,7 @@ class _MailComposerState extends ResponsiveState<MailComposer> {
 
   String? subject;
   String? from;
+  List<String>? userEmails = [];
   List<String>? to = [];
 
   @override
@@ -80,6 +82,7 @@ class _MailComposerState extends ResponsiveState<MailComposer> {
       final authState = context.read<AuthBloc>().state;
       if (authState.user != null) {
         from = authState.user!.email!;
+        userEmails = [from!];
       }
     }
   }
@@ -156,15 +159,27 @@ class _MailComposerState extends ResponsiveState<MailComposer> {
                   _buildPaddedDivider(),
                   _buildToField(toController, to),
                   _buildPaddedDivider(),
-                  _buildEmailFields(
+                  _buildFieldWithLabel(
                     context.t.mail_composer.from,
-                    null,
-                    enabled: false,
-                    value: from,
-                    onTap: () {
-                      // _showFromSelector();
-                    },
+                    ComposerFromSelector(
+                      emails: userEmails!,
+                      initialValue: from,
+                      onSelected: (value) {
+                        setState(() {
+                          from = value;
+                        });
+                      },
+                    ),
                   ),
+                  // _buildEmailFields(
+                  //   context.t.mail_composer.from,
+                  //   null,
+                  //   enabled: false,
+                  //   value: from,
+                  //   onTap: () {
+                  //     // _showFromSelector();
+                  //   },
+                  // ),
                   _buildPaddedDivider(),
                   _buildEmailFields(
                       context.t.mail_composer.subject, subjectController),
@@ -208,6 +223,23 @@ class _MailComposerState extends ResponsiveState<MailComposer> {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: $constants.insets.sm),
       child: Divider(),
+    );
+  }
+
+  Widget _buildFieldWithLabel(String label, Widget field) {
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: $constants.insets.sm),
+      child: Row(
+        children: [
+          Text(
+            "$label:",
+            style:
+                getTextTheme(context).bodyMedium!.copyWith(color: Colors.grey),
+          ),
+          SizedBox(width: $constants.insets.xs),
+          Expanded(child: field),
+        ],
+      ),
     );
   }
 

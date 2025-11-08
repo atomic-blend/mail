@@ -12,7 +12,7 @@ import 'package:mail/components/avatars/checkbox_avatar.dart';
 import 'package:mail/components/avatars/mail_user_avatar.dart';
 import 'package:mail/i18n/strings.g.dart';
 import 'package:mail/models/mail/mail.dart';
-import 'package:mail/pages/mails/mail_composer.dart';
+import 'package:mail/pages/mails/composer/mail_composer.dart';
 import 'package:mail/pages/mails/mail_details.dart';
 import 'package:mail/services/sync.service.dart';
 import 'package:mail/models/send_mail/send_mail.dart' as send_mail;
