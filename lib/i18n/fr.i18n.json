@@ -40,6 +40,7 @@
     "from": "De",
     "subject": "Objet",
     "to": "À",
+    "send": "Envoyer",
     "save_draft_modal": {
       "title": "Enregistrer le brouillon",
       "description": "Voulez-vous enregistrer le brouillon ?",

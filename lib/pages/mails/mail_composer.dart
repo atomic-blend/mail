@@ -1,4 +1,5 @@
 import 'package:ab_shared/blocs/auth/auth.bloc.dart';
+import 'package:ab_shared/components/buttons/primary_button_square.dart';
 import 'package:ab_shared/components/editor/ab_editor.dart';
 import 'package:ab_shared/components/editor/ab_editor_toolbar.dart';
 import 'package:ab_shared/components/forms/app_text_form_field.dart';
@@ -118,47 +119,38 @@ class _MailComposerState extends ResponsiveState<MailComposer> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  IconButton(
-                    onPressed: () {
-                      _draftAndPop(context);
-                    },
-                    icon: Icon(CupertinoIcons.chevron_back),
-                  ),
-                  SizedBox(height: $constants.insets.xs),
-                  Padding(
-                    padding:
-                        EdgeInsets.symmetric(horizontal: $constants.insets.sm),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          context.t.mail_composer.title,
-                          style: getTextTheme(context)
-                              .displaySmall!
-                              .copyWith(fontWeight: FontWeight.bold),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      IconButton(
+                        onPressed: () {
+                          _draftAndPop(context);
+                        },
+                        icon: Icon(CupertinoIcons.chevron_back),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: $constants.insets.sm,
                         ),
-                        if (mailState is MailSending)
-                          Padding(
-                            padding: EdgeInsets.symmetric(
-                              horizontal: $constants.insets.sm,
-                            ),
-                            child: CircularProgressIndicator.adaptive(
-                              strokeWidth: 2,
-                            ),
-                          ),
-                        if (mailState is! MailSending)
-                          IconButton(
-                            onPressed: () {
-                              _sendMail();
-                            },
-                            icon: Icon(
-                              CupertinoIcons.arrow_up_circle_fill,
-                              size: 30,
-                              color: getTheme(context).primary,
-                            ),
-                          ),
-                      ],
-                    ),
+                        child: PrimaryButtonSquare(
+                          height: 35,
+                          onPressed: () {
+                            _sendMail();
+                          },
+                          leading: mailState is MailSending
+                              ? CircularProgressIndicator.adaptive(
+                                  strokeWidth: 2,
+                                )
+                              : null,
+                          text: context.t.mail_composer.send,
+                          textStyle:
+                              getTextTheme(context).headlineSmall!.copyWith(
+                                    color: $constants.palette.white,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                        ),
+                      ),
+                    ],
                   ),
                   SizedBox(height: $constants.insets.xs),
                   _buildPaddedDivider(),

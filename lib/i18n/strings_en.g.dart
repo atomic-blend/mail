@@ -163,6 +163,9 @@ class TranslationsMailComposerEn {
 	/// en: 'To'
 	String get to => 'To';
 
+	/// en: 'Send'
+	String get send => 'Send';
+
 	late final TranslationsMailComposerSaveDraftModalEn save_draft_modal = TranslationsMailComposerSaveDraftModalEn._(_root);
 	Map<String, String> get errors => {
 		'error_sending_email': 'An error occurred while sending the email. Please try again.',
@@ -422,6 +425,7 @@ extension on Translations {
 			case 'mail_composer.from': return 'From';
 			case 'mail_composer.subject': return 'Subject';
 			case 'mail_composer.to': return 'To';
+			case 'mail_composer.send': return 'Send';
 			case 'mail_composer.save_draft_modal.title': return 'Save Draft';
 			case 'mail_composer.save_draft_modal.description': return 'Do you want to save the draft?';
 			case 'mail_composer.save_draft_modal.confirm_text': return 'Save';

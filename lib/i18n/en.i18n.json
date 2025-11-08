@@ -45,6 +45,7 @@
     "from": "From",
     "subject": "Subject",
     "to": "To",
+    "send": "Send",
     "save_draft_modal": {
       "title": "Save Draft",
       "description": "Do you want to save the draft?",

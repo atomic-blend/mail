@@ -120,6 +120,7 @@ class _TranslationsMailComposerFr implements TranslationsMailComposerEn {
 	@override String get from => 'De';
 	@override String get subject => 'Objet';
 	@override String get to => 'À';
+	@override String get send => 'Envoyer';
 	@override late final _TranslationsMailComposerSaveDraftModalFr save_draft_modal = _TranslationsMailComposerSaveDraftModalFr._(_root);
 	@override Map<String, String> get errors => {
 		'error_sending_email': 'Une erreur s\'est produite lors de l\'envoi de l\'e-mail. Veuillez réessayer.',
@@ -325,6 +326,7 @@ extension on TranslationsFr {
 			case 'mail_composer.from': return 'De';
 			case 'mail_composer.subject': return 'Objet';
 			case 'mail_composer.to': return 'À';
+			case 'mail_composer.send': return 'Envoyer';
 			case 'mail_composer.save_draft_modal.title': return 'Enregistrer le brouillon';
 			case 'mail_composer.save_draft_modal.description': return 'Voulez-vous enregistrer le brouillon ?';
 			case 'mail_composer.save_draft_modal.confirm_text': return 'Enregistrer';
