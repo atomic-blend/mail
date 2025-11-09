@@ -36,10 +36,10 @@ class MailComposer extends ResponsiveStatefulWidget {
       this.backgroundColor});
 
   @override
-  ResponsiveState<MailComposer> createState() => _MailComposerState();
+  ResponsiveState<MailComposer> createState() => MailComposerState();
 }
 
-class _MailComposerState extends ResponsiveState<MailComposer> {
+class MailComposerState extends ResponsiveState<MailComposer> {
   FleatherController? editorState;
   TextEditingController subjectController = TextEditingController();
   TextEditingController toController = TextEditingController();
@@ -141,7 +141,7 @@ class _MailComposerState extends ResponsiveState<MailComposer> {
                       children: [
                         IconButton(
                           onPressed: () {
-                            _draftAndPop(context);
+                            draftAndPop(context);
                           },
                           icon: Icon(CupertinoIcons.chevron_back),
                         ),
@@ -241,7 +241,10 @@ class _MailComposerState extends ResponsiveState<MailComposer> {
                 child: Padding(
                   padding:
                       EdgeInsets.symmetric(horizontal: $constants.insets.md),
-                  child: ABEditorToolbar(editorState: editorState!),
+                  child: ABEditorToolbar(
+                    editorState: editorState!,
+                    backgroundColor: widget.backgroundColor,
+                  ),
                 ),
               ),
             ],
@@ -300,7 +303,10 @@ class _MailComposerState extends ResponsiveState<MailComposer> {
     return mdContent.replaceAll(regex, '');
   }
 
-  void _draftAndPop(BuildContext context) async {
+  void draftAndPop(
+    BuildContext context, {
+    bool pop = true,
+  }) async {
     if (editorState!.document.length <= 1 &&
         subjectController.text.isEmpty &&
         toController.text.isEmpty) {
@@ -349,8 +355,10 @@ class _MailComposerState extends ResponsiveState<MailComposer> {
         context.read<MailBloc>().add(SaveDraft(mail));
       }
     }
-    if (!context.mounted) return;
-    Navigator.pop(context);
+    if (pop) {
+      if (!context.mounted) return;
+      Navigator.pop(context);
+    }
     return;
   }
 }
