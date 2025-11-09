@@ -23,7 +23,8 @@ import 'package:parchment/codecs.dart';
 
 class MailComposer extends ResponsiveStatefulWidget {
   final send_mail.SendMail? mail;
-  const MailComposer({super.key, this.mail});
+  final Function(String)? onSubjectChanged;
+  const MailComposer({super.key, this.mail, this.onSubjectChanged});
 
   @override
   ResponsiveState<MailComposer> createState() => _MailComposerState();
@@ -195,6 +196,10 @@ class _MailComposerState extends ResponsiveState<MailComposer> {
                         controller: subjectController,
                         value: subject,
                         backgroundColor: null,
+                        onChange: () => {
+                          if (widget.onSubjectChanged != null)
+                            {widget.onSubjectChanged!(subjectController.text)}
+                        },
                       )),
                   // _buildPaddedDivider(),
                   SizedBox(height: $constants.insets.xs),

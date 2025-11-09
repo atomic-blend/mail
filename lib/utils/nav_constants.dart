@@ -1,6 +1,7 @@
 import 'package:ab_shared/blocs/auth/auth.bloc.dart';
 import 'package:ab_shared/components/app/ab_navbar.dart';
 import 'package:ab_shared/components/app/ab_header.dart';
+import 'package:ab_shared/components/app/window_layout/window_layout_controller.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mail/blocs/mail/mail_bloc.dart';
 import 'package:mail/pages/mails/composer/mail_composer.dart';
@@ -8,7 +9,9 @@ import 'package:ab_shared/utils/shortcuts.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:icons_plus/icons_plus.dart';
+import 'package:mail/pages/mails/composer/window_mail_composer.dart';
 import 'package:mail/services/sync.service.dart';
+import 'package:mail/utils/get_it.dart';
 
 final $navConstants = NavConstants();
 
@@ -29,18 +32,23 @@ class NavConstants {
           icon: LineAwesome.plus_solid,
           label: "New Mail",
           onTap: () {
-            if (isDesktop(context)) {
-              showDialog(
-                  context: context,
-                  builder: (context) => const Dialog(child: MailComposer()));
-            } else {
-              showModalBottomSheet(
-                  isScrollControlled: true,
-                  context: context,
-                  builder: (context) => SizedBox(
-                      height: getSize(context).height * 0.88,
-                      child: const MailComposer()));
-            }
+            getIt<WindowLayoutController>().addWindow(
+              WindowMailComposer(
+                initiallyCollapsed: true,
+              ),
+            );
+            // if (isDesktop(context)) {
+            //   showDialog(
+            //       context: context,
+            //       builder: (context) => const Dialog(child: MailComposer()));
+            // } else {
+            //   showModalBottomSheet(
+            //       isScrollControlled: true,
+            //       context: context,
+            //       builder: (context) => SizedBox(
+            //           height: getSize(context).height * 0.88,
+            //           child: const MailComposer()));
+            // }
           },
         ),
         subItems: [
