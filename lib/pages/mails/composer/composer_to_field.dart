@@ -3,7 +3,6 @@ import 'package:ab_shared/utils/constants.dart';
 import 'package:ab_shared/utils/shortcuts.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:mail/i18n/strings.g.dart';
 
 class ComposerToField extends StatefulWidget {
   final List<String>? emails;
@@ -32,12 +31,14 @@ class _ComposerToFieldState extends State<ComposerToField> {
         crossAxisAlignment: WrapCrossAlignment.center,
         children: [
           if (widget.emails != null && widget.emails!.isNotEmpty)
-            Row(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.center,
+            Wrap(
+              // mainAxisSize: MainAxisSize.min,
+              // crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 ...widget.emails!.map((email) => Padding(
-                      padding: EdgeInsets.only(right: $constants.insets.xs),
+                      padding: EdgeInsets.only(
+                          right: $constants.insets.xs,
+                          bottom: $constants.insets.xs),
                       child: Container(
                         padding: EdgeInsets.symmetric(
                             horizontal: $constants.insets.xs,
@@ -77,31 +78,24 @@ class _ComposerToFieldState extends State<ComposerToField> {
               maxWidth: 250,
               minWidth: 100,
             ),
-            child: AppTextFormField(
-              controller: controller,
-              backgroundColor: null,
-              onChange: () {
-                // detect spaces in the controller text and add them to the to list + clear the controller text
-                final email =
-                    _parseMailAddressFromInput(controller?.text ?? "");
-                if (email != null) {
-                  setState(() {
-                    controller?.clear();
-                  });
-                  widget.onSelected?.call(email);
+            child: Focus(
+              onFocusChange: (hasFocus) {
+                if (!hasFocus) {
+                  _submitEmail();
                 }
               },
-              onSubmitted: () {
-                // store the email to the list + clear the controller text when the user presses enter
-                final email =
-                    _parseMailAddressFromInput(controller?.text ?? "");
-                if (email != null) {
-                  setState(() {
-                    controller?.clear();
-                  });
-                  widget.onSelected?.call(email);
-                }
-              },
+              child: AppTextFormField(
+                controller: controller,
+                backgroundColor: null,
+                onChange: () {
+                  // detect spaces in the controller text and add them to the to list + clear the controller text
+                  _submitEmail();
+                },
+                onSubmitted: () {
+                  // store the email to the list + clear the controller text when the user presses enter
+                  _submitEmail();
+                },
+              ),
             ),
           ),
         ],
@@ -109,12 +103,23 @@ class _ComposerToFieldState extends State<ComposerToField> {
     );
   }
 
+  void _submitEmail() {
+    // detect spaces in the controller text and add them to the to list + clear the controller text
+    final email = _parseMailAddressFromInput(controller?.text ?? "");
+    if (email != null) {
+      setState(() {
+        controller?.clear();
+      });
+      widget.onSelected?.call(email);
+    }
+  }
+
   String? _parseMailAddressFromInput(String input) {
     final splitTokens = [" ", ",", ";", "\n"];
     // detect spaces in the controller text and add them to the to list + clear the controller text
     for (final token in splitTokens) {
       final parts = input.split(token);
-      if (parts.length > 1) {
+      if (parts.isNotEmpty && parts.first.contains("@")) {
         return parts.first;
       }
     }

@@ -172,7 +172,7 @@ class _MailComposerState extends ResponsiveState<MailComposer> {
                       },
                     ),
                   ),
-                  _buildPaddedDivider(),
+                  // _buildPaddedDivider(),
                   _buildFieldWithLabel(
                     context.t.mail_composer.from,
                     ComposerFromField(
@@ -185,7 +185,7 @@ class _MailComposerState extends ResponsiveState<MailComposer> {
                       },
                     ),
                   ),
-                  _buildPaddedDivider(),
+                  // _buildPaddedDivider(),
                   _buildFieldWithLabel(
                       context.t.mail_composer.subject,
                       AppTextFormField(
@@ -196,7 +196,7 @@ class _MailComposerState extends ResponsiveState<MailComposer> {
                         value: subject,
                         backgroundColor: null,
                       )),
-                  _buildPaddedDivider(),
+                  // _buildPaddedDivider(),
                   SizedBox(height: $constants.insets.xs),
                   Expanded(
                     child: SizedBox(
@@ -230,13 +230,6 @@ class _MailComposerState extends ResponsiveState<MailComposer> {
         );
       });
     });
-  }
-
-  Widget _buildPaddedDivider() {
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: $constants.insets.sm),
-      child: Divider(),
-    );
   }
 
   Widget _buildFieldWithLabel(String label, Widget field) {
