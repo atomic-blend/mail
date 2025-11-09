@@ -8,8 +8,13 @@ class ComposerToField extends StatefulWidget {
   final List<String>? emails;
   final Function(String)? onSelected;
   final Function(String)? onRemoved;
+  final Color? backgroundColor;
   const ComposerToField(
-      {super.key, required this.emails, this.onSelected, this.onRemoved});
+      {super.key,
+      required this.emails,
+      this.onSelected,
+      this.onRemoved,
+      this.backgroundColor});
 
   @override
   State<ComposerToField> createState() => _ComposerToFieldState();
@@ -86,7 +91,7 @@ class _ComposerToFieldState extends State<ComposerToField> {
               },
               child: AppTextFormField(
                 controller: controller,
-                backgroundColor: null,
+                backgroundColor: widget.backgroundColor,
                 onChange: () {
                   // detect spaces in the controller text and add them to the to list + clear the controller text
                   _submitEmail();

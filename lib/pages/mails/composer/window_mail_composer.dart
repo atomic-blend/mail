@@ -39,13 +39,17 @@ class _WindowMailComposerState extends WindowLayoutWidgetState {
 
   @override
   Widget body(BuildContext context) {
-    return MailComposer(
-      mail: (widget as WindowMailComposer).draft,
-      onSubjectChanged: (newSubject) {
-        setState(() {
-          subject = newSubject;
-        });
-      },
+    return Material(
+      child: MailComposer(
+        mail: (widget as WindowMailComposer).draft,
+        backgroundColor: getTheme(context).surface,
+        windowMode: true,
+        onSubjectChanged: (newSubject) {
+          setState(() {
+            subject = newSubject;
+          });
+        },
+      ),
     );
   }
 }

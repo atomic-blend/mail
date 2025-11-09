@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:ab_shared/blocs/auth/auth.bloc.dart';
 import 'package:ab_shared/components/buttons/primary_button_square.dart';
 import 'package:ab_shared/components/editor/ab_editor.dart';
@@ -24,7 +26,14 @@ import 'package:parchment/codecs.dart';
 class MailComposer extends ResponsiveStatefulWidget {
   final send_mail.SendMail? mail;
   final Function(String)? onSubjectChanged;
-  const MailComposer({super.key, this.mail, this.onSubjectChanged});
+  final bool? windowMode;
+  final Color? backgroundColor;
+  const MailComposer(
+      {super.key,
+      this.mail,
+      this.onSubjectChanged,
+      this.windowMode = false,
+      this.backgroundColor});
 
   @override
   ResponsiveState<MailComposer> createState() => _MailComposerState();
@@ -114,6 +123,8 @@ class _MailComposerState extends ResponsiveState<MailComposer> {
     return BlocBuilder<MailBloc, MailState>(builder: (context, mailState) {
       return BlocBuilder<AuthBloc, AuthState>(builder: (context, authState) {
         return ElevatedContainer(
+          disableShadow: widget.windowMode == true,
+          color: widget.backgroundColor,
           padding: EdgeInsets.only(
             top: $constants.insets.xs,
           ),
@@ -124,43 +135,45 @@ class _MailComposerState extends ResponsiveState<MailComposer> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      IconButton(
-                        onPressed: () {
-                          _draftAndPop(context);
-                        },
-                        icon: Icon(CupertinoIcons.chevron_back),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: $constants.insets.sm,
-                        ),
-                        child: PrimaryButtonSquare(
-                          height: 35,
+                  if (widget.windowMode == false)
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        IconButton(
                           onPressed: () {
-                            _sendMail();
+                            _draftAndPop(context);
                           },
-                          leading: mailState is MailSending
-                              ? CircularProgressIndicator.adaptive(
-                                  strokeWidth: 2,
-                                )
-                              : null,
-                          text: context.t.mail_composer.send,
-                          textStyle:
-                              getTextTheme(context).headlineSmall!.copyWith(
-                                    color: $constants.palette.white,
-                                    fontWeight: FontWeight.bold,
-                                  ),
+                          icon: Icon(CupertinoIcons.chevron_back),
                         ),
-                      ),
-                    ],
-                  ),
+                        Padding(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: $constants.insets.sm,
+                          ),
+                          child: PrimaryButtonSquare(
+                            height: 35,
+                            onPressed: () {
+                              _sendMail();
+                            },
+                            leading: mailState is MailSending
+                                ? CircularProgressIndicator.adaptive(
+                                    strokeWidth: 2,
+                                  )
+                                : null,
+                            text: context.t.mail_composer.send,
+                            textStyle:
+                                getTextTheme(context).headlineSmall!.copyWith(
+                                      color: $constants.palette.white,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                          ),
+                        ),
+                      ],
+                    ),
                   _buildFieldWithLabel(
                     context.t.mail_composer.to,
                     ComposerToField(
                       emails: to,
+                      backgroundColor: widget.backgroundColor,
                       onSelected: (value) {
                         setState(() {
                           to?.add(value);
@@ -179,6 +192,7 @@ class _MailComposerState extends ResponsiveState<MailComposer> {
                     ComposerFromField(
                       emails: userEmails!,
                       initialValue: from,
+                      backgroundColor: widget.backgroundColor,
                       onSelected: (value) {
                         setState(() {
                           from = value;
@@ -195,7 +209,7 @@ class _MailComposerState extends ResponsiveState<MailComposer> {
                             .copyWith(fontWeight: FontWeight.bold),
                         controller: subjectController,
                         value: subject,
-                        backgroundColor: null,
+                        backgroundColor: widget.backgroundColor,
                         onChange: () => {
                           if (widget.onSubjectChanged != null)
                             {widget.onSubjectChanged!(subjectController.text)}

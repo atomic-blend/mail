@@ -7,8 +7,13 @@ class ComposerFromField extends StatelessWidget {
   final List<String> emails;
   final String? initialValue;
   final Function(String)? onSelected;
+  final Color? backgroundColor;
   const ComposerFromField(
-      {super.key, required this.emails, this.initialValue, this.onSelected});
+      {super.key,
+      required this.emails,
+      this.initialValue,
+      this.onSelected,
+      this.backgroundColor});
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +27,8 @@ class ComposerFromField extends StatelessWidget {
         ),
         excludeSelected: true,
         decoration: CustomDropdownDecoration(
-            closedFillColor: getTheme(context).surfaceContainer),
+            closedFillColor:
+                backgroundColor ?? getTheme(context).surfaceContainer),
         items: emails,
         onChanged: (value) {
           if (value != null && onSelected != null) {
