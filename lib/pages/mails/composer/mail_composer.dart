@@ -241,9 +241,34 @@ class MailComposerState extends ResponsiveState<MailComposer> {
                 child: Padding(
                   padding:
                       EdgeInsets.symmetric(horizontal: $constants.insets.md),
-                  child: ABEditorToolbar(
-                    editorState: editorState!,
-                    backgroundColor: widget.backgroundColor,
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      ABEditorToolbar(
+                        editorState: editorState!,
+                        backgroundColor: widget.backgroundColor,
+                      ),
+                      if (widget.windowMode == true) ...[
+                        SizedBox(width: $constants.insets.sm),
+                        PrimaryButtonSquare(
+                          height: 45,
+                          onPressed: () {
+                            _sendMail();
+                          },
+                          leading: mailState is MailSending
+                              ? CircularProgressIndicator.adaptive(
+                                  strokeWidth: 2,
+                                )
+                              : null,
+                          text: context.t.mail_composer.send,
+                          textStyle:
+                              getTextTheme(context).headlineSmall!.copyWith(
+                                    color: $constants.palette.white,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                        )
+                      ]
+                    ],
                   ),
                 ),
               ),
@@ -276,13 +301,26 @@ class MailComposerState extends ResponsiveState<MailComposer> {
     final mdContent = parchmentMarkdown.encode(editorState!.document);
     final plainTextContent = _markdownToPlainText(mdContent);
 
-    //TODO: add attachements and create a raw mail entity like it's done in the backend
+    if (to == null || to!.isEmpty) {
+      //TODO: show error to user
+      throw Exception("No recipient specified");
+    }
+
+    if (subjectController.text.isEmpty) {
+      //TODO: ask user to confirm sending without subject in a dialog
+    }
+
+    if (htmlContent.isEmpty && plainTextContent.isEmpty) {
+      // TODO: ask the user to confirm sending an empty email
+    }
+
     final mail = Mail();
     mail.headers = [
       {"Key": "To", "Value": to},
       {"Key": "From", "Value": from},
       {"Key": "Subject", "Value": subjectController.text},
     ];
+    
     mail.textContent = plainTextContent;
     mail.htmlContent = htmlContent;
     mail.createdAt = DateTime.now();
