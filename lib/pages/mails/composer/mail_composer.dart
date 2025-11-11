@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:ab_shared/blocs/auth/auth.bloc.dart';
 import 'package:ab_shared/components/buttons/primary_button_square.dart';
 import 'package:ab_shared/components/editor/ab_editor.dart';
@@ -154,7 +152,7 @@ class MailComposerState extends ResponsiveState<MailComposer> {
                           child: PrimaryButtonSquare(
                             height: 35,
                             onPressed: () {
-                              _sendMail();
+                              _sendMail(context);
                             },
                             leading: mailState is MailSending
                                 ? CircularProgressIndicator.adaptive(
@@ -257,7 +255,7 @@ class MailComposerState extends ResponsiveState<MailComposer> {
                         PrimaryButtonSquare(
                           height: 45,
                           onPressed: () {
-                            _sendMail();
+                            _sendMail(context);
                           },
                           leading: mailState is MailSending
                               ? CircularProgressIndicator.adaptive(
@@ -437,7 +435,7 @@ class MailComposerState extends ResponsiveState<MailComposer> {
     return mail;
   }
 
-  void _sendMail() async {
+  void _sendMail(BuildContext context) async {
     final mail = await _generateMailEntity();
 
     if (mail == null) {
