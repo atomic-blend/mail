@@ -64,7 +64,16 @@ class MailComposerState extends ResponsiveState<MailComposer> {
         to = [];
       }
 
-      from = widget.mail!.mail!.getHeader("From") ?? "";
+      from = widget.mail!.mail!.getHeader("From");
+
+      // Initialize from field with current user's email if not already set
+      if (from == null) {
+        final authState = context.read<AuthBloc>().state;
+        if (authState.user != null) {
+          from = authState.user!.email!;
+          userEmails = [from!];
+        }
+      }
 
       // Safely decode HTML content to prevent stack overflow
       try {
@@ -89,13 +98,10 @@ class MailComposerState extends ResponsiveState<MailComposer> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     // Initialize from field with current user's email if not already set
-    if (from == null) {
-      final authState = context.read<AuthBloc>().state;
-      if (authState.user != null) {
-        from = authState.user!.email!;
-        userEmails = [from!];
-      }
-    }
+    final authState = context.read<AuthBloc>().state;
+    final userAccountEmail = authState.user!.email!;
+    userEmails = [userAccountEmail];
+    from ??= userAccountEmail;
   }
 
   @override
