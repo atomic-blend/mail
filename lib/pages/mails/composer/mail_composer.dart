@@ -124,7 +124,7 @@ class MailComposerState extends ResponsiveState<MailComposer> {
       return BlocBuilder<AuthBloc, AuthState>(builder: (context, authState) {
         return ElevatedContainer(
           disableShadow: widget.windowMode == true,
-          color: widget.backgroundColor,
+          color: widget.backgroundColor ?? getTheme(context).surface,
           padding: EdgeInsets.only(
             top: $constants.insets.xs,
           ),
@@ -174,7 +174,8 @@ class MailComposerState extends ResponsiveState<MailComposer> {
                     ComposerToField(
                       emails: to,
                       erroredEmails: toEmailsErrors,
-                      backgroundColor: widget.backgroundColor,
+                      backgroundColor:
+                          widget.backgroundColor ?? getTheme(context).surface,
                       onSelected: (value) {
                         setState(() {
                           to?.add(value);
@@ -194,7 +195,8 @@ class MailComposerState extends ResponsiveState<MailComposer> {
                     ComposerFromField(
                       emails: userEmails!,
                       initialValue: from,
-                      backgroundColor: widget.backgroundColor,
+                      backgroundColor:
+                          widget.backgroundColor ?? getTheme(context).surface,
                       onSelected: (value) {
                         setState(() {
                           from = value;
@@ -211,7 +213,8 @@ class MailComposerState extends ResponsiveState<MailComposer> {
                             .copyWith(fontWeight: FontWeight.bold),
                         controller: subjectController,
                         value: subject,
-                        backgroundColor: widget.backgroundColor,
+                        backgroundColor:
+                            widget.backgroundColor ?? getTheme(context).surface,
                         onChange: () => {
                           if (widget.onSubjectChanged != null)
                             {widget.onSubjectChanged!(subjectController.text)}
@@ -251,7 +254,8 @@ class MailComposerState extends ResponsiveState<MailComposer> {
                     children: [
                       ABEditorToolbar(
                         editorState: editorState!,
-                        backgroundColor: widget.backgroundColor,
+                        backgroundColor:
+                            widget.backgroundColor ?? getTheme(context).surface,
                       ),
                       if (widget.windowMode == true) ...[
                         SizedBox(width: $constants.insets.sm),
@@ -320,108 +324,112 @@ class MailComposerState extends ResponsiveState<MailComposer> {
     );
   }
 
-  Future<Mail?> _generateMailEntity() async {
+  Future<Mail?> _generateMailEntity({
+    bool? isDraft = false,
+  }) async {
     final htmlContent = parchmentHtml.encode(editorState!.document);
     final mdContent = parchmentMarkdown.encode(editorState!.document);
     final plainTextContent = _markdownToPlainText(mdContent);
 
-    final emptyFields = [];
+    if (isDraft != true) {
+      final emptyFields = [];
 
-    if (to == null || to!.isEmpty) {
-      setState(() {
-        toError = context.t.mail_composer.errors["no_recipient"]!;
-      });
-      return null;
-    }
+      if (to == null || to!.isEmpty) {
+        setState(() {
+          toError = context.t.mail_composer.errors["no_recipient"]!;
+        });
+        return null;
+      }
 
-    if (subjectController.text.isEmpty) {
-      emptyFields.add("subject");
-    }
+      if (subjectController.text.isEmpty) {
+        emptyFields.add("subject");
+      }
 
-    if (htmlContent.isEmpty) {
-      emptyFields.add("body");
-    }
+      if (htmlContent.isEmpty) {
+        emptyFields.add("body");
+      }
 
-    // ask in a dialog if the user still wants to send the email if there are empty fields
-    if (emptyFields.isNotEmpty) {
-      // For now, we just proceed without blocking
-      final confirm = await showDialog(
-        context: context,
-        builder: (context) => Dialog(
-          child: Container(
-            padding: EdgeInsets.all($constants.insets.lg),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  context.t.mail_composer.incomplete_email_modal.title,
-                  style: getTextTheme(context).headlineMedium!.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
-                ),
-                SizedBox(height: $constants.insets.md),
-                Text(
-                  context.t.mail_composer.incomplete_email_modal.description,
-                ),
-                SizedBox(height: $constants.insets.md),
-                ...emptyFields.map((field) =>
-                    Text("- ${context.t.mail_composer.fields[field]}")),
-                SizedBox(height: $constants.insets.md),
-                Text(
-                  context
-                      .t.mail_composer.incomplete_email_modal.want_to_go_back,
-                ),
-                SizedBox(height: $constants.insets.lg),
-                Row(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    PrimaryButtonSquare(
-                      outlined: true,
-                      onPressed: () {
-                        Navigator.pop(context, false); // Go back to editing
-                      },
-                      text: context
-                          .t.mail_composer.incomplete_email_modal.cancel_text,
-                    ),
-                    SizedBox(width: $constants.insets.md),
-                    PrimaryButtonSquare(
-                        text: context.t.mail_composer.incomplete_email_modal
-                            .confirm_text,
+      // ask in a dialog if the user still wants to send the email if there are empty fields
+      if (emptyFields.isNotEmpty) {
+        // For now, we just proceed without blocking
+        final confirm = await showDialog(
+          context: context,
+          builder: (context) => Dialog(
+            child: Container(
+              padding: EdgeInsets.all($constants.insets.lg),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    context.t.mail_composer.incomplete_email_modal.title,
+                    style: getTextTheme(context).headlineMedium!.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
+                  ),
+                  SizedBox(height: $constants.insets.md),
+                  Text(
+                    context.t.mail_composer.incomplete_email_modal.description,
+                  ),
+                  SizedBox(height: $constants.insets.md),
+                  ...emptyFields.map((field) =>
+                      Text("- ${context.t.mail_composer.fields[field]}")),
+                  SizedBox(height: $constants.insets.md),
+                  Text(
+                    context
+                        .t.mail_composer.incomplete_email_modal.want_to_go_back,
+                  ),
+                  SizedBox(height: $constants.insets.lg),
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      PrimaryButtonSquare(
+                        outlined: true,
                         onPressed: () {
-                          Navigator.pop(context, true); // Close dialog
-                        }),
-                  ],
-                ),
-              ],
+                          Navigator.pop(context, false); // Go back to editing
+                        },
+                        text: context
+                            .t.mail_composer.incomplete_email_modal.cancel_text,
+                      ),
+                      SizedBox(width: $constants.insets.md),
+                      PrimaryButtonSquare(
+                          text: context.t.mail_composer.incomplete_email_modal
+                              .confirm_text,
+                          onPressed: () {
+                            Navigator.pop(context, true); // Close dialog
+                          }),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
-        ),
-      );
-      if (confirm != true) {
-        return null; // User chose to go back
+        );
+        if (confirm != true) {
+          return null; // User chose to go back
+        }
       }
-    }
 
-    // loop through to list and validate email addresses, collect invalid ones
-    List<String> toEmailsErrors = [];
-    for (var email in to!) {
-      final emailRegex = RegExp(
-          r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9]+\.[a-zA-Z]+");
-      if (!emailRegex.hasMatch(email)) {
-        toEmailsErrors.add(email);
+      // loop through to list and validate email addresses, collect invalid ones
+      List<String> toEmailsErrors = [];
+      for (var email in to!) {
+        final emailRegex = RegExp(
+            r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9]+\.[a-zA-Z]+");
+        if (!emailRegex.hasMatch(email)) {
+          toEmailsErrors.add(email);
+        }
       }
-    }
-    if (toEmailsErrors.isNotEmpty) {
-      setState(() {
-        this.toEmailsErrors = toEmailsErrors;
-        toError = context.t.mail_composer.errors["invalid_recipient"]!;
-      });
-      return null;
-    } else {
-      setState(() {
-        this.toEmailsErrors = [];
-      });
+      if (toEmailsErrors.isNotEmpty) {
+        setState(() {
+          this.toEmailsErrors = toEmailsErrors;
+          toError = context.t.mail_composer.errors["invalid_recipient"]!;
+        });
+        return null;
+      } else {
+        setState(() {
+          this.toEmailsErrors = [];
+        });
+      }
     }
 
     final mail = Mail();
@@ -498,7 +506,9 @@ class MailComposerState extends ResponsiveState<MailComposer> {
 
     if (saveDraft) {
       // save the draft
-      final mail = await _generateMailEntity();
+      final mail = await _generateMailEntity(
+        isDraft: true,
+      );
       if (mail == null) {
         return;
       }
