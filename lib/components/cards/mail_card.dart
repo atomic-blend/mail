@@ -410,12 +410,15 @@ class _MailCardState extends State<MailCard> {
       showModalBottomSheet(
         isScrollControlled: true,
         context: context,
+        useRootNavigator: true,
         isDismissible: false,
         enableDrag: false,
         backgroundColor: Colors.transparent,
         builder: (context) => SizedBox(
-            height: getSize(context).height * 0.92,
-            child: MailComposer(mail: widget.draft)),
+            height: getSize(context).height * 0.88,
+            child: MailComposer(
+              mail: widget.draft,
+            )),
       );
     }
   }
