@@ -32,23 +32,20 @@ class NavConstants {
           icon: LineAwesome.plus_solid,
           label: "New Mail",
           onTap: () {
-            getIt<WindowLayoutController>().addWindow(
-              WindowMailComposer(
-                initiallyCollapsed: true,
-              ),
-            );
-            // if (isDesktop(context)) {
-            //   showDialog(
-            //       context: context,
-            //       builder: (context) => const Dialog(child: MailComposer()));
-            // } else {
-            //   showModalBottomSheet(
-            //       isScrollControlled: true,
-            //       context: context,
-            //       builder: (context) => SizedBox(
-            //           height: getSize(context).height * 0.88,
-            //           child: const MailComposer()));
-            // }
+            if (isDesktop(context)) {
+              getIt<WindowLayoutController>().addWindow(
+                WindowMailComposer(
+                  initiallyCollapsed: false,
+                ),
+              );
+            } else {
+              showModalBottomSheet(
+                  isScrollControlled: true,
+                  context: context,
+                  builder: (context) => SizedBox(
+                      height: getSize(context).height * 0.88,
+                      child: const MailComposer()));
+            }
           },
         ),
         subItems: [
