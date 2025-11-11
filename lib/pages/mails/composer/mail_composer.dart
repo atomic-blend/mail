@@ -235,7 +235,9 @@ class MailComposerState extends ResponsiveState<MailComposer> {
               ),
               Positioned(
                 bottom: MediaQuery.of(context).viewInsets.bottom == 0
-                    ? $constants.insets.lg
+                    ? widget.windowMode != true
+                        ? $constants.insets.lg
+                        : 0
                     : MediaQuery.of(context).viewInsets.bottom +
                         $constants.insets.xs,
                 left: 0,
@@ -245,6 +247,7 @@ class MailComposerState extends ResponsiveState<MailComposer> {
                       EdgeInsets.symmetric(horizontal: $constants.insets.md),
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       ABEditorToolbar(
                         editorState: editorState!,
