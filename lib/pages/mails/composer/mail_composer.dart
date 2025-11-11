@@ -462,7 +462,7 @@ class MailComposerState extends ResponsiveState<MailComposer> {
     if (editorState!.document.length <= 1 &&
         subjectController.text.isEmpty &&
         toController.text.isEmpty) {
-      Navigator.pop(context);
+      if (pop) Navigator.pop(context);
       return;
     }
     // ask the user if they want to save the draft when the body content is not filled but there is a subject / from / to
