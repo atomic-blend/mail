@@ -6,12 +6,14 @@ import 'package:flutter/material.dart';
 
 class ComposerToField extends StatefulWidget {
   final List<String>? emails;
+  final List<String>? erroredEmails;
   final Function(String)? onSelected;
   final Function(String)? onRemoved;
   final Color? backgroundColor;
   const ComposerToField(
       {super.key,
-      required this.emails,
+      this.emails,
+      this.erroredEmails,
       this.onSelected,
       this.onRemoved,
       this.backgroundColor});
@@ -49,7 +51,10 @@ class _ComposerToFieldState extends State<ComposerToField> {
                             horizontal: $constants.insets.xs,
                             vertical: $constants.insets.xs),
                         decoration: BoxDecoration(
-                          color: Colors.grey.shade200,
+                          color: widget.erroredEmails != null &&
+                                  widget.erroredEmails!.contains(email)
+                              ? getTheme(context).error.withValues(alpha: 0.2)
+                              : Colors.grey.shade200,
                           borderRadius:
                               BorderRadius.circular($constants.insets.sm),
                         ),

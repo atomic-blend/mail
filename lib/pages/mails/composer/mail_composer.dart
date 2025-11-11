@@ -175,6 +175,7 @@ class MailComposerState extends ResponsiveState<MailComposer> {
                     context.t.mail_composer.to,
                     ComposerToField(
                       emails: to,
+                      erroredEmails: toEmailsErrors,
                       backgroundColor: widget.backgroundColor,
                       onSelected: (value) {
                         setState(() {
@@ -318,7 +319,7 @@ class MailComposerState extends ResponsiveState<MailComposer> {
     );
   }
 
-  Mail? _generateMailEntity() {
+  Future<Mail?> _generateMailEntity() async {
     final htmlContent = parchmentHtml.encode(editorState!.document);
     final mdContent = parchmentMarkdown.encode(editorState!.document);
     final plainTextContent = _markdownToPlainText(mdContent);
@@ -333,16 +334,94 @@ class MailComposerState extends ResponsiveState<MailComposer> {
     }
 
     if (subjectController.text.isEmpty) {
-      emptyFields.add("Subject");
-      //TODO: ask user to confirm sending without subject in a dialog
+      emptyFields.add("subject");
     }
 
-    if (htmlContent.isEmpty && plainTextContent.isEmpty) {
-      emptyFields.add("Body");
-      // TODO: ask the user to confirm sending an empty email
+    if (htmlContent.isEmpty) {
+      emptyFields.add("body");
     }
 
-    //TODO: ask in a dialog if the user still wants to send the email if there are empty fields
+    // ask in a dialog if the user still wants to send the email if there are empty fields
+    if (emptyFields.isNotEmpty) {
+      // For now, we just proceed without blocking
+      final confirm = await showDialog(
+        context: context,
+        builder: (context) => Dialog(
+          child: Container(
+            padding: EdgeInsets.all($constants.insets.lg),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  context.t.mail_composer.incomplete_email_modal.title,
+                  style: getTextTheme(context).headlineMedium!.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
+                ),
+                SizedBox(height: $constants.insets.md),
+                Text(
+                  context.t.mail_composer.incomplete_email_modal.description,
+                ),
+                SizedBox(height: $constants.insets.md),
+                ...emptyFields.map((field) =>
+                    Text("- ${context.t.mail_composer.fields[field]}")),
+                SizedBox(height: $constants.insets.md),
+                Text(
+                  context
+                      .t.mail_composer.incomplete_email_modal.want_to_go_back,
+                ),
+                SizedBox(height: $constants.insets.lg),
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    PrimaryButtonSquare(
+                      outlined: true,
+                      onPressed: () {
+                        Navigator.pop(context, false); // Go back to editing
+                      },
+                      text: context
+                          .t.mail_composer.incomplete_email_modal.cancel_text,
+                    ),
+                    SizedBox(width: $constants.insets.md),
+                    PrimaryButtonSquare(
+                        text: context.t.mail_composer.incomplete_email_modal
+                            .confirm_text,
+                        onPressed: () {
+                          Navigator.pop(context, true); // Close dialog
+                        }),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+      if (confirm != true) {
+        return null; // User chose to go back
+      }
+    }
+
+    // loop through to list and validate email addresses, collect invalid ones
+    List<String> toEmailsErrors = [];
+    for (var email in to!) {
+      final emailRegex = RegExp(
+          r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9]+\.[a-zA-Z]+");
+      if (!emailRegex.hasMatch(email)) {
+        toEmailsErrors.add(email);
+      }
+    }
+    if (toEmailsErrors.isNotEmpty) {
+      setState(() {
+        this.toEmailsErrors = toEmailsErrors;
+        toError = context.t.mail_composer.errors["invalid_recipient"]!;
+      });
+      return null;
+    } else {
+      setState(() {
+        this.toEmailsErrors = [];
+      });
+    }
 
     final mail = Mail();
     mail.headers = [
@@ -358,13 +437,14 @@ class MailComposerState extends ResponsiveState<MailComposer> {
     return mail;
   }
 
-  void _sendMail() {
-    final mail = _generateMailEntity();
+  void _sendMail() async {
+    final mail = await _generateMailEntity();
 
     if (mail == null) {
       return;
     }
 
+    if (!context.mounted) return;
     context.read<MailBloc>().add(SendMail(mail));
   }
 
@@ -417,7 +497,7 @@ class MailComposerState extends ResponsiveState<MailComposer> {
 
     if (saveDraft) {
       // save the draft
-      final mail = _generateMailEntity();
+      final mail = await _generateMailEntity();
       if (mail == null) {
         return;
       }

@@ -120,11 +120,19 @@ class _TranslationsMailComposerFr implements TranslationsMailComposerEn {
 	@override String get from => 'De';
 	@override String get subject => 'Objet';
 	@override String get to => 'À';
+	@override String get body => 'Corps';
 	@override String get send => 'Envoyer';
+	@override Map<String, String> get fields => {
+		'to': 'À',
+		'subject': 'Objet',
+		'body': 'Corps',
+	};
 	@override late final _TranslationsMailComposerSaveDraftModalFr save_draft_modal = _TranslationsMailComposerSaveDraftModalFr._(_root);
+	@override late final _TranslationsMailComposerIncompleteEmailModalFr incomplete_email_modal = _TranslationsMailComposerIncompleteEmailModalFr._(_root);
 	@override Map<String, String> get errors => {
 		'error_sending_email': 'Une erreur s\'est produite lors de l\'envoi de l\'e-mail. Veuillez réessayer.',
 		'no_recipient': 'Veuillez spécifier au moins un destinataire.',
+		'invalid_recipient': 'Un ou plusieurs destinataires ont une adresse e-mail invalide.',
 	};
 }
 
@@ -268,6 +276,20 @@ class _TranslationsMailComposerSaveDraftModalFr implements TranslationsMailCompo
 	@override String get cancel_text => 'Annuler';
 }
 
+// Path: mail_composer.incomplete_email_modal
+class _TranslationsMailComposerIncompleteEmailModalFr implements TranslationsMailComposerIncompleteEmailModalEn {
+	_TranslationsMailComposerIncompleteEmailModalFr._(this._root);
+
+	final TranslationsFr _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'E-mail incomplet';
+	@override String get description => 'Le mail que vous essayez d\'envoyer est incomplet.\nVeuillez vérifier les champs suivants :';
+	@override String get want_to_go_back => 'Voulez-vous revenir en arrière pour le compléter ?';
+	@override String get cancel_text => 'Revenir';
+	@override String get confirm_text => 'Envoyer quand même';
+}
+
 // Path: account.sections
 class _TranslationsAccountSectionsFr implements TranslationsAccountSectionsEn {
 	_TranslationsAccountSectionsFr._(this._root);
@@ -327,13 +349,23 @@ extension on TranslationsFr {
 			case 'mail_composer.from': return 'De';
 			case 'mail_composer.subject': return 'Objet';
 			case 'mail_composer.to': return 'À';
+			case 'mail_composer.body': return 'Corps';
 			case 'mail_composer.send': return 'Envoyer';
+			case 'mail_composer.fields.to': return 'À';
+			case 'mail_composer.fields.subject': return 'Objet';
+			case 'mail_composer.fields.body': return 'Corps';
 			case 'mail_composer.save_draft_modal.title': return 'Enregistrer le brouillon';
 			case 'mail_composer.save_draft_modal.description': return 'Voulez-vous enregistrer le brouillon ?';
 			case 'mail_composer.save_draft_modal.confirm_text': return 'Enregistrer';
 			case 'mail_composer.save_draft_modal.cancel_text': return 'Annuler';
+			case 'mail_composer.incomplete_email_modal.title': return 'E-mail incomplet';
+			case 'mail_composer.incomplete_email_modal.description': return 'Le mail que vous essayez d\'envoyer est incomplet.\nVeuillez vérifier les champs suivants :';
+			case 'mail_composer.incomplete_email_modal.want_to_go_back': return 'Voulez-vous revenir en arrière pour le compléter ?';
+			case 'mail_composer.incomplete_email_modal.cancel_text': return 'Revenir';
+			case 'mail_composer.incomplete_email_modal.confirm_text': return 'Envoyer quand même';
 			case 'mail_composer.errors.error_sending_email': return 'Une erreur s\'est produite lors de l\'envoi de l\'e-mail. Veuillez réessayer.';
 			case 'mail_composer.errors.no_recipient': return 'Veuillez spécifier au moins un destinataire.';
+			case 'mail_composer.errors.invalid_recipient': return 'Un ou plusieurs destinataires ont une adresse e-mail invalide.';
 			case 'account.sections.account': return 'Compte';
 			case 'under_construction.title': return 'On travaille dessus !';
 			case 'under_construction.description': return 'Cette fonctionnalité est en cours de développement.\n\nRevenez bientôt pour découvrir les dernières mises à jour !';
