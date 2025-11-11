@@ -45,14 +45,30 @@
     "from": "From",
     "subject": "Subject",
     "to": "To",
+    "body": "Body",
+    "send": "Send",
+    "fields(map)": {
+      "to": "To",
+      "subject": "Subject",
+      "body": "Body"
+    },
     "save_draft_modal": {
       "title": "Save Draft",
       "description": "Do you want to save the draft?",
       "confirm_text": "Save",
       "cancel_text": "Discard"
     },
+    "incomplete_email_modal": {
+      "title": "Incomplete Email",
+      "description": "The email you are trying to send is incomplete.\nPlease check the following fields:",
+      "want_to_go_back": "Do you want to go back and complete it?",
+      "cancel_text": "Go Back",
+      "confirm_text": "Send Anyway"
+    },
     "errors(map)": {
-      "error_sending_email": "An error occurred while sending the email. Please try again."
+      "error_sending_email": "An error occurred while sending the email. Please try again.",
+      "no_recipient": "Please specify at least one recipient.",
+      "invalid_recipient": "One or more recipients have an invalid email address."
     }
   },
   "under_construction": {

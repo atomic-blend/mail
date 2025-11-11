@@ -163,9 +163,23 @@ class TranslationsMailComposerEn {
 	/// en: 'To'
 	String get to => 'To';
 
+	/// en: 'Body'
+	String get body => 'Body';
+
+	/// en: 'Send'
+	String get send => 'Send';
+
+	Map<String, String> get fields => {
+		'to': 'To',
+		'subject': 'Subject',
+		'body': 'Body',
+	};
 	late final TranslationsMailComposerSaveDraftModalEn save_draft_modal = TranslationsMailComposerSaveDraftModalEn._(_root);
+	late final TranslationsMailComposerIncompleteEmailModalEn incomplete_email_modal = TranslationsMailComposerIncompleteEmailModalEn._(_root);
 	Map<String, String> get errors => {
 		'error_sending_email': 'An error occurred while sending the email. Please try again.',
+		'no_recipient': 'Please specify at least one recipient.',
+		'invalid_recipient': 'One or more recipients have an invalid email address.',
 	};
 }
 
@@ -364,6 +378,30 @@ class TranslationsMailComposerSaveDraftModalEn {
 	String get cancel_text => 'Discard';
 }
 
+// Path: mail_composer.incomplete_email_modal
+class TranslationsMailComposerIncompleteEmailModalEn {
+	TranslationsMailComposerIncompleteEmailModalEn._(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Incomplete Email'
+	String get title => 'Incomplete Email';
+
+	/// en: 'The email you are trying to send is incomplete. Please check the following fields:'
+	String get description => 'The email you are trying to send is incomplete.\nPlease check the following fields:';
+
+	/// en: 'Do you want to go back and complete it?'
+	String get want_to_go_back => 'Do you want to go back and complete it?';
+
+	/// en: 'Go Back'
+	String get cancel_text => 'Go Back';
+
+	/// en: 'Send Anyway'
+	String get confirm_text => 'Send Anyway';
+}
+
 // Path: toast_notifications.selected_mails
 class TranslationsToastNotificationsSelectedMailsEn {
 	TranslationsToastNotificationsSelectedMailsEn._(this._root);
@@ -422,11 +460,23 @@ extension on Translations {
 			case 'mail_composer.from': return 'From';
 			case 'mail_composer.subject': return 'Subject';
 			case 'mail_composer.to': return 'To';
+			case 'mail_composer.body': return 'Body';
+			case 'mail_composer.send': return 'Send';
+			case 'mail_composer.fields.to': return 'To';
+			case 'mail_composer.fields.subject': return 'Subject';
+			case 'mail_composer.fields.body': return 'Body';
 			case 'mail_composer.save_draft_modal.title': return 'Save Draft';
 			case 'mail_composer.save_draft_modal.description': return 'Do you want to save the draft?';
 			case 'mail_composer.save_draft_modal.confirm_text': return 'Save';
 			case 'mail_composer.save_draft_modal.cancel_text': return 'Discard';
+			case 'mail_composer.incomplete_email_modal.title': return 'Incomplete Email';
+			case 'mail_composer.incomplete_email_modal.description': return 'The email you are trying to send is incomplete.\nPlease check the following fields:';
+			case 'mail_composer.incomplete_email_modal.want_to_go_back': return 'Do you want to go back and complete it?';
+			case 'mail_composer.incomplete_email_modal.cancel_text': return 'Go Back';
+			case 'mail_composer.incomplete_email_modal.confirm_text': return 'Send Anyway';
 			case 'mail_composer.errors.error_sending_email': return 'An error occurred while sending the email. Please try again.';
+			case 'mail_composer.errors.no_recipient': return 'Please specify at least one recipient.';
+			case 'mail_composer.errors.invalid_recipient': return 'One or more recipients have an invalid email address.';
 			case 'under_construction.title': return 'We\'re working on it!';
 			case 'under_construction.description': return 'This feature is not yet available, but we\'re working hard to bring it to you soon.\n\nStay tuned!';
 			case 'more.title': return 'More';

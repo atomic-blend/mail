@@ -40,14 +40,30 @@
     "from": "De",
     "subject": "Objet",
     "to": "À",
+    "body": "Corps",
+    "send": "Envoyer",
+    "fields(map)": {
+      "to": "À",
+      "subject": "Objet",
+      "body": "Corps"
+    },
     "save_draft_modal": {
       "title": "Enregistrer le brouillon",
       "description": "Voulez-vous enregistrer le brouillon ?",
       "confirm_text": "Enregistrer",
       "cancel_text": "Annuler"
     },
+    "incomplete_email_modal": {
+      "title": "E-mail incomplet",
+      "description": "Le mail que vous essayez d'envoyer est incomplet.\nVeuillez vérifier les champs suivants :",
+      "want_to_go_back": "Voulez-vous revenir en arrière pour le compléter ?",
+      "cancel_text": "Revenir",
+      "confirm_text": "Envoyer quand même"
+    },
     "errors(map)": {
-      "error_sending_email": "Une erreur s'est produite lors de l'envoi de l'e-mail. Veuillez réessayer."
+      "error_sending_email": "Une erreur s'est produite lors de l'envoi de l'e-mail. Veuillez réessayer.",
+      "no_recipient": "Veuillez spécifier au moins un destinataire.",
+      "invalid_recipient": "Un ou plusieurs destinataires ont une adresse e-mail invalide."
     }
   },
   "account": {
