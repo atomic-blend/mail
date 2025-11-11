@@ -169,6 +169,7 @@ class TranslationsMailComposerEn {
 	late final TranslationsMailComposerSaveDraftModalEn save_draft_modal = TranslationsMailComposerSaveDraftModalEn._(_root);
 	Map<String, String> get errors => {
 		'error_sending_email': 'An error occurred while sending the email. Please try again.',
+		'no_recipient': 'Please specify at least one recipient.',
 	};
 }
 
@@ -431,6 +432,7 @@ extension on Translations {
 			case 'mail_composer.save_draft_modal.confirm_text': return 'Save';
 			case 'mail_composer.save_draft_modal.cancel_text': return 'Discard';
 			case 'mail_composer.errors.error_sending_email': return 'An error occurred while sending the email. Please try again.';
+			case 'mail_composer.errors.no_recipient': return 'Please specify at least one recipient.';
 			case 'under_construction.title': return 'We\'re working on it!';
 			case 'under_construction.description': return 'This feature is not yet available, but we\'re working hard to bring it to you soon.\n\nStay tuned!';
 			case 'more.title': return 'More';

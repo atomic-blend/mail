@@ -124,6 +124,7 @@ class _TranslationsMailComposerFr implements TranslationsMailComposerEn {
 	@override late final _TranslationsMailComposerSaveDraftModalFr save_draft_modal = _TranslationsMailComposerSaveDraftModalFr._(_root);
 	@override Map<String, String> get errors => {
 		'error_sending_email': 'Une erreur s\'est produite lors de l\'envoi de l\'e-mail. Veuillez réessayer.',
+		'no_recipient': 'Veuillez spécifier au moins un destinataire.',
 	};
 }
 
@@ -332,6 +333,7 @@ extension on TranslationsFr {
 			case 'mail_composer.save_draft_modal.confirm_text': return 'Enregistrer';
 			case 'mail_composer.save_draft_modal.cancel_text': return 'Annuler';
 			case 'mail_composer.errors.error_sending_email': return 'Une erreur s\'est produite lors de l\'envoi de l\'e-mail. Veuillez réessayer.';
+			case 'mail_composer.errors.no_recipient': return 'Veuillez spécifier au moins un destinataire.';
 			case 'account.sections.account': return 'Compte';
 			case 'under_construction.title': return 'On travaille dessus !';
 			case 'under_construction.description': return 'Cette fonctionnalité est en cours de développement.\n\nRevenez bientôt pour découvrir les dernières mises à jour !';

@@ -48,7 +48,8 @@
       "cancel_text": "Annuler"
     },
     "errors(map)": {
-      "error_sending_email": "Une erreur s'est produite lors de l'envoi de l'e-mail. Veuillez réessayer."
+      "error_sending_email": "Une erreur s'est produite lors de l'envoi de l'e-mail. Veuillez réessayer.",
+      "no_recipient": "Veuillez spécifier au moins un destinataire."
     }
   },
   "account": {

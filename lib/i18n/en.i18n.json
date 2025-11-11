@@ -53,7 +53,8 @@
       "cancel_text": "Discard"
     },
     "errors(map)": {
-      "error_sending_email": "An error occurred while sending the email. Please try again."
+      "error_sending_email": "An error occurred while sending the email. Please try again.",
+      "no_recipient": "Please specify at least one recipient."
     }
   },
   "under_construction": {

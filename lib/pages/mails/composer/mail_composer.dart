@@ -48,6 +48,8 @@ class MailComposerState extends ResponsiveState<MailComposer> {
   String? from;
   List<String>? userEmails = [];
   List<String>? to = [];
+  String? toError;
+  List<String>? toEmailsErrors = [];
 
   @override
   void initState() {
@@ -185,6 +187,7 @@ class MailComposerState extends ResponsiveState<MailComposer> {
                         });
                       },
                     ),
+                    errorText: toError,
                   ),
                   // _buildPaddedDivider(),
                   _buildFieldWithLabel(
@@ -279,40 +282,67 @@ class MailComposerState extends ResponsiveState<MailComposer> {
     });
   }
 
-  Widget _buildFieldWithLabel(String label, Widget field) {
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: $constants.insets.sm),
-      child: Row(
-        children: [
-          Text(
-            "$label:",
-            style:
-                getTextTheme(context).bodyMedium!.copyWith(color: Colors.grey),
+  Widget _buildFieldWithLabel(String label, Widget field, {String? errorText}) {
+    return Column(
+      children: [
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: $constants.insets.sm),
+          child: Row(
+            children: [
+              Text(
+                "$label:",
+                style: getTextTheme(context)
+                    .bodyMedium!
+                    .copyWith(color: Colors.grey),
+              ),
+              SizedBox(width: $constants.insets.xxs),
+              Expanded(child: field),
+            ],
           ),
-          SizedBox(width: $constants.insets.xxs),
-          Expanded(child: field),
-        ],
-      ),
+        ),
+        if (errorText != null)
+          Padding(
+            padding: EdgeInsets.symmetric(
+                horizontal: $constants.insets.sm, vertical: 2),
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                errorText,
+                style: getTextTheme(context)
+                    .bodySmall!
+                    .copyWith(color: getTheme(context).error),
+              ),
+            ),
+          ),
+      ],
     );
   }
 
-  Mail _generateMailEntity() {
+  Mail? _generateMailEntity() {
     final htmlContent = parchmentHtml.encode(editorState!.document);
     final mdContent = parchmentMarkdown.encode(editorState!.document);
     final plainTextContent = _markdownToPlainText(mdContent);
 
+    final emptyFields = [];
+
     if (to == null || to!.isEmpty) {
-      //TODO: show error to user
-      throw Exception("No recipient specified");
+      setState(() {
+        toError = context.t.mail_composer.errors["no_recipient"]!;
+      });
+      return null;
     }
 
     if (subjectController.text.isEmpty) {
+      emptyFields.add("Subject");
       //TODO: ask user to confirm sending without subject in a dialog
     }
 
     if (htmlContent.isEmpty && plainTextContent.isEmpty) {
+      emptyFields.add("Body");
       // TODO: ask the user to confirm sending an empty email
     }
+
+    //TODO: ask in a dialog if the user still wants to send the email if there are empty fields
 
     final mail = Mail();
     mail.headers = [
@@ -320,7 +350,7 @@ class MailComposerState extends ResponsiveState<MailComposer> {
       {"Key": "From", "Value": from},
       {"Key": "Subject", "Value": subjectController.text},
     ];
-    
+
     mail.textContent = plainTextContent;
     mail.htmlContent = htmlContent;
     mail.createdAt = DateTime.now();
@@ -330,6 +360,10 @@ class MailComposerState extends ResponsiveState<MailComposer> {
 
   void _sendMail() {
     final mail = _generateMailEntity();
+
+    if (mail == null) {
+      return;
+    }
 
     context.read<MailBloc>().add(SendMail(mail));
   }
@@ -384,6 +418,9 @@ class MailComposerState extends ResponsiveState<MailComposer> {
     if (saveDraft) {
       // save the draft
       final mail = _generateMailEntity();
+      if (mail == null) {
+        return;
+      }
       if (widget.mail != null) {
         // update the draft
         if (!context.mounted) return;
