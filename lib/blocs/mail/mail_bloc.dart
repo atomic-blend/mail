@@ -130,7 +130,10 @@ class MailBloc extends HydratedBloc<MailEvent, MailState> {
 
       // Emit final state with all mails, drafts, and sent mails
       final newState = MailState.transform(MailLoaded.new, prevState,
-          mails: allMails, drafts: drafts, sentMails: allSent, latestSync: DateTime.now());
+          mails: allMails,
+          drafts: drafts,
+          sentMails: allSent,
+          latestSync: DateTime.now());
 
       emit(newState);
     } catch (e) {
@@ -235,7 +238,10 @@ class MailBloc extends HydratedBloc<MailEvent, MailState> {
 
       // Emit final state with merged mails, drafts, and sent mails
       final newState = MailState.transform(MailLoaded.new, prevState,
-          mails: mergedMails, drafts: mergedDrafts, sentMails: mergedSent, latestSync: DateTime.now());
+          mails: mergedMails,
+          drafts: mergedDrafts,
+          sentMails: mergedSent,
+          latestSync: DateTime.now());
 
       emit(newState);
     } catch (e) {
@@ -264,8 +270,10 @@ class MailBloc extends HydratedBloc<MailEvent, MailState> {
           currentPage++;
           // Emit intermediate state to show progress
           final intermediateState = MailState.transform(
-              MailLoaded.new, prevState,
-              sentMails: allSent,);
+            MailLoaded.new,
+            prevState,
+            sentMails: allSent,
+          );
           emit(intermediateState);
         }
       }

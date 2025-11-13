@@ -154,8 +154,16 @@ class MailLoaded extends MailState {
       super.untrashedMails});
 
   @override
-  List<Object?> get props =>
-      [mails, latestSync, drafts, sentMails, archivedMails, unarchivedMails, trashedMails, untrashedMails];
+  List<Object?> get props => [
+        mails,
+        latestSync,
+        drafts,
+        sentMails,
+        archivedMails,
+        unarchivedMails,
+        trashedMails,
+        untrashedMails
+      ];
 }
 
 class MailLoadingError extends MailState {
