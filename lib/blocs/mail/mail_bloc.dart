@@ -38,9 +38,18 @@ class MailBloc extends HydratedBloc<MailEvent, MailState> {
         drafts: (json["drafts"] as List)
             .map((e) => send_mail.SendMail.fromJson(e))
             .toList(),
+        sentMails: (json["sent_mails"] as List)
+            .map((e) => send_mail.SendMail.fromJson(e))
+            .toList(),
         latestSync: json["latestSync"] != null
             ? DateTime.parse(json["latestSync"])
             : null,
+        readMails: List<String>.from(json["readMails"] ?? []),
+        unreadMails: List<String>.from(json["unreadMails"] ?? []),
+        archivedMails: List<String>.from(json["archivedMails"] ?? []),
+        unarchivedMails: List<String>.from(json["unarchivedMails"] ?? []),
+        trashedMails: List<String>.from(json["trashedMails"] ?? []),
+        untrashedMails: List<String>.from(json["untrashedMails"] ?? []),
       );
     }
     return MailInitial();
@@ -52,7 +61,14 @@ class MailBloc extends HydratedBloc<MailEvent, MailState> {
       return {
         "mails": state.mails!.map((e) => e.toJson()).toList(),
         "drafts": state.drafts!.map((e) => e.toJson()).toList(),
+        "sent_mails": state.sentMails!.map((e) => e.toJson()).toList(),
         "latestSync": state.latestSync?.toIso8601String(),
+        "readMails": state.readMails.toList(),
+        "unreadMails": state.unreadMails.toList(),
+        "archivedMails": state.archivedMails.toList(),
+        "unarchivedMails": state.unarchivedMails.toList(),
+        "trashedMails": state.trashedMails.toList(),
+        "untrashedMails": state.untrashedMails.toList(),
       };
     }
     return null;
@@ -448,5 +464,5 @@ class MailBloc extends HydratedBloc<MailEvent, MailState> {
 
   FutureOr<void> _onLogout(MailLogout event, Emitter<MailState> emit) {
     emit(MailInitial());
-  } 
+  }
 }
