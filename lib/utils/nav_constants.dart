@@ -74,6 +74,14 @@ class NavConstants {
             header: _buildHeader(context, "Archive"),
           ),
           NavigationItem(
+            key: Key("sent"),
+            icon: LineAwesome.envelope,
+            cupertinoIcon: CupertinoIcons.tray_arrow_up,
+            label: "Sent",
+            location: "/sent",
+            header: _buildHeader(context, "Sent"),
+          ),
+          NavigationItem(
             key: Key("trashed"),
             icon: LineAwesome.trash_solid,
             cupertinoIcon: CupertinoIcons.bin_xmark_fill,
