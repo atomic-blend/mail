@@ -12,6 +12,14 @@ final class SyncSince extends MailEvent {
   const SyncSince();
 }
 
+final class SyncSentPaginated extends MailEvent {
+  const SyncSentPaginated();
+}
+
+final class SyncSentSince extends MailEvent {
+  const SyncSentSince();
+}
+
 final class MarkAsRead extends MailEvent {
   const MarkAsRead({this.mailId, this.mailIds});
   final String? mailId;

@@ -220,7 +220,7 @@ class MailService {
         await globalApiClient.get('/mail/send?page=$page&size=$size');
     if (result != null && result.statusCode == 200) {
       final List<send_mail.SendMail> decryptedSent = [];
-      final sentMails = result.data["sent_mails"];
+      final sentMails = result.data["send_mails"];
 
       for (var sent in (sentMails ?? [])) {
         final decryptedSentMail = await send_mail.SendMail.decrypt(

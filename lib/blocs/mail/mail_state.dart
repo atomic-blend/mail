@@ -37,8 +37,11 @@ sealed class MailState extends Equatable {
         readMails,
         unreadMails,
         drafts,
+        sentMails,
         archivedMails,
-        unarchivedMails
+        unarchivedMails,
+        trashedMails,
+        untrashedMails
       ];
 
   /// Transforms one MailState to another while preserving all properties
@@ -152,7 +155,7 @@ class MailLoaded extends MailState {
 
   @override
   List<Object?> get props =>
-      [mails, latestSync, drafts, archivedMails, unarchivedMails];
+      [mails, latestSync, drafts, sentMails, archivedMails, unarchivedMails, trashedMails, untrashedMails];
 }
 
 class MailLoadingError extends MailState {

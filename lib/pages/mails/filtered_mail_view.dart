@@ -88,6 +88,7 @@ class _FliteredMailViewState extends State<FliteredMailView> {
                 : getSize(context).width,
             child: Column(
               children: [
+                Text(mailState.sentMails?.length.toString() ?? '0'),
                 Expanded(
                   child: MailList(
                     mails: filteredMails,
