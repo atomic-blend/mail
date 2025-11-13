@@ -64,54 +64,58 @@ class _MailCardState extends State<MailCard> {
     }
     return LayoutBuilder(builder: (context, constraints) {
       return Slidable(
-        enabled: widget.enabled ?? true,
+        enabled: widget.enabled == true && widget.isSent != true,
         endActionPane: ActionPane(motion: const ScrollMotion(), children: [
           SizedBox(
             width: $constants.insets.xs,
           ),
-          Theme(
-            data: Theme.of(context).copyWith(
-                outlinedButtonTheme: const OutlinedButtonThemeData(
-              style: ButtonStyle(
-                  iconColor: WidgetStatePropertyAll(Colors.white),
-                  iconSize: WidgetStatePropertyAll(25)),
-            )),
-            child: SlidableAction(
-              onPressed: (context) {
-                if (widget.draft != null) {
-                  showDialog(
-                      context: context,
-                      builder: (context) => ABModal(
-                            title: context.t.mail_card.delete_draft_modal.title,
-                            description: context
-                                .t.mail_card.delete_draft_modal.description,
-                            warning:
-                                context.t.mail_card.delete_draft_modal.warning,
-                            onConfirm: () {
-                              widget.onDelete?.call(widget.draft!.id!);
-                              Navigator.of(context).pop();
-                            },
-                          ));
-                } else {
-                  if (mail.trashed != true) {
-                    context.read<MailBloc>().add(TrashMail(mailId: mail.id!));
+          if (widget.isSent != true)
+            Theme(
+              data: Theme.of(context).copyWith(
+                  outlinedButtonTheme: const OutlinedButtonThemeData(
+                style: ButtonStyle(
+                    iconColor: WidgetStatePropertyAll(Colors.white),
+                    iconSize: WidgetStatePropertyAll(25)),
+              )),
+              child: SlidableAction(
+                onPressed: (context) {
+                  if (widget.draft != null) {
+                    showDialog(
+                        context: context,
+                        builder: (context) => ABModal(
+                              title:
+                                  context.t.mail_card.delete_draft_modal.title,
+                              description: context
+                                  .t.mail_card.delete_draft_modal.description,
+                              warning: context
+                                  .t.mail_card.delete_draft_modal.warning,
+                              onConfirm: () {
+                                widget.onDelete?.call(widget.draft!.id!);
+                                Navigator.of(context).pop();
+                              },
+                            ));
                   } else {
-                    context.read<MailBloc>().add(UntrashMail(mailId: mail.id!));
+                    if (mail.trashed != true) {
+                      context.read<MailBloc>().add(TrashMail(mailId: mail.id!));
+                    } else {
+                      context
+                          .read<MailBloc>()
+                          .add(UntrashMail(mailId: mail.id!));
+                    }
                   }
-                }
-              },
-              backgroundColor: getTheme(context).error,
-              foregroundColor: Colors.white,
-              icon: widget.draft != null
-                  ? CupertinoIcons.delete
-                  : mail.trashed != true
-                      ? CupertinoIcons.delete
-                      : CupertinoIcons.trash_slash,
-              borderRadius: BorderRadius.circular(
-                $constants.corners.sm,
+                },
+                backgroundColor: getTheme(context).error,
+                foregroundColor: Colors.white,
+                icon: widget.draft != null
+                    ? CupertinoIcons.delete
+                    : mail.trashed != true
+                        ? CupertinoIcons.delete
+                        : CupertinoIcons.trash_slash,
+                borderRadius: BorderRadius.circular(
+                  $constants.corners.sm,
+                ),
               ),
             ),
-          ),
           SizedBox(
             width: $constants.insets.xs,
           ),
