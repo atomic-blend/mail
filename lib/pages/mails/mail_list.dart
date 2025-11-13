@@ -13,6 +13,7 @@ class MailList extends StatefulWidget {
   final Function(dynamic)? onDeselect;
   final List<dynamic>? selectedMails;
   final bool? drafts;
+  final bool? sent;
   final Widget? header;
   final Function(String)? onDelete;
   final bool? isSelecting;
@@ -21,6 +22,7 @@ class MailList extends StatefulWidget {
   const MailList({
     super.key,
     this.drafts = false,
+    this.sent = false,
     this.onDelete,
     this.header,
     this.mails,
@@ -109,8 +111,13 @@ class _MailListState extends State<MailList> {
                   setSelectMode: (value) {
                     widget.setIsSelecting?.call(value);
                   },
-                  draft: widget.drafts == true ? mail as SendMail : null,
-                  mail: widget.drafts != true ? mail : null,
+                  draft: widget.drafts == true || widget.sent == true
+                      ? mail as SendMail
+                      : null,
+                  mail: widget.drafts != true && widget.sent != true
+                      ? mail
+                      : null,
+                  isSent: widget.sent == true,
                   onDelete: widget.onDelete,
                   onSelect: widget.onSelect,
                   onDeselect: widget.onDeselect,

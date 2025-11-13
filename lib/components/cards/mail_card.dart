@@ -1,3 +1,4 @@
+import 'package:ab_shared/components/app/window_layout/window_layout_controller.dart';
 import 'package:ab_shared/components/modals/ab_modal.dart';
 import 'package:ab_shared/utils/constants.dart';
 import 'package:ab_shared/utils/shortcuts.dart';
@@ -13,12 +14,16 @@ import 'package:mail/components/avatars/mail_user_avatar.dart';
 import 'package:mail/i18n/strings.g.dart';
 import 'package:mail/models/mail/mail.dart';
 import 'package:mail/pages/mails/composer/mail_composer.dart';
+import 'package:mail/pages/mails/composer/window_mail_composer.dart';
 import 'package:mail/pages/mails/mail_details.dart';
 import 'package:mail/services/sync.service.dart';
 import 'package:mail/models/send_mail/send_mail.dart' as send_mail;
+import 'package:mail/utils/get_it.dart';
 
 class MailCard extends StatefulWidget {
   final Mail? mail;
+
+  final bool? isSent;
   final send_mail.SendMail? draft;
   final Function(String)? onDelete;
   final Function(dynamic)? onSelect;
@@ -33,6 +38,7 @@ class MailCard extends StatefulWidget {
       {super.key,
       this.mail,
       this.draft,
+      this.isSent,
       this.onDelete,
       this.onSelect,
       this.onDeselect,
@@ -214,7 +220,30 @@ class _MailCardState extends State<MailCard> {
                     }
                   }
                 } else {
-                  _openComposer(context);
+                  if (widget.isSent == true) {
+                    if (getSize(context).width < $constants.screenSize.md) {
+                      // on mobile, tapping the mail opens it in the detail screen
+                      await Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => MailDetailScreen(
+                            mail,
+                            onCancel: () {
+                              Navigator.of(context).pop();
+                            },
+                          ),
+                        ),
+                      );
+                    } else {
+                      // on desktop, tapping the mail opens it in the preview panel
+                      // multi-select mode enables itself when the user clicks on the avatar / checkbox
+                      _toggleSelected(
+                        mail,
+                        reset: widget.selectMode != true,
+                      );
+                    }
+                  } else {
+                    _openComposer(context);
+                  }
                 }
               },
               child: Row(
@@ -240,7 +269,7 @@ class _MailCardState extends State<MailCard> {
                   else
                     MailUserAvatar(
                       value: mail.getHeader("From"),
-                      read: mail.read,
+                      read: mail.read != true || widget.draft != null,
                       onTap: () {
                         if (isDesktop(context)) {
                           if (widget.selectMode == true &&
@@ -268,7 +297,9 @@ class _MailCardState extends State<MailCard> {
                           mail.getHeader("From"),
                           style: getTextTheme(context).headlineSmall!.copyWith(
                                 fontWeight:
-                                    mail.read != true ? FontWeight.bold : null,
+                                    mail.read != true && widget.draft == null
+                                        ? FontWeight.bold
+                                        : null,
                               ),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
@@ -283,7 +314,9 @@ class _MailCardState extends State<MailCard> {
                           mail.getHeader("Subject"),
                           style: getTextTheme(context).bodyMedium!.copyWith(
                                 fontWeight:
-                                    mail.read != true ? FontWeight.bold : null,
+                                    mail.read != true && widget.draft == null
+                                        ? FontWeight.bold
+                                        : null,
                               ),
                           overflow: TextOverflow.ellipsis,
                           textAlign: TextAlign.left,
@@ -392,20 +425,12 @@ class _MailCardState extends State<MailCard> {
 
   void _openComposer(BuildContext context) {
     if (isDesktop(context)) {
-      showDialog(
-          context: context,
-          builder: (context) => Dialog(
-                child: SizedBox(
-                  height: getSize(context).height * 0.8,
-                  width: getSize(context).width * 0.8,
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular($constants.corners.md),
-                    child: MailComposer(
-                      mail: widget.draft,
-                    ),
-                  ),
-                ),
-              ));
+      getIt<WindowLayoutController>().addWindow(
+        WindowMailComposer(
+          initiallyCollapsed: false,
+          draft: widget.draft,
+        ),
+      );
     } else {
       showModalBottomSheet(
         isScrollControlled: true,

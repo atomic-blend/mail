@@ -200,6 +200,7 @@ class _TranslationsEmailFoldersFr implements TranslationsEmailFoldersEn {
 	@override String get drafts => 'Brouillons';
 	@override String get archive => 'Archive';
 	@override String get trashed => 'Corbeille';
+	@override String get sent => 'Envoyés';
 	@override String get all => 'Tous';
 }
 
@@ -378,6 +379,7 @@ extension on TranslationsFr {
 			case 'email_folders.drafts': return 'Brouillons';
 			case 'email_folders.archive': return 'Archive';
 			case 'email_folders.trashed': return 'Corbeille';
+			case 'email_folders.sent': return 'Envoyés';
 			case 'email_folders.all': return 'Tous';
 			case 'mail_actions.mark_as_read': return 'Marquer comme lu';
 			case 'mail_actions.mark_as_unread': return 'Marquer comme non lu';

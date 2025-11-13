@@ -254,6 +254,9 @@ class TranslationsEmailFoldersEn {
 	/// en: 'Trashed'
 	String get trashed => 'Trashed';
 
+	/// en: 'Sent'
+	String get sent => 'Sent';
+
 	/// en: 'All'
 	String get all => 'All';
 }
@@ -486,6 +489,7 @@ extension on Translations {
 			case 'email_folders.drafts': return 'Drafts';
 			case 'email_folders.archive': return 'Archive';
 			case 'email_folders.trashed': return 'Trashed';
+			case 'email_folders.sent': return 'Sent';
 			case 'email_folders.all': return 'All';
 			case 'mail_actions.mark_as_read': return 'Mark as read';
 			case 'mail_actions.mark_as_unread': return 'Mark as unread';
