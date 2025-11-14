@@ -37,7 +37,6 @@ class _DraftScreenState extends State<DraftScreen> {
   Widget build(BuildContext context) {
     return BlocBuilder<MailBloc, MailState>(builder: (context, mailState) {
       final drafts = mailState.drafts ?? [];
-      print("Rendering Drafts Screen with ${drafts.length} drafts");
       return Row(
         children: [
           ConditionalParentWidget(
