@@ -45,11 +45,12 @@ class BigMailCard extends StatelessWidget {
                     mail,
                     isSent,
                   ),
-                  buildPeopleRowList(
+                  buildPeopleRow(
                     context,
                     context.t.mail_composer.to,
                     mail.getHeader("To"),
                     mail,
+                    isSent,
                   ),
                 ],
               ),
@@ -97,8 +98,9 @@ class BigMailCard extends StatelessWidget {
     }
   }
 
-  Widget buildPeopleRow(BuildContext context, String label, String value,
+  Widget buildPeopleRow(BuildContext context, String label, dynamic value,
       Mail mail, bool? isSent) {
+    String displayValue = value is List ? value.join(", ") : value.toString();
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -108,27 +110,7 @@ class BigMailCard extends StatelessWidget {
         ),
         SizedBox(width: $constants.insets.xs),
         Text(
-          value,
-          style: getTextTheme(context).bodyMedium!.copyWith(
-              fontWeight:
-                  mail.read != true && isSent != true ? FontWeight.bold : null),
-        ),
-      ],
-    );
-  }
-
-  Widget buildPeopleRowList(
-      BuildContext context, String label, List<dynamic> value, Mail mail) {
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Text(
-          "$label: ",
-          style: getTextTheme(context).bodyMedium!.copyWith(color: Colors.grey),
-        ),
-        SizedBox(width: $constants.insets.xs),
-        Text(
-          value.join(", "),
+          displayValue,
           style: getTextTheme(context).bodyMedium!.copyWith(
               fontWeight:
                   mail.read != true && isSent != true ? FontWeight.bold : null),

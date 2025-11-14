@@ -231,6 +231,7 @@ class _MailCardState extends State<MailCard> {
                         MaterialPageRoute(
                           builder: (context) => MailDetailScreen(
                             mail,
+                            isSent: true,
                             onCancel: () {
                               Navigator.of(context).pop();
                             },
@@ -273,7 +274,7 @@ class _MailCardState extends State<MailCard> {
                   else
                     MailUserAvatar(
                       value: mail.getHeader("From"),
-                      read: mail.read != true || widget.draft != null,
+                      read: mail.read == true || widget.draft != null,
                       onTap: () {
                         if (isDesktop(context)) {
                           if (widget.selectMode == true &&

@@ -1,3 +1,5 @@
+import 'package:ab_shared/components/app/conditional_parent_wrapper.dart';
+import 'package:ab_shared/utils/constants.dart';
 import 'package:ab_shared/utils/shortcuts.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:go_router/go_router.dart';
@@ -41,34 +43,44 @@ class _SentScreenState extends State<SentScreen> {
     return BlocBuilder<MailBloc, MailState>(builder: (context, mailState) {
       final sentMails = mailState.sentMails ?? [];
       return Row(
+        mainAxisSize: MainAxisSize.min,
         children: [
-          SizedBox(
-            width: isDesktop(context) ? 300 : getSize(context).width,
-            child: Column(
-              children: [
-                Expanded(
-                  child: MailList(
-                    sent: true,
-                    mails: sentMails,
-                    onSelect: (mail) => setState(() {
-                      send_mail.SendMail sentMail = sentMails
-                          .firstWhere((element) => element.mail?.id == mail.id);
-                      selected = sentMail;
-                    }),
-                    onDeselect: (mail) {
-                      setState(() {
-                        selected = null;
-                      });
-                    },
+          ConditionalParentWidget(
+            condition: getSize(context).width < $constants.screenSize.lg,
+            parentBuilder: (child) => Expanded(
+              child: child,
+            ),
+            child: ConstrainedBox(
+              constraints: BoxConstraints(
+                maxWidth: isDesktop(context) &&
+                        getSize(context).width > $constants.screenSize.lg
+                    ? getSize(context).width * 0.3
+                    : getSize(context).width,
+              ),
+              child: Column(
+                children: [
+                  Expanded(
+                    child: MailList(
+                      sent: true,
+                      mails: sentMails,
+                      onSelect: (mail) => setState(() {
+                        send_mail.SendMail sentMail = sentMails.firstWhere(
+                            (element) => element.mail?.id == mail.id);
+                        selected = sentMail;
+                      }),
+                      onDeselect: (mail) {
+                        setState(() {
+                          selected = null;
+                        });
+                      },
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
-          if (isDesktop(context)) ...[
-            VerticalDivider(
-              width: 1,
-            ),
+          if (isDesktop(context) &&
+              getSize(context).width > $constants.screenSize.lg) ...[
             Expanded(
               child: sentMails.isEmpty || selected == null
                   ? NoMailSelectedScreen(
