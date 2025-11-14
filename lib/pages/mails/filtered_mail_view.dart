@@ -1,4 +1,5 @@
 import 'package:ab_shared/components/ab_toast.dart';
+import 'package:ab_shared/components/app/conditional_parent_wrapper.dart';
 import 'package:ab_shared/utils/constants.dart';
 import 'package:ab_shared/utils/shortcuts.dart';
 import 'package:flutter/cupertino.dart';
@@ -80,37 +81,44 @@ class _FliteredMailViewState extends State<FliteredMailView> {
       }
       return Row(
         children: [
-          SizedBox(
-            width: isDesktop(context)
-                ? getSize(context).width > $constants.screenSize.md
-                    ? 350
-                    : getSize(context).width * 0.66
-                : getSize(context).width,
-            child: Column(
-              children: [
-                Expanded(
-                  child: MailList(
-                    mails: filteredMails,
-                    onSelect: (mail) {
-                      setState(() {
-                        selectedMails.add(mail);
-                      });
-                    },
-                    onDeselect: (mail) {
-                      setState(() {
-                        selectedMails.remove(mail);
-                      });
-                    },
-                    selectedMails: selectedMails,
-                    isSelecting: isSelecting,
-                    setIsSelecting: (value) {
-                      setState(() {
-                        isSelecting = value;
-                      });
-                    },
+          ConditionalParentWidget(
+            condition: getSize(context).width < $constants.screenSize.lg,
+            parentBuilder: (child) => Expanded(
+              child: child,
+            ),
+            child: ConstrainedBox(
+              constraints: BoxConstraints(
+                maxWidth: isDesktop(context) &&
+                        getSize(context).width > $constants.screenSize.lg
+                    ? getSize(context).width * 0.3
+                    : getSize(context).width,
+              ),
+              child: Column(
+                children: [
+                  Expanded(
+                    child: MailList(
+                      mails: filteredMails,
+                      onSelect: (mail) {
+                        setState(() {
+                          selectedMails.add(mail);
+                        });
+                      },
+                      onDeselect: (mail) {
+                        setState(() {
+                          selectedMails.remove(mail);
+                        });
+                      },
+                      selectedMails: selectedMails,
+                      isSelecting: isSelecting,
+                      setIsSelecting: (value) {
+                        setState(() {
+                          isSelecting = value;
+                        });
+                      },
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
           if (isDesktop(context) &&

@@ -195,7 +195,7 @@ class MailBloc extends HydratedBloc<MailEvent, MailState> {
 
         final List<send_mail.SendMail> pageDrafts =
             paginationResult['drafts'] as List<send_mail.SendMail>;
-        totalPages = paginationResult['total_pages'] as int;
+        totalPages = paginationResult['total_count'] as int;
 
         // Add all drafts from this page to our collection
         newDrafts.addAll(pageDrafts);
@@ -223,7 +223,7 @@ class MailBloc extends HydratedBloc<MailEvent, MailState> {
 
         final List<send_mail.SendMail> pageSent =
             paginationResult['sent_mails'] as List<send_mail.SendMail>;
-        totalPages = paginationResult['total_pages'] as int;
+        totalPages = paginationResult['total_count'] as int;
 
         // Add all sent mails from this page to our collection
         newSent.addAll(pageSent);
@@ -308,7 +308,7 @@ class MailBloc extends HydratedBloc<MailEvent, MailState> {
 
         final List<send_mail.SendMail> pageSent =
             paginationResult['sent_mails'] as List<send_mail.SendMail>;
-        totalPages = paginationResult['total_pages'] as int;
+        totalPages = paginationResult['total_count'] as int;
 
         // Add all sent mails from this page to our collection
         newSent.addAll(pageSent);
