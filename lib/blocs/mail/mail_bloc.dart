@@ -15,6 +15,8 @@ class MailBloc extends HydratedBloc<MailEvent, MailState> {
   MailBloc() : super(MailInitial()) {
     on<SyncAllMailsPaginated>(_onSyncAllMailsPaginated);
     on<SyncSince>(_onSyncSince);
+    on<SyncSentPaginated>(_onSyncSentPaginated);
+    on<SyncSentSince>(_onSyncSentSince);
     on<MarkAsRead>(_onMarkAsRead);
     on<MarkAsUnread>(_onMarkAsUnread);
     on<SyncMailActions>(_onSyncMailActions);
@@ -38,9 +40,18 @@ class MailBloc extends HydratedBloc<MailEvent, MailState> {
         drafts: (json["drafts"] as List)
             .map((e) => send_mail.SendMail.fromJson(e))
             .toList(),
+        sentMails: (json["sent_mails"] as List)
+            .map((e) => send_mail.SendMail.fromJson(e))
+            .toList(),
         latestSync: json["latestSync"] != null
             ? DateTime.parse(json["latestSync"])
             : null,
+        readMails: List<String>.from(json["readMails"] ?? []),
+        unreadMails: List<String>.from(json["unreadMails"] ?? []),
+        archivedMails: List<String>.from(json["archivedMails"] ?? []),
+        unarchivedMails: List<String>.from(json["unarchivedMails"] ?? []),
+        trashedMails: List<String>.from(json["trashedMails"] ?? []),
+        untrashedMails: List<String>.from(json["untrashedMails"] ?? []),
       );
     }
     return MailInitial();
@@ -52,7 +63,14 @@ class MailBloc extends HydratedBloc<MailEvent, MailState> {
       return {
         "mails": state.mails!.map((e) => e.toJson()).toList(),
         "drafts": state.drafts!.map((e) => e.toJson()).toList(),
+        "sent_mails": state.sentMails!.map((e) => e.toJson()).toList(),
         "latestSync": state.latestSync?.toIso8601String(),
+        "readMails": state.readMails.toList(),
+        "unreadMails": state.unreadMails.toList(),
+        "archivedMails": state.archivedMails.toList(),
+        "unarchivedMails": state.unarchivedMails.toList(),
+        "trashedMails": state.trashedMails.toList(),
+        "untrashedMails": state.untrashedMails.toList(),
       };
     }
     return null;
@@ -94,9 +112,28 @@ class MailBloc extends HydratedBloc<MailEvent, MailState> {
       // Load drafts
       final drafts = await _mailService.getDrafts();
 
-      // Emit final state with all mails and drafts
+      // Load sent mails
+      List<send_mail.SendMail> allSent = [];
+      int currentPageSent = 1;
+      bool hasMorePagesSent = true;
+
+      while (hasMorePagesSent) {
+        final pageSent =
+            await _mailService.getSent(page: currentPageSent, size: 10);
+        if (pageSent.isEmpty) {
+          hasMorePagesSent = false;
+        } else {
+          allSent.addAll(pageSent);
+          currentPageSent++;
+        }
+      }
+
+      // Emit final state with all mails, drafts, and sent mails
       final newState = MailState.transform(MailLoaded.new, prevState,
-          mails: allMails, drafts: drafts, latestSync: DateTime.now());
+          mails: allMails,
+          drafts: drafts,
+          sentMails: allSent,
+          latestSync: DateTime.now());
 
       emit(newState);
     } catch (e) {
@@ -158,7 +195,7 @@ class MailBloc extends HydratedBloc<MailEvent, MailState> {
 
         final List<send_mail.SendMail> pageDrafts =
             paginationResult['drafts'] as List<send_mail.SendMail>;
-        totalPages = paginationResult['total_pages'] as int;
+        totalPages = paginationResult['total_count'] as int;
 
         // Add all drafts from this page to our collection
         newDrafts.addAll(pageDrafts);
@@ -172,9 +209,133 @@ class MailBloc extends HydratedBloc<MailEvent, MailState> {
       final mergedMails = _mergeMails(prevState.mails ?? [], newMails);
       final mergedDrafts = _mergeDrafts(prevState.drafts ?? [], newDrafts);
 
-      // Emit final state with merged mails and drafts
+      // Load sent mails since the given date
+      List<send_mail.SendMail> newSent = [];
+      currentPage = 1;
+      totalPages = 1;
+      hasMorePages = true;
+
+      while (hasMorePages && currentPage <= totalPages) {
+        final paginationResult = await _mailService.getSentSince(
+            since: prevState.latestSync ?? DateTime.now(),
+            page: currentPage,
+            size: 10);
+
+        final List<send_mail.SendMail> pageSent =
+            paginationResult['sent_mails'] as List<send_mail.SendMail>;
+        totalPages = paginationResult['total_count'] as int;
+
+        // Add all sent mails from this page to our collection
+        newSent.addAll(pageSent);
+
+        // Check if we have more pages to load
+        hasMorePages = currentPage < totalPages;
+        currentPage++;
+      }
+
+      // Merge sent mails
+      final mergedSent = _mergeSentMails(prevState.sentMails ?? [], newSent);
+
+      // Emit final state with merged mails, drafts, and sent mails
       final newState = MailState.transform(MailLoaded.new, prevState,
-          mails: mergedMails, drafts: mergedDrafts, latestSync: DateTime.now());
+          mails: mergedMails,
+          drafts: mergedDrafts,
+          sentMails: mergedSent,
+          latestSync: DateTime.now());
+
+      emit(newState);
+    } catch (e) {
+      emit(MailState.transformError(
+          MailLoadingError.new, prevState, e.toString()));
+    }
+  }
+
+  void _onSyncSentPaginated(
+      SyncSentPaginated event, Emitter<MailState> emit) async {
+    final prevState = state;
+    emit(MailState.transform(MailLoading.new, prevState));
+    try {
+      // Load all pages of sent mails
+      List<send_mail.SendMail> allSent = [];
+      int currentPage = 1;
+      bool hasMorePages = true;
+
+      while (hasMorePages) {
+        final pageSent =
+            await _mailService.getSent(page: currentPage, size: 10);
+        if (pageSent.isEmpty) {
+          hasMorePages = false;
+        } else {
+          allSent.addAll(pageSent);
+          currentPage++;
+          // Emit intermediate state to show progress
+          final intermediateState = MailState.transform(
+            MailLoaded.new,
+            prevState,
+            sentMails: allSent,
+          );
+          emit(intermediateState);
+        }
+      }
+
+      // Emit final state with all sent mails
+      final newState = MailState.transform(MailLoaded.new, prevState,
+          sentMails: allSent, latestSync: DateTime.now());
+
+      emit(newState);
+    } catch (e) {
+      emit(MailState.transformError(
+          MailLoadingError.new, prevState, e.toString()));
+    }
+  }
+
+  void _onSyncSentSince(SyncSentSince event, Emitter<MailState> emit) async {
+    final prevState = state;
+    emit(MailState.transform(MailLoading.new, prevState));
+
+    try {
+      // Load sent mails since the given date
+      List<send_mail.SendMail> newSent = [];
+      int currentPage = 1;
+      int totalPages = 1;
+      bool hasMorePages = true;
+
+      while (hasMorePages && currentPage <= totalPages) {
+        final paginationResult = await _mailService.getSentSince(
+            since: prevState.latestSync ?? DateTime.now(),
+            page: currentPage,
+            size: 10);
+
+        final List<send_mail.SendMail> pageSent =
+            paginationResult['sent_mails'] as List<send_mail.SendMail>;
+        totalPages = paginationResult['total_count'] as int;
+
+        // Add all sent mails from this page to our collection
+        newSent.addAll(pageSent);
+
+        // Check if we have more pages to load
+        hasMorePages = currentPage < totalPages;
+        currentPage++;
+
+        // Emit intermediate state to show progress
+        if (hasMorePages) {
+          final mergedSent =
+              _mergeSentMails(prevState.sentMails ?? [], newSent);
+          final intermediateState = MailState.transform(
+            MailLoaded.new,
+            prevState,
+            sentMails: mergedSent,
+          );
+          emit(intermediateState);
+        }
+      }
+
+      // Merge with existing state
+      final mergedSent = _mergeSentMails(prevState.sentMails ?? [], newSent);
+
+      // Emit final state with merged sent mails
+      final newState = MailState.transform(MailLoaded.new, prevState,
+          sentMails: mergedSent, latestSync: DateTime.now());
 
       emit(newState);
     } catch (e) {
@@ -446,7 +607,32 @@ class MailBloc extends HydratedBloc<MailEvent, MailState> {
           .compareTo(a.mail?.createdAt ?? DateTime(1970)));
   }
 
+  /// Merges new sent mails with existing sent mails, updating existing ones or adding new ones
+  List<send_mail.SendMail> _mergeSentMails(
+      List<send_mail.SendMail> existingSent, List<send_mail.SendMail> newSent) {
+    final Map<String, send_mail.SendMail> sentMap = {};
+
+    // Add existing sent mails to map
+    for (final sent in existingSent) {
+      if (sent.id != null) {
+        sentMap[sent.id!] = sent;
+      }
+    }
+
+    // Update or add new sent mails
+    for (final sent in newSent) {
+      if (sent.id != null) {
+        sentMap[sent.id!] = sent;
+      }
+    }
+
+    // Convert back to list and sort by date (newest first)
+    return sentMap.values.toList()
+      ..sort((a, b) => (b.mail?.createdAt ?? DateTime(1970))
+          .compareTo(a.mail?.createdAt ?? DateTime(1970)));
+  }
+
   FutureOr<void> _onLogout(MailLogout event, Emitter<MailState> emit) {
     emit(MailInitial());
-  } 
+  }
 }

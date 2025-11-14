@@ -8,8 +8,10 @@ import 'package:mail/models/mail/mail.dart';
 
 class BigMailCard extends StatelessWidget {
   final Mail mail;
+  final bool? isSent;
   final Color? backgroundColor;
-  const BigMailCard({super.key, required this.mail, this.backgroundColor});
+  const BigMailCard(
+      {super.key, required this.mail, this.isSent, this.backgroundColor});
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +31,9 @@ class BigMailCard extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              MailUserAvatar(value: mail.getHeader("From"), read: mail.read),
+              MailUserAvatar(
+                  value: mail.getHeader("From"),
+                  read: mail.read != true || isSent != true),
               SizedBox(width: $constants.insets.sm),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -39,12 +43,14 @@ class BigMailCard extends StatelessWidget {
                     context.t.mail_composer.from,
                     mail.getHeader("From"),
                     mail,
+                    isSent,
                   ),
                   buildPeopleRow(
                     context,
                     context.t.mail_composer.to,
                     mail.getHeader("To"),
                     mail,
+                    isSent,
                   ),
                 ],
               ),
@@ -53,18 +59,20 @@ class BigMailCard extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  Text(
-                    Jiffy.parseFromDateTime(mail.createdAt!).yMd.toString(),
-                    style: getTextTheme(context)
-                        .bodySmall!
-                        .copyWith(color: Colors.grey),
-                  ),
-                  Text(
-                    Jiffy.parseFromDateTime(mail.createdAt!).Hm.toString(),
-                    style: getTextTheme(context)
-                        .bodySmall!
-                        .copyWith(color: Colors.grey),
-                  )
+                  if (mail.createdAt != null)
+                    Text(
+                      Jiffy.parseFromDateTime(mail.createdAt!).yMd.toString(),
+                      style: getTextTheme(context)
+                          .bodySmall!
+                          .copyWith(color: Colors.grey),
+                    ),
+                  if (mail.createdAt != null)
+                    Text(
+                      Jiffy.parseFromDateTime(mail.createdAt!).Hm.toString(),
+                      style: getTextTheme(context)
+                          .bodySmall!
+                          .copyWith(color: Colors.grey),
+                    )
                 ],
               )
             ],
@@ -90,8 +98,9 @@ class BigMailCard extends StatelessWidget {
     }
   }
 
-  Widget buildPeopleRow(
-      BuildContext context, String label, String value, Mail mail) {
+  Widget buildPeopleRow(BuildContext context, String label, dynamic value,
+      Mail mail, bool? isSent) {
+    String displayValue = value is List ? value.join(", ") : value.toString();
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -101,10 +110,10 @@ class BigMailCard extends StatelessWidget {
         ),
         SizedBox(width: $constants.insets.xs),
         Text(
-          value,
-          style: getTextTheme(context)
-              .bodyMedium!
-              .copyWith(fontWeight: mail.read != true ? FontWeight.bold : null),
+          displayValue,
+          style: getTextTheme(context).bodyMedium!.copyWith(
+              fontWeight:
+                  mail.read != true && isSent != true ? FontWeight.bold : null),
         ),
       ],
     );

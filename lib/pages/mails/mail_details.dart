@@ -4,6 +4,7 @@ import 'package:ab_shared/components/widgets/elevated_container.dart';
 import 'package:ab_shared/utils/constants.dart';
 import 'package:ab_shared/utils/shortcuts.dart';
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:collection/collection.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -19,10 +20,14 @@ enum MailScreenMode {
 
 class MailDetailScreen extends ResponsiveStatefulWidget {
   final Mail mail;
+  final bool? isSent;
   final MailScreenMode mode;
   final VoidCallback? onCancel;
   const MailDetailScreen(this.mail,
-      {super.key, this.mode = MailScreenMode.standalone, this.onCancel});
+      {super.key,
+      this.mode = MailScreenMode.standalone,
+      this.onCancel,
+      this.isSent});
 
   @override
   ResponsiveState<MailDetailScreen> createState() => MailDetailScreenState();
@@ -31,7 +36,7 @@ class MailDetailScreen extends ResponsiveStatefulWidget {
 class MailDetailScreenState extends ResponsiveState<MailDetailScreen> {
   @override
   void initState() {
-    if (widget.mail.read != true) {
+    if (widget.mail.read != true && widget.isSent != true) {
       context.read<MailBloc>().add(MarkAsRead(mailId: widget.mail.id!));
     }
     super.initState();
@@ -47,8 +52,8 @@ class MailDetailScreenState extends ResponsiveState<MailDetailScreen> {
         bottom: !isDesktop(context),
         top: !isDesktop(context),
         child: BlocBuilder<MailBloc, MailState>(builder: (context, mailState) {
-          final mail = mailState.mails
-                  ?.firstWhere((element) => element.id == widget.mail.id) ??
+          final mail = mailState.mails?.firstWhereOrNull(
+                  (element) => element.id == widget.mail.id) ??
               widget.mail;
           return Stack(
             children: [
@@ -154,12 +159,13 @@ class MailDetailScreenState extends ResponsiveState<MailDetailScreen> {
                                             context,
                                             context.t.mail_actions.archive,
                                             CupertinoIcons.archivebox, () {
-                                          if (mail.archived != true) {  
-                                          context.read<MailBloc>().add(
-                                              ArchiveMail(mailId: mail.id!));
+                                          if (mail.archived != true) {
+                                            context.read<MailBloc>().add(
+                                                ArchiveMail(mailId: mail.id!));
                                           } else {
                                             context.read<MailBloc>().add(
-                                                UnarchiveMail(mailId: mail.id!));
+                                                UnarchiveMail(
+                                                    mailId: mail.id!));
                                           }
                                         }),
                                         SizedBox(width: $constants.insets.xs),
@@ -168,9 +174,8 @@ class MailDetailScreenState extends ResponsiveState<MailDetailScreen> {
                                             context.t.mail_actions.trash,
                                             CupertinoIcons.trash, () {
                                           if (mail.trashed != true) {
-                                          context
-                                              .read<MailBloc>()
-                                              .add(TrashMail(mailId: mail.id!));
+                                            context.read<MailBloc>().add(
+                                                TrashMail(mailId: mail.id!));
                                           } else {
                                             context.read<MailBloc>().add(
                                                 UntrashMail(mailId: mail.id!));
@@ -198,6 +203,7 @@ class MailDetailScreenState extends ResponsiveState<MailDetailScreen> {
                       ),
                       child: BigMailCard(
                           mail: mail,
+                          isSent: widget.isSent,
                           backgroundColor: getTheme(context).surfaceContainer),
                     ),
                   ],

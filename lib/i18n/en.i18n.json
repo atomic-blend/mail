@@ -89,6 +89,7 @@
     "drafts": "Drafts",
     "archive": "Archive",
     "trashed": "Trashed",
+    "sent": "Sent",
     "all": "All"
   },
   "mail_actions": {

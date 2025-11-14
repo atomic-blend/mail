@@ -1,3 +1,5 @@
+import 'package:ab_shared/components/app/conditional_parent_wrapper.dart';
+import 'package:ab_shared/utils/constants.dart';
 import 'package:ab_shared/utils/shortcuts.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:go_router/go_router.dart';
@@ -37,20 +39,31 @@ class _DraftScreenState extends State<DraftScreen> {
       final drafts = mailState.drafts ?? [];
       return Row(
         children: [
-          SizedBox(
-            width: isDesktop(context) ? 300 : getSize(context).width,
-            child: Column(
-              children: [
-                Expanded(
-                  child: MailList(
-                    drafts: true,
-                    onDelete: (draftId) {
-                      context.read<MailBloc>().add(DeleteDraft(draftId));
-                    },
-                    mails: drafts,
+          ConditionalParentWidget(
+            condition: getSize(context).width < $constants.screenSize.lg,
+            parentBuilder: (child) => Expanded(
+              child: child,
+            ),
+            child: ConstrainedBox(
+              constraints: BoxConstraints(
+                maxWidth: isDesktop(context) &&
+                        getSize(context).width > $constants.screenSize.lg
+                    ? getSize(context).width * 0.3
+                    : getSize(context).width,
+              ),
+              child: Column(
+                children: [
+                  Expanded(
+                    child: MailList(
+                      drafts: true,
+                      onDelete: (draftId) {
+                        context.read<MailBloc>().add(DeleteDraft(draftId));
+                      },
+                      mails: drafts,
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
           // if (isDesktop(context)) ...[
