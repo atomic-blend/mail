@@ -22,9 +22,9 @@ import 'package:mail/utils/get_it.dart';
 
 class MailCard extends StatefulWidget {
   final Mail? mail;
+  final send_mail.SendMail? draft;
 
   final bool? isSent;
-  final send_mail.SendMail? draft;
   final Function(String)? onDelete;
   final Function(dynamic)? onSelect;
   final Function(dynamic)? onDeselect;
@@ -62,6 +62,13 @@ class _MailCardState extends State<MailCard> {
     if (mail == null) {
       return const SizedBox.shrink();
     }
+
+    final statusPill = _buildStatusPillList(
+      context: context,
+      mail: mail,
+      draft: widget.draft,
+      isSent: widget.isSent == true,
+    );
     return LayoutBuilder(builder: (context, constraints) {
       return Slidable(
         enabled: widget.enabled == true && widget.isSent != true,
@@ -330,6 +337,18 @@ class _MailCardState extends State<MailCard> {
                       ),
                     ],
                   ),
+                  if (statusPill != null) ...[
+                    Spacer(),
+                    Padding(
+                      padding: EdgeInsets.only(right: $constants.insets.xs),
+                      child: Container(
+                        constraints: BoxConstraints(
+                          maxWidth: 130,
+                        ),
+                        child: statusPill,
+                      ),
+                    ),
+                  ],
                   if (widget.selectMode == true) ...[
                     Spacer(),
                     GestureDetector(
@@ -451,5 +470,103 @@ class _MailCardState extends State<MailCard> {
             )),
       );
     }
+  }
+
+  Widget? _buildStatusPillList({
+    required BuildContext context,
+    Mail? mail,
+    send_mail.SendMail? draft,
+    bool? isSent,
+  }) {
+    if (draft != null) {
+      if (isSent == true) {
+        return _buildStatusPill(
+            context: context,
+            icon: _getSentMailIcon(status: draft.sendStatus),
+            text: draft.sendStatus.name,
+            color: _getSentMailColor(status: draft.sendStatus));
+      } else {
+        return _buildStatusPill(
+          context: context,
+          icon: CupertinoIcons.create,
+          text: "Draft",
+          color: Colors.grey.shade900,
+        );
+      }
+    }
+    return null;
+  }
+
+  IconData? _getSentMailIcon({
+    required send_mail.SendStatus? status,
+  }) {
+    switch (status) {
+      case send_mail.SendStatus.sent:
+        return CupertinoIcons.paperplane_fill;
+      case send_mail.SendStatus.failed:
+        return CupertinoIcons.exclamationmark_circle;
+      case send_mail.SendStatus.retry:
+        return CupertinoIcons.arrow_2_circlepath;
+      case send_mail.SendStatus.pending:
+        return CupertinoIcons.clock;
+      default:
+        return null;
+    }
+  }
+
+  Color? _getSentMailColor({
+    required send_mail.SendStatus? status,
+  }) {
+    switch (status) {
+      case send_mail.SendStatus.sent:
+        return Colors.blue;
+      case send_mail.SendStatus.failed:
+        return Colors.red;
+      case send_mail.SendStatus.retry:
+        return Colors.orange;
+      case send_mail.SendStatus.pending:
+        return Colors.black;
+      default:
+        return null;
+    }
+  }
+
+  Widget _buildStatusPill({
+    required BuildContext context,
+    required String text,
+    Color? color,
+    IconData? icon,
+  }) {
+    return Container(
+      padding: EdgeInsets.symmetric(
+        horizontal: $constants.insets.xs,
+        vertical: $constants.insets.xxs,
+      ),
+      decoration: BoxDecoration(
+        color: color?.withValues(alpha: 0.1) ??
+            getTheme(context).primary.withValues(alpha: 0.1),
+        borderRadius: BorderRadius.circular($constants.corners.md),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          if (icon != null) ...[
+            Icon(
+              icon,
+              size: 12,
+              color: color ?? getTheme(context).primary,
+            ),
+            SizedBox(width: $constants.insets.xxs),
+          ],
+          Text(
+            text,
+            style: getTextTheme(context).bodySmall!.copyWith(
+                  color: color ?? getTheme(context).primary,
+                  fontWeight: FontWeight.bold,
+                ),
+          ),
+        ],
+      ),
+    );
   }
 }
