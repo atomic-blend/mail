@@ -90,7 +90,7 @@ class _FliteredMailViewState extends State<FliteredMailView> {
               constraints: BoxConstraints(
                 maxWidth: isDesktop(context) &&
                         getSize(context).width > $constants.screenSize.lg
-                    ? getSize(context).width * 0.3
+                    ? 450
                     : getSize(context).width,
               ),
               child: Column(

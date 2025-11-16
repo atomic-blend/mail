@@ -26,7 +26,10 @@ class _InboxScreenState extends State<InboxScreen> {
   Widget build(BuildContext context) {
     return FliteredMailView(
       title: context.t.email_folders.inbox,
-      filter: (mail) => mail.archived != true && mail.trashed != true,
+      filter: (mail) =>
+          mail.archived != true &&
+          mail.trashed != true &&
+          mail.rejected != true,
     );
   }
 }
