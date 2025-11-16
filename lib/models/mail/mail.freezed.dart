@@ -31,6 +31,8 @@ mixin _$Mail {
   set textContent(String? value) => throw _privateConstructorUsedError;
   String? get htmlContent => throw _privateConstructorUsedError;
   set htmlContent(String? value) => throw _privateConstructorUsedError;
+  String? get inReplyTo => throw _privateConstructorUsedError;
+  set inReplyTo(String? value) => throw _privateConstructorUsedError;
   List<MailAttachment>? get attachments => throw _privateConstructorUsedError;
   set attachments(List<MailAttachment>? value) =>
       throw _privateConstructorUsedError;
@@ -73,6 +75,7 @@ abstract class $MailCopyWith<$Res> {
       List<Map<String, dynamic>>? headers,
       String? textContent,
       String? htmlContent,
+      String? inReplyTo,
       List<MailAttachment>? attachments,
       bool? archived,
       bool? trashed,
@@ -105,6 +108,7 @@ class _$MailCopyWithImpl<$Res, $Val extends Mail>
     Object? headers = freezed,
     Object? textContent = freezed,
     Object? htmlContent = freezed,
+    Object? inReplyTo = freezed,
     Object? attachments = freezed,
     Object? archived = freezed,
     Object? trashed = freezed,
@@ -136,6 +140,10 @@ class _$MailCopyWithImpl<$Res, $Val extends Mail>
       htmlContent: freezed == htmlContent
           ? _value.htmlContent
           : htmlContent // ignore: cast_nullable_to_non_nullable
+              as String?,
+      inReplyTo: freezed == inReplyTo
+          ? _value.inReplyTo
+          : inReplyTo // ignore: cast_nullable_to_non_nullable
               as String?,
       attachments: freezed == attachments
           ? _value.attachments
@@ -194,6 +202,7 @@ abstract class _$$MailImplCopyWith<$Res> implements $MailCopyWith<$Res> {
       List<Map<String, dynamic>>? headers,
       String? textContent,
       String? htmlContent,
+      String? inReplyTo,
       List<MailAttachment>? attachments,
       bool? archived,
       bool? trashed,
@@ -223,6 +232,7 @@ class __$$MailImplCopyWithImpl<$Res>
     Object? headers = freezed,
     Object? textContent = freezed,
     Object? htmlContent = freezed,
+    Object? inReplyTo = freezed,
     Object? attachments = freezed,
     Object? archived = freezed,
     Object? trashed = freezed,
@@ -254,6 +264,10 @@ class __$$MailImplCopyWithImpl<$Res>
       htmlContent: freezed == htmlContent
           ? _value.htmlContent
           : htmlContent // ignore: cast_nullable_to_non_nullable
+              as String?,
+      inReplyTo: freezed == inReplyTo
+          ? _value.inReplyTo
+          : inReplyTo // ignore: cast_nullable_to_non_nullable
               as String?,
       attachments: freezed == attachments
           ? _value.attachments
@@ -308,6 +322,7 @@ class _$MailImpl extends _Mail {
       this.headers,
       this.textContent,
       this.htmlContent,
+      this.inReplyTo,
       this.attachments,
       this.archived,
       this.trashed,
@@ -333,6 +348,8 @@ class _$MailImpl extends _Mail {
   String? textContent;
   @override
   String? htmlContent;
+  @override
+  String? inReplyTo;
   @override
   List<MailAttachment>? attachments;
   @override
@@ -377,6 +394,7 @@ abstract class _Mail extends Mail {
       List<Map<String, dynamic>>? headers,
       String? textContent,
       String? htmlContent,
+      String? inReplyTo,
       List<MailAttachment>? attachments,
       bool? archived,
       bool? trashed,
@@ -406,6 +424,9 @@ abstract class _Mail extends Mail {
   @override
   String? get htmlContent;
   set htmlContent(String? value);
+  @override
+  String? get inReplyTo;
+  set inReplyTo(String? value);
   @override
   List<MailAttachment>? get attachments;
   set attachments(List<MailAttachment>? value);

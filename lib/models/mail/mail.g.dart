@@ -14,6 +14,7 @@ _$MailImpl _$$MailImplFromJson(Map<String, dynamic> json) => _$MailImpl(
           .toList(),
       textContent: json['textContent'] as String?,
       htmlContent: json['htmlContent'] as String?,
+      inReplyTo: json['inReplyTo'] as String?,
       attachments: (json['attachments'] as List<dynamic>?)
           ?.map((e) => MailAttachment.fromJson(e as Map<String, dynamic>))
           .toList(),
@@ -41,6 +42,7 @@ Map<String, dynamic> _$$MailImplToJson(_$MailImpl instance) =>
       'headers': instance.headers,
       'textContent': instance.textContent,
       'htmlContent': instance.htmlContent,
+      'inReplyTo': instance.inReplyTo,
       'attachments': instance.attachments,
       'archived': instance.archived,
       'trashed': instance.trashed,

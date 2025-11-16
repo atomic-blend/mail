@@ -356,64 +356,9 @@ class MailComposerState extends ResponsiveState<MailComposer> {
       }
 
       // ask in a dialog if the user still wants to send the email if there are empty fields
-      if (emptyFields.isNotEmpty) {
-        // For now, we just proceed without blocking
-        final confirm = await showDialog(
-          context: context,
-          builder: (context) => Dialog(
-            child: Container(
-              padding: EdgeInsets.all($constants.insets.lg),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    context.t.mail_composer.incomplete_email_modal.title,
-                    style: getTextTheme(context).headlineMedium!.copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
-                  ),
-                  SizedBox(height: $constants.insets.md),
-                  Text(
-                    context.t.mail_composer.incomplete_email_modal.description,
-                  ),
-                  SizedBox(height: $constants.insets.md),
-                  ...emptyFields.map((field) =>
-                      Text("- ${context.t.mail_composer.fields[field]}")),
-                  SizedBox(height: $constants.insets.md),
-                  Text(
-                    context
-                        .t.mail_composer.incomplete_email_modal.want_to_go_back,
-                  ),
-                  SizedBox(height: $constants.insets.lg),
-                  Row(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      PrimaryButtonSquare(
-                        outlined: true,
-                        onPressed: () {
-                          Navigator.pop(context, false); // Go back to editing
-                        },
-                        text: context
-                            .t.mail_composer.incomplete_email_modal.cancel_text,
-                      ),
-                      SizedBox(width: $constants.insets.md),
-                      PrimaryButtonSquare(
-                          text: context.t.mail_composer.incomplete_email_modal
-                              .confirm_text,
-                          onPressed: () {
-                            Navigator.pop(context, true); // Close dialog
-                          }),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          ),
-        );
-        if (confirm != true) {
-          return null; // User chose to go back
-        }
+      final proceed = await _confirmEmptyMailDialog(context, emptyFields);
+      if (!proceed) {
+        return null;
       }
 
       // loop through to list and validate email addresses, collect invalid ones
@@ -450,6 +395,69 @@ class MailComposerState extends ResponsiveState<MailComposer> {
     mail.createdAt = DateTime.now();
 
     return mail;
+  }
+
+  Future<bool> _confirmEmptyMailDialog(
+    BuildContext context,
+    List<dynamic> emptyFields,
+  ) async {
+    if (emptyFields.isNotEmpty) {
+      // For now, we just proceed without blocking
+      return await showDialog(
+        context: context,
+        builder: (context) => Dialog(
+          child: Container(
+            padding: EdgeInsets.all($constants.insets.lg),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  context.t.mail_composer.incomplete_email_modal.title,
+                  style: getTextTheme(context).headlineMedium!.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
+                ),
+                SizedBox(height: $constants.insets.md),
+                Text(
+                  context.t.mail_composer.incomplete_email_modal.description,
+                ),
+                SizedBox(height: $constants.insets.md),
+                ...emptyFields.map((field) =>
+                    Text("- ${context.t.mail_composer.fields[field]}")),
+                SizedBox(height: $constants.insets.md),
+                Text(
+                  context
+                      .t.mail_composer.incomplete_email_modal.want_to_go_back,
+                ),
+                SizedBox(height: $constants.insets.lg),
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    PrimaryButtonSquare(
+                      outlined: true,
+                      onPressed: () {
+                        Navigator.pop(context, false); // Go back to editing
+                      },
+                      text: context
+                          .t.mail_composer.incomplete_email_modal.cancel_text,
+                    ),
+                    SizedBox(width: $constants.insets.md),
+                    PrimaryButtonSquare(
+                        text: context.t.mail_composer.incomplete_email_modal
+                            .confirm_text,
+                        onPressed: () {
+                          Navigator.pop(context, true); // Close dialog
+                        }),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+    }
+    return false;
   }
 
   void _sendMail(BuildContext context) async {

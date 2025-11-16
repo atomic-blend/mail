@@ -17,6 +17,8 @@ class Mail with _$Mail {
       "textContent": textContent,
       "htmlContent": htmlContent,
       "headers": headersMap,
+      //TODO: add attachments handling
+      "inReplyTo": inReplyTo,
       "createdAt": createdAt?.toIso8601String(),
     };
   }
@@ -27,6 +29,7 @@ class Mail with _$Mail {
     List<Map<String, dynamic>>? headers,
     String? textContent,
     String? htmlContent,
+    String? inReplyTo,
     List<MailAttachment>? attachments,
     bool? archived,
     bool? trashed,
@@ -47,6 +50,7 @@ class Mail with _$Mail {
     'attachments',
     'archived',
     'read',
+    'inReplyTo',
     'trashed',
     'greylisted',
     'rejected',
@@ -60,7 +64,7 @@ class Mail with _$Mail {
 
   @override
   String toString() {
-    return 'Mail { id: $id, userId: $userId, headers: $headers, textContent: $textContent, htmlContent: $htmlContent, attachments: $attachments, archived: $archived, trashed: $trashed, trashedAt: $trashedAt, greylisted: $greylisted, rejected: $rejected, rewriteSubject: $rewriteSubject, createdAt: $createdAt, updatedAt: $updatedAt }';
+    return 'Mail { id: $id, userId: $userId, headers: $headers, inReplyTo: $inReplyTo, textContent: $textContent, htmlContent: $htmlContent, attachments: $attachments, archived: $archived, trashed: $trashed, trashedAt: $trashedAt, greylisted: $greylisted, rejected: $rejected, rewriteSubject: $rewriteSubject, createdAt: $createdAt, updatedAt: $updatedAt }';
   }
 
   bool search(String query) {
@@ -79,7 +83,7 @@ class Mail with _$Mail {
     }
     if (headers?.any((header) =>
             header['Key'] == 'From' &&
-                header['Value']?.toLowerCase().contains(query.toLowerCase())) ??
+            header['Value']?.toLowerCase().contains(query.toLowerCase())) ??
         false) {
       isMatch = true;
     }
