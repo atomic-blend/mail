@@ -74,6 +74,14 @@ class NavConstants {
             header: _buildHeader(context, "Archive"),
           ),
           NavigationItem(
+            key: Key("spam"),
+            icon: LineAwesome.fire_alt_solid,
+            cupertinoIcon: CupertinoIcons.flame,
+            label: "Spam",
+            location: "/spam",
+            header: _buildHeader(context, "Spam"),
+          ),
+          NavigationItem(
             key: Key("sent"),
             icon: LineAwesome.envelope,
             cupertinoIcon: CupertinoIcons.tray_arrow_up,

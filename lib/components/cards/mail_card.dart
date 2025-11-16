@@ -493,6 +493,17 @@ class _MailCardState extends State<MailCard> {
           color: Colors.grey.shade900,
         );
       }
+    } else {
+      if (mail != null) {
+        if (mail.rejected == true) {
+          return _buildStatusPill(
+            context: context,
+            text: context.t.email_folders.spam,
+            color: Colors.red,
+            icon: CupertinoIcons.flame,
+          );
+        }
+      }
     }
     return null;
   }

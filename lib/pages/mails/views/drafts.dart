@@ -48,7 +48,7 @@ class _DraftScreenState extends State<DraftScreen> {
               constraints: BoxConstraints(
                 maxWidth: isDesktop(context) &&
                         getSize(context).width > $constants.screenSize.lg
-                    ? getSize(context).width * 0.3
+                    ? 450
                     : getSize(context).width,
               ),
               child: Column(
