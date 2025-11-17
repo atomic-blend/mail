@@ -9,9 +9,7 @@ part of 'mail.dart';
 _$MailImpl _$$MailImplFromJson(Map<String, dynamic> json) => _$MailImpl(
       id: json['id'] as String?,
       userId: json['userId'] as String?,
-      headers: (json['headers'] as List<dynamic>?)
-          ?.map((e) => e as Map<String, dynamic>)
-          .toList(),
+      headers: json['headers'] as Map<String, dynamic>?,
       textContent: json['textContent'] as String?,
       htmlContent: json['htmlContent'] as String?,
       inReplyTo: json['inReplyTo'] as String?,

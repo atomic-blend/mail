@@ -11,12 +11,10 @@ class Mail with _$Mail {
 
   Map<String, dynamic> toRawMail() {
     // convert headers from list of maps to a single map where Key is the key and Value is the value
-    final Map<String, dynamic> headersMap = Map.fromEntries(
-        headers!.map((header) => MapEntry(header["Key"], header["Value"])));
     return {
       "textContent": textContent,
       "htmlContent": htmlContent,
-      "headers": headersMap,
+      "headers": headers,
       //TODO: add attachments handling
       "inReplyTo": inReplyTo,
       "createdAt": createdAt?.toIso8601String(),
@@ -26,7 +24,7 @@ class Mail with _$Mail {
   factory Mail({
     String? id,
     String? userId,
-    List<Map<String, dynamic>>? headers,
+    Map<String, dynamic>? headers,
     String? textContent,
     String? htmlContent,
     String? inReplyTo,
@@ -75,22 +73,17 @@ class Mail with _$Mail {
     if (htmlContent?.toLowerCase().contains(query.toLowerCase()) ?? false) {
       isMatch = true;
     }
-    if (headers?.any((header) =>
-            header['Key'] == 'Subject' &&
-            header['Value']?.toLowerCase().contains(query.toLowerCase())) ??
-        false) {
+    if (headers?.containsKey('Subject') == true &&
+        headers!['Subject']?.toLowerCase().contains(query.toLowerCase()) ==
+            true) {
       isMatch = true;
     }
-    if (headers?.any((header) =>
-            header['Key'] == 'From' &&
-            header['Value']?.toLowerCase().contains(query.toLowerCase())) ??
-        false) {
+    if (headers?.containsKey('From') == true &&
+        headers!['From']?.toLowerCase().contains(query.toLowerCase()) == true) {
       isMatch = true;
     }
-    if (headers?.any((header) =>
-            header['To']?.toLowerCase().contains(query.toLowerCase()) ??
-            false) ??
-        false) {
+    if (headers?.containsKey('To') == true &&
+        headers!['To']?.toLowerCase().contains(query.toLowerCase()) == true) {
       isMatch = true;
     }
     if (attachments?.any((attachment) =>
@@ -162,11 +155,11 @@ class Mail with _$Mail {
   dynamic getHeader(String key) {
     if (headers == null) return '';
     try {
-      final header = headers!.firstWhere(
-        (header) => header['Key'].toString().toLowerCase() == key.toLowerCase(),
-        orElse: () => {},
-      );
-      return header['Value'] ?? '';
+      final header = headers![key];
+      if (header != null) {
+        return header;
+      }
+      return '';
     } catch (e) {
       return '';
     }

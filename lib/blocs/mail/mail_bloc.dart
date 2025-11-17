@@ -237,11 +237,14 @@ class MailBloc extends HydratedBloc<MailEvent, MailState> {
       final mergedSent = _mergeSentMails(prevState.sentMails ?? [], newSent);
 
       // Emit final state with merged mails, drafts, and sent mails
-      final newState = MailState.transform(MailLoaded.new, prevState,
-          mails: mergedMails,
-          drafts: mergedDrafts,
-          sentMails: mergedSent,
-          latestSync: DateTime.now());
+      final newState = MailState.transform(
+        MailLoaded.new,
+        prevState,
+        mails: mergedMails,
+        drafts: mergedDrafts,
+        sentMails: mergedSent,
+        latestSync: DateTime.now(),
+      );
 
       emit(newState);
     } catch (e) {

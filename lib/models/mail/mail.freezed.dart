@@ -24,8 +24,8 @@ mixin _$Mail {
   set id(String? value) => throw _privateConstructorUsedError;
   String? get userId => throw _privateConstructorUsedError;
   set userId(String? value) => throw _privateConstructorUsedError;
-  List<Map<String, dynamic>>? get headers => throw _privateConstructorUsedError;
-  set headers(List<Map<String, dynamic>>? value) =>
+  Map<String, dynamic>? get headers => throw _privateConstructorUsedError;
+  set headers(Map<String, dynamic>? value) =>
       throw _privateConstructorUsedError;
   String? get textContent => throw _privateConstructorUsedError;
   set textContent(String? value) => throw _privateConstructorUsedError;
@@ -72,7 +72,7 @@ abstract class $MailCopyWith<$Res> {
   $Res call(
       {String? id,
       String? userId,
-      List<Map<String, dynamic>>? headers,
+      Map<String, dynamic>? headers,
       String? textContent,
       String? htmlContent,
       String? inReplyTo,
@@ -132,7 +132,7 @@ class _$MailCopyWithImpl<$Res, $Val extends Mail>
       headers: freezed == headers
           ? _value.headers
           : headers // ignore: cast_nullable_to_non_nullable
-              as List<Map<String, dynamic>>?,
+              as Map<String, dynamic>?,
       textContent: freezed == textContent
           ? _value.textContent
           : textContent // ignore: cast_nullable_to_non_nullable
@@ -199,7 +199,7 @@ abstract class _$$MailImplCopyWith<$Res> implements $MailCopyWith<$Res> {
   $Res call(
       {String? id,
       String? userId,
-      List<Map<String, dynamic>>? headers,
+      Map<String, dynamic>? headers,
       String? textContent,
       String? htmlContent,
       String? inReplyTo,
@@ -256,7 +256,7 @@ class __$$MailImplCopyWithImpl<$Res>
       headers: freezed == headers
           ? _value.headers
           : headers // ignore: cast_nullable_to_non_nullable
-              as List<Map<String, dynamic>>?,
+              as Map<String, dynamic>?,
       textContent: freezed == textContent
           ? _value.textContent
           : textContent // ignore: cast_nullable_to_non_nullable
@@ -343,7 +343,7 @@ class _$MailImpl extends _Mail {
   @override
   String? userId;
   @override
-  List<Map<String, dynamic>>? headers;
+  Map<String, dynamic>? headers;
   @override
   String? textContent;
   @override
@@ -391,7 +391,7 @@ abstract class _Mail extends Mail {
   factory _Mail(
       {String? id,
       String? userId,
-      List<Map<String, dynamic>>? headers,
+      Map<String, dynamic>? headers,
       String? textContent,
       String? htmlContent,
       String? inReplyTo,
@@ -416,8 +416,8 @@ abstract class _Mail extends Mail {
   String? get userId;
   set userId(String? value);
   @override
-  List<Map<String, dynamic>>? get headers;
-  set headers(List<Map<String, dynamic>>? value);
+  Map<String, dynamic>? get headers;
+  set headers(Map<String, dynamic>? value);
   @override
   String? get textContent;
   set textContent(String? value);

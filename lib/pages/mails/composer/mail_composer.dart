@@ -384,11 +384,11 @@ class MailComposerState extends ResponsiveState<MailComposer> {
     }
 
     final mail = Mail();
-    mail.headers = [
-      {"Key": "To", "Value": to},
-      {"Key": "From", "Value": from},
-      {"Key": "Subject", "Value": subjectController.text},
-    ];
+    mail.headers = {
+      "To": to,
+      "From": from,
+      "Subject": subjectController.text,
+    };
 
     mail.textContent = plainTextContent;
     mail.htmlContent = htmlContent;
