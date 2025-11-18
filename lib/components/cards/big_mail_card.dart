@@ -158,7 +158,7 @@ class BigMailCard extends StatelessWidget {
       ),
       color: backgroundColor ?? getTheme(context).surface,
       border: border,
-      blurRadius: 2,
+      blurRadius: 1,
       borderRadius: $constants.corners.sm,
       onTap: onTap,
       child: Row(

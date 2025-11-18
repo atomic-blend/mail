@@ -55,6 +55,7 @@ class _WindowMailComposerState extends WindowLayoutWidgetState {
       child: MailComposer(
         key: mailComposerKey,
         mail: (widget as WindowMailComposer).draft,
+        inReplyTo: (widget as WindowMailComposer).inReplyTo,
         backgroundColor: getTheme(context).surface,
         windowMode: true,
         onSubjectChanged: (newSubject) {

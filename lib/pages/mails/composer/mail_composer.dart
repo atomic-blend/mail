@@ -129,6 +129,21 @@ class MailComposerState extends ResponsiveState<MailComposer> {
     } else {
       editorState = FleatherController(document: ParchmentDocument());
     }
+
+    if (widget.inReplyTo != null) {
+      final originalMail = widget.inReplyTo!;
+      final originalSubject = originalMail.getHeader("Subject") ?? "";
+      if (originalSubject.toLowerCase().startsWith("re:")) {
+        subjectController.text = originalSubject;
+      } else {
+        subjectController.text = "Re: $originalSubject";
+      }
+
+      final originalFrom = originalMail.getHeader("From");
+      if (originalFrom != null) {
+        to = [originalFrom];
+      }
+    }
     super.initState();
   }
 
