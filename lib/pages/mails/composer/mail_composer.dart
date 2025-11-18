@@ -1,4 +1,5 @@
 import 'package:ab_shared/blocs/auth/auth.bloc.dart';
+import 'package:ab_shared/components/app/window_layout/window_layout_controller.dart';
 import 'package:ab_shared/components/buttons/primary_button_square.dart';
 import 'package:ab_shared/components/editor/ab_editor.dart';
 import 'package:ab_shared/components/editor/ab_editor_toolbar.dart';
@@ -19,16 +20,53 @@ import 'package:mail/models/mail/mail.dart';
 import 'package:mail/models/send_mail/send_mail.dart' as send_mail;
 import 'package:mail/pages/mails/composer/composer_from_field.dart';
 import 'package:mail/pages/mails/composer/composer_to_field.dart';
+import 'package:mail/pages/mails/composer/window_mail_composer.dart';
+import 'package:mail/utils/get_it.dart';
 import 'package:parchment/codecs.dart';
+
+class MailComposerHelper {
+  static void openMailComposer(
+    BuildContext context, {
+    send_mail.SendMail? mail,
+    Mail? inReplyTo,
+    Function(String)? onSubjectChanged,
+    bool? windowMode = false,
+    Color? backgroundColor,
+  }) {
+    if (isDesktop(context)) {
+      getIt<WindowLayoutController>().addWindow(
+        WindowMailComposer(
+          initiallyCollapsed: false,
+          draft: mail,
+          inReplyTo: inReplyTo,
+        ),
+      );
+    } else {
+      showModalBottomSheet(
+          isScrollControlled: true,
+          context: context,
+          builder: (context) => SizedBox(
+              height: getSize(context).height * 0.88,
+              child: MailComposer(
+                mail: mail,
+                inReplyTo: inReplyTo,
+                onSubjectChanged: onSubjectChanged,
+                backgroundColor: backgroundColor,
+              )));
+    }
+  }
+}
 
 class MailComposer extends ResponsiveStatefulWidget {
   final send_mail.SendMail? mail;
+  final Mail? inReplyTo;
   final Function(String)? onSubjectChanged;
   final bool? windowMode;
   final Color? backgroundColor;
   const MailComposer(
       {super.key,
       this.mail,
+      this.inReplyTo,
       this.onSubjectChanged,
       this.windowMode = false,
       this.backgroundColor});

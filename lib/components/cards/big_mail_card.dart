@@ -1,10 +1,13 @@
+import 'package:ab_shared/components/widgets/elevated_container.dart';
 import 'package:ab_shared/utils/constants.dart';
 import 'package:ab_shared/utils/shortcuts.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:mail/components/avatars/mail_user_avatar.dart';
 import 'package:mail/i18n/strings.g.dart';
 import 'package:mail/models/mail/mail.dart';
+import 'package:mail/pages/mails/composer/mail_composer.dart';
 
 class BigMailCard extends StatelessWidget {
   final Mail mail;
@@ -55,6 +58,26 @@ class BigMailCard extends StatelessWidget {
                 ],
               ),
               Spacer(),
+              ConstrainedBox(
+                constraints: BoxConstraints(
+                  maxWidth: 100,
+                ),
+                child: Wrap(
+                  children: [
+                    _buildActionPill(
+                        context: context,
+                        text: "Reply",
+                        icon: CupertinoIcons.reply,
+                        onTap: () {
+                          MailComposerHelper.openMailComposer(
+                            context,
+                            inReplyTo: mail,
+                          );
+                        }),
+                  ],
+                ),
+              ),
+              SizedBox(width: $constants.insets.sm),
               Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.end,
@@ -116,6 +139,48 @@ class BigMailCard extends StatelessWidget {
                   mail.read != true && isSent != true ? FontWeight.bold : null),
         ),
       ],
+    );
+  }
+
+  Widget _buildActionPill({
+    required BuildContext context,
+    String? text,
+    IconData? icon,
+    Color? backgroundColor,
+    Color? textColor,
+    Border? border,
+    VoidCallback? onTap,
+  }) {
+    return ElevatedContainer(
+      padding: EdgeInsets.symmetric(
+        horizontal: $constants.insets.xs,
+        vertical: $constants.insets.xs,
+      ),
+      color: backgroundColor ?? getTheme(context).surface,
+      border: border,
+      blurRadius: 2,
+      borderRadius: $constants.corners.sm,
+      onTap: onTap,
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          if (icon != null) ...[
+            Icon(
+              icon,
+              size: 16,
+              color: textColor,
+            ),
+            SizedBox(width: $constants.insets.xs),
+          ],
+          if (text != null)
+            Text(
+              text,
+              style: getTextTheme(context).bodySmall!.copyWith(
+                    color: textColor,
+                  ),
+            ),
+        ],
+      ),
     );
   }
 }

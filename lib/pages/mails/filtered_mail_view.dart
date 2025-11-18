@@ -42,7 +42,6 @@ class _FliteredMailViewState extends State<FliteredMailView> {
               ?.where((mail) => widget.filter?.call(mail) ?? true)
               .toList() ??
           [];
-      print("Filtered mails length: ${filteredMails.length}");
       if (!isDesktop(context) &&
           selectedMails.isNotEmpty &&
           isSelecting == true) {

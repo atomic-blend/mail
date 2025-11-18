@@ -1,15 +1,18 @@
 import 'package:ab_shared/utils/shortcuts.dart';
 import 'package:flutter/material.dart';
 import 'package:ab_shared/components/app/window_layout/window_layout_widget.dart';
+import 'package:mail/models/mail/mail.dart';
 import 'package:mail/models/send_mail/send_mail.dart';
 import 'package:mail/pages/mails/composer/mail_composer.dart';
 import 'package:mail/services/sync.service.dart';
 
 class WindowMailComposer extends WindowLayoutWidget {
   final SendMail? draft;
+  final Mail? inReplyTo;
   const WindowMailComposer({
     super.key,
     this.draft,
+    this.inReplyTo,
     super.initiallyCollapsed = true,
     super.contentHeight = 500,
     super.headerHeight = 50,
