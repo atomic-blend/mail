@@ -476,7 +476,7 @@ class MailComposerState extends ResponsiveState<MailComposer> {
         ),
       );
     }
-    return false;
+    return true;
   }
 
   void _sendMail(BuildContext context) async {
