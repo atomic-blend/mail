@@ -458,55 +458,21 @@ class MailComposerState extends ResponsiveState<MailComposer> {
       // For now, we just proceed without blocking
       return await showDialog(
         context: context,
-        builder: (context) => Dialog(
-          child: Container(
-            padding: EdgeInsets.all($constants.insets.lg),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  context.t.mail_composer.incomplete_email_modal.title,
-                  style: getTextTheme(context).headlineMedium!.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
-                ),
-                SizedBox(height: $constants.insets.md),
-                Text(
-                  context.t.mail_composer.incomplete_email_modal.description,
-                ),
-                SizedBox(height: $constants.insets.md),
-                ...emptyFields.map((field) =>
-                    Text("- ${context.t.mail_composer.fields[field]}")),
-                SizedBox(height: $constants.insets.md),
-                Text(
-                  context
-                      .t.mail_composer.incomplete_email_modal.want_to_go_back,
-                ),
-                SizedBox(height: $constants.insets.lg),
-                Row(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    PrimaryButtonSquare(
-                      outlined: true,
-                      onPressed: () {
-                        Navigator.pop(context, false); // Go back to editing
-                      },
-                      text: context
-                          .t.mail_composer.incomplete_email_modal.cancel_text,
-                    ),
-                    SizedBox(width: $constants.insets.md),
-                    PrimaryButtonSquare(
-                        text: context.t.mail_composer.incomplete_email_modal
-                            .confirm_text,
-                        onPressed: () {
-                          Navigator.pop(context, true); // Close dialog
-                        }),
-                  ],
-                ),
-              ],
-            ),
-          ),
+        builder: (context) => ABModal(
+          width: 400,
+          title: context.t.mail_composer.incomplete_email_modal.title,
+          description:
+              "${context.t.mail_composer.incomplete_email_modal.description}\n\n${emptyFields.map((field) => '- ${context.t.mail_composer.fields[field]}').join('\n')}\n\n${context.t.mail_composer.incomplete_email_modal.want_to_go_back}",
+          confirmText:
+              context.t.mail_composer.incomplete_email_modal.confirm_text,
+          cancelText:
+              context.t.mail_composer.incomplete_email_modal.cancel_text,
+          onConfirm: () {
+            Navigator.pop(context, true);
+          },
+          onCancel: () {
+            Navigator.pop(context, false);
+          },
         ),
       );
     }
@@ -550,6 +516,7 @@ class MailComposerState extends ResponsiveState<MailComposer> {
       final result = await showDialog(
           context: context,
           builder: (context) => ABModal(
+                width: 400,
                 title: context.t.mail_composer.save_draft_modal.title,
                 description:
                     context.t.mail_composer.save_draft_modal.description,

@@ -14,9 +14,9 @@ class WindowMailComposer extends WindowLayoutWidget {
     this.draft,
     this.inReplyTo,
     super.initiallyCollapsed = true,
-    super.contentHeight = 500,
+    super.contentHeight = 600,
     super.headerHeight = 50,
-    super.width = 400,
+    super.width = 700,
   });
 
   @override
