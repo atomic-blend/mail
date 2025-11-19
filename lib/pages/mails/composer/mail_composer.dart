@@ -24,6 +24,7 @@ import 'package:mail/pages/mails/composer/window_mail_composer.dart';
 import 'package:mail/utils/get_it.dart';
 import 'package:parchment/codecs.dart';
 
+/// MailComposerHelper: responsible for opening composer UI appropriately
 class MailComposerHelper {
   static void openMailComposer(
     BuildContext context, {
@@ -43,57 +44,84 @@ class MailComposerHelper {
       );
     } else {
       showModalBottomSheet(
-          isScrollControlled: true,
-          context: context,
-          builder: (context) => SizedBox(
-              height: getSize(context).height * 0.88,
-              child: MailComposer(
-                mail: mail,
-                inReplyTo: inReplyTo,
-                onSubjectChanged: onSubjectChanged,
-                backgroundColor: backgroundColor,
-              )));
+        isScrollControlled: true,
+        context: context,
+        builder: (context) => SizedBox(
+          height: getSize(context).height * 0.88,
+          child: MailComposer(
+            mail: mail,
+            inReplyTo: inReplyTo,
+            onSubjectChanged: onSubjectChanged,
+            backgroundColor: backgroundColor,
+          ),
+        ),
+      );
     }
   }
 }
 
+/// The main composer widget
 class MailComposer extends ResponsiveStatefulWidget {
   final send_mail.SendMail? mail;
   final Mail? inReplyTo;
   final Function(String)? onSubjectChanged;
   final bool? windowMode;
   final Color? backgroundColor;
-  const MailComposer(
-      {super.key,
-      this.mail,
-      this.inReplyTo,
-      this.onSubjectChanged,
-      this.windowMode = false,
-      this.backgroundColor});
+
+  const MailComposer({
+    super.key,
+    this.mail,
+    this.inReplyTo,
+    this.onSubjectChanged,
+    this.windowMode = false,
+    this.backgroundColor,
+  });
 
   @override
   ResponsiveState<MailComposer> createState() => MailComposerState();
 }
 
 class MailComposerState extends ResponsiveState<MailComposer> {
-  FleatherController? editorState;
-  TextEditingController subjectController = TextEditingController();
-  TextEditingController toController = TextEditingController();
+  // Editor & controllers
+  late FleatherController editorController;
+  final TextEditingController subjectController = TextEditingController();
 
-  String? subject;
+  // Fields state
+  List<String> to = [];
   String? from;
-  List<String>? userEmails = [];
-  List<String>? to = [];
+  List<String> userEmails = [];
   String? toError;
-  List<String>? toEmailsErrors = [];
+  List<String> toEmailsErrors = [];
 
   @override
   void initState() {
-    if (widget.mail?.mail != null) {
-      subjectController.text = widget.mail!.mail!.getHeader("Subject") ?? "";
+    super.initState();
+    _initializeFromDraftOrReply();
+  }
 
-      // Safely handle To field - it might be a string or list
-      final toHeader = widget.mail!.mail!.getHeader("To");
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // Ensure we have the current user's account email as default 'from' option
+    final authState = context.read<AuthBloc>().state;
+    final userEmail = authState.user?.email;
+    if (userEmail != null) {
+      userEmails = [userEmail];
+      from ??= userEmail;
+    }
+  }
+
+  void _initializeFromDraftOrReply() {
+    // Default empty editor
+    FleatherController defaultEditor() =>
+        FleatherController(document: ParchmentDocument());
+
+    // If a draft send_mail is supplied, try to populate fields
+    if (widget.mail?.mail != null) {
+      final draft = widget.mail!.mail!;
+      subjectController.text = draft.getHeader("Subject") ?? "";
+
+      final toHeader = draft.getHeader("To");
       if (toHeader is List) {
         to = List<String>.from(toHeader);
       } else if (toHeader is String && toHeader.isNotEmpty) {
@@ -102,237 +130,402 @@ class MailComposerState extends ResponsiveState<MailComposer> {
         to = [];
       }
 
-      from = widget.mail!.mail!.getHeader("From");
+      from = draft.getHeader("From");
 
-      // Initialize from field with current user's email if not already set
-      if (from == null) {
-        final authState = context.read<AuthBloc>().state;
-        if (authState.user != null) {
-          from = authState.user!.email!;
-          userEmails = [from!];
-        }
-      }
-
-      // Safely decode HTML content to prevent stack overflow
       try {
-        final textContent = widget.mail!.mail!.textContent ?? "";
+        final textContent = draft.textContent ?? "";
         if (textContent.isNotEmpty) {
-          editorState =
+          editorController =
               FleatherController(document: parchmentHtml.decode(textContent));
         } else {
-          editorState = FleatherController(document: ParchmentDocument());
+          editorController = defaultEditor();
         }
       } catch (e) {
-        // If decoding fails, create empty document
-        editorState = FleatherController(document: ParchmentDocument());
+        editorController = defaultEditor();
       }
-    } else {
-      editorState = FleatherController(document: ParchmentDocument());
+      return;
     }
-    super.initState();
-  }
 
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    // Initialize from field with current user's email if not already set
-    final authState = context.read<AuthBloc>().state;
-    final userAccountEmail = authState.user!.email!;
-    userEmails = [userAccountEmail];
-    from ??= userAccountEmail;
+    // If replying to an email, pre-fill subject and to
+    if (widget.inReplyTo != null) {
+      final original = widget.inReplyTo!;
+      final origSubject = original.getHeader("Subject") ?? "";
+      if (origSubject.toLowerCase().startsWith("re:")) {
+        subjectController.text = origSubject;
+      } else {
+        subjectController.text = "Re: $origSubject";
+      }
+
+      final originalFrom = original.getHeader("From");
+      if (originalFrom != null) {
+        to = [originalFrom];
+      }
+    }
+
+    // Default values
+    editorController = FleatherController(document: ParchmentDocument());
   }
 
   @override
   Widget build(BuildContext context) {
     return BlocListener<MailBloc, MailState>(
-        listener: (context, mailState) {
-          if (mailState is MailSendSuccess) {
-            Navigator.pop(context);
-          } else if (mailState is MailSendError) {
-            ToastHelper.showError(
-                context: context,
-                title: context.t.mail_composer.errors["error_sending_email"]!);
-          }
-        },
-        child: super.build(context));
+      listener: _onMailStateChanged,
+      child: super.build(context),
+    );
+  }
+
+  void _onMailStateChanged(BuildContext context, MailState state) {
+    if (state is MailSendSuccess) {
+      if (context.mounted) Navigator.pop(context);
+    } else if (state is MailSendError) {
+      ToastHelper.showError(
+        context: context,
+        title: context.t.mail_composer.errors["error_sending_email"]!,
+      );
+    }
   }
 
   @override
-  Widget buildDesktop(BuildContext context) {
-    return buildMobile(context);
-  }
+  Widget buildDesktop(BuildContext context) => buildMobile(context);
 
   @override
   Widget buildMobile(BuildContext context) {
-    return BlocBuilder<MailBloc, MailState>(builder: (context, mailState) {
-      return BlocBuilder<AuthBloc, AuthState>(builder: (context, authState) {
-        return ElevatedContainer(
-          disableShadow: widget.windowMode == true,
-          color: widget.backgroundColor ?? getTheme(context).surface,
-          padding: EdgeInsets.only(
-            top: $constants.insets.xs,
-          ),
-          width: double.infinity,
-          child: Stack(
-            children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.start,
+    return BlocBuilder<MailBloc, MailState>(
+      builder: (context, mailState) {
+        return BlocBuilder<AuthBloc, AuthState>(
+          builder: (context, authState) {
+            return ElevatedContainer(
+              disableShadow: widget.windowMode == true,
+              color: widget.backgroundColor ?? getTheme(context).surface,
+              padding: EdgeInsets.only(top: $constants.insets.xs),
+              width: double.infinity,
+              child: Stack(
                 children: [
-                  if (widget.windowMode == false)
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        IconButton(
-                          onPressed: () {
-                            draftAndPop(context);
-                          },
-                          icon: Icon(CupertinoIcons.chevron_back),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: $constants.insets.sm,
-                          ),
-                          child: PrimaryButtonSquare(
-                            height: 35,
-                            onPressed: () {
-                              _sendMail(context);
-                            },
-                            leading: mailState is MailSending
-                                ? CircularProgressIndicator.adaptive(
-                                    strokeWidth: 2,
-                                  )
-                                : null,
-                            text: context.t.mail_composer.send,
-                            textStyle:
-                                getTextTheme(context).headlineSmall!.copyWith(
-                                      color: $constants.palette.white,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  _buildFieldWithLabel(
-                    context.t.mail_composer.to,
-                    ComposerToField(
-                      emails: to,
-                      erroredEmails: toEmailsErrors,
-                      backgroundColor:
-                          widget.backgroundColor ?? getTheme(context).surface,
-                      onSelected: (value) {
-                        setState(() {
-                          to?.add(value);
-                        });
-                      },
-                      onRemoved: (value) {
-                        setState(() {
-                          to?.remove(value);
-                        });
-                      },
-                    ),
-                    errorText: toError,
-                  ),
-                  // _buildPaddedDivider(),
-                  _buildFieldWithLabel(
-                    context.t.mail_composer.from,
-                    ComposerFromField(
-                      emails: userEmails!,
-                      initialValue: from,
-                      backgroundColor:
-                          widget.backgroundColor ?? getTheme(context).surface,
-                      onSelected: (value) {
-                        setState(() {
-                          from = value;
-                        });
-                      },
-                    ),
-                  ),
-                  // _buildPaddedDivider(),
-                  _buildFieldWithLabel(
-                      context.t.mail_composer.subject,
-                      AppTextFormField(
-                        textStyle: getTextTheme(context)
-                            .bodyMedium!
-                            .copyWith(fontWeight: FontWeight.bold),
-                        controller: subjectController,
-                        value: subject,
-                        backgroundColor:
-                            widget.backgroundColor ?? getTheme(context).surface,
-                        onChange: () => {
-                          if (widget.onSubjectChanged != null)
-                            {widget.onSubjectChanged!(subjectController.text)}
-                        },
-                      )),
-                  // _buildPaddedDivider(),
-                  SizedBox(height: $constants.insets.xs),
-                  Expanded(
-                    child: SizedBox(
-                      width: double.infinity,
-                      child: ABEditor(editorState: editorState!),
-                    ),
-                  ),
-                  SizedBox(
-                      height: isDesktop(context)
-                          ? 85
-                          : MediaQuery.of(context).viewInsets.bottom == 0
-                              ? 85
-                              : 60 + MediaQuery.of(context).viewInsets.bottom),
-                ],
-              ),
-              Positioned(
-                bottom: MediaQuery.of(context).viewInsets.bottom == 0
-                    ? widget.windowMode != true
-                        ? $constants.insets.lg
-                        : 0
-                    : MediaQuery.of(context).viewInsets.bottom +
-                        $constants.insets.xs,
-                left: 0,
-                right: 0,
-                child: Padding(
-                  padding:
-                      EdgeInsets.symmetric(horizontal: $constants.insets.md),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      ABEditorToolbar(
-                        editorState: editorState!,
-                        backgroundColor:
-                            widget.backgroundColor ?? getTheme(context).surface,
+                      if (widget.windowMode == false)
+                        _HeaderBar(
+                          onBack: () => draftAndPop(context),
+                          onSend: () => _sendMail(context),
+                          isSending: mailState is MailSending,
+                        ),
+                      _FieldWithLabel(
+                        label: context.t.mail_composer.to,
+                        errorText: toError,
+                        child: ComposerToField(
+                          emails: to,
+                          erroredEmails: toEmailsErrors,
+                          backgroundColor: widget.backgroundColor ??
+                              getTheme(context).surface,
+                          onSelected: (value) => setState(() => to.add(value)),
+                          onRemoved: (value) =>
+                              setState(() => to.remove(value)),
+                        ),
                       ),
-                      if (widget.windowMode == true) ...[
-                        SizedBox(width: $constants.insets.sm),
-                        PrimaryButtonSquare(
-                          height: 45,
-                          onPressed: () {
-                            _sendMail(context);
+                      _FieldWithLabel(
+                        label: context.t.mail_composer.from,
+                        child: ComposerFromField(
+                          emails: userEmails,
+                          initialValue: from,
+                          backgroundColor: widget.backgroundColor ??
+                              getTheme(context).surface,
+                          onSelected: (value) => setState(() => from = value),
+                        ),
+                      ),
+                      _FieldWithLabel(
+                        label: context.t.mail_composer.subject,
+                        child: AppTextFormField(
+                          textStyle: getTextTheme(context)
+                              .bodyMedium!
+                              .copyWith(fontWeight: FontWeight.bold),
+                          controller: subjectController,
+                          backgroundColor: widget.backgroundColor ??
+                              getTheme(context).surface,
+                          onChange: () {
+                            if (widget.onSubjectChanged != null) {
+                              widget.onSubjectChanged!(subjectController.text);
+                            }
                           },
-                          leading: mailState is MailSending
-                              ? CircularProgressIndicator.adaptive(
-                                  strokeWidth: 2,
-                                )
-                              : null,
-                          text: context.t.mail_composer.send,
-                          textStyle:
-                              getTextTheme(context).headlineSmall!.copyWith(
-                                    color: $constants.palette.white,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                        )
-                      ]
+                        ),
+                      ),
+                      SizedBox(height: $constants.insets.xs),
+                      Expanded(
+                        child: SizedBox(
+                          width: double.infinity,
+                          child: ABEditor(editorState: editorController),
+                        ),
+                      ),
+                      SizedBox(
+                        height: isDesktop(context)
+                            ? 85
+                            : MediaQuery.of(context).viewInsets.bottom == 0
+                                ? 85
+                                : 60 + MediaQuery.of(context).viewInsets.bottom,
+                      ),
                     ],
                   ),
-                ),
+                  Positioned(
+                    bottom: MediaQuery.of(context).viewInsets.bottom == 0
+                        ? widget.windowMode != true
+                            ? $constants.insets.lg
+                            : 0
+                        : MediaQuery.of(context).viewInsets.bottom +
+                            $constants.insets.xs,
+                    left: 0,
+                    right: 0,
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(
+                          horizontal: $constants.insets.md),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          ABEditorToolbar(
+                            editorState: editorController,
+                            backgroundColor: widget.backgroundColor ??
+                                getTheme(context).surface,
+                          ),
+                          if (widget.windowMode == true) ...[
+                            SizedBox(width: $constants.insets.sm),
+                            PrimaryButtonSquare(
+                              height: 45,
+                              onPressed: () => _sendMail(context),
+                              leading: mailState is MailSending
+                                  ? CircularProgressIndicator.adaptive(
+                                      strokeWidth: 2)
+                                  : null,
+                              text: context.t.mail_composer.send,
+                              textStyle:
+                                  getTextTheme(context).headlineSmall!.copyWith(
+                                        color: $constants.palette.white,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                            ),
+                          ],
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
               ),
-            ],
-          ),
+            );
+          },
         );
-      });
-    });
+      },
+    );
   }
 
-  Widget _buildFieldWithLabel(String label, Widget field, {String? errorText}) {
+  /// Validate fields and generate a Mail entity. Returns null if validation fails or user cancels.
+  Future<Mail?> _generateMailEntity({bool isDraft = false}) async {
+    final htmlContent = parchmentHtml.encode(editorController.document);
+    final mdContent = parchmentMarkdown.encode(editorController.document);
+    final plainTextContent = _markdownToPlainText(mdContent);
+
+    // If not a draft, validate recipients, subject/body and confirm if incomplete
+    if (!isDraft) {
+      // Validate recipients presence
+      if (to.isEmpty) {
+        setState(() {
+          toError = context.t.mail_composer.errors["no_recipient"]!;
+        });
+        return null;
+      }
+
+      // Check empty subject/body
+      final emptyFields = <String>[];
+      if (subjectController.text.trim().isEmpty) emptyFields.add("subject");
+      if (htmlContent.trim().isEmpty) emptyFields.add("body");
+
+      final proceed = await _confirmEmptyMailDialog(context, emptyFields);
+      if (!proceed) return null;
+
+      // Validate email addresses and collect invalid ones
+      final invalid = <String>[];
+      final emailRegex = RegExp(
+        r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9]+\.[a-zA-Z]+",
+      );
+      for (final email in to) {
+        if (!emailRegex.hasMatch(email)) invalid.add(email);
+      }
+
+      if (invalid.isNotEmpty) {
+        setState(() {
+          toEmailsErrors = invalid;
+          toError = context.t.mail_composer.errors["invalid_recipient"]!;
+        });
+        return null;
+      } else {
+        setState(() {
+          toEmailsErrors = [];
+          toError = null;
+        });
+      }
+    }
+
+    final mail = Mail()
+      ..headers = {
+        "To": to,
+        "From": from,
+        "Subject": subjectController.text,
+      }
+      ..textContent = plainTextContent
+      ..htmlContent = htmlContent
+      ..createdAt = DateTime.now();
+
+    return mail;
+  }
+
+  Future<bool> _confirmEmptyMailDialog(
+      BuildContext context, List<String> emptyFields) async {
+    if (emptyFields.isEmpty) return true;
+
+    final description =
+        "${context.t.mail_composer.incomplete_email_modal.description}\n\n${emptyFields.map((f) => '- ${context.t.mail_composer.fields[f]}').join('\n')}\n\n${context.t.mail_composer.incomplete_email_modal.want_to_go_back}";
+
+    final result = await showDialog<bool>(
+      context: context,
+      builder: (context) => ABModal(
+        width: 400,
+        title: context.t.mail_composer.incomplete_email_modal.title,
+        description: description,
+        confirmText:
+            context.t.mail_composer.incomplete_email_modal.confirm_text,
+        cancelText: context.t.mail_composer.incomplete_email_modal.cancel_text,
+        onConfirm: () => Navigator.pop(context, true),
+        onCancel: () => Navigator.pop(context, false),
+      ),
+    );
+
+    return result ?? false;
+  }
+
+  void _sendMail(BuildContext context) async {
+    final mail = await _generateMailEntity();
+    if (mail == null) return;
+    if (!context.mounted) return;
+    context.read<MailBloc>().add(SendMail(mail));
+  }
+
+  String _markdownToPlainText(String mdContent) {
+    final regex = RegExp(r'[*_~`#]');
+    return mdContent.replaceAll(regex, '');
+  }
+
+  /// Save draft and pop. Behavior:
+  /// - If everything empty -> just pop
+  /// - If some fields filled, ask to save draft
+  Future<void> draftAndPop(BuildContext context, {bool pop = true}) async {
+    final editorHasContent = editorController.document.length > 1;
+    final hasAnyField = editorHasContent ||
+        subjectController.text.isNotEmpty ||
+        to.isNotEmpty ||
+        from != null;
+
+    if (!hasAnyField) {
+      if (pop && context.mounted) Navigator.pop(context);
+      return;
+    }
+
+    bool saveDraft = false;
+
+    // Ask only if body empty but other fields present
+    if (!editorHasContent &&
+        (subjectController.text.isNotEmpty || to.isNotEmpty)) {
+      final result = await showDialog<bool>(
+        context: context,
+        builder: (context) => ABModal(
+          width: 400,
+          title: context.t.mail_composer.save_draft_modal.title,
+          description: context.t.mail_composer.save_draft_modal.description,
+          confirmText: context.t.mail_composer.save_draft_modal.confirm_text,
+          cancelText: context.t.mail_composer.save_draft_modal.cancel_text,
+          onConfirm: () => Navigator.pop(context, true),
+          onCancel: () => Navigator.pop(context, false),
+        ),
+      );
+      saveDraft = result ?? false;
+    }
+
+    // If editor has content we always save draft
+    if (editorHasContent) saveDraft = true;
+
+    if (saveDraft) {
+      final mail = await _generateMailEntity(isDraft: true);
+      if (mail == null) return;
+      if (!context.mounted) return;
+
+      if (widget.mail != null) {
+        context.read<MailBloc>().add(UpdateDraft(mail, widget.mail!.id!));
+      } else {
+        context.read<MailBloc>().add(SaveDraft(mail));
+      }
+    }
+
+    if (pop && context.mounted) Navigator.pop(context);
+  }
+
+  @override
+  void dispose() {
+    subjectController.dispose();
+    super.dispose();
+  }
+}
+
+/// Small reusable header bar widget that contains back button and send button
+class _HeaderBar extends StatelessWidget {
+  final VoidCallback onBack;
+  final VoidCallback onSend;
+  final bool isSending;
+
+  const _HeaderBar({
+    required this.onBack,
+    required this.onSend,
+    this.isSending = false,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        IconButton(
+          onPressed: onBack,
+          icon: Icon(CupertinoIcons.chevron_back),
+        ),
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: $constants.insets.sm),
+          child: PrimaryButtonSquare(
+            height: 35,
+            onPressed: onSend,
+            leading: isSending
+                ? CircularProgressIndicator.adaptive(strokeWidth: 2)
+                : null,
+            text: context.t.mail_composer.send,
+            textStyle: getTextTheme(context).headlineSmall!.copyWith(
+                  color: $constants.palette.white,
+                  fontWeight: FontWeight.bold,
+                ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+/// Reusable labeled field row used for To/From/Subject fields
+class _FieldWithLabel extends StatelessWidget {
+  final String label;
+  final Widget child;
+  final String? errorText;
+
+  const _FieldWithLabel({
+    required this.label,
+    required this.child,
+    this.errorText,
+  });
+
+  @override
+  Widget build(BuildContext context) {
     return Column(
       children: [
         Padding(
@@ -346,18 +539,20 @@ class MailComposerState extends ResponsiveState<MailComposer> {
                     .copyWith(color: Colors.grey),
               ),
               SizedBox(width: $constants.insets.xxs),
-              Expanded(child: field),
+              Expanded(child: child),
             ],
           ),
         ),
         if (errorText != null)
           Padding(
             padding: EdgeInsets.symmetric(
-                horizontal: $constants.insets.sm, vertical: 2),
+              horizontal: $constants.insets.sm,
+              vertical: 2,
+            ),
             child: Align(
               alignment: Alignment.centerLeft,
               child: Text(
-                errorText,
+                errorText!,
                 style: getTextTheme(context)
                     .bodySmall!
                     .copyWith(color: getTheme(context).error),
@@ -366,217 +561,5 @@ class MailComposerState extends ResponsiveState<MailComposer> {
           ),
       ],
     );
-  }
-
-  Future<Mail?> _generateMailEntity({
-    bool? isDraft = false,
-  }) async {
-    final htmlContent = parchmentHtml.encode(editorState!.document);
-    final mdContent = parchmentMarkdown.encode(editorState!.document);
-    final plainTextContent = _markdownToPlainText(mdContent);
-
-    if (isDraft != true) {
-      final emptyFields = [];
-
-      if (to == null || to!.isEmpty) {
-        setState(() {
-          toError = context.t.mail_composer.errors["no_recipient"]!;
-        });
-        return null;
-      }
-
-      if (subjectController.text.isEmpty) {
-        emptyFields.add("subject");
-      }
-
-      if (htmlContent.isEmpty) {
-        emptyFields.add("body");
-      }
-
-      // ask in a dialog if the user still wants to send the email if there are empty fields
-      final proceed = await _confirmEmptyMailDialog(context, emptyFields);
-      if (!proceed) {
-        return null;
-      }
-
-      // loop through to list and validate email addresses, collect invalid ones
-      List<String> toEmailsErrors = [];
-      for (var email in to!) {
-        final emailRegex = RegExp(
-            r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9]+\.[a-zA-Z]+");
-        if (!emailRegex.hasMatch(email)) {
-          toEmailsErrors.add(email);
-        }
-      }
-      if (toEmailsErrors.isNotEmpty) {
-        setState(() {
-          this.toEmailsErrors = toEmailsErrors;
-          toError = context.t.mail_composer.errors["invalid_recipient"]!;
-        });
-        return null;
-      } else {
-        setState(() {
-          this.toEmailsErrors = [];
-        });
-      }
-    }
-
-    final mail = Mail();
-    mail.headers = {
-      "To": to,
-      "From": from,
-      "Subject": subjectController.text,
-    };
-
-    mail.textContent = plainTextContent;
-    mail.htmlContent = htmlContent;
-    mail.createdAt = DateTime.now();
-
-    return mail;
-  }
-
-  Future<bool> _confirmEmptyMailDialog(
-    BuildContext context,
-    List<dynamic> emptyFields,
-  ) async {
-    if (emptyFields.isNotEmpty) {
-      // For now, we just proceed without blocking
-      return await showDialog(
-        context: context,
-        builder: (context) => Dialog(
-          child: Container(
-            padding: EdgeInsets.all($constants.insets.lg),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  context.t.mail_composer.incomplete_email_modal.title,
-                  style: getTextTheme(context).headlineMedium!.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
-                ),
-                SizedBox(height: $constants.insets.md),
-                Text(
-                  context.t.mail_composer.incomplete_email_modal.description,
-                ),
-                SizedBox(height: $constants.insets.md),
-                ...emptyFields.map((field) =>
-                    Text("- ${context.t.mail_composer.fields[field]}")),
-                SizedBox(height: $constants.insets.md),
-                Text(
-                  context
-                      .t.mail_composer.incomplete_email_modal.want_to_go_back,
-                ),
-                SizedBox(height: $constants.insets.lg),
-                Row(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    PrimaryButtonSquare(
-                      outlined: true,
-                      onPressed: () {
-                        Navigator.pop(context, false); // Go back to editing
-                      },
-                      text: context
-                          .t.mail_composer.incomplete_email_modal.cancel_text,
-                    ),
-                    SizedBox(width: $constants.insets.md),
-                    PrimaryButtonSquare(
-                        text: context.t.mail_composer.incomplete_email_modal
-                            .confirm_text,
-                        onPressed: () {
-                          Navigator.pop(context, true); // Close dialog
-                        }),
-                  ],
-                ),
-              ],
-            ),
-          ),
-        ),
-      );
-    }
-    return false;
-  }
-
-  void _sendMail(BuildContext context) async {
-    final mail = await _generateMailEntity();
-
-    if (mail == null) {
-      return;
-    }
-
-    if (!context.mounted) return;
-    context.read<MailBloc>().add(SendMail(mail));
-  }
-
-  String _markdownToPlainText(String mdContent) {
-    // Regular expression to match Markdown symbols including '#'
-    RegExp regex = RegExp(r'[*_~`#]');
-    // Replace Markdown symbols with an empty string
-    return mdContent.replaceAll(regex, '');
-  }
-
-  void draftAndPop(
-    BuildContext context, {
-    bool pop = true,
-  }) async {
-    if (editorState!.document.length <= 1 &&
-        subjectController.text.isEmpty &&
-        toController.text.isEmpty) {
-      if (pop) Navigator.pop(context);
-      return;
-    }
-    // ask the user if they want to save the draft when the body content is not filled but there is a subject / from / to
-    bool saveDraft = false;
-    if (editorState!.document.length <= 1 &&
-        (subjectController.text.isNotEmpty ||
-            toController.text.isNotEmpty ||
-            from != null)) {
-      final result = await showDialog(
-          context: context,
-          builder: (context) => ABModal(
-                title: context.t.mail_composer.save_draft_modal.title,
-                description:
-                    context.t.mail_composer.save_draft_modal.description,
-                confirmText:
-                    context.t.mail_composer.save_draft_modal.confirm_text,
-                cancelText:
-                    context.t.mail_composer.save_draft_modal.cancel_text,
-                onConfirm: () {
-                  Navigator.pop(context, true);
-                },
-                onCancel: () {
-                  Navigator.pop(context, false);
-                },
-              ));
-      saveDraft = result;
-    }
-
-    if (editorState!.document.length > 1) {
-      saveDraft = true;
-    }
-
-    if (saveDraft) {
-      // save the draft
-      final mail = await _generateMailEntity(
-        isDraft: true,
-      );
-      if (mail == null) {
-        return;
-      }
-      if (widget.mail != null) {
-        // update the draft
-        if (!context.mounted) return;
-        context.read<MailBloc>().add(UpdateDraft(mail, widget.mail!.id!));
-      } else {
-        if (!context.mounted) return;
-        context.read<MailBloc>().add(SaveDraft(mail));
-      }
-    }
-    if (pop) {
-      if (!context.mounted) return;
-      Navigator.pop(context);
-    }
-    return;
   }
 }

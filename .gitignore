@@ -170,3 +170,4 @@ app.*.symbols
 /macos/DerivedData
 /macos_dmg/*.dmg
 /playstore_key.json
+.zed/debug.json
