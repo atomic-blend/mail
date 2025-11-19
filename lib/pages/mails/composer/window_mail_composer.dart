@@ -1,6 +1,6 @@
+import 'package:ab_shared/components/app/window_layout/window_layout_widget.dart';
 import 'package:ab_shared/utils/shortcuts.dart';
 import 'package:flutter/material.dart';
-import 'package:ab_shared/components/app/window_layout/window_layout_widget.dart';
 import 'package:mail/models/mail/mail.dart';
 import 'package:mail/models/send_mail/send_mail.dart';
 import 'package:mail/pages/mails/composer/mail_composer.dart';
