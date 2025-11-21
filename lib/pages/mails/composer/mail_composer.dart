@@ -163,7 +163,7 @@ class MailComposerState extends ResponsiveState<MailComposer> {
           r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9]+\.[a-zA-Z]+",
         );
         if (emailRegex.hasMatch(originalFrom)) {
-        to = [originalFrom];
+          to = [originalFrom];
         } else {
           // Try to extract email from Name <email> format
           final emailExtractRegex = RegExp(r'<([^>]+)>');
@@ -189,7 +189,7 @@ class MailComposerState extends ResponsiveState<MailComposer> {
 
   void _onMailStateChanged(BuildContext context, MailState state) {
     if (state is MailSendSuccess) {
-      if (context.mounted) Navigator.pop(context);
+      if (context.mounted && widget.windowMode != true) Navigator.pop(context);
     } else if (state is MailSendError) {
       ToastHelper.showError(
         context: context,
