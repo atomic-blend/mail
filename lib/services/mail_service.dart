@@ -84,7 +84,7 @@ class MailService {
   Future<bool> sendMail(Mail mail) async {
     final result =
         await globalApiClient.post('/mail/send', data: mail.toRawMail());
-    if (result != null && result.statusCode == 200) {
+    if (result != null && result.statusCode == 201) {
       return true;
     } else {
       throw Exception('Failed to send mail');
@@ -94,7 +94,7 @@ class MailService {
   Future<bool> saveDraft(Mail mail) async {
     final result =
         await globalApiClient.post('/mail/draft', data: mail.toRawMail());
-    if (result != null && result.statusCode == 200) {
+    if (result != null && result.statusCode == 201) {
       return true;
     } else {
       throw Exception('Failed to save draft');

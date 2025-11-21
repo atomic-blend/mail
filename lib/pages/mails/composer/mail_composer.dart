@@ -158,7 +158,20 @@ class MailComposerState extends ResponsiveState<MailComposer> {
 
       final originalFrom = original.getHeader("From");
       if (originalFrom != null) {
+        // check if originalFrom is just an email or a Name <email> format
+        final emailRegex = RegExp(
+          r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9]+\.[a-zA-Z]+",
+        );
+        if (emailRegex.hasMatch(originalFrom)) {
         to = [originalFrom];
+        } else {
+          // Try to extract email from Name <email> format
+          final emailExtractRegex = RegExp(r'<([^>]+)>');
+          final match = emailExtractRegex.firstMatch(originalFrom);
+          if (match != null && match.groupCount >= 1) {
+            to = [match.group(1)!];
+          }
+        }
       }
     }
 
