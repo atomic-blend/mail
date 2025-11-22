@@ -13,8 +13,13 @@ class BigMailCard extends StatelessWidget {
   final Mail mail;
   final bool? isSent;
   final Color? backgroundColor;
+  final bool collapsed;
   const BigMailCard(
-      {super.key, required this.mail, this.isSent, this.backgroundColor});
+      {super.key,
+      required this.mail,
+      this.isSent,
+      this.backgroundColor,
+      this.collapsed = false});
 
   @override
   Widget build(BuildContext context) {
@@ -101,11 +106,13 @@ class BigMailCard extends StatelessWidget {
             ],
           ),
           SizedBox(height: $constants.insets.sm),
-          Text(
-            getContent(context, mail),
-            textAlign: TextAlign.left,
-            style: getTextTheme(context).bodyMedium,
-          ),
+          if (!collapsed) ...[
+            Text(
+              getContent(context, mail),
+              textAlign: TextAlign.left,
+              style: getTextTheme(context).bodyMedium,
+            ),
+          ],
         ],
       ),
     );
