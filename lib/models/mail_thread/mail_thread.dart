@@ -8,7 +8,6 @@ part 'mail_thread.freezed.dart';
 
 @freezed
 class MailThread with _$MailThread {
-  MailThread._();
   factory MailThread({
     @Default(<Mail>[]) List<Mail> mails,
   }) = _MailThread;

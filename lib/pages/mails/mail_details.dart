@@ -50,7 +50,6 @@ class MailDetailScreenState extends ResponsiveState<MailDetailScreen> {
         mailState.mails ?? [],
         widget.mail,
       );
-      print(thread);
       return Scaffold(
         backgroundColor: getTheme(context).surface,
         body: SafeArea(

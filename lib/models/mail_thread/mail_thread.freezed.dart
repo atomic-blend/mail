@@ -105,8 +105,7 @@ class __$$MailThreadImplCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$MailThreadImpl implements _MailThread {
-  const _$MailThreadImpl({final List<Mail> mails = const <Mail>[]})
-      : _mails = mails;
+  _$MailThreadImpl({final List<Mail> mails = const <Mail>[]}) : _mails = mails;
 
   factory _$MailThreadImpl.fromJson(Map<String, dynamic> json) =>
       _$$MailThreadImplFromJson(json);
@@ -155,7 +154,7 @@ class _$MailThreadImpl implements _MailThread {
 }
 
 abstract class _MailThread implements MailThread {
-  const factory _MailThread({final List<Mail> mails}) = _$MailThreadImpl;
+  factory _MailThread({final List<Mail> mails}) = _$MailThreadImpl;
 
   factory _MailThread.fromJson(Map<String, dynamic> json) =
       _$MailThreadImpl.fromJson;

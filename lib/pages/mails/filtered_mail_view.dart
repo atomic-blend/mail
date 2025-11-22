@@ -138,6 +138,7 @@ class _FliteredMailViewState extends State<FliteredMailView> {
                       )
                     : selectedMails.length == 1 && isSelecting != true
                         ? MailDetailScreen(
+                          key: ValueKey(selectedMails.first.id),
                             selectedMails.first,
                             mode: MailScreenMode.integrated,
                             onCancel: () {
