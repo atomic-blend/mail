@@ -228,6 +228,7 @@ class MailDetailScreenState extends ResponsiveState<MailDetailScreen> {
                                 backgroundColor:
                                     getTheme(context).surfaceContainer,
                                 collapsed: tmail.id != widget.mail.id,
+                                readOnly: tmail.id != widget.mail.id,
                               );
                             },
                           ),
