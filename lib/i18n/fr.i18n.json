@@ -41,6 +41,7 @@
     "subject": "Objet",
     "to": "À",
     "body": "Corps",
+    "date": "Date",
     "send": "Envoyer",
     "fields(map)": {
       "to": "À",

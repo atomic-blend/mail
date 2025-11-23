@@ -1,3 +1,4 @@
+import 'package:ab_shared/components/app/conditional_parent_wrapper.dart';
 import 'package:ab_shared/components/widgets/elevated_container.dart';
 import 'package:ab_shared/utils/constants.dart';
 import 'package:ab_shared/utils/shortcuts.dart';
@@ -83,6 +84,15 @@ class _BigMailCardState extends State<BigMailCard> {
                       widget.mail,
                       widget.isSent,
                     ),
+                    if (!isDesktop(context))
+                      buildPeopleRow(
+                        context,
+                        context.t.mail_composer.date,
+                        "${Jiffy.parseFromDateTime(widget.mail.createdAt!).yMd.toString()} ${Jiffy.parseFromDateTime(widget.mail.createdAt!).Hm.toString()}",
+                        widget.mail,
+                        widget.isSent,
+                        valueTextStyle: getTextTheme(context).bodySmall!,
+                      ),
                   ],
                 ),
                 Spacer(),
@@ -95,7 +105,6 @@ class _BigMailCardState extends State<BigMailCard> {
                       if (_collapsed != true && widget.readOnly != true)
                         _buildActionPill(
                             context: context,
-                            text: "Reply",
                             icon: CupertinoIcons.reply,
                             onTap: () {
                               MailComposerHelper.openMailComposer(
@@ -107,30 +116,31 @@ class _BigMailCardState extends State<BigMailCard> {
                   ),
                 ),
                 SizedBox(width: $constants.insets.sm),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    if (widget.mail.createdAt != null)
-                      Text(
-                        Jiffy.parseFromDateTime(widget.mail.createdAt!)
-                            .yMd
-                            .toString(),
-                        style: getTextTheme(context)
-                            .bodySmall!
-                            .copyWith(color: Colors.grey),
-                      ),
-                    if (widget.mail.createdAt != null)
-                      Text(
-                        Jiffy.parseFromDateTime(widget.mail.createdAt!)
-                            .Hm
-                            .toString(),
-                        style: getTextTheme(context)
-                            .bodySmall!
-                            .copyWith(color: Colors.grey),
-                      )
-                  ],
-                )
+                if (isDesktop(context))
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      if (widget.mail.createdAt != null)
+                        Text(
+                          Jiffy.parseFromDateTime(widget.mail.createdAt!)
+                              .yMd
+                              .toString(),
+                          style: getTextTheme(context)
+                              .bodySmall!
+                              .copyWith(color: Colors.grey),
+                        ),
+                      if (widget.mail.createdAt != null)
+                        Text(
+                          Jiffy.parseFromDateTime(widget.mail.createdAt!)
+                              .Hm
+                              .toString(),
+                          style: getTextTheme(context)
+                              .bodySmall!
+                              .copyWith(color: Colors.grey),
+                        )
+                    ],
+                  )
               ],
             ),
             SizedBox(height: $constants.insets.sm),
@@ -158,9 +168,12 @@ class _BigMailCardState extends State<BigMailCard> {
   }
 
   Widget buildPeopleRow(BuildContext context, String label, dynamic value,
-      Mail mail, bool? isSent) {
+      Mail mail, bool? isSent,
+      {TextStyle? valueTextStyle}) {
     String displayValue = value is List ? value.join(", ") : value.toString();
     return Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.end,
       mainAxisSize: MainAxisSize.min,
       children: [
         Text(
@@ -170,9 +183,11 @@ class _BigMailCardState extends State<BigMailCard> {
         SizedBox(width: $constants.insets.xs),
         Text(
           displayValue,
-          style: getTextTheme(context).bodyMedium!.copyWith(
-              fontWeight:
-                  mail.read != true && isSent != true ? FontWeight.bold : null),
+          style: valueTextStyle ??
+              getTextTheme(context).bodyMedium!.copyWith(
+                  fontWeight: mail.read != true && isSent != true
+                      ? FontWeight.bold
+                      : null),
         ),
       ],
     );
@@ -206,15 +221,16 @@ class _BigMailCardState extends State<BigMailCard> {
               size: 16,
               color: textColor,
             ),
-            SizedBox(width: $constants.insets.xs),
           ],
-          if (text != null)
+          if (text != null) ...[
+            SizedBox(width: $constants.insets.xs),
             Text(
               text,
               style: getTextTheme(context).bodySmall!.copyWith(
                     color: textColor,
                   ),
             ),
+          ]
         ],
       ),
     );
