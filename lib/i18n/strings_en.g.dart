@@ -166,6 +166,9 @@ class TranslationsMailComposerEn {
 	/// en: 'Body'
 	String get body => 'Body';
 
+	/// en: 'Date'
+	String get date => 'Date';
+
 	/// en: 'Send'
 	String get send => 'Send';
 
@@ -467,6 +470,7 @@ extension on Translations {
 			case 'mail_composer.subject': return 'Subject';
 			case 'mail_composer.to': return 'To';
 			case 'mail_composer.body': return 'Body';
+			case 'mail_composer.date': return 'Date';
 			case 'mail_composer.send': return 'Send';
 			case 'mail_composer.fields.to': return 'To';
 			case 'mail_composer.fields.subject': return 'Subject';

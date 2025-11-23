@@ -15,7 +15,6 @@ class Mail with _$Mail {
       "textContent": textContent,
       "htmlContent": htmlContent,
       "headers": headers,
-      //TODO: add attachments handling
       "inReplyTo": inReplyTo,
       "createdAt": createdAt?.toIso8601String(),
     };

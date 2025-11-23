@@ -46,6 +46,7 @@
     "subject": "Subject",
     "to": "To",
     "body": "Body",
+    "date": "Date",
     "send": "Send",
     "fields(map)": {
       "to": "To",

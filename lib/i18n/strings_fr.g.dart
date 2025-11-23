@@ -121,6 +121,7 @@ class _TranslationsMailComposerFr implements TranslationsMailComposerEn {
 	@override String get subject => 'Objet';
 	@override String get to => 'À';
 	@override String get body => 'Corps';
+	@override String get date => 'Date';
 	@override String get send => 'Envoyer';
 	@override Map<String, String> get fields => {
 		'to': 'À',
@@ -352,6 +353,7 @@ extension on TranslationsFr {
 			case 'mail_composer.subject': return 'Objet';
 			case 'mail_composer.to': return 'À';
 			case 'mail_composer.body': return 'Corps';
+			case 'mail_composer.date': return 'Date';
 			case 'mail_composer.send': return 'Envoyer';
 			case 'mail_composer.fields.to': return 'À';
 			case 'mail_composer.fields.subject': return 'Objet';
