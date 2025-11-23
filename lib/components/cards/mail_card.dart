@@ -187,76 +187,7 @@ class _MailCardState extends State<MailCard> {
                 _toggleSelected(mail);
               },
               onTap: () async {
-                if (widget.onTap != null) {
-                  widget.onTap?.call(mail);
-                  return;
-                }
-                if (widget.draft == null) {
-                  // on mobile, open the mail in the detail screen only when no mails are selected (ie not in multi-select mode)
-                  if (!isDesktop(context)) {
-                    if (widget.selectedMails.isEmpty) {
-                      await Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => MailDetailScreen(
-                                mail,
-                                onCancel: () {
-                                  Navigator.of(context).pop();
-                                },
-                              )));
-                    } else {
-                      // when in multi-select mode, toggle the selection of the mail
-                      _toggleSelected(mail);
-                    }
-                    if (!context.mounted) return;
-                    SyncService.sync(context);
-                  } else {
-                    if (getSize(context).width < $constants.screenSize.md) {
-                      // on mobile, tapping the mail opens it in the detail screen
-                      await Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => MailDetailScreen(
-                            mail,
-                            onCancel: () {
-                              Navigator.of(context).pop();
-                            },
-                          ),
-                        ),
-                      );
-                    } else {
-                      // on desktop, tapping the mail opens it in the preview panel
-                      // multi-select mode enables itself when the user clicks on the avatar / checkbox
-                      _toggleSelected(
-                        mail,
-                        reset: widget.selectMode != true,
-                      );
-                    }
-                  }
-                } else {
-                  if (widget.isSent == true) {
-                    if (getSize(context).width < $constants.screenSize.md) {
-                      // on mobile, tapping the mail opens it in the detail screen
-                      await Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => MailDetailScreen(
-                            mail,
-                            isSent: true,
-                            onCancel: () {
-                              Navigator.of(context).pop();
-                            },
-                          ),
-                        ),
-                      );
-                    } else {
-                      // on desktop, tapping the mail opens it in the preview panel
-                      // multi-select mode enables itself when the user clicks on the avatar / checkbox
-                      _toggleSelected(
-                        mail,
-                        reset: widget.selectMode != true,
-                      );
-                    }
-                  } else {
-                    _openComposer(context);
-                  }
-                }
+                await _onMailTap(context, mail);
               },
               child: Row(
                 children: [
@@ -424,6 +355,19 @@ class _MailCardState extends State<MailCard> {
     });
   }
 
+  Future<void> _openMailDetailMobile(Mail mail, {bool isSent = false}) async {
+    await getIt<GlobalKey<NavigatorState>>(
+      instanceName: 'rootNavigatorKey',
+    ).currentState!.push(MaterialPageRoute(
+        builder: (context) => MailDetailScreen(
+              mail,
+              isSent: isSent,
+              onCancel: () {
+                Navigator.of(context).pop();
+              },
+            )));
+  }
+
   void _toggleSelected(Mail mail, {bool reset = false}) {
     if (reset) {
       widget.selectedMails.clear();
@@ -579,5 +523,53 @@ class _MailCardState extends State<MailCard> {
         ],
       ),
     );
+  }
+
+  Future<void> _onMailTap(BuildContext context, Mail mail) async {
+    if (widget.onTap != null) {
+      widget.onTap?.call(mail);
+      return;
+    }
+    if (widget.draft == null) {
+      // on mobile, open the mail in the detail screen only when no mails are selected (ie not in multi-select mode)
+      if (!isDesktop(context)) {
+        if (widget.selectedMails.isEmpty) {
+          await _openMailDetailMobile(mail);
+        } else {
+          // when in multi-select mode, toggle the selection of the mail
+          _toggleSelected(mail);
+        }
+        if (!context.mounted) return;
+        SyncService.sync(context);
+      } else {
+        if (getSize(context).width < $constants.screenSize.md) {
+          // on mobile, tapping the mail opens it in the detail screen
+          await _openMailDetailMobile(mail);
+        } else {
+          // on desktop, tapping the mail opens it in the preview panel
+          // multi-select mode enables itself when the user clicks on the avatar / checkbox
+          _toggleSelected(
+            mail,
+            reset: widget.selectMode != true,
+          );
+        }
+      }
+    } else {
+      if (widget.isSent == true) {
+        if (getSize(context).width < $constants.screenSize.md) {
+          // on mobile, tapping the mail opens it in the detail screen
+          await _openMailDetailMobile(mail, isSent: true);
+        } else {
+          // on desktop, tapping the mail opens it in the preview panel
+          // multi-select mode enables itself when the user clicks on the avatar / checkbox
+          _toggleSelected(
+            mail,
+            reset: widget.selectMode != true,
+          );
+        }
+      } else {
+        _openComposer(context);
+      }
+    }
   }
 }
