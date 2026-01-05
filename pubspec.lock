@@ -1789,7 +1789,7 @@ packages:
     source: hosted
     version: "1.1.0"
   super_tooltip:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: super_tooltip
       sha256: "06f734caa2ddb2313813dac2c939f096222beece9c146ec7d71e07e6e869bef2"
