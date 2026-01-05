@@ -120,7 +120,7 @@ class MailDetailScreenState extends ResponsiveState<MailDetailScreen> {
                                     constraints: BoxConstraints(
                                       maxWidth: isDesktop(context)
                                           ? getSize(context).width * 0.68
-                                          : getSize(context).width,
+                                          : getSize(context).width * 0.88,
                                     ),
                                     child: Padding(
                                       padding: EdgeInsets.symmetric(

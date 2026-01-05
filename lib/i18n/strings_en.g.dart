@@ -3,12 +3,13 @@
 ///
 // coverage:ignore-file
 // ignore_for_file: type=lint, unused_import
+// dart format off
 
 part of 'strings.g.dart';
 
 // Path: <root>
 typedef TranslationsEn = Translations; // ignore: unused_element
-class Translations implements BaseTranslations<AppLocale, Translations> {
+class Translations with BaseTranslations<AppLocale, Translations> {
 	/// Returns the current translations of the given [context].
 	///
 	/// Usage:
@@ -441,74 +442,76 @@ class TranslationsSettingsAppSettingsSelfHostedUrlEn {
 	String get not_set => 'Not set';
 }
 
-/// Flat map(s) containing all translations.
+/// The flat map containing all translations for locale <en>.
 /// Only for edge cases! For simple maps, use the map function of this library.
+///
+/// The Dart AOT compiler has issues with very large switch statements,
+/// so the map is split into smaller functions (512 entries each).
 extension on Translations {
 	dynamic _flatMapFunction(String path) {
-		switch (path) {
-			case 'settings.title': return 'Settings';
-			case 'settings.app_settings.title': return 'App Settings';
-			case 'settings.app_settings.selfHostedUrl.title': return 'Self-Hosted URL';
-			case 'settings.app_settings.selfHostedUrl.not_set': return 'Not set';
-			case 'settings.logout': return 'Logout';
-			case 'sections.mail': return 'Mail';
-			case 'account.sections.account': return 'Account';
-			case 'mail_card.no_content': return 'No content';
-			case 'mail_card.delete_draft_modal.title': return 'Delete draft';
-			case 'mail_card.delete_draft_modal.description': return 'Are you sure you want to delete this draft?';
-			case 'mail_card.delete_draft_modal.warning': return 'This action cannot be undone.';
-			case 'zero_inbox_card.title': return 'Congratulations!';
-			case 'zero_inbox_card.description': return 'You don\'t have any unread messages.';
-			case 'trashed.card_title': return 'Delete all trashed mails';
-			case 'trashed.x_mails_trashed': return ({required Object count}) => '${count} mails trashed';
-			case 'trashed.description': return 'Those are the mails that have been trashed by you, they will be deleted after 30 days.';
-			case 'trashed.delete_all_trashed_mails_modal.title': return 'Delete all trashed mails';
-			case 'trashed.delete_all_trashed_mails_modal.description': return 'Are you sure you want to delete all trashed mails?';
-			case 'trashed.delete_all_trashed_mails_modal.warning': return 'This action cannot be undone.';
-			case 'mail_composer.title': return 'New Mail';
-			case 'mail_composer.from': return 'From';
-			case 'mail_composer.subject': return 'Subject';
-			case 'mail_composer.to': return 'To';
-			case 'mail_composer.body': return 'Body';
-			case 'mail_composer.date': return 'Date';
-			case 'mail_composer.send': return 'Send';
-			case 'mail_composer.fields.to': return 'To';
-			case 'mail_composer.fields.subject': return 'Subject';
-			case 'mail_composer.fields.body': return 'Body';
-			case 'mail_composer.save_draft_modal.title': return 'Save Draft';
-			case 'mail_composer.save_draft_modal.description': return 'Do you want to save the draft?';
-			case 'mail_composer.save_draft_modal.confirm_text': return 'Save';
-			case 'mail_composer.save_draft_modal.cancel_text': return 'Discard';
-			case 'mail_composer.incomplete_email_modal.title': return 'Incomplete Email';
-			case 'mail_composer.incomplete_email_modal.description': return 'The email you are trying to send is incomplete.\nPlease check the following fields:';
-			case 'mail_composer.incomplete_email_modal.want_to_go_back': return 'Do you want to go back and complete it?';
-			case 'mail_composer.incomplete_email_modal.cancel_text': return 'Go Back';
-			case 'mail_composer.incomplete_email_modal.confirm_text': return 'Send Anyway';
-			case 'mail_composer.errors.error_sending_email': return 'An error occurred while sending the email. Please try again.';
-			case 'mail_composer.errors.no_recipient': return 'Please specify at least one recipient.';
-			case 'mail_composer.errors.invalid_recipient': return 'One or more recipients have an invalid email address.';
-			case 'under_construction.title': return 'We\'re working on it!';
-			case 'under_construction.description': return 'This feature is not yet available, but we\'re working hard to bring it to you soon.\n\nStay tuned!';
-			case 'more.title': return 'More';
-			case 'actions.delete': return 'Delete';
-			case 'xx_mail_card.description': return ({required Object count}) => 'You have ${count} mails in this folder.';
-			case 'email_folders.inbox': return 'Inbox';
-			case 'email_folders.drafts': return 'Drafts';
-			case 'email_folders.archive': return 'Archive';
-			case 'email_folders.trashed': return 'Trashed';
-			case 'email_folders.spam': return 'Spam';
-			case 'email_folders.sent': return 'Sent';
-			case 'email_folders.all': return 'All';
-			case 'mail_actions.mark_as_read': return 'Mark as read';
-			case 'mail_actions.mark_as_unread': return 'Mark as unread';
-			case 'mail_actions.archive': return 'Archive';
-			case 'mail_actions.unarchive': return 'Unarchive';
-			case 'mail_actions.trash': return 'Trash';
-			case 'mail_actions.untrash': return 'Untrash';
-			case 'toast_notifications.selected_mails.title': return ({required Object count}) => '${count} mails selected';
-			case 'toast_notifications.selected_mails.description': return 'Click here to perform action.';
-			default: return null;
-		}
+		return switch (path) {
+			'settings.title' => 'Settings',
+			'settings.app_settings.title' => 'App Settings',
+			'settings.app_settings.selfHostedUrl.title' => 'Self-Hosted URL',
+			'settings.app_settings.selfHostedUrl.not_set' => 'Not set',
+			'settings.logout' => 'Logout',
+			'sections.mail' => 'Mail',
+			'account.sections.account' => 'Account',
+			'mail_card.no_content' => 'No content',
+			'mail_card.delete_draft_modal.title' => 'Delete draft',
+			'mail_card.delete_draft_modal.description' => 'Are you sure you want to delete this draft?',
+			'mail_card.delete_draft_modal.warning' => 'This action cannot be undone.',
+			'zero_inbox_card.title' => 'Congratulations!',
+			'zero_inbox_card.description' => 'You don\'t have any unread messages.',
+			'trashed.card_title' => 'Delete all trashed mails',
+			'trashed.x_mails_trashed' => ({required Object count}) => '${count} mails trashed',
+			'trashed.description' => 'Those are the mails that have been trashed by you, they will be deleted after 30 days.',
+			'trashed.delete_all_trashed_mails_modal.title' => 'Delete all trashed mails',
+			'trashed.delete_all_trashed_mails_modal.description' => 'Are you sure you want to delete all trashed mails?',
+			'trashed.delete_all_trashed_mails_modal.warning' => 'This action cannot be undone.',
+			'mail_composer.title' => 'New Mail',
+			'mail_composer.from' => 'From',
+			'mail_composer.subject' => 'Subject',
+			'mail_composer.to' => 'To',
+			'mail_composer.body' => 'Body',
+			'mail_composer.date' => 'Date',
+			'mail_composer.send' => 'Send',
+			'mail_composer.fields.to' => 'To',
+			'mail_composer.fields.subject' => 'Subject',
+			'mail_composer.fields.body' => 'Body',
+			'mail_composer.save_draft_modal.title' => 'Save Draft',
+			'mail_composer.save_draft_modal.description' => 'Do you want to save the draft?',
+			'mail_composer.save_draft_modal.confirm_text' => 'Save',
+			'mail_composer.save_draft_modal.cancel_text' => 'Discard',
+			'mail_composer.incomplete_email_modal.title' => 'Incomplete Email',
+			'mail_composer.incomplete_email_modal.description' => 'The email you are trying to send is incomplete.\nPlease check the following fields:',
+			'mail_composer.incomplete_email_modal.want_to_go_back' => 'Do you want to go back and complete it?',
+			'mail_composer.incomplete_email_modal.cancel_text' => 'Go Back',
+			'mail_composer.incomplete_email_modal.confirm_text' => 'Send Anyway',
+			'mail_composer.errors.error_sending_email' => 'An error occurred while sending the email. Please try again.',
+			'mail_composer.errors.no_recipient' => 'Please specify at least one recipient.',
+			'mail_composer.errors.invalid_recipient' => 'One or more recipients have an invalid email address.',
+			'under_construction.title' => 'We\'re working on it!',
+			'under_construction.description' => 'This feature is not yet available, but we\'re working hard to bring it to you soon.\n\nStay tuned!',
+			'more.title' => 'More',
+			'actions.delete' => 'Delete',
+			'xx_mail_card.description' => ({required Object count}) => 'You have ${count} mails in this folder.',
+			'email_folders.inbox' => 'Inbox',
+			'email_folders.drafts' => 'Drafts',
+			'email_folders.archive' => 'Archive',
+			'email_folders.trashed' => 'Trashed',
+			'email_folders.spam' => 'Spam',
+			'email_folders.sent' => 'Sent',
+			'email_folders.all' => 'All',
+			'mail_actions.mark_as_read' => 'Mark as read',
+			'mail_actions.mark_as_unread' => 'Mark as unread',
+			'mail_actions.archive' => 'Archive',
+			'mail_actions.unarchive' => 'Unarchive',
+			'mail_actions.trash' => 'Trash',
+			'mail_actions.untrash' => 'Untrash',
+			'toast_notifications.selected_mails.title' => ({required Object count}) => '${count} mails selected',
+			'toast_notifications.selected_mails.description' => 'Click here to perform action.',
+			_ => null,
+		};
 	}
 }
-

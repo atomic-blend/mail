@@ -30,6 +30,7 @@ class Mail with _$Mail {
     List<MailAttachment>? attachments,
     bool? archived,
     bool? trashed,
+    String? calendarEvent,
     bool? greylisted,
     bool? rejected,
     bool? rewriteSubject,
@@ -47,6 +48,7 @@ class Mail with _$Mail {
     'attachments',
     'archived',
     'read',
+    'calendarEvent',
     'inReplyTo',
     'trashed',
     'greylisted',
@@ -109,6 +111,7 @@ class Mail with _$Mail {
             )
           : null,
       'archived': archived,
+      'calendarEvent': calendarEvent,
       'trashed': trashed,
       'greylisted': greylisted,
       'rejected': rejected,

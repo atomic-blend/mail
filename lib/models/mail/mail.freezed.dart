@@ -40,6 +40,8 @@ mixin _$Mail {
   set archived(bool? value) => throw _privateConstructorUsedError;
   bool? get trashed => throw _privateConstructorUsedError;
   set trashed(bool? value) => throw _privateConstructorUsedError;
+  String? get calendarEvent => throw _privateConstructorUsedError;
+  set calendarEvent(String? value) => throw _privateConstructorUsedError;
   bool? get greylisted => throw _privateConstructorUsedError;
   set greylisted(bool? value) => throw _privateConstructorUsedError;
   bool? get rejected => throw _privateConstructorUsedError;
@@ -79,6 +81,7 @@ abstract class $MailCopyWith<$Res> {
       List<MailAttachment>? attachments,
       bool? archived,
       bool? trashed,
+      String? calendarEvent,
       bool? greylisted,
       bool? rejected,
       bool? rewriteSubject,
@@ -112,6 +115,7 @@ class _$MailCopyWithImpl<$Res, $Val extends Mail>
     Object? attachments = freezed,
     Object? archived = freezed,
     Object? trashed = freezed,
+    Object? calendarEvent = freezed,
     Object? greylisted = freezed,
     Object? rejected = freezed,
     Object? rewriteSubject = freezed,
@@ -157,6 +161,10 @@ class _$MailCopyWithImpl<$Res, $Val extends Mail>
           ? _value.trashed
           : trashed // ignore: cast_nullable_to_non_nullable
               as bool?,
+      calendarEvent: freezed == calendarEvent
+          ? _value.calendarEvent
+          : calendarEvent // ignore: cast_nullable_to_non_nullable
+              as String?,
       greylisted: freezed == greylisted
           ? _value.greylisted
           : greylisted // ignore: cast_nullable_to_non_nullable
@@ -206,6 +214,7 @@ abstract class _$$MailImplCopyWith<$Res> implements $MailCopyWith<$Res> {
       List<MailAttachment>? attachments,
       bool? archived,
       bool? trashed,
+      String? calendarEvent,
       bool? greylisted,
       bool? rejected,
       bool? rewriteSubject,
@@ -236,6 +245,7 @@ class __$$MailImplCopyWithImpl<$Res>
     Object? attachments = freezed,
     Object? archived = freezed,
     Object? trashed = freezed,
+    Object? calendarEvent = freezed,
     Object? greylisted = freezed,
     Object? rejected = freezed,
     Object? rewriteSubject = freezed,
@@ -281,6 +291,10 @@ class __$$MailImplCopyWithImpl<$Res>
           ? _value.trashed
           : trashed // ignore: cast_nullable_to_non_nullable
               as bool?,
+      calendarEvent: freezed == calendarEvent
+          ? _value.calendarEvent
+          : calendarEvent // ignore: cast_nullable_to_non_nullable
+              as String?,
       greylisted: freezed == greylisted
           ? _value.greylisted
           : greylisted // ignore: cast_nullable_to_non_nullable
@@ -326,6 +340,7 @@ class _$MailImpl extends _Mail {
       this.attachments,
       this.archived,
       this.trashed,
+      this.calendarEvent,
       this.greylisted,
       this.rejected,
       this.rewriteSubject,
@@ -356,6 +371,8 @@ class _$MailImpl extends _Mail {
   bool? archived;
   @override
   bool? trashed;
+  @override
+  String? calendarEvent;
   @override
   bool? greylisted;
   @override
@@ -398,6 +415,7 @@ abstract class _Mail extends Mail {
       List<MailAttachment>? attachments,
       bool? archived,
       bool? trashed,
+      String? calendarEvent,
       bool? greylisted,
       bool? rejected,
       bool? rewriteSubject,
@@ -436,6 +454,9 @@ abstract class _Mail extends Mail {
   @override
   bool? get trashed;
   set trashed(bool? value);
+  @override
+  String? get calendarEvent;
+  set calendarEvent(String? value);
   @override
   bool? get greylisted;
   set greylisted(bool? value);
