@@ -164,27 +164,7 @@ class TranslationsMailComposerEn {
 	/// en: 'To'
 	String get to => 'To';
 
-	/// en: 'Body'
-	String get body => 'Body';
-
-	/// en: 'Date'
-	String get date => 'Date';
-
-	/// en: 'Send'
-	String get send => 'Send';
-
-	Map<String, String> get fields => {
-		'to': 'To',
-		'subject': 'Subject',
-		'body': 'Body',
-	};
 	late final TranslationsMailComposerSaveDraftModalEn save_draft_modal = TranslationsMailComposerSaveDraftModalEn._(_root);
-	late final TranslationsMailComposerIncompleteEmailModalEn incomplete_email_modal = TranslationsMailComposerIncompleteEmailModalEn._(_root);
-	Map<String, String> get errors => {
-		'error_sending_email': 'An error occurred while sending the email. Please try again.',
-		'no_recipient': 'Please specify at least one recipient.',
-		'invalid_recipient': 'One or more recipients have an invalid email address.',
-	};
 }
 
 // Path: under_construction
@@ -257,12 +237,6 @@ class TranslationsEmailFoldersEn {
 
 	/// en: 'Trashed'
 	String get trashed => 'Trashed';
-
-	/// en: 'Spam'
-	String get spam => 'Spam';
-
-	/// en: 'Sent'
-	String get sent => 'Sent';
 
 	/// en: 'All'
 	String get all => 'All';
@@ -388,30 +362,6 @@ class TranslationsMailComposerSaveDraftModalEn {
 	String get cancel_text => 'Discard';
 }
 
-// Path: mail_composer.incomplete_email_modal
-class TranslationsMailComposerIncompleteEmailModalEn {
-	TranslationsMailComposerIncompleteEmailModalEn._(this._root);
-
-	final Translations _root; // ignore: unused_field
-
-	// Translations
-
-	/// en: 'Incomplete Email'
-	String get title => 'Incomplete Email';
-
-	/// en: 'The email you are trying to send is incomplete. Please check the following fields:'
-	String get description => 'The email you are trying to send is incomplete.\nPlease check the following fields:';
-
-	/// en: 'Do you want to go back and complete it?'
-	String get want_to_go_back => 'Do you want to go back and complete it?';
-
-	/// en: 'Go Back'
-	String get cancel_text => 'Go Back';
-
-	/// en: 'Send Anyway'
-	String get confirm_text => 'Send Anyway';
-}
-
 // Path: toast_notifications.selected_mails
 class TranslationsToastNotificationsSelectedMailsEn {
 	TranslationsToastNotificationsSelectedMailsEn._(this._root);
@@ -473,24 +423,10 @@ extension on Translations {
 			'mail_composer.from' => 'From',
 			'mail_composer.subject' => 'Subject',
 			'mail_composer.to' => 'To',
-			'mail_composer.body' => 'Body',
-			'mail_composer.date' => 'Date',
-			'mail_composer.send' => 'Send',
-			'mail_composer.fields.to' => 'To',
-			'mail_composer.fields.subject' => 'Subject',
-			'mail_composer.fields.body' => 'Body',
 			'mail_composer.save_draft_modal.title' => 'Save Draft',
 			'mail_composer.save_draft_modal.description' => 'Do you want to save the draft?',
 			'mail_composer.save_draft_modal.confirm_text' => 'Save',
 			'mail_composer.save_draft_modal.cancel_text' => 'Discard',
-			'mail_composer.incomplete_email_modal.title' => 'Incomplete Email',
-			'mail_composer.incomplete_email_modal.description' => 'The email you are trying to send is incomplete.\nPlease check the following fields:',
-			'mail_composer.incomplete_email_modal.want_to_go_back' => 'Do you want to go back and complete it?',
-			'mail_composer.incomplete_email_modal.cancel_text' => 'Go Back',
-			'mail_composer.incomplete_email_modal.confirm_text' => 'Send Anyway',
-			'mail_composer.errors.error_sending_email' => 'An error occurred while sending the email. Please try again.',
-			'mail_composer.errors.no_recipient' => 'Please specify at least one recipient.',
-			'mail_composer.errors.invalid_recipient' => 'One or more recipients have an invalid email address.',
 			'under_construction.title' => 'We\'re working on it!',
 			'under_construction.description' => 'This feature is not yet available, but we\'re working hard to bring it to you soon.\n\nStay tuned!',
 			'more.title' => 'More',
@@ -500,8 +436,6 @@ extension on Translations {
 			'email_folders.drafts' => 'Drafts',
 			'email_folders.archive' => 'Archive',
 			'email_folders.trashed' => 'Trashed',
-			'email_folders.spam' => 'Spam',
-			'email_folders.sent' => 'Sent',
 			'email_folders.all' => 'All',
 			'mail_actions.mark_as_read' => 'Mark as read',
 			'mail_actions.mark_as_unread' => 'Mark as unread',

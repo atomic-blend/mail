@@ -8,8 +8,6 @@ import 'package:mail/pages/mails/views/all_mail.dart';
 import 'package:mail/pages/mails/views/archive.dart';
 import 'package:mail/pages/mails/views/drafts.dart';
 import 'package:mail/pages/mails/views/inbox.dart';
-import 'package:mail/pages/mails/views/sent.dart';
-import 'package:mail/pages/mails/views/spam.dart';
 import 'package:mail/pages/mails/views/trashed.dart';
 import 'package:mail/pages/organize/organize.dart';
 import 'package:mail/pages/search/search.dart';
@@ -25,14 +23,12 @@ final GlobalKey<NavigatorState> appLayoutNavigatorKey =
     TypedGoRoute<HomeRoute>(path: '/', name: "home"),
     TypedGoRoute<InboxRoute>(path: '/inbox', name: "inbox"),
     TypedGoRoute<DraftRoute>(path: '/drafts', name: "drafts"),
-    TypedGoRoute<SentRoute>(path: '/sent', name: "sent"),
-    TypedGoRoute<SpamRoute>(path: '/spam', name: "spam"),
     TypedGoRoute<ArchiveRoute>(path: '/archive', name: "archive"),
     TypedGoRoute<AllMailRoute>(path: '/all', name: "all"),
     TypedGoRoute<TrashedRoute>(path: '/trashed', name: "trashed"),
     TypedGoRoute<OrganizeRoute>(path: '/organize', name: "organize"),
     TypedGoRoute<SearchRoute>(path: '/search', name: "search"),
-    TypedGoRoute<AccountRoute>(path: '/account', name: "account"),
+    TypedGoRoute<AccountRoute>(path: '/account', name: "account")
   ],
 )
 class AppRouter extends ShellRouteData {
