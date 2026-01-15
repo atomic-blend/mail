@@ -121,7 +121,21 @@ class _TranslationsMailComposerFr implements TranslationsMailComposerEn {
 	@override String get from => 'De';
 	@override String get subject => 'Objet';
 	@override String get to => 'À';
+	@override String get body => 'Corps';
+	@override String get date => 'Date';
+	@override String get send => 'Envoyer';
+	@override Map<String, String> get fields => {
+		'to': 'À',
+		'subject': 'Objet',
+		'body': 'Corps',
+	};
 	@override late final _TranslationsMailComposerSaveDraftModalFr save_draft_modal = _TranslationsMailComposerSaveDraftModalFr._(_root);
+	@override late final _TranslationsMailComposerIncompleteEmailModalFr incomplete_email_modal = _TranslationsMailComposerIncompleteEmailModalFr._(_root);
+	@override Map<String, String> get errors => {
+		'error_sending_email': 'Une erreur s\'est produite lors de l\'envoi de l\'e-mail. Veuillez réessayer.',
+		'no_recipient': 'Veuillez spécifier au moins un destinataire.',
+		'invalid_recipient': 'Un ou plusieurs destinataires ont une adresse e-mail invalide.',
+	};
 }
 
 // Path: account
@@ -188,6 +202,8 @@ class _TranslationsEmailFoldersFr implements TranslationsEmailFoldersEn {
 	@override String get drafts => 'Brouillons';
 	@override String get archive => 'Archive';
 	@override String get trashed => 'Corbeille';
+	@override String get spam => 'Spam';
+	@override String get sent => 'Envoyés';
 	@override String get all => 'Tous';
 }
 
@@ -264,6 +280,20 @@ class _TranslationsMailComposerSaveDraftModalFr implements TranslationsMailCompo
 	@override String get cancel_text => 'Annuler';
 }
 
+// Path: mail_composer.incomplete_email_modal
+class _TranslationsMailComposerIncompleteEmailModalFr implements TranslationsMailComposerIncompleteEmailModalEn {
+	_TranslationsMailComposerIncompleteEmailModalFr._(this._root);
+
+	final TranslationsFr _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'E-mail incomplet';
+	@override String get description => 'Le mail que vous essayez d\'envoyer est incomplet.\nVeuillez vérifier les champs suivants :';
+	@override String get want_to_go_back => 'Voulez-vous revenir en arrière pour le compléter ?';
+	@override String get cancel_text => 'Revenir';
+	@override String get confirm_text => 'Envoyer quand même';
+}
+
 // Path: account.sections
 class _TranslationsAccountSectionsFr implements TranslationsAccountSectionsEn {
 	_TranslationsAccountSectionsFr._(this._root);
@@ -326,10 +356,24 @@ extension on TranslationsFr {
 			'mail_composer.from' => 'De',
 			'mail_composer.subject' => 'Objet',
 			'mail_composer.to' => 'À',
+			'mail_composer.body' => 'Corps',
+			'mail_composer.date' => 'Date',
+			'mail_composer.send' => 'Envoyer',
+			'mail_composer.fields.to' => 'À',
+			'mail_composer.fields.subject' => 'Objet',
+			'mail_composer.fields.body' => 'Corps',
 			'mail_composer.save_draft_modal.title' => 'Enregistrer le brouillon',
 			'mail_composer.save_draft_modal.description' => 'Voulez-vous enregistrer le brouillon ?',
 			'mail_composer.save_draft_modal.confirm_text' => 'Enregistrer',
 			'mail_composer.save_draft_modal.cancel_text' => 'Annuler',
+			'mail_composer.incomplete_email_modal.title' => 'E-mail incomplet',
+			'mail_composer.incomplete_email_modal.description' => 'Le mail que vous essayez d\'envoyer est incomplet.\nVeuillez vérifier les champs suivants :',
+			'mail_composer.incomplete_email_modal.want_to_go_back' => 'Voulez-vous revenir en arrière pour le compléter ?',
+			'mail_composer.incomplete_email_modal.cancel_text' => 'Revenir',
+			'mail_composer.incomplete_email_modal.confirm_text' => 'Envoyer quand même',
+			'mail_composer.errors.error_sending_email' => 'Une erreur s\'est produite lors de l\'envoi de l\'e-mail. Veuillez réessayer.',
+			'mail_composer.errors.no_recipient' => 'Veuillez spécifier au moins un destinataire.',
+			'mail_composer.errors.invalid_recipient' => 'Un ou plusieurs destinataires ont une adresse e-mail invalide.',
 			'account.sections.account' => 'Compte',
 			'under_construction.title' => 'On travaille dessus !',
 			'under_construction.description' => 'Cette fonctionnalité est en cours de développement.\n\nRevenez bientôt pour découvrir les dernières mises à jour !',
@@ -342,6 +386,8 @@ extension on TranslationsFr {
 			'email_folders.drafts' => 'Brouillons',
 			'email_folders.archive' => 'Archive',
 			'email_folders.trashed' => 'Corbeille',
+			'email_folders.spam' => 'Spam',
+			'email_folders.sent' => 'Envoyés',
 			'email_folders.all' => 'Tous',
 			'mail_actions.mark_as_read' => 'Marquer comme lu',
 			'mail_actions.mark_as_unread' => 'Marquer comme non lu',

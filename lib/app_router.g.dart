@@ -30,16 +30,6 @@ RouteBase get $appRouter => ShellRouteData.$route(
           factory: _$DraftRoute._fromState,
         ),
         GoRouteData.$route(
-          path: '/sent',
-          name: 'sent',
-          factory: _$SentRoute._fromState,
-        ),
-        GoRouteData.$route(
-          path: '/spam',
-          name: 'spam',
-          factory: _$SpamRoute._fromState,
-        ),
-        GoRouteData.$route(
           path: '/archive',
           name: 'archive',
           factory: _$ArchiveRoute._fromState,
@@ -126,50 +116,6 @@ mixin _$DraftRoute on GoRouteData {
   @override
   String get location => GoRouteData.$location(
         '/drafts',
-      );
-
-  @override
-  void go(BuildContext context) => context.go(location);
-
-  @override
-  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
-
-  @override
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
-
-  @override
-  void replace(BuildContext context) => context.replace(location);
-}
-
-mixin _$SentRoute on GoRouteData {
-  static SentRoute _fromState(GoRouterState state) => SentRoute();
-
-  @override
-  String get location => GoRouteData.$location(
-        '/sent',
-      );
-
-  @override
-  void go(BuildContext context) => context.go(location);
-
-  @override
-  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
-
-  @override
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
-
-  @override
-  void replace(BuildContext context) => context.replace(location);
-}
-
-mixin _$SpamRoute on GoRouteData {
-  static SpamRoute _fromState(GoRouterState state) => SpamRoute();
-
-  @override
-  String get location => GoRouteData.$location(
-        '/spam',
       );
 
   @override

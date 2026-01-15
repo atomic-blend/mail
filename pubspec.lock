@@ -21,11 +21,11 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: "v0.12.5"
-      resolved-ref: c19517476256bfbe91d15f3e9e069ac3f3a78518
+      ref: "v0.12.6"
+      resolved-ref: "9ba369c74db56aec870a974b0e364ec3f1dcc198"
       url: "https://github.com/atomic-blend/app-shared.git"
     source: git
-    version: "0.12.4"
+    version: "0.12.5"
   analyzer:
     dependency: transitive
     description:
@@ -338,14 +338,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.7.11"
-  debounce_throttle:
-    dependency: transitive
-    description:
-      name: debounce_throttle
-      sha256: c95cf47afda975fc507794a52040a16756fb2f31ad3027d4e691c41862ff5692
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.0.0"
   device_calendar:
     dependency: "direct main"
     description:
@@ -781,22 +773,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.7.0"
-  flutter_stripe:
-    dependency: "direct main"
-    description:
-      name: flutter_stripe
-      sha256: a474b283f4b07e8973687514bf48762e618073b0d6b7acc45cea9a60466d4f8c
-      url: "https://pub.dev"
-    source: hosted
-    version: "11.5.0"
-  flutter_stripe_web:
-    dependency: "direct main"
-    description:
-      name: flutter_stripe_web
-      sha256: f248952994cf91b1b08672e86aa635f698892d594e33d6a9e0f512657ad8aa40
-      url: "https://pub.dev"
-    source: hosted
-    version: "6.5.1"
   flutter_svg:
     dependency: "direct main"
     description:
@@ -1335,38 +1311,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.8"
-  pointer_interceptor:
-    dependency: transitive
-    description:
-      name: pointer_interceptor
-      sha256: "57210410680379aea8b1b7ed6ae0c3ad349bfd56fe845b8ea934a53344b9d523"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.10.1+2"
-  pointer_interceptor_ios:
-    dependency: transitive
-    description:
-      name: pointer_interceptor_ios
-      sha256: "03c5fa5896080963ab4917eeffda8d28c90f22863a496fb5ba13bc10943e40e4"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.10.1+1"
-  pointer_interceptor_platform_interface:
-    dependency: transitive
-    description:
-      name: pointer_interceptor_platform_interface
-      sha256: "0597b0560e14354baeb23f8375cd612e8bd4841bf8306ecb71fcd0bb78552506"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.10.0+1"
-  pointer_interceptor_web:
-    dependency: transitive
-    description:
-      name: pointer_interceptor_web
-      sha256: "460b600e71de6fcea2b3d5f662c92293c049c4319e27f0829310e5a953b3ee2a"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.10.3"
   pointycastle:
     dependency: "direct main"
     description:
@@ -1583,14 +1527,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.0.0"
-  simple_observable:
-    dependency: transitive
-    description:
-      name: simple_observable
-      sha256: b392795c48f8b5f301b4c8f73e15f56e38fe70f42278c649d8325e859a783301
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.0.0"
   sizer:
     dependency: "direct main"
     description:
@@ -1748,48 +1684,8 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.4.1"
-  stripe_android:
-    dependency: transitive
-    description:
-      name: stripe_android
-      sha256: a666352e0c20753ecd8feebb5944882bf597167be4f020641266515a495bd55f
-      url: "https://pub.dev"
-    source: hosted
-    version: "11.5.0"
-  stripe_ios:
-    dependency: transitive
-    description:
-      name: stripe_ios
-      sha256: "0f7afed3ac61e544e7525da9b692b23d93e762d56f6c9aa7f77fc6d9a686a65d"
-      url: "https://pub.dev"
-    source: hosted
-    version: "11.5.0"
-  stripe_js:
-    dependency: transitive
-    description:
-      name: stripe_js
-      sha256: b5113618f12feb3149dd467bf12286322196ea13218816086786d1d5f4c464d1
-      url: "https://pub.dev"
-    source: hosted
-    version: "6.4.0"
-  stripe_platform_interface:
-    dependency: transitive
-    description:
-      name: stripe_platform_interface
-      sha256: "23c10f3875da07f85a6196fcb676e64c767ad2d04ec73ba4e941ac797a4ee4d3"
-      url: "https://pub.dev"
-    source: hosted
-    version: "11.5.0"
-  super_tag_editor:
-    dependency: "direct main"
-    description:
-      name: super_tag_editor
-      sha256: "7f7c1cb38e98e9cfa92fb074d4d5f5f53846d6bffcc96e05cb2191c159dba28d"
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.1.0"
   super_tooltip:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: super_tooltip
       sha256: "06f734caa2ddb2313813dac2c939f096222beece9c146ec7d71e07e6e869bef2"
