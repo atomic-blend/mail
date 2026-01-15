@@ -51,6 +51,7 @@ class TranslationsFr with BaseTranslations<AppLocale, Translations> implements T
 	@override late final _TranslationsEmailFoldersFr email_folders = _TranslationsEmailFoldersFr._(_root);
 	@override late final _TranslationsMailActionsFr mail_actions = _TranslationsMailActionsFr._(_root);
 	@override late final _TranslationsToastNotificationsFr toast_notifications = _TranslationsToastNotificationsFr._(_root);
+	@override late final _TranslationsEmailDomainValidationFr email_domain_validation = _TranslationsEmailDomainValidationFr._(_root);
 }
 
 // Path: settings
@@ -232,6 +233,31 @@ class _TranslationsToastNotificationsFr implements TranslationsToastNotification
 	@override late final _TranslationsToastNotificationsSelectedMailsFr selected_mails = _TranslationsToastNotificationsSelectedMailsFr._(_root);
 }
 
+// Path: email_domain_validation
+class _TranslationsEmailDomainValidationFr implements TranslationsEmailDomainValidationEn {
+	_TranslationsEmailDomainValidationFr._(this._root);
+
+	final TranslationsFr _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Mettre à jour l\'adresse e-mail';
+	@override String description({required Object domains}) => 'Votre adresse e-mail actuelle ne provient pas d\'un domaine autorisé. Veuillez fournir une nouvelle adresse e-mail provenant de l\'un des domaines autorisés suivants : ${domains}';
+	@override String get current_email => 'E-mail actuel';
+	@override String get new_email_label => 'Nouvelle adresse e-mail';
+	@override String get new_email_hint => 'Entrez votre nouvelle adresse e-mail';
+	@override String get backup_email_label => 'E-mail de secours (optionnel)';
+	@override String get backup_email_hint => 'Entrez une adresse e-mail de secours';
+	@override String get info => 'L\'e-mail de secours sera utilisé pour la récupération du compte et les notifications importantes.';
+	@override String get submit => 'Mettre à jour l\'e-mail';
+	@override String get submitting => 'Mise à jour...';
+	@override Map<String, dynamic> get errors => {
+		'empty_email': 'Veuillez entrer une adresse e-mail.',
+		'invalid_email_format': 'Veuillez entrer une adresse e-mail valide.',
+		'email_not_in_authorized_domain': ({required Object domains}) => 'L\'adresse e-mail doit provenir de l\'un de ces domaines : ${domains}',
+		'update_failed': 'Échec de la mise à jour de l\'adresse e-mail. Veuillez réessayer.',
+	};
+}
+
 // Path: settings.app_settings
 class _TranslationsSettingsAppSettingsFr implements TranslationsSettingsAppSettingsEn {
 	_TranslationsSettingsAppSettingsFr._(this._root);
@@ -397,6 +423,20 @@ extension on TranslationsFr {
 			'mail_actions.untrash' => 'Restaurer',
 			'toast_notifications.selected_mails.title' => ({required Object count}) => '${count} mails sélectionnés',
 			'toast_notifications.selected_mails.description' => 'Cliquez ici pour effectuer une action.',
+			'email_domain_validation.title' => 'Mettre à jour l\'adresse e-mail',
+			'email_domain_validation.description' => ({required Object domains}) => 'Votre adresse e-mail actuelle ne provient pas d\'un domaine autorisé. Veuillez fournir une nouvelle adresse e-mail provenant de l\'un des domaines autorisés suivants : ${domains}',
+			'email_domain_validation.current_email' => 'E-mail actuel',
+			'email_domain_validation.new_email_label' => 'Nouvelle adresse e-mail',
+			'email_domain_validation.new_email_hint' => 'Entrez votre nouvelle adresse e-mail',
+			'email_domain_validation.backup_email_label' => 'E-mail de secours (optionnel)',
+			'email_domain_validation.backup_email_hint' => 'Entrez une adresse e-mail de secours',
+			'email_domain_validation.info' => 'L\'e-mail de secours sera utilisé pour la récupération du compte et les notifications importantes.',
+			'email_domain_validation.submit' => 'Mettre à jour l\'e-mail',
+			'email_domain_validation.submitting' => 'Mise à jour...',
+			'email_domain_validation.errors.empty_email' => 'Veuillez entrer une adresse e-mail.',
+			'email_domain_validation.errors.invalid_email_format' => 'Veuillez entrer une adresse e-mail valide.',
+			'email_domain_validation.errors.email_not_in_authorized_domain' => ({required Object domains}) => 'L\'adresse e-mail doit provenir de l\'un de ces domaines : ${domains}',
+			'email_domain_validation.errors.update_failed' => 'Échec de la mise à jour de l\'adresse e-mail. Veuillez réessayer.',
 			_ => null,
 		};
 	}
