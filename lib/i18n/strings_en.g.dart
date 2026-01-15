@@ -54,6 +54,7 @@ class Translations with BaseTranslations<AppLocale, Translations> {
 	late final TranslationsEmailFoldersEn email_folders = TranslationsEmailFoldersEn._(_root);
 	late final TranslationsMailActionsEn mail_actions = TranslationsMailActionsEn._(_root);
 	late final TranslationsToastNotificationsEn toast_notifications = TranslationsToastNotificationsEn._(_root);
+	late final TranslationsEmailDomainValidationEn email_domain_validation = TranslationsEmailDomainValidationEn._(_root);
 }
 
 // Path: settings
@@ -305,6 +306,52 @@ class TranslationsToastNotificationsEn {
 	late final TranslationsToastNotificationsSelectedMailsEn selected_mails = TranslationsToastNotificationsSelectedMailsEn._(_root);
 }
 
+// Path: email_domain_validation
+class TranslationsEmailDomainValidationEn {
+	TranslationsEmailDomainValidationEn._(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Update Email Address'
+	String get title => 'Update Email Address';
+
+	/// en: 'Your current email address is not from an authorized domain. Please provide a new email address from one of the following authorized domains: ${domains}'
+	String description({required Object domains}) => 'Your current email address is not from an authorized domain. Please provide a new email address from one of the following authorized domains: ${domains}';
+
+	/// en: 'Current Email'
+	String get current_email => 'Current Email';
+
+	/// en: 'New Email Address'
+	String get new_email_label => 'New Email Address';
+
+	/// en: 'Enter your new email address'
+	String get new_email_hint => 'Enter your new email address';
+
+	/// en: 'Backup Email (Optional)'
+	String get backup_email_label => 'Backup Email (Optional)';
+
+	/// en: 'Enter a backup email address'
+	String get backup_email_hint => 'Enter a backup email address';
+
+	/// en: 'The backup email will be used for account recovery and important notifications.'
+	String get info => 'The backup email will be used for account recovery and important notifications.';
+
+	/// en: 'Update Email'
+	String get submit => 'Update Email';
+
+	/// en: 'Updating...'
+	String get submitting => 'Updating...';
+
+	Map<String, dynamic> get errors => {
+		'empty_email': 'Please enter an email address.',
+		'invalid_email_format': 'Please enter a valid email address.',
+		'email_not_in_authorized_domain': ({required Object domains}) => 'The email address must be from one of these domains: ${domains}',
+		'update_failed': 'Failed to update email address. Please try again.',
+	};
+}
+
 // Path: settings.app_settings
 class TranslationsSettingsAppSettingsEn {
 	TranslationsSettingsAppSettingsEn._(this._root);
@@ -511,6 +558,20 @@ extension on Translations {
 			'mail_actions.untrash' => 'Untrash',
 			'toast_notifications.selected_mails.title' => ({required Object count}) => '${count} mails selected',
 			'toast_notifications.selected_mails.description' => 'Click here to perform action.',
+			'email_domain_validation.title' => 'Update Email Address',
+			'email_domain_validation.description' => ({required Object domains}) => 'Your current email address is not from an authorized domain. Please provide a new email address from one of the following authorized domains: ${domains}',
+			'email_domain_validation.current_email' => 'Current Email',
+			'email_domain_validation.new_email_label' => 'New Email Address',
+			'email_domain_validation.new_email_hint' => 'Enter your new email address',
+			'email_domain_validation.backup_email_label' => 'Backup Email (Optional)',
+			'email_domain_validation.backup_email_hint' => 'Enter a backup email address',
+			'email_domain_validation.info' => 'The backup email will be used for account recovery and important notifications.',
+			'email_domain_validation.submit' => 'Update Email',
+			'email_domain_validation.submitting' => 'Updating...',
+			'email_domain_validation.errors.empty_email' => 'Please enter an email address.',
+			'email_domain_validation.errors.invalid_email_format' => 'Please enter a valid email address.',
+			'email_domain_validation.errors.email_not_in_authorized_domain' => ({required Object domains}) => 'The email address must be from one of these domains: ${domains}',
+			'email_domain_validation.errors.update_failed' => 'Failed to update email address. Please try again.',
 			_ => null,
 		};
 	}

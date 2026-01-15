@@ -203,8 +203,11 @@ class MailMarkAsReadSuccess extends MailState {
         readMails,
         unreadMails,
         drafts,
+        sentMails,
         archivedMails,
-        unarchivedMails
+        unarchivedMails,
+        trashedMails,
+        untrashedMails
       ];
 }
 
@@ -238,8 +241,18 @@ class MailMarkAsUnreadSuccess extends MailState {
       super.untrashedMails});
 
   @override
-  List<Object?> get props =>
-      [mails, latestSync, unreadMails, drafts, archivedMails, unarchivedMails];
+  List<Object?> get props => [
+        mails,
+        latestSync,
+        readMails,
+        unreadMails,
+        drafts,
+        sentMails,
+        archivedMails,
+        unarchivedMails,
+        trashedMails,
+        untrashedMails
+      ];
 }
 
 class MailMarkAsUnreadError extends MailState {
@@ -284,8 +297,11 @@ class MailSending extends MailState {
         readMails,
         unreadMails,
         drafts,
+        sentMails,
         archivedMails,
-        unarchivedMails
+        unarchivedMails,
+        trashedMails,
+        untrashedMails
       ];
 }
 
@@ -308,8 +324,11 @@ class MailSendSuccess extends MailState {
         readMails,
         unreadMails,
         drafts,
+        sentMails,
         archivedMails,
-        unarchivedMails
+        unarchivedMails,
+        trashedMails,
+        untrashedMails
       ];
 }
 
@@ -357,8 +376,11 @@ class MailSaveDraftSuccess extends MailState {
         readMails,
         unreadMails,
         drafts,
+        sentMails,
         archivedMails,
-        unarchivedMails
+        unarchivedMails,
+        trashedMails,
+        untrashedMails
       ];
 }
 
@@ -406,8 +428,11 @@ class MailDeleteDraftSuccess extends MailState {
         readMails,
         unreadMails,
         drafts,
+        sentMails,
         archivedMails,
-        unarchivedMails
+        unarchivedMails,
+        trashedMails,
+        untrashedMails
       ];
 }
 
@@ -455,8 +480,11 @@ class MailUpdateDraftSuccess extends MailState {
         readMails,
         unreadMails,
         drafts,
+        sentMails,
         archivedMails,
-        unarchivedMails
+        unarchivedMails,
+        trashedMails,
+        untrashedMails
       ];
 }
 
@@ -504,8 +532,11 @@ class MailArchiveSuccess extends MailState {
         readMails,
         unreadMails,
         drafts,
+        sentMails,
         archivedMails,
-        unarchivedMails
+        unarchivedMails,
+        trashedMails,
+        untrashedMails
       ];
 }
 
@@ -553,8 +584,11 @@ class MailUnarchiveSuccess extends MailState {
         readMails,
         unreadMails,
         drafts,
+        sentMails,
         archivedMails,
-        unarchivedMails
+        unarchivedMails,
+        trashedMails,
+        untrashedMails
       ];
 }
 
@@ -602,8 +636,11 @@ class MailTrashSuccess extends MailState {
         readMails,
         unreadMails,
         drafts,
+        sentMails,
         archivedMails,
-        unarchivedMails
+        unarchivedMails,
+        trashedMails,
+        untrashedMails
       ];
 }
 
@@ -651,8 +688,11 @@ class MailUntrashSuccess extends MailState {
         readMails,
         unreadMails,
         drafts,
+        sentMails,
         archivedMails,
-        unarchivedMails
+        unarchivedMails,
+        trashedMails,
+        untrashedMails
       ];
 }
 
@@ -700,8 +740,11 @@ class MailEmptyTrashSuccess extends MailState {
         readMails,
         unreadMails,
         drafts,
+        sentMails,
         archivedMails,
-        unarchivedMails
+        unarchivedMails,
+        trashedMails,
+        untrashedMails
       ];
 }
 

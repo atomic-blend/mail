@@ -155,7 +155,7 @@ class MailBloc extends HydratedBloc<MailEvent, MailState> {
 
       while (hasMorePages && currentPage <= totalPages) {
         final paginationResult = await _mailService.getMailsSince(
-            since: prevState.latestSync ?? DateTime.now(),
+            since: prevState.latestSync ?? DateTime(1970),
             page: currentPage,
             size: 10);
 
@@ -189,7 +189,7 @@ class MailBloc extends HydratedBloc<MailEvent, MailState> {
 
       while (hasMorePages && currentPage <= totalPages) {
         final paginationResult = await _mailService.getDraftsSince(
-            since: prevState.latestSync ?? DateTime.now(),
+            since: prevState.latestSync ?? DateTime(1970),
             page: currentPage,
             size: 10);
 
@@ -217,7 +217,7 @@ class MailBloc extends HydratedBloc<MailEvent, MailState> {
 
       while (hasMorePages && currentPage <= totalPages) {
         final paginationResult = await _mailService.getSentSince(
-            since: prevState.latestSync ?? DateTime.now(),
+            since: prevState.latestSync ?? DateTime(1970),
             page: currentPage,
             size: 10);
 
@@ -305,7 +305,7 @@ class MailBloc extends HydratedBloc<MailEvent, MailState> {
 
       while (hasMorePages && currentPage <= totalPages) {
         final paginationResult = await _mailService.getSentSince(
-            since: prevState.latestSync ?? DateTime.now(),
+            since: prevState.latestSync ?? DateTime(1970),
             page: currentPage,
             size: 10);
 
@@ -352,14 +352,17 @@ class MailBloc extends HydratedBloc<MailEvent, MailState> {
     if (prevState.readMails.contains(event.mailId ?? "")) {
       return;
     }
-    prevState.unreadMails.remove(event.mailId);
+    final newReadMails = List<String>.from(prevState.readMails);
+    final newUnreadMails = List<String>.from(prevState.unreadMails);
+    newUnreadMails.remove(event.mailId);
     if (event.mailId != null) {
-      prevState.readMails.add(event.mailId!);
+      newReadMails.add(event.mailId!);
     }
     if (event.mailIds != null) {
-      prevState.readMails.addAll(event.mailIds!);
+      newReadMails.addAll(event.mailIds!);
     }
-    emit(MailState.transform(MailMarkAsReadSuccess.new, prevState));
+    emit(MailState.transform(MailMarkAsReadSuccess.new, prevState,
+        readMails: newReadMails, unreadMails: newUnreadMails));
     add(SyncMailActions());
   }
 
@@ -368,14 +371,17 @@ class MailBloc extends HydratedBloc<MailEvent, MailState> {
     if (prevState.unreadMails.contains(event.mailId)) {
       return;
     }
-    prevState.readMails.remove(event.mailId);
+    final newReadMails = List<String>.from(prevState.readMails);
+    final newUnreadMails = List<String>.from(prevState.unreadMails);
+    newReadMails.remove(event.mailId);
     if (event.mailId != null) {
-      prevState.unreadMails.add(event.mailId!);
+      newUnreadMails.add(event.mailId!);
     }
     if (event.mailIds != null) {
-      prevState.unreadMails.addAll(event.mailIds!);
+      newUnreadMails.addAll(event.mailIds!);
     }
-    emit(MailState.transform(MailMarkAsUnreadSuccess.new, prevState));
+    emit(MailState.transform(MailMarkAsUnreadSuccess.new, prevState,
+        readMails: newReadMails, unreadMails: newUnreadMails));
     add(SyncMailActions());
   }
 
@@ -392,13 +398,13 @@ class MailBloc extends HydratedBloc<MailEvent, MailState> {
         untrashedMailIds: state.untrashedMails,
       );
       if (result.success) {
-        state.readMails.clear();
-        state.unreadMails.clear();
-        state.archivedMails.clear();
-        state.unarchivedMails.clear();
-        state.trashedMails.clear();
-        state.untrashedMails.clear();
-        emit(MailState.transform(MailLoaded.new, prevState));
+        emit(MailState.transform(MailLoaded.new, prevState,
+            readMails: [],
+            unreadMails: [],
+            archivedMails: [],
+            unarchivedMails: [],
+            trashedMails: [],
+            untrashedMails: []));
       } else {
         emit(MailState.transformError(MailLoadingError.new, prevState,
             result.message ?? "Unknown error"));
@@ -407,7 +413,7 @@ class MailBloc extends HydratedBloc<MailEvent, MailState> {
       emit(MailState.transformError(
           MailLoadingError.new, prevState, e.toString()));
     }
-    add(const SyncSince());
+    // Don't trigger another sync here - the sync service handles calling the appropriate sync
   }
 
   void _onSendMail(SendMail event, Emitter<MailState> emit) async {
@@ -416,7 +422,7 @@ class MailBloc extends HydratedBloc<MailEvent, MailState> {
     try {
       await _mailService.sendMail(event.mail);
       emit(MailState.transform(MailSendSuccess.new, prevState));
-      add(const SyncAllMailsPaginated());
+      add(const SyncSince());
     } catch (e) {
       emit(
           MailState.transformError(MailSendError.new, prevState, e.toString()));
@@ -428,7 +434,7 @@ class MailBloc extends HydratedBloc<MailEvent, MailState> {
     try {
       await _mailService.saveDraft(event.mail);
       emit(MailState.transform(MailSaveDraftSuccess.new, prevState));
-      add(const SyncAllMailsPaginated());
+      add(const SyncSince());
     } catch (e) {
       emit(MailState.transformError(
           MailSaveDraftError.new, prevState, e.toString()));
@@ -441,7 +447,7 @@ class MailBloc extends HydratedBloc<MailEvent, MailState> {
     try {
       await _mailService.deleteDraft(event.draftId);
       emit(MailState.transform(MailDeleteDraftSuccess.new, prevState));
-      add(const SyncAllMailsPaginated());
+      add(const SyncSince());
     } catch (e) {
       emit(MailState.transformError(
           MailDeleteDraftError.new, prevState, e.toString()));
@@ -454,7 +460,7 @@ class MailBloc extends HydratedBloc<MailEvent, MailState> {
     try {
       await _mailService.updateDraft(event.mail, event.draftId);
       emit(MailState.transform(MailUpdateDraftSuccess.new, prevState));
-      add(const SyncAllMailsPaginated());
+      add(const SyncSince());
     } catch (e) {
       emit(MailState.transformError(
           MailUpdateDraftError.new, prevState, e.toString()));
@@ -468,14 +474,18 @@ class MailBloc extends HydratedBloc<MailEvent, MailState> {
       if (prevState.archivedMails.contains(event.mailId)) {
         return;
       }
-      prevState.unarchivedMails.remove(event.mailId);
+      final newArchivedMails = List<String>.from(prevState.archivedMails);
+      final newUnarchivedMails = List<String>.from(prevState.unarchivedMails);
+      newUnarchivedMails.remove(event.mailId);
       if (event.mailId != null) {
-        prevState.archivedMails.add(event.mailId!);
+        newArchivedMails.add(event.mailId!);
       }
       if (event.mailIds != null) {
-        prevState.archivedMails.addAll(event.mailIds!);
+        newArchivedMails.addAll(event.mailIds!);
       }
-      emit(MailState.transform(MailArchiveSuccess.new, prevState));
+      emit(MailState.transform(MailArchiveSuccess.new, prevState,
+          archivedMails: newArchivedMails,
+          unarchivedMails: newUnarchivedMails));
       add(SyncMailActions());
     } catch (e) {
       emit(MailState.transformError(
@@ -490,14 +500,18 @@ class MailBloc extends HydratedBloc<MailEvent, MailState> {
       if (prevState.unarchivedMails.contains(event.mailId)) {
         return;
       }
-      prevState.archivedMails.remove(event.mailId);
+      final newArchivedMails = List<String>.from(prevState.archivedMails);
+      final newUnarchivedMails = List<String>.from(prevState.unarchivedMails);
+      newArchivedMails.remove(event.mailId);
       if (event.mailId != null) {
-        prevState.unarchivedMails.add(event.mailId!);
+        newUnarchivedMails.add(event.mailId!);
       }
       if (event.mailIds != null) {
-        prevState.unarchivedMails.addAll(event.mailIds!);
+        newUnarchivedMails.addAll(event.mailIds!);
       }
-      emit(MailState.transform(MailUnarchiveSuccess.new, prevState));
+      emit(MailState.transform(MailUnarchiveSuccess.new, prevState,
+          archivedMails: newArchivedMails,
+          unarchivedMails: newUnarchivedMails));
       add(SyncMailActions());
     } catch (e) {
       emit(MailState.transformError(
@@ -511,14 +525,17 @@ class MailBloc extends HydratedBloc<MailEvent, MailState> {
       if (prevState.trashedMails.contains(event.mailId)) {
         return;
       }
-      prevState.untrashedMails.remove(event.mailId);
+      final newTrashedMails = List<String>.from(prevState.trashedMails);
+      final newUntrashedMails = List<String>.from(prevState.untrashedMails);
+      newUntrashedMails.remove(event.mailId);
       if (event.mailId != null) {
-        prevState.trashedMails.add(event.mailId!);
+        newTrashedMails.add(event.mailId!);
       }
       if (event.mailIds != null) {
-        prevState.trashedMails.addAll(event.mailIds!);
+        newTrashedMails.addAll(event.mailIds!);
       }
-      emit(MailState.transform(MailTrashSuccess.new, prevState));
+      emit(MailState.transform(MailTrashSuccess.new, prevState,
+          trashedMails: newTrashedMails, untrashedMails: newUntrashedMails));
       add(SyncMailActions());
     } catch (e) {
       emit(MailState.transformError(
@@ -533,14 +550,17 @@ class MailBloc extends HydratedBloc<MailEvent, MailState> {
       if (prevState.untrashedMails.contains(event.mailId)) {
         return;
       }
-      prevState.trashedMails.remove(event.mailId);
+      final newTrashedMails = List<String>.from(prevState.trashedMails);
+      final newUntrashedMails = List<String>.from(prevState.untrashedMails);
+      newTrashedMails.remove(event.mailId);
       if (event.mailId != null) {
-        prevState.untrashedMails.add(event.mailId!);
+        newUntrashedMails.add(event.mailId!);
       }
       if (event.mailIds != null) {
-        prevState.untrashedMails.addAll(event.mailIds!);
+        newUntrashedMails.addAll(event.mailIds!);
       }
-      emit(MailState.transform(MailUntrashSuccess.new, prevState));
+      emit(MailState.transform(MailUntrashSuccess.new, prevState,
+          trashedMails: newTrashedMails, untrashedMails: newUntrashedMails));
       add(SyncMailActions());
     } catch (e) {
       emit(MailState.transformError(
@@ -554,7 +574,7 @@ class MailBloc extends HydratedBloc<MailEvent, MailState> {
     try {
       await _mailService.emptyTrash();
       emit(MailState.transform(MailEmptyTrashSuccess.new, prevState));
-      add(const SyncAllMailsPaginated());
+      add(const SyncSince());
     } catch (e) {
       emit(MailState.transformError(
           MailEmptyTrashError.new, prevState, e.toString()));
