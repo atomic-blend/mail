@@ -27,7 +27,7 @@ platform :ios do
 
   lane :build_beta do
     Dir.chdir("..") do
-        sh('fvm flutter build ipa --flavor prod --release -t lib/main_prod.dart --release --dart-define APP_ENV=prod --dart-define APPLE_REVENUE_CAT_API_KEY=' + ENV["APPLE_REVENUE_CAT_API_KEY"])
+        sh('fvm flutter build ipa --flavor prod --release -t lib/main_prod.dart --release --dart-define APP_ENV=prod')
     end
   end
 
@@ -35,7 +35,7 @@ platform :ios do
      upload_to_testflight(
      api_key_path: "/Users/brandonguigo/appstore_connect_api_key.json",
      app_identifier: "fr.atomicblend.mail",
-     ipa: "../build/ios/ipa/Atomic Mail.ipa",
+     ipa: "../build/ios/ipa/Atomic Inbox.ipa",
      distribute_external: true,
      notify_external_testers: true,
      submit_beta_review: true,
@@ -112,11 +112,11 @@ platform :mac do
 
     lane :package_dmg do
         Dir.chdir("..") do
-           sh("rm -rf macos_dmg/AtomicMail-latest.dmg")
-           sh("TAG=$(git describe --abbrev=0 --tags) rm -rf macos_dmg/AtomicMail-$TAG.dmg")
+           sh("rm -rf macos_dmg/AtomicInbox-latest.dmg")
+           sh("TAG=$(git describe --abbrev=0 --tags) rm -rf macos_dmg/AtomicInbox-$TAG.dmg")
            sh("npm install -g appdmg")
-           sh("TAG=$(git describe --abbrev=0 --tags) appdmg macos_dmg/config.json macos_dmg/AtomicMail-$TAG.dmg")
-           sh("appdmg macos_dmg/config.json macos_dmg/AtomicMail-latest.dmg")
+           sh("TAG=$(git describe --abbrev=0 --tags) appdmg macos_dmg/config.json macos_dmg/AtomicInbox-$TAG.dmg")
+           sh("appdmg macos_dmg/config.json macos_dmg/AtomicInbox-latest.dmg")
         end
     end
 

@@ -42,13 +42,13 @@ android {
             dimension "flavor-type"
             applicationId "fr.atomicblend.maildev"
             namespace "fr.atomicblend.maildev"
-            resValue "string", "app_name", "Atomic Mail - Dev"
+            resValue "string", "app_name", "Atomic Inbox - Dev"
         }
         prod {
             dimension "flavor-type"
             applicationId "fr.atomicblend.mail"
             namespace "fr.atomicblend.mail"
-            resValue "string", "app_name", "Atomic Mail"
+            resValue "string", "app_name", "Atomic Inbox"
         }
     }
 

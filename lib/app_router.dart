@@ -1,5 +1,4 @@
 import 'package:ab_shared/pages/account/account.dart';
-import 'package:ab_shared/pages/settings/settings.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
@@ -29,8 +28,7 @@ final GlobalKey<NavigatorState> appLayoutNavigatorKey =
     TypedGoRoute<TrashedRoute>(path: '/trashed', name: "trashed"),
     TypedGoRoute<OrganizeRoute>(path: '/organize', name: "organize"),
     TypedGoRoute<SearchRoute>(path: '/search', name: "search"),
-    TypedGoRoute<AccountRoute>(path: '/account', name: "account"),
-    TypedGoRoute<SettingsRoute>(path: '/settings', name: "settings"),
+    TypedGoRoute<AccountRoute>(path: '/account', name: "account")
   ],
 )
 class AppRouter extends ShellRouteData {
