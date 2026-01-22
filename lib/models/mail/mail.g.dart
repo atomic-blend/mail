@@ -9,16 +9,16 @@ part of 'mail.dart';
 _$MailImpl _$$MailImplFromJson(Map<String, dynamic> json) => _$MailImpl(
       id: json['id'] as String?,
       userId: json['userId'] as String?,
-      headers: (json['headers'] as List<dynamic>?)
-          ?.map((e) => e as Map<String, dynamic>)
-          .toList(),
+      headers: json['headers'] as Map<String, dynamic>?,
       textContent: json['textContent'] as String?,
       htmlContent: json['htmlContent'] as String?,
+      inReplyTo: json['inReplyTo'] as String?,
       attachments: (json['attachments'] as List<dynamic>?)
           ?.map((e) => MailAttachment.fromJson(e as Map<String, dynamic>))
           .toList(),
       archived: json['archived'] as bool?,
       trashed: json['trashed'] as bool?,
+      calendarEvent: json['calendarEvent'] as String?,
       greylisted: json['greylisted'] as bool?,
       rejected: json['rejected'] as bool?,
       rewriteSubject: json['rewriteSubject'] as bool?,
@@ -41,9 +41,11 @@ Map<String, dynamic> _$$MailImplToJson(_$MailImpl instance) =>
       'headers': instance.headers,
       'textContent': instance.textContent,
       'htmlContent': instance.htmlContent,
+      'inReplyTo': instance.inReplyTo,
       'attachments': instance.attachments,
       'archived': instance.archived,
       'trashed': instance.trashed,
+      'calendarEvent': instance.calendarEvent,
       'greylisted': instance.greylisted,
       'rejected': instance.rejected,
       'rewriteSubject': instance.rewriteSubject,

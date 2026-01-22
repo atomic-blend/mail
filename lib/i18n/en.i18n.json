@@ -45,11 +45,31 @@
     "from": "From",
     "subject": "Subject",
     "to": "To",
+    "body": "Body",
+    "date": "Date",
+    "send": "Send",
+    "fields(map)": {
+      "to": "To",
+      "subject": "Subject",
+      "body": "Body"
+    },
     "save_draft_modal": {
       "title": "Save Draft",
       "description": "Do you want to save the draft?",
       "confirm_text": "Save",
       "cancel_text": "Discard"
+    },
+    "incomplete_email_modal": {
+      "title": "Incomplete Email",
+      "description": "The email you are trying to send is incomplete.\nPlease check the following fields:",
+      "want_to_go_back": "Do you want to go back and complete it?",
+      "cancel_text": "Go Back",
+      "confirm_text": "Send Anyway"
+    },
+    "errors(map)": {
+      "error_sending_email": "An error occurred while sending the email. Please try again.",
+      "no_recipient": "Please specify at least one recipient.",
+      "invalid_recipient": "One or more recipients have an invalid email address."
     }
   },
   "under_construction": {
@@ -70,6 +90,8 @@
     "drafts": "Drafts",
     "archive": "Archive",
     "trashed": "Trashed",
+    "spam": "Spam",
+    "sent": "Sent",
     "all": "All"
   },
   "mail_actions": {
@@ -84,6 +106,24 @@
     "selected_mails": {
       "title": "${count} mails selected",
       "description": "Click here to perform action."
+    }
+  },
+  "email_domain_validation": {
+    "title": "Update Email Address",
+    "description": "Your current email address is not from an authorized domain. Please provide a new email address from one of the following authorized domains: ${domains}",
+    "current_email": "Current Email",
+    "new_email_label": "New Email Address",
+    "new_email_hint": "Enter your new email address",
+    "backup_email_label": "Backup Email (Optional)",
+    "backup_email_hint": "Enter a backup email address",
+    "info": "The backup email will be used for account recovery and important notifications.",
+    "submit": "Update Email",
+    "submitting": "Updating...",
+    "errors(map)": {
+      "empty_email": "Please enter an email address.",
+      "invalid_email_format": "Please enter a valid email address.",
+      "email_not_in_authorized_domain": "The email address must be from one of these domains: ${domains}",
+      "update_failed": "Failed to update email address. Please try again."
     }
   }
 }

@@ -5,6 +5,7 @@
   "debugShowMaterialGrid": false,
   "debugApiClient": true,
   "restApiUrl": "URL",
+  "publicUrl": "URL",
   "appleRevenueCatApiKey": "API_KEY",
   "googleRevenueCatApiKey": "API_KEY"
 }

@@ -1,3 +1,4 @@
+import 'package:ab_shared/components/app/window_layout/window_layout_controller.dart';
 import 'package:ab_shared/components/modals/ab_modal.dart';
 import 'package:ab_shared/utils/constants.dart';
 import 'package:ab_shared/utils/shortcuts.dart';
@@ -12,14 +13,18 @@ import 'package:mail/components/avatars/checkbox_avatar.dart';
 import 'package:mail/components/avatars/mail_user_avatar.dart';
 import 'package:mail/i18n/strings.g.dart';
 import 'package:mail/models/mail/mail.dart';
-import 'package:mail/pages/mails/mail_composer.dart';
+import 'package:mail/pages/mails/composer/mail_composer.dart';
+import 'package:mail/pages/mails/composer/window_mail_composer.dart';
 import 'package:mail/pages/mails/mail_details.dart';
 import 'package:mail/services/sync.service.dart';
 import 'package:mail/models/send_mail/send_mail.dart' as send_mail;
+import 'package:mail/utils/get_it.dart';
 
 class MailCard extends StatefulWidget {
   final Mail? mail;
   final send_mail.SendMail? draft;
+
+  final bool? isSent;
   final Function(String)? onDelete;
   final Function(dynamic)? onSelect;
   final Function(dynamic)? onDeselect;
@@ -33,6 +38,7 @@ class MailCard extends StatefulWidget {
       {super.key,
       this.mail,
       this.draft,
+      this.isSent,
       this.onDelete,
       this.onSelect,
       this.onDeselect,
@@ -56,56 +62,67 @@ class _MailCardState extends State<MailCard> {
     if (mail == null) {
       return const SizedBox.shrink();
     }
+
+    final statusPill = _buildStatusPillList(
+      context: context,
+      mail: mail,
+      draft: widget.draft,
+      isSent: widget.isSent == true,
+    );
     return LayoutBuilder(builder: (context, constraints) {
       return Slidable(
-        enabled: widget.enabled ?? true,
+        enabled: widget.enabled == true && widget.isSent != true,
         endActionPane: ActionPane(motion: const ScrollMotion(), children: [
           SizedBox(
             width: $constants.insets.xs,
           ),
-          Theme(
-            data: Theme.of(context).copyWith(
-                outlinedButtonTheme: const OutlinedButtonThemeData(
-              style: ButtonStyle(
-                  iconColor: WidgetStatePropertyAll(Colors.white),
-                  iconSize: WidgetStatePropertyAll(25)),
-            )),
-            child: SlidableAction(
-              onPressed: (context) {
-                if (widget.draft != null) {
-                  showDialog(
-                      context: context,
-                      builder: (context) => ABModal(
-                            title: context.t.mail_card.delete_draft_modal.title,
-                            description: context
-                                .t.mail_card.delete_draft_modal.description,
-                            warning:
-                                context.t.mail_card.delete_draft_modal.warning,
-                            onConfirm: () {
-                              widget.onDelete?.call(widget.draft!.id!);
-                              Navigator.of(context).pop();
-                            },
-                          ));
-                } else {
-                  if (mail.trashed != true) {
-                    context.read<MailBloc>().add(TrashMail(mailId: mail.id!));
+          if (widget.isSent != true)
+            Theme(
+              data: Theme.of(context).copyWith(
+                  outlinedButtonTheme: const OutlinedButtonThemeData(
+                style: ButtonStyle(
+                    iconColor: WidgetStatePropertyAll(Colors.white),
+                    iconSize: WidgetStatePropertyAll(25)),
+              )),
+              child: SlidableAction(
+                onPressed: (context) {
+                  if (widget.draft != null) {
+                    showDialog(
+                        context: context,
+                        builder: (context) => ABModal(
+                              title:
+                                  context.t.mail_card.delete_draft_modal.title,
+                              description: context
+                                  .t.mail_card.delete_draft_modal.description,
+                              warning: context
+                                  .t.mail_card.delete_draft_modal.warning,
+                              onConfirm: () {
+                                widget.onDelete?.call(widget.draft!.id!);
+                                Navigator.of(context).pop();
+                              },
+                            ));
                   } else {
-                    context.read<MailBloc>().add(UntrashMail(mailId: mail.id!));
+                    if (mail.trashed != true) {
+                      context.read<MailBloc>().add(TrashMail(mailId: mail.id!));
+                    } else {
+                      context
+                          .read<MailBloc>()
+                          .add(UntrashMail(mailId: mail.id!));
+                    }
                   }
-                }
-              },
-              backgroundColor: getTheme(context).error,
-              foregroundColor: Colors.white,
-              icon: widget.draft != null
-                  ? CupertinoIcons.delete
-                  : mail.trashed != true
-                      ? CupertinoIcons.delete
-                      : CupertinoIcons.trash_slash,
-              borderRadius: BorderRadius.circular(
-                $constants.corners.sm,
+                },
+                backgroundColor: getTheme(context).error,
+                foregroundColor: Colors.white,
+                icon: widget.draft != null
+                    ? CupertinoIcons.delete
+                    : mail.trashed != true
+                        ? CupertinoIcons.delete
+                        : CupertinoIcons.trash_slash,
+                borderRadius: BorderRadius.circular(
+                  $constants.corners.sm,
+                ),
               ),
             ),
-          ),
           SizedBox(
             width: $constants.insets.xs,
           ),
@@ -170,52 +187,7 @@ class _MailCardState extends State<MailCard> {
                 _toggleSelected(mail);
               },
               onTap: () async {
-                if (widget.onTap != null) {
-                  widget.onTap?.call(mail);
-                  return;
-                }
-                if (widget.draft == null) {
-                  // on mobile, open the mail in the detail screen only when no mails are selected (ie not in multi-select mode)
-                  if (!isDesktop(context)) {
-                    if (widget.selectedMails.isEmpty) {
-                      await Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => MailDetailScreen(
-                                mail,
-                                onCancel: () {
-                                  Navigator.of(context).pop();
-                                },
-                              )));
-                    } else {
-                      // when in multi-select mode, toggle the selection of the mail
-                      _toggleSelected(mail);
-                    }
-                    if (!context.mounted) return;
-                    SyncService.sync(context);
-                  } else {
-                    if (getSize(context).width < $constants.screenSize.md) {
-                      // on mobile, tapping the mail opens it in the detail screen
-                      await Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => MailDetailScreen(
-                            mail,
-                            onCancel: () {
-                              Navigator.of(context).pop();
-                            },
-                          ),
-                        ),
-                      );
-                    } else {
-                      // on desktop, tapping the mail opens it in the preview panel
-                      // multi-select mode enables itself when the user clicks on the avatar / checkbox
-                      _toggleSelected(
-                        mail,
-                        reset: widget.selectMode != true,
-                      );
-                    }
-                  }
-                } else {
-                  _openComposer(context);
-                }
+                await _onMailTap(context, mail);
               },
               child: Row(
                 children: [
@@ -240,7 +212,7 @@ class _MailCardState extends State<MailCard> {
                   else
                     MailUserAvatar(
                       value: mail.getHeader("From"),
-                      read: mail.read,
+                      read: mail.read == true || widget.draft != null,
                       onTap: () {
                         if (isDesktop(context)) {
                           if (widget.selectMode == true &&
@@ -268,7 +240,9 @@ class _MailCardState extends State<MailCard> {
                           mail.getHeader("From"),
                           style: getTextTheme(context).headlineSmall!.copyWith(
                                 fontWeight:
-                                    mail.read != true ? FontWeight.bold : null,
+                                    mail.read != true && widget.draft == null
+                                        ? FontWeight.bold
+                                        : null,
                               ),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
@@ -283,7 +257,9 @@ class _MailCardState extends State<MailCard> {
                           mail.getHeader("Subject"),
                           style: getTextTheme(context).bodyMedium!.copyWith(
                                 fontWeight:
-                                    mail.read != true ? FontWeight.bold : null,
+                                    mail.read != true && widget.draft == null
+                                        ? FontWeight.bold
+                                        : null,
                               ),
                           overflow: TextOverflow.ellipsis,
                           textAlign: TextAlign.left,
@@ -292,6 +268,18 @@ class _MailCardState extends State<MailCard> {
                       ),
                     ],
                   ),
+                  if (statusPill != null) ...[
+                    Spacer(),
+                    Padding(
+                      padding: EdgeInsets.only(right: $constants.insets.xs),
+                      child: Container(
+                        constraints: BoxConstraints(
+                          maxWidth: 130,
+                        ),
+                        child: statusPill,
+                      ),
+                    ),
+                  ],
                   if (widget.selectMode == true) ...[
                     Spacer(),
                     GestureDetector(
@@ -367,6 +355,19 @@ class _MailCardState extends State<MailCard> {
     });
   }
 
+  Future<void> _openMailDetailMobile(Mail mail, {bool isSent = false}) async {
+    await getIt<GlobalKey<NavigatorState>>(
+      instanceName: 'rootNavigatorKey',
+    ).currentState!.push(MaterialPageRoute(
+        builder: (context) => MailDetailScreen(
+              mail,
+              isSent: isSent,
+              onCancel: () {
+                Navigator.of(context).pop();
+              },
+            )));
+  }
+
   void _toggleSelected(Mail mail, {bool reset = false}) {
     if (reset) {
       widget.selectedMails.clear();
@@ -392,31 +393,183 @@ class _MailCardState extends State<MailCard> {
 
   void _openComposer(BuildContext context) {
     if (isDesktop(context)) {
-      showDialog(
-          context: context,
-          builder: (context) => Dialog(
-                child: SizedBox(
-                  height: getSize(context).height * 0.8,
-                  width: getSize(context).width * 0.8,
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular($constants.corners.md),
-                    child: MailComposer(
-                      mail: widget.draft,
-                    ),
-                  ),
-                ),
-              ));
+      getIt<WindowLayoutController>().addWindow(
+        WindowMailComposer(
+          initiallyCollapsed: false,
+          draft: widget.draft,
+        ),
+      );
     } else {
       showModalBottomSheet(
         isScrollControlled: true,
         context: context,
+        useRootNavigator: true,
         isDismissible: false,
         enableDrag: false,
         backgroundColor: Colors.transparent,
         builder: (context) => SizedBox(
-            height: getSize(context).height * 0.92,
-            child: MailComposer(mail: widget.draft)),
+            height: getSize(context).height * 0.88,
+            child: MailComposer(
+              mail: widget.draft,
+            )),
       );
+    }
+  }
+
+  Widget? _buildStatusPillList({
+    required BuildContext context,
+    Mail? mail,
+    send_mail.SendMail? draft,
+    bool? isSent,
+  }) {
+    if (draft != null) {
+      if (isSent == true) {
+        return _buildStatusPill(
+            context: context,
+            icon: _getSentMailIcon(status: draft.sendStatus),
+            text: draft.sendStatus.name,
+            color: _getSentMailColor(status: draft.sendStatus));
+      } else {
+        return _buildStatusPill(
+          context: context,
+          icon: CupertinoIcons.create,
+          text: "Draft",
+          color: Colors.grey.shade900,
+        );
+      }
+    } else {
+      if (mail != null) {
+        if (mail.rejected == true) {
+          return _buildStatusPill(
+            context: context,
+            text: context.t.email_folders.spam,
+            color: Colors.red,
+            icon: CupertinoIcons.flame,
+          );
+        }
+      }
+    }
+    return null;
+  }
+
+  IconData? _getSentMailIcon({
+    required send_mail.SendStatus? status,
+  }) {
+    switch (status) {
+      case send_mail.SendStatus.sent:
+        return CupertinoIcons.paperplane_fill;
+      case send_mail.SendStatus.failed:
+        return CupertinoIcons.exclamationmark_circle;
+      case send_mail.SendStatus.retry:
+        return CupertinoIcons.arrow_2_circlepath;
+      case send_mail.SendStatus.pending:
+        return CupertinoIcons.clock;
+      default:
+        return null;
+    }
+  }
+
+  Color? _getSentMailColor({
+    required send_mail.SendStatus? status,
+  }) {
+    switch (status) {
+      case send_mail.SendStatus.sent:
+        return Colors.blue;
+      case send_mail.SendStatus.failed:
+        return Colors.red;
+      case send_mail.SendStatus.retry:
+        return Colors.orange;
+      case send_mail.SendStatus.pending:
+        return Colors.black;
+      default:
+        return null;
+    }
+  }
+
+  Widget _buildStatusPill({
+    required BuildContext context,
+    required String text,
+    Color? color,
+    IconData? icon,
+  }) {
+    return Container(
+      padding: EdgeInsets.symmetric(
+        horizontal: $constants.insets.xs,
+        vertical: $constants.insets.xxs,
+      ),
+      decoration: BoxDecoration(
+        color: color?.withValues(alpha: 0.1) ??
+            getTheme(context).primary.withValues(alpha: 0.1),
+        borderRadius: BorderRadius.circular($constants.corners.md),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          if (icon != null) ...[
+            Icon(
+              icon,
+              size: 12,
+              color: color ?? getTheme(context).primary,
+            ),
+            SizedBox(width: $constants.insets.xxs),
+          ],
+          Text(
+            text,
+            style: getTextTheme(context).bodySmall!.copyWith(
+                  color: color ?? getTheme(context).primary,
+                  fontWeight: FontWeight.bold,
+                ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Future<void> _onMailTap(BuildContext context, Mail mail) async {
+    if (widget.onTap != null) {
+      widget.onTap?.call(mail);
+      return;
+    }
+    if (widget.draft == null) {
+      // on mobile, open the mail in the detail screen only when no mails are selected (ie not in multi-select mode)
+      if (!isDesktop(context)) {
+        if (widget.selectedMails.isEmpty) {
+          await _openMailDetailMobile(mail);
+        } else {
+          // when in multi-select mode, toggle the selection of the mail
+          _toggleSelected(mail);
+        }
+        if (!context.mounted) return;
+        SyncService.sync(context);
+      } else {
+        if (getSize(context).width < $constants.screenSize.md) {
+          // on mobile, tapping the mail opens it in the detail screen
+          await _openMailDetailMobile(mail);
+        } else {
+          // on desktop, tapping the mail opens it in the preview panel
+          // multi-select mode enables itself when the user clicks on the avatar / checkbox
+          _toggleSelected(
+            mail,
+            reset: widget.selectMode != true,
+          );
+        }
+      }
+    } else {
+      if (widget.isSent == true) {
+        if (getSize(context).width < $constants.screenSize.md) {
+          // on mobile, tapping the mail opens it in the detail screen
+          await _openMailDetailMobile(mail, isSent: true);
+        } else {
+          // on desktop, tapping the mail opens it in the preview panel
+          // multi-select mode enables itself when the user clicks on the avatar / checkbox
+          _toggleSelected(
+            mail,
+            reset: widget.selectMode != true,
+          );
+        }
+      } else {
+        _openComposer(context);
+      }
     }
   }
 }

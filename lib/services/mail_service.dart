@@ -84,7 +84,7 @@ class MailService {
   Future<bool> sendMail(Mail mail) async {
     final result =
         await globalApiClient.post('/mail/send', data: mail.toRawMail());
-    if (result != null && result.statusCode == 200) {
+    if (result != null && result.statusCode == 201) {
       return true;
     } else {
       throw Exception('Failed to send mail');
@@ -94,7 +94,7 @@ class MailService {
   Future<bool> saveDraft(Mail mail) async {
     final result =
         await globalApiClient.post('/mail/draft', data: mail.toRawMail());
-    if (result != null && result.statusCode == 200) {
+    if (result != null && result.statusCode == 201) {
       return true;
     } else {
       throw Exception('Failed to save draft');
@@ -211,6 +211,57 @@ class MailService {
       };
     } else {
       throw Exception('Failed to load drafts since $sinceFormatted');
+    }
+  }
+
+  Future<List<send_mail.SendMail>> getSent(
+      {int page = 1, int size = 10}) async {
+    final result =
+        await globalApiClient.get('/mail/send?page=$page&size=$size');
+    if (result != null && result.statusCode == 200) {
+      final List<send_mail.SendMail> decryptedSent = [];
+      final sentMails = result.data["send_mails"];
+
+      for (var sent in (sentMails ?? [])) {
+        final decryptedSentMail = await send_mail.SendMail.decrypt(
+            sent as Map<String, dynamic>, encryptionService);
+        decryptedSent.add(decryptedSentMail);
+      }
+      return decryptedSent;
+    } else {
+      throw Exception('Failed to get sent mails');
+    }
+  }
+
+  Future<Map<String, dynamic>> getSentSince({
+    required DateTime since,
+    int page = 1,
+    int size = 10,
+  }) async {
+    final sinceFormatted =
+        since.toUtc().toIso8601String().replaceAll('.000Z', 'Z');
+    final result = await globalApiClient
+        .get('/mail/send/since?since=$sinceFormatted&page=$page&size=$size');
+
+    if (result != null && result.statusCode == 200) {
+      final List<send_mail.SendMail> decryptedSent = [];
+      final sentMails = result.data["sent_mails"];
+
+      for (var sent in (sentMails ?? [])) {
+        final decryptedSentMail = await send_mail.SendMail.decrypt(
+            sent as Map<String, dynamic>, encryptionService);
+        decryptedSent.add(decryptedSentMail);
+      }
+
+      return {
+        'sent_mails': decryptedSent,
+        'total_count': result.data['total_count'],
+        'page': result.data['page'],
+        'size': result.data['size'],
+        'total_pages': result.data['total_pages'],
+      };
+    } else {
+      throw Exception('Failed to load sent mails since $sinceFormatted');
     }
   }
 }

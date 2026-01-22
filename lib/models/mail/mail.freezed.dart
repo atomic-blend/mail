@@ -24,13 +24,15 @@ mixin _$Mail {
   set id(String? value) => throw _privateConstructorUsedError;
   String? get userId => throw _privateConstructorUsedError;
   set userId(String? value) => throw _privateConstructorUsedError;
-  List<Map<String, dynamic>>? get headers => throw _privateConstructorUsedError;
-  set headers(List<Map<String, dynamic>>? value) =>
+  Map<String, dynamic>? get headers => throw _privateConstructorUsedError;
+  set headers(Map<String, dynamic>? value) =>
       throw _privateConstructorUsedError;
   String? get textContent => throw _privateConstructorUsedError;
   set textContent(String? value) => throw _privateConstructorUsedError;
   String? get htmlContent => throw _privateConstructorUsedError;
   set htmlContent(String? value) => throw _privateConstructorUsedError;
+  String? get inReplyTo => throw _privateConstructorUsedError;
+  set inReplyTo(String? value) => throw _privateConstructorUsedError;
   List<MailAttachment>? get attachments => throw _privateConstructorUsedError;
   set attachments(List<MailAttachment>? value) =>
       throw _privateConstructorUsedError;
@@ -38,6 +40,8 @@ mixin _$Mail {
   set archived(bool? value) => throw _privateConstructorUsedError;
   bool? get trashed => throw _privateConstructorUsedError;
   set trashed(bool? value) => throw _privateConstructorUsedError;
+  String? get calendarEvent => throw _privateConstructorUsedError;
+  set calendarEvent(String? value) => throw _privateConstructorUsedError;
   bool? get greylisted => throw _privateConstructorUsedError;
   set greylisted(bool? value) => throw _privateConstructorUsedError;
   bool? get rejected => throw _privateConstructorUsedError;
@@ -70,12 +74,14 @@ abstract class $MailCopyWith<$Res> {
   $Res call(
       {String? id,
       String? userId,
-      List<Map<String, dynamic>>? headers,
+      Map<String, dynamic>? headers,
       String? textContent,
       String? htmlContent,
+      String? inReplyTo,
       List<MailAttachment>? attachments,
       bool? archived,
       bool? trashed,
+      String? calendarEvent,
       bool? greylisted,
       bool? rejected,
       bool? rewriteSubject,
@@ -105,9 +111,11 @@ class _$MailCopyWithImpl<$Res, $Val extends Mail>
     Object? headers = freezed,
     Object? textContent = freezed,
     Object? htmlContent = freezed,
+    Object? inReplyTo = freezed,
     Object? attachments = freezed,
     Object? archived = freezed,
     Object? trashed = freezed,
+    Object? calendarEvent = freezed,
     Object? greylisted = freezed,
     Object? rejected = freezed,
     Object? rewriteSubject = freezed,
@@ -128,7 +136,7 @@ class _$MailCopyWithImpl<$Res, $Val extends Mail>
       headers: freezed == headers
           ? _value.headers
           : headers // ignore: cast_nullable_to_non_nullable
-              as List<Map<String, dynamic>>?,
+              as Map<String, dynamic>?,
       textContent: freezed == textContent
           ? _value.textContent
           : textContent // ignore: cast_nullable_to_non_nullable
@@ -136,6 +144,10 @@ class _$MailCopyWithImpl<$Res, $Val extends Mail>
       htmlContent: freezed == htmlContent
           ? _value.htmlContent
           : htmlContent // ignore: cast_nullable_to_non_nullable
+              as String?,
+      inReplyTo: freezed == inReplyTo
+          ? _value.inReplyTo
+          : inReplyTo // ignore: cast_nullable_to_non_nullable
               as String?,
       attachments: freezed == attachments
           ? _value.attachments
@@ -149,6 +161,10 @@ class _$MailCopyWithImpl<$Res, $Val extends Mail>
           ? _value.trashed
           : trashed // ignore: cast_nullable_to_non_nullable
               as bool?,
+      calendarEvent: freezed == calendarEvent
+          ? _value.calendarEvent
+          : calendarEvent // ignore: cast_nullable_to_non_nullable
+              as String?,
       greylisted: freezed == greylisted
           ? _value.greylisted
           : greylisted // ignore: cast_nullable_to_non_nullable
@@ -191,12 +207,14 @@ abstract class _$$MailImplCopyWith<$Res> implements $MailCopyWith<$Res> {
   $Res call(
       {String? id,
       String? userId,
-      List<Map<String, dynamic>>? headers,
+      Map<String, dynamic>? headers,
       String? textContent,
       String? htmlContent,
+      String? inReplyTo,
       List<MailAttachment>? attachments,
       bool? archived,
       bool? trashed,
+      String? calendarEvent,
       bool? greylisted,
       bool? rejected,
       bool? rewriteSubject,
@@ -223,9 +241,11 @@ class __$$MailImplCopyWithImpl<$Res>
     Object? headers = freezed,
     Object? textContent = freezed,
     Object? htmlContent = freezed,
+    Object? inReplyTo = freezed,
     Object? attachments = freezed,
     Object? archived = freezed,
     Object? trashed = freezed,
+    Object? calendarEvent = freezed,
     Object? greylisted = freezed,
     Object? rejected = freezed,
     Object? rewriteSubject = freezed,
@@ -246,7 +266,7 @@ class __$$MailImplCopyWithImpl<$Res>
       headers: freezed == headers
           ? _value.headers
           : headers // ignore: cast_nullable_to_non_nullable
-              as List<Map<String, dynamic>>?,
+              as Map<String, dynamic>?,
       textContent: freezed == textContent
           ? _value.textContent
           : textContent // ignore: cast_nullable_to_non_nullable
@@ -254,6 +274,10 @@ class __$$MailImplCopyWithImpl<$Res>
       htmlContent: freezed == htmlContent
           ? _value.htmlContent
           : htmlContent // ignore: cast_nullable_to_non_nullable
+              as String?,
+      inReplyTo: freezed == inReplyTo
+          ? _value.inReplyTo
+          : inReplyTo // ignore: cast_nullable_to_non_nullable
               as String?,
       attachments: freezed == attachments
           ? _value.attachments
@@ -267,6 +291,10 @@ class __$$MailImplCopyWithImpl<$Res>
           ? _value.trashed
           : trashed // ignore: cast_nullable_to_non_nullable
               as bool?,
+      calendarEvent: freezed == calendarEvent
+          ? _value.calendarEvent
+          : calendarEvent // ignore: cast_nullable_to_non_nullable
+              as String?,
       greylisted: freezed == greylisted
           ? _value.greylisted
           : greylisted // ignore: cast_nullable_to_non_nullable
@@ -308,9 +336,11 @@ class _$MailImpl extends _Mail {
       this.headers,
       this.textContent,
       this.htmlContent,
+      this.inReplyTo,
       this.attachments,
       this.archived,
       this.trashed,
+      this.calendarEvent,
       this.greylisted,
       this.rejected,
       this.rewriteSubject,
@@ -328,17 +358,21 @@ class _$MailImpl extends _Mail {
   @override
   String? userId;
   @override
-  List<Map<String, dynamic>>? headers;
+  Map<String, dynamic>? headers;
   @override
   String? textContent;
   @override
   String? htmlContent;
+  @override
+  String? inReplyTo;
   @override
   List<MailAttachment>? attachments;
   @override
   bool? archived;
   @override
   bool? trashed;
+  @override
+  String? calendarEvent;
   @override
   bool? greylisted;
   @override
@@ -374,12 +408,14 @@ abstract class _Mail extends Mail {
   factory _Mail(
       {String? id,
       String? userId,
-      List<Map<String, dynamic>>? headers,
+      Map<String, dynamic>? headers,
       String? textContent,
       String? htmlContent,
+      String? inReplyTo,
       List<MailAttachment>? attachments,
       bool? archived,
       bool? trashed,
+      String? calendarEvent,
       bool? greylisted,
       bool? rejected,
       bool? rewriteSubject,
@@ -398,14 +434,17 @@ abstract class _Mail extends Mail {
   String? get userId;
   set userId(String? value);
   @override
-  List<Map<String, dynamic>>? get headers;
-  set headers(List<Map<String, dynamic>>? value);
+  Map<String, dynamic>? get headers;
+  set headers(Map<String, dynamic>? value);
   @override
   String? get textContent;
   set textContent(String? value);
   @override
   String? get htmlContent;
   set htmlContent(String? value);
+  @override
+  String? get inReplyTo;
+  set inReplyTo(String? value);
   @override
   List<MailAttachment>? get attachments;
   set attachments(List<MailAttachment>? value);
@@ -415,6 +454,9 @@ abstract class _Mail extends Mail {
   @override
   bool? get trashed;
   set trashed(bool? value);
+  @override
+  String? get calendarEvent;
+  set calendarEvent(String? value);
   @override
   bool? get greylisted;
   set greylisted(bool? value);

@@ -32,6 +32,10 @@
 	<string>Access device calendar to display in app.</string>
 	<key>NSCalendarsUsageDescription</key>
 	<string>Access device calendar to display in app</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>User will be able to send image via email</string>
+	<key>NSCameraUsageDescription</key>
+	<string>User will be able to send image via email</string>
 	<key>NSContactsUsageDescription</key>
 	<string>Access device contacts to display in app</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>

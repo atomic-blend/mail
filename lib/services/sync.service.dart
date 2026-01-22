@@ -11,10 +11,37 @@ class SyncService {
 
     // Sync data
     context.read<MailBloc>().add(const SyncMailActions());
-    if (context.read<MailBloc>().state is MailInitial) {
-      context.read<MailBloc>().add(const SyncAllMailsPaginated());
+    
+    conditionalSync(
+        context,
+        context.read<MailBloc>().state is MailInitial,
+        context.read<MailBloc>().state.mails,
+        const SyncAllMailsPaginated(),
+        const SyncSince(),
+        context.read<MailBloc>());
+
+    conditionalSync(
+        context,
+        context.read<MailBloc>().state is MailInitial,
+        context.read<MailBloc>().state.sentMails,
+        const SyncSentPaginated(),
+        const SyncSentSince(),
+        context.read<MailBloc>());
+
+    context.read<AuthBloc>().add(RefreshUser());
+  }
+
+  static void conditionalSync(
+      BuildContext context,
+      bool isInitial,
+      List<dynamic>? items,
+      dynamic allEvent,
+      dynamic sinceEvent,
+      Bloc<dynamic, dynamic> bloc) {
+    if (isInitial || items == null || items.isEmpty) {
+      bloc.add(allEvent);
     } else {
-      context.read<MailBloc>().add(const SyncSince());
+      bloc.add(sinceEvent);
     }
   }
 

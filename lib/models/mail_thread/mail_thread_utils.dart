@@ -1,0 +1,155 @@
+import 'package:mail/models/mail/mail.dart';
+import 'package:mail/models/mail_thread/mail_thread.dart';
+
+class MailThreadUtils {
+  // Reconstructs a MailThread given a list of mails and a target mail.
+  // will return the complete thread for the target mail.
+  // should be sorted from oldest to newest.
+  // headers References and In-Reply-To should be used to reconstruct the thread.
+  static MailThread reconstructThread(List<Mail> mails, Mail targetMail) {
+    String? getHeader(Map<String, dynamic>? headers, String key) {
+      if (headers == null) return null;
+      for (final k in headers.keys) {
+        if (k.toString().toLowerCase() == key.toLowerCase()) {
+          final v = headers[k];
+          return v?.toString();
+        }
+      }
+      return null;
+    }
+
+    String normalizeId(String id) {
+      var s = id.replaceAll('\u0000', '');
+      s = s.trim();
+      s = s.replaceAll(RegExp(r'^[<\s]+|[>\s]+$'), '');
+      return s;
+    }
+
+    String? getMessageId(Mail m) {
+      final mid = getHeader(m.headers, 'Message-ID') ??
+          getHeader(m.headers, 'Message-Id') ??
+          getHeader(m.headers, 'MessageId');
+      if (mid == null || mid.trim().isEmpty) return null;
+      return normalizeId(mid);
+    }
+
+    List<String> parseRefs(dynamic refs) {
+      if (refs == null) return [];
+      if (refs is List) {
+        return refs
+            .map((e) => normalizeId(e.toString()))
+            .where((s) => s.isNotEmpty)
+            .toList();
+      }
+      final s = refs.toString();
+      final parts = s.split(RegExp(r'[\s,]+'));
+      return parts
+          .map((p) => normalizeId(p))
+          .where((s) => s.isNotEmpty)
+          .toList();
+    }
+
+    // build map of message-id -> Mail
+    final Map<String, Mail> idToMail = {};
+    for (final m in mails) {
+      final mid = getMessageId(m);
+      if (mid != null && mid.isNotEmpty) {
+        idToMail[mid] = m;
+      }
+    }
+
+    final List<Mail> result = [];
+    void addUnique(Mail m) {
+      if (!result.contains(m)) result.add(m);
+    }
+
+    // Prefer References header when available on the target mail
+    final refs = parseRefs(getHeader(targetMail.headers, 'References'));
+    if (refs.isNotEmpty) {
+      for (final ref in refs) {
+        final found = idToMail[ref];
+        if (found != null) addUnique(found);
+      }
+      addUnique(targetMail);
+    } else {
+      // Fallback: follow In-Reply-To chain backwards from targetMail
+      final List<Mail> ancestors = [];
+      String? inReply = getHeader(targetMail.headers, 'In-Reply-To');
+      final seen = <String>{};
+      while (inReply != null && inReply.trim().isNotEmpty) {
+        final nid = normalizeId(inReply);
+        if (seen.contains(nid)) break;
+        seen.add(nid);
+        final parent = idToMail[nid];
+        if (parent == null) break;
+        ancestors.add(parent);
+        inReply = getHeader(parent.headers, 'In-Reply-To');
+      }
+      // ancestors are from closest parent -> older; add oldest first
+      for (final a in ancestors.reversed) {
+        addUnique(a);
+      }
+      addUnique(targetMail);
+    }
+
+    // Ensure we also include descendants (replies) by closure: if any mail
+    // references a message already in the result, include it. Repeat until stable.
+    Set<String> idSet = result
+        .map((m) => getMessageId(m))
+        .where((e) => e != null)
+        .cast<String>()
+        .toSet();
+
+    bool addedAny;
+    do {
+      addedAny = false;
+      for (final m in mails) {
+        if (result.contains(m)) continue;
+        final inReply = getHeader(m.headers, 'In-Reply-To');
+        final midInReply = inReply == null || inReply.trim().isEmpty
+            ? null
+            : normalizeId(inReply);
+        final mrefs = parseRefs(getHeader(m.headers, 'References'));
+        final mId = getMessageId(m);
+
+        final referencesTarget =
+            (midInReply != null && idSet.contains(midInReply)) ||
+                mrefs.any((r) => idSet.contains(r));
+
+        if (referencesTarget) {
+          addUnique(m);
+          if (mId != null) idSet.add(mId);
+          addedAny = true;
+        }
+      }
+    } while (addedAny);
+
+    // As a last resort, if result is empty, include the target and any mails that reference it
+    if (result.isEmpty) {
+      addUnique(targetMail);
+      final targetId = getMessageId(targetMail);
+      for (final m in mails) {
+        final inReply = getHeader(m.headers, 'In-Reply-To');
+        final midInReply = inReply == null || inReply.trim().isEmpty
+            ? null
+            : normalizeId(inReply);
+        final refs = parseRefs(getHeader(m.headers, 'References'));
+        if ((midInReply != null &&
+                targetId != null &&
+                midInReply == targetId) ||
+            (targetId != null && refs.contains(targetId))) {
+          addUnique(m);
+        }
+      }
+    }
+
+    // Sort from oldest to newest by createdAt (nulls treated as epoch)
+    result.sort((a, b) {
+      final at = a.createdAt?.millisecondsSinceEpoch ?? 0;
+      final bt = b.createdAt?.millisecondsSinceEpoch ?? 0;
+      return at.compareTo(bt);
+    });
+
+    return MailThread(mails: result);
+  }
+}

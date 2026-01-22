@@ -40,11 +40,31 @@
     "from": "De",
     "subject": "Objet",
     "to": "À",
+    "body": "Corps",
+    "date": "Date",
+    "send": "Envoyer",
+    "fields(map)": {
+      "to": "À",
+      "subject": "Objet",
+      "body": "Corps"
+    },
     "save_draft_modal": {
       "title": "Enregistrer le brouillon",
       "description": "Voulez-vous enregistrer le brouillon ?",
       "confirm_text": "Enregistrer",
       "cancel_text": "Annuler"
+    },
+    "incomplete_email_modal": {
+      "title": "E-mail incomplet",
+      "description": "Le mail que vous essayez d'envoyer est incomplet.\nVeuillez vérifier les champs suivants :",
+      "want_to_go_back": "Voulez-vous revenir en arrière pour le compléter ?",
+      "cancel_text": "Revenir",
+      "confirm_text": "Envoyer quand même"
+    },
+    "errors(map)": {
+      "error_sending_email": "Une erreur s'est produite lors de l'envoi de l'e-mail. Veuillez réessayer.",
+      "no_recipient": "Veuillez spécifier au moins un destinataire.",
+      "invalid_recipient": "Un ou plusieurs destinataires ont une adresse e-mail invalide."
     }
   },
   "account": {
@@ -72,6 +92,8 @@
     "drafts": "Brouillons",
     "archive": "Archive",
     "trashed": "Corbeille",
+    "spam": "Spam",
+    "sent": "Envoyés",
     "all": "Tous"
   },
   "mail_actions": {
@@ -86,6 +108,24 @@
     "selected_mails": {
       "title": "${count} mails sélectionnés",
       "description": "Cliquez ici pour effectuer une action."
-    } 
+    }
+  },
+  "email_domain_validation": {
+    "title": "Mettre à jour l'adresse e-mail",
+    "description": "Votre adresse e-mail actuelle ne provient pas d'un domaine autorisé. Veuillez fournir une nouvelle adresse e-mail provenant de l'un des domaines autorisés suivants : ${domains}",
+    "current_email": "E-mail actuel",
+    "new_email_label": "Nouvelle adresse e-mail",
+    "new_email_hint": "Entrez votre nouvelle adresse e-mail",
+    "backup_email_label": "E-mail de secours (optionnel)",
+    "backup_email_hint": "Entrez une adresse e-mail de secours",
+    "info": "L'e-mail de secours sera utilisé pour la récupération du compte et les notifications importantes.",
+    "submit": "Mettre à jour l'e-mail",
+    "submitting": "Mise à jour...",
+    "errors(map)": {
+      "empty_email": "Veuillez entrer une adresse e-mail.",
+      "invalid_email_format": "Veuillez entrer une adresse e-mail valide.",
+      "email_not_in_authorized_domain": "L'adresse e-mail doit provenir de l'un de ces domaines : ${domains}",
+      "update_failed": "Échec de la mise à jour de l'adresse e-mail. Veuillez réessayer."
+    }
   }
 }

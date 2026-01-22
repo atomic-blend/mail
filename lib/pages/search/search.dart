@@ -73,7 +73,7 @@ class _SearchScreenState extends State<SearchScreen> {
                   ? getSize(context).width > $constants.screenSize.md
                       ? 350
                       : getSize(context).width * 0.66
-                  : getSize(context).width,
+                  : getSize(context).width * 0.95,
               child: Column(
                 children: [
                   if (searchState is SearchLoaded) ...[

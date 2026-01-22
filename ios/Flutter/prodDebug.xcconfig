@@ -3,5 +3,5 @@
 
 FLUTTER_TARGET=lib/main_prod.dart
 ASSET_PREFIX=prod
-BUNDLE_NAME=Atomic Mail
-BUNDLE_DISPLAY_NAME=Atomic Mail
+BUNDLE_NAME=Atomic Inbox
+BUNDLE_DISPLAY_NAME=Atomic Inbox

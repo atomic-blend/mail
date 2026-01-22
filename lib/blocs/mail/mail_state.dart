@@ -3,6 +3,7 @@ part of 'mail_bloc.dart';
 sealed class MailState extends Equatable {
   final List<Mail>? mails;
   final List<send_mail.SendMail>? drafts;
+  final List<send_mail.SendMail>? sentMails;
   final List<String> readMails;
   final List<String> unreadMails;
   final List<String> archivedMails;
@@ -15,6 +16,7 @@ sealed class MailState extends Equatable {
       List<String>? readMails,
       List<String>? unreadMails,
       List<send_mail.SendMail>? drafts,
+      List<send_mail.SendMail>? sentMails,
       List<String>? archivedMails,
       List<String>? unarchivedMails,
       List<String>? trashedMails,
@@ -22,6 +24,7 @@ sealed class MailState extends Equatable {
       : readMails = readMails ?? [],
         unreadMails = unreadMails ?? [],
         drafts = drafts ?? [],
+        sentMails = sentMails ?? [],
         archivedMails = archivedMails ?? [],
         unarchivedMails = unarchivedMails ?? [],
         trashedMails = trashedMails ?? [],
@@ -34,8 +37,11 @@ sealed class MailState extends Equatable {
         readMails,
         unreadMails,
         drafts,
+        sentMails,
         archivedMails,
-        unarchivedMails
+        unarchivedMails,
+        trashedMails,
+        untrashedMails
       ];
 
   /// Transforms one MailState to another while preserving all properties
@@ -46,6 +52,7 @@ sealed class MailState extends Equatable {
       List<String>? readMails,
       List<String>? unreadMails,
       List<send_mail.SendMail>? drafts,
+      List<send_mail.SendMail>? sentMails,
       List<String>? archivedMails,
       List<String>? unarchivedMails,
       List<String>? trashedMails,
@@ -57,6 +64,7 @@ sealed class MailState extends Equatable {
     List<String>? readMails,
     List<String>? unreadMails,
     List<send_mail.SendMail>? drafts,
+    List<send_mail.SendMail>? sentMails,
     List<String>? archivedMails,
     List<String>? unarchivedMails,
     List<String>? trashedMails,
@@ -66,6 +74,7 @@ sealed class MailState extends Equatable {
       mails ?? fromState.mails,
       latestSync: latestSync ?? fromState.latestSync,
       readMails: readMails ?? fromState.readMails,
+      sentMails: sentMails ?? fromState.sentMails,
       unreadMails: unreadMails ?? fromState.unreadMails,
       drafts: drafts ?? fromState.drafts,
       archivedMails: archivedMails ?? fromState.archivedMails,
@@ -84,6 +93,7 @@ sealed class MailState extends Equatable {
         List<String>? readMails,
         List<String>? unreadMails,
         List<send_mail.SendMail>? drafts,
+        List<send_mail.SendMail>? sentMails,
         List<String>? archivedMails,
         List<String>? unarchivedMails,
         List<String>? trashedMails,
@@ -95,6 +105,7 @@ sealed class MailState extends Equatable {
       fromState.mails,
       message,
       latestSync: fromState.latestSync,
+      sentMails: fromState.sentMails,
       readMails: fromState.readMails,
       unreadMails: fromState.unreadMails,
       drafts: fromState.drafts,
@@ -111,6 +122,7 @@ class MailInitial extends MailState {
       : super(null,
             readMails: [],
             unreadMails: [],
+            sentMails: [],
             drafts: [],
             archivedMails: [],
             unarchivedMails: []);
@@ -122,6 +134,7 @@ class MailLoading extends MailState {
       super.unreadMails,
       super.latestSync,
       super.drafts,
+      super.sentMails,
       super.archivedMails,
       super.unarchivedMails,
       super.trashedMails,
@@ -134,14 +147,23 @@ class MailLoaded extends MailState {
       super.unreadMails,
       super.latestSync,
       super.drafts,
+      super.sentMails,
       super.archivedMails,
       super.unarchivedMails,
       super.trashedMails,
       super.untrashedMails});
 
   @override
-  List<Object?> get props =>
-      [mails, latestSync, drafts, archivedMails, unarchivedMails];
+  List<Object?> get props => [
+        mails,
+        latestSync,
+        drafts,
+        sentMails,
+        archivedMails,
+        unarchivedMails,
+        trashedMails,
+        untrashedMails
+      ];
 }
 
 class MailLoadingError extends MailState {
@@ -150,6 +172,7 @@ class MailLoadingError extends MailState {
       super.unreadMails,
       super.latestSync,
       super.drafts,
+      super.sentMails,
       super.archivedMails,
       super.unarchivedMails,
       super.trashedMails,
@@ -167,6 +190,7 @@ class MailMarkAsReadSuccess extends MailState {
       super.readMails,
       super.unreadMails,
       super.drafts,
+      super.sentMails,
       super.archivedMails,
       super.unarchivedMails,
       super.trashedMails,
@@ -179,8 +203,11 @@ class MailMarkAsReadSuccess extends MailState {
         readMails,
         unreadMails,
         drafts,
+        sentMails,
         archivedMails,
-        unarchivedMails
+        unarchivedMails,
+        trashedMails,
+        untrashedMails
       ];
 }
 
@@ -190,6 +217,7 @@ class MailMarkAsReadError extends MailState {
       super.readMails,
       super.drafts,
       super.archivedMails,
+      super.sentMails,
       super.unarchivedMails,
       super.trashedMails,
       super.untrashedMails});
@@ -208,12 +236,23 @@ class MailMarkAsUnreadSuccess extends MailState {
       super.drafts,
       super.archivedMails,
       super.unarchivedMails,
+      super.sentMails,
       super.trashedMails,
       super.untrashedMails});
 
   @override
-  List<Object?> get props =>
-      [mails, latestSync, unreadMails, drafts, archivedMails, unarchivedMails];
+  List<Object?> get props => [
+        mails,
+        latestSync,
+        readMails,
+        unreadMails,
+        drafts,
+        sentMails,
+        archivedMails,
+        unarchivedMails,
+        trashedMails,
+        untrashedMails
+      ];
 }
 
 class MailMarkAsUnreadError extends MailState {
@@ -223,6 +262,7 @@ class MailMarkAsUnreadError extends MailState {
       super.drafts,
       super.archivedMails,
       super.unarchivedMails,
+      super.sentMails,
       super.trashedMails,
       super.untrashedMails});
   final String message;
@@ -238,12 +278,13 @@ class MailMarkAsUnreadError extends MailState {
       ];
 }
 
-class MailSendSuccess extends MailState {
-  MailSendSuccess(super.mails,
+class MailSending extends MailState {
+  MailSending(super.mails,
       {super.latestSync,
       super.readMails,
       super.unreadMails,
       super.drafts,
+      super.sentMails,
       super.archivedMails,
       super.unarchivedMails,
       super.trashedMails,
@@ -256,8 +297,38 @@ class MailSendSuccess extends MailState {
         readMails,
         unreadMails,
         drafts,
+        sentMails,
         archivedMails,
-        unarchivedMails
+        unarchivedMails,
+        trashedMails,
+        untrashedMails
+      ];
+}
+
+class MailSendSuccess extends MailState {
+  MailSendSuccess(super.mails,
+      {super.latestSync,
+      super.readMails,
+      super.unreadMails,
+      super.drafts,
+      super.sentMails,
+      super.archivedMails,
+      super.unarchivedMails,
+      super.trashedMails,
+      super.untrashedMails});
+
+  @override
+  List<Object?> get props => [
+        mails,
+        latestSync,
+        readMails,
+        unreadMails,
+        drafts,
+        sentMails,
+        archivedMails,
+        unarchivedMails,
+        trashedMails,
+        untrashedMails
       ];
 }
 
@@ -267,6 +338,7 @@ class MailSendError extends MailState {
       super.readMails,
       super.unreadMails,
       super.drafts,
+      super.sentMails,
       super.archivedMails,
       super.unarchivedMails,
       super.trashedMails,
@@ -291,6 +363,7 @@ class MailSaveDraftSuccess extends MailState {
       super.readMails,
       super.unreadMails,
       super.drafts,
+      super.sentMails,
       super.archivedMails,
       super.unarchivedMails,
       super.trashedMails,
@@ -303,8 +376,11 @@ class MailSaveDraftSuccess extends MailState {
         readMails,
         unreadMails,
         drafts,
+        sentMails,
         archivedMails,
-        unarchivedMails
+        unarchivedMails,
+        trashedMails,
+        untrashedMails
       ];
 }
 
@@ -314,6 +390,7 @@ class MailSaveDraftError extends MailState {
       super.readMails,
       super.unreadMails,
       super.drafts,
+      super.sentMails,
       super.archivedMails,
       super.unarchivedMails,
       super.trashedMails,
@@ -338,6 +415,7 @@ class MailDeleteDraftSuccess extends MailState {
       super.readMails,
       super.unreadMails,
       super.drafts,
+      super.sentMails,
       super.archivedMails,
       super.unarchivedMails,
       super.trashedMails,
@@ -350,8 +428,11 @@ class MailDeleteDraftSuccess extends MailState {
         readMails,
         unreadMails,
         drafts,
+        sentMails,
         archivedMails,
-        unarchivedMails
+        unarchivedMails,
+        trashedMails,
+        untrashedMails
       ];
 }
 
@@ -361,6 +442,7 @@ class MailDeleteDraftError extends MailState {
       super.readMails,
       super.unreadMails,
       super.drafts,
+      super.sentMails,
       super.archivedMails,
       super.unarchivedMails,
       super.trashedMails,
@@ -385,6 +467,7 @@ class MailUpdateDraftSuccess extends MailState {
       super.readMails,
       super.unreadMails,
       super.drafts,
+      super.sentMails,
       super.archivedMails,
       super.unarchivedMails,
       super.trashedMails,
@@ -397,8 +480,11 @@ class MailUpdateDraftSuccess extends MailState {
         readMails,
         unreadMails,
         drafts,
+        sentMails,
         archivedMails,
-        unarchivedMails
+        unarchivedMails,
+        trashedMails,
+        untrashedMails
       ];
 }
 
@@ -408,6 +494,7 @@ class MailUpdateDraftError extends MailState {
       super.readMails,
       super.unreadMails,
       super.drafts,
+      super.sentMails,
       super.archivedMails,
       super.unarchivedMails,
       super.trashedMails,
@@ -432,6 +519,7 @@ class MailArchiveSuccess extends MailState {
       super.readMails,
       super.unreadMails,
       super.drafts,
+      super.sentMails,
       super.archivedMails,
       super.unarchivedMails,
       super.trashedMails,
@@ -444,8 +532,11 @@ class MailArchiveSuccess extends MailState {
         readMails,
         unreadMails,
         drafts,
+        sentMails,
         archivedMails,
-        unarchivedMails
+        unarchivedMails,
+        trashedMails,
+        untrashedMails
       ];
 }
 
@@ -455,6 +546,7 @@ class MailArchiveError extends MailState {
       super.readMails,
       super.unreadMails,
       super.drafts,
+      super.sentMails,
       super.archivedMails,
       super.unarchivedMails,
       super.trashedMails,
@@ -479,6 +571,7 @@ class MailUnarchiveSuccess extends MailState {
       super.readMails,
       super.unreadMails,
       super.drafts,
+      super.sentMails,
       super.archivedMails,
       super.unarchivedMails,
       super.trashedMails,
@@ -491,8 +584,11 @@ class MailUnarchiveSuccess extends MailState {
         readMails,
         unreadMails,
         drafts,
+        sentMails,
         archivedMails,
-        unarchivedMails
+        unarchivedMails,
+        trashedMails,
+        untrashedMails
       ];
 }
 
@@ -502,6 +598,7 @@ class MailUnarchiveError extends MailState {
       super.readMails,
       super.unreadMails,
       super.drafts,
+      super.sentMails,
       super.archivedMails,
       super.unarchivedMails,
       super.trashedMails,
@@ -526,6 +623,7 @@ class MailTrashSuccess extends MailState {
       super.readMails,
       super.unreadMails,
       super.drafts,
+      super.sentMails,
       super.archivedMails,
       super.unarchivedMails,
       super.trashedMails,
@@ -538,8 +636,11 @@ class MailTrashSuccess extends MailState {
         readMails,
         unreadMails,
         drafts,
+        sentMails,
         archivedMails,
-        unarchivedMails
+        unarchivedMails,
+        trashedMails,
+        untrashedMails
       ];
 }
 
@@ -549,6 +650,7 @@ class MailTrashError extends MailState {
       super.readMails,
       super.unreadMails,
       super.drafts,
+      super.sentMails,
       super.archivedMails,
       super.unarchivedMails,
       super.trashedMails,
@@ -573,6 +675,7 @@ class MailUntrashSuccess extends MailState {
       super.readMails,
       super.unreadMails,
       super.drafts,
+      super.sentMails,
       super.archivedMails,
       super.unarchivedMails,
       super.trashedMails,
@@ -585,8 +688,11 @@ class MailUntrashSuccess extends MailState {
         readMails,
         unreadMails,
         drafts,
+        sentMails,
         archivedMails,
-        unarchivedMails
+        unarchivedMails,
+        trashedMails,
+        untrashedMails
       ];
 }
 
@@ -596,6 +702,7 @@ class MailUntrashError extends MailState {
       super.readMails,
       super.unreadMails,
       super.drafts,
+      super.sentMails,
       super.archivedMails,
       super.unarchivedMails,
       super.trashedMails,
@@ -620,6 +727,7 @@ class MailEmptyTrashSuccess extends MailState {
       super.readMails,
       super.unreadMails,
       super.drafts,
+      super.sentMails,
       super.archivedMails,
       super.unarchivedMails,
       super.trashedMails,
@@ -632,8 +740,11 @@ class MailEmptyTrashSuccess extends MailState {
         readMails,
         unreadMails,
         drafts,
+        sentMails,
         archivedMails,
-        unarchivedMails
+        unarchivedMails,
+        trashedMails,
+        untrashedMails
       ];
 }
 
@@ -643,6 +754,7 @@ class MailEmptyTrashError extends MailState {
       super.readMails,
       super.unreadMails,
       super.drafts,
+      super.sentMails,
       super.archivedMails,
       super.unarchivedMails,
       super.trashedMails,

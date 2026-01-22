@@ -3,6 +3,7 @@
 ///
 // coverage:ignore-file
 // ignore_for_file: type=lint, unused_import
+// dart format off
 
 import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
@@ -10,7 +11,7 @@ import 'package:slang/generated.dart';
 import 'strings.g.dart';
 
 // Path: <root>
-class TranslationsFr implements Translations {
+class TranslationsFr with BaseTranslations<AppLocale, Translations> implements Translations {
 	/// You can call this constructor and build your own translation instance of this locale.
 	/// Constructing via the enum [AppLocale.build] is preferred.
 	TranslationsFr({Map<String, Node>? overrides, PluralResolver? cardinalResolver, PluralResolver? ordinalResolver, TranslationMetadata<AppLocale, Translations>? meta})
@@ -50,6 +51,7 @@ class TranslationsFr implements Translations {
 	@override late final _TranslationsEmailFoldersFr email_folders = _TranslationsEmailFoldersFr._(_root);
 	@override late final _TranslationsMailActionsFr mail_actions = _TranslationsMailActionsFr._(_root);
 	@override late final _TranslationsToastNotificationsFr toast_notifications = _TranslationsToastNotificationsFr._(_root);
+	@override late final _TranslationsEmailDomainValidationFr email_domain_validation = _TranslationsEmailDomainValidationFr._(_root);
 }
 
 // Path: settings
@@ -120,7 +122,21 @@ class _TranslationsMailComposerFr implements TranslationsMailComposerEn {
 	@override String get from => 'De';
 	@override String get subject => 'Objet';
 	@override String get to => 'À';
+	@override String get body => 'Corps';
+	@override String get date => 'Date';
+	@override String get send => 'Envoyer';
+	@override Map<String, String> get fields => {
+		'to': 'À',
+		'subject': 'Objet',
+		'body': 'Corps',
+	};
 	@override late final _TranslationsMailComposerSaveDraftModalFr save_draft_modal = _TranslationsMailComposerSaveDraftModalFr._(_root);
+	@override late final _TranslationsMailComposerIncompleteEmailModalFr incomplete_email_modal = _TranslationsMailComposerIncompleteEmailModalFr._(_root);
+	@override Map<String, String> get errors => {
+		'error_sending_email': 'Une erreur s\'est produite lors de l\'envoi de l\'e-mail. Veuillez réessayer.',
+		'no_recipient': 'Veuillez spécifier au moins un destinataire.',
+		'invalid_recipient': 'Un ou plusieurs destinataires ont une adresse e-mail invalide.',
+	};
 }
 
 // Path: account
@@ -187,6 +203,8 @@ class _TranslationsEmailFoldersFr implements TranslationsEmailFoldersEn {
 	@override String get drafts => 'Brouillons';
 	@override String get archive => 'Archive';
 	@override String get trashed => 'Corbeille';
+	@override String get spam => 'Spam';
+	@override String get sent => 'Envoyés';
 	@override String get all => 'Tous';
 }
 
@@ -213,6 +231,31 @@ class _TranslationsToastNotificationsFr implements TranslationsToastNotification
 
 	// Translations
 	@override late final _TranslationsToastNotificationsSelectedMailsFr selected_mails = _TranslationsToastNotificationsSelectedMailsFr._(_root);
+}
+
+// Path: email_domain_validation
+class _TranslationsEmailDomainValidationFr implements TranslationsEmailDomainValidationEn {
+	_TranslationsEmailDomainValidationFr._(this._root);
+
+	final TranslationsFr _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Mettre à jour l\'adresse e-mail';
+	@override String description({required Object domains}) => 'Votre adresse e-mail actuelle ne provient pas d\'un domaine autorisé. Veuillez fournir une nouvelle adresse e-mail provenant de l\'un des domaines autorisés suivants : ${domains}';
+	@override String get current_email => 'E-mail actuel';
+	@override String get new_email_label => 'Nouvelle adresse e-mail';
+	@override String get new_email_hint => 'Entrez votre nouvelle adresse e-mail';
+	@override String get backup_email_label => 'E-mail de secours (optionnel)';
+	@override String get backup_email_hint => 'Entrez une adresse e-mail de secours';
+	@override String get info => 'L\'e-mail de secours sera utilisé pour la récupération du compte et les notifications importantes.';
+	@override String get submit => 'Mettre à jour l\'e-mail';
+	@override String get submitting => 'Mise à jour...';
+	@override Map<String, dynamic> get errors => {
+		'empty_email': 'Veuillez entrer une adresse e-mail.',
+		'invalid_email_format': 'Veuillez entrer une adresse e-mail valide.',
+		'email_not_in_authorized_domain': ({required Object domains}) => 'L\'adresse e-mail doit provenir de l\'un de ces domaines : ${domains}',
+		'update_failed': 'Échec de la mise à jour de l\'adresse e-mail. Veuillez réessayer.',
+	};
 }
 
 // Path: settings.app_settings
@@ -263,6 +306,20 @@ class _TranslationsMailComposerSaveDraftModalFr implements TranslationsMailCompo
 	@override String get cancel_text => 'Annuler';
 }
 
+// Path: mail_composer.incomplete_email_modal
+class _TranslationsMailComposerIncompleteEmailModalFr implements TranslationsMailComposerIncompleteEmailModalEn {
+	_TranslationsMailComposerIncompleteEmailModalFr._(this._root);
+
+	final TranslationsFr _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'E-mail incomplet';
+	@override String get description => 'Le mail que vous essayez d\'envoyer est incomplet.\nVeuillez vérifier les champs suivants :';
+	@override String get want_to_go_back => 'Voulez-vous revenir en arrière pour le compléter ?';
+	@override String get cancel_text => 'Revenir';
+	@override String get confirm_text => 'Envoyer quand même';
+}
+
 // Path: account.sections
 class _TranslationsAccountSectionsFr implements TranslationsAccountSectionsEn {
 	_TranslationsAccountSectionsFr._(this._root);
@@ -295,60 +352,92 @@ class _TranslationsSettingsAppSettingsSelfHostedUrlFr implements TranslationsSet
 	@override String get not_set => 'Non défini';
 }
 
-/// Flat map(s) containing all translations.
+/// The flat map containing all translations for locale <fr>.
 /// Only for edge cases! For simple maps, use the map function of this library.
+///
+/// The Dart AOT compiler has issues with very large switch statements,
+/// so the map is split into smaller functions (512 entries each).
 extension on TranslationsFr {
 	dynamic _flatMapFunction(String path) {
-		switch (path) {
-			case 'settings.title': return 'Paramètres';
-			case 'settings.app_settings.title': return 'Paramètres de l\'application';
-			case 'settings.app_settings.selfHostedUrl.title': return 'URL auto-hébergée';
-			case 'settings.app_settings.selfHostedUrl.not_set': return 'Non défini';
-			case 'settings.logout': return 'Déconnexion';
-			case 'sections.mail': return 'Mail';
-			case 'zero_inbox_card.title': return 'Félicitations !';
-			case 'zero_inbox_card.description': return 'Vous n\'avez aucun message non lu.';
-			case 'mail_card.no_content': return 'Aucun contenu';
-			case 'mail_card.delete_draft_modal.title': return 'Supprimer le brouillon';
-			case 'mail_card.delete_draft_modal.description': return 'Êtes-vous sûr de vouloir supprimer ce brouillon ?';
-			case 'mail_card.delete_draft_modal.warning': return 'Cette action ne peut pas être annulée.';
-			case 'trashed.card_title': return 'Supprimer tous les mails supprimés';
-			case 'trashed.x_mails_trashed': return ({required Object count}) => '${count} mails supprimés';
-			case 'trashed.description': return 'Ce sont les mails que vous avez supprimés, ils seront supprimés après 30 jours.';
-			case 'trashed.delete_all_trashed_mails_modal.title': return 'Supprimer tous les mails supprimés';
-			case 'trashed.delete_all_trashed_mails_modal.description': return 'Êtes-vous sûr de vouloir supprimer tous les mails supprimés ?';
-			case 'trashed.delete_all_trashed_mails_modal.warning': return 'Cette action ne peut pas être annulée.';
-			case 'mail_composer.title': return 'Nouveau Mail';
-			case 'mail_composer.from': return 'De';
-			case 'mail_composer.subject': return 'Objet';
-			case 'mail_composer.to': return 'À';
-			case 'mail_composer.save_draft_modal.title': return 'Enregistrer le brouillon';
-			case 'mail_composer.save_draft_modal.description': return 'Voulez-vous enregistrer le brouillon ?';
-			case 'mail_composer.save_draft_modal.confirm_text': return 'Enregistrer';
-			case 'mail_composer.save_draft_modal.cancel_text': return 'Annuler';
-			case 'account.sections.account': return 'Compte';
-			case 'under_construction.title': return 'On travaille dessus !';
-			case 'under_construction.description': return 'Cette fonctionnalité est en cours de développement.\n\nRevenez bientôt pour découvrir les dernières mises à jour !';
-			case 'more.title': return 'Plus';
-			case 'actions.save': return 'Enregistrer';
-			case 'actions.cancel': return 'Annuler';
-			case 'actions.delete': return 'Supprimer';
-			case 'xx_mail_card.description': return ({required Object count}) => 'Vous avez ${count} mails dans ce dossier.';
-			case 'email_folders.inbox': return 'Boîte de réception';
-			case 'email_folders.drafts': return 'Brouillons';
-			case 'email_folders.archive': return 'Archive';
-			case 'email_folders.trashed': return 'Corbeille';
-			case 'email_folders.all': return 'Tous';
-			case 'mail_actions.mark_as_read': return 'Marquer comme lu';
-			case 'mail_actions.mark_as_unread': return 'Marquer comme non lu';
-			case 'mail_actions.archive': return 'Archive';
-			case 'mail_actions.unarchive': return 'Désarchiver';
-			case 'mail_actions.trash': return 'Corbeille';
-			case 'mail_actions.untrash': return 'Restaurer';
-			case 'toast_notifications.selected_mails.title': return ({required Object count}) => '${count} mails sélectionnés';
-			case 'toast_notifications.selected_mails.description': return 'Cliquez ici pour effectuer une action.';
-			default: return null;
-		}
+		return switch (path) {
+			'settings.title' => 'Paramètres',
+			'settings.app_settings.title' => 'Paramètres de l\'application',
+			'settings.app_settings.selfHostedUrl.title' => 'URL auto-hébergée',
+			'settings.app_settings.selfHostedUrl.not_set' => 'Non défini',
+			'settings.logout' => 'Déconnexion',
+			'sections.mail' => 'Mail',
+			'zero_inbox_card.title' => 'Félicitations !',
+			'zero_inbox_card.description' => 'Vous n\'avez aucun message non lu.',
+			'mail_card.no_content' => 'Aucun contenu',
+			'mail_card.delete_draft_modal.title' => 'Supprimer le brouillon',
+			'mail_card.delete_draft_modal.description' => 'Êtes-vous sûr de vouloir supprimer ce brouillon ?',
+			'mail_card.delete_draft_modal.warning' => 'Cette action ne peut pas être annulée.',
+			'trashed.card_title' => 'Supprimer tous les mails supprimés',
+			'trashed.x_mails_trashed' => ({required Object count}) => '${count} mails supprimés',
+			'trashed.description' => 'Ce sont les mails que vous avez supprimés, ils seront supprimés après 30 jours.',
+			'trashed.delete_all_trashed_mails_modal.title' => 'Supprimer tous les mails supprimés',
+			'trashed.delete_all_trashed_mails_modal.description' => 'Êtes-vous sûr de vouloir supprimer tous les mails supprimés ?',
+			'trashed.delete_all_trashed_mails_modal.warning' => 'Cette action ne peut pas être annulée.',
+			'mail_composer.title' => 'Nouveau Mail',
+			'mail_composer.from' => 'De',
+			'mail_composer.subject' => 'Objet',
+			'mail_composer.to' => 'À',
+			'mail_composer.body' => 'Corps',
+			'mail_composer.date' => 'Date',
+			'mail_composer.send' => 'Envoyer',
+			'mail_composer.fields.to' => 'À',
+			'mail_composer.fields.subject' => 'Objet',
+			'mail_composer.fields.body' => 'Corps',
+			'mail_composer.save_draft_modal.title' => 'Enregistrer le brouillon',
+			'mail_composer.save_draft_modal.description' => 'Voulez-vous enregistrer le brouillon ?',
+			'mail_composer.save_draft_modal.confirm_text' => 'Enregistrer',
+			'mail_composer.save_draft_modal.cancel_text' => 'Annuler',
+			'mail_composer.incomplete_email_modal.title' => 'E-mail incomplet',
+			'mail_composer.incomplete_email_modal.description' => 'Le mail que vous essayez d\'envoyer est incomplet.\nVeuillez vérifier les champs suivants :',
+			'mail_composer.incomplete_email_modal.want_to_go_back' => 'Voulez-vous revenir en arrière pour le compléter ?',
+			'mail_composer.incomplete_email_modal.cancel_text' => 'Revenir',
+			'mail_composer.incomplete_email_modal.confirm_text' => 'Envoyer quand même',
+			'mail_composer.errors.error_sending_email' => 'Une erreur s\'est produite lors de l\'envoi de l\'e-mail. Veuillez réessayer.',
+			'mail_composer.errors.no_recipient' => 'Veuillez spécifier au moins un destinataire.',
+			'mail_composer.errors.invalid_recipient' => 'Un ou plusieurs destinataires ont une adresse e-mail invalide.',
+			'account.sections.account' => 'Compte',
+			'under_construction.title' => 'On travaille dessus !',
+			'under_construction.description' => 'Cette fonctionnalité est en cours de développement.\n\nRevenez bientôt pour découvrir les dernières mises à jour !',
+			'more.title' => 'Plus',
+			'actions.save' => 'Enregistrer',
+			'actions.cancel' => 'Annuler',
+			'actions.delete' => 'Supprimer',
+			'xx_mail_card.description' => ({required Object count}) => 'Vous avez ${count} mails dans ce dossier.',
+			'email_folders.inbox' => 'Boîte de réception',
+			'email_folders.drafts' => 'Brouillons',
+			'email_folders.archive' => 'Archive',
+			'email_folders.trashed' => 'Corbeille',
+			'email_folders.spam' => 'Spam',
+			'email_folders.sent' => 'Envoyés',
+			'email_folders.all' => 'Tous',
+			'mail_actions.mark_as_read' => 'Marquer comme lu',
+			'mail_actions.mark_as_unread' => 'Marquer comme non lu',
+			'mail_actions.archive' => 'Archive',
+			'mail_actions.unarchive' => 'Désarchiver',
+			'mail_actions.trash' => 'Corbeille',
+			'mail_actions.untrash' => 'Restaurer',
+			'toast_notifications.selected_mails.title' => ({required Object count}) => '${count} mails sélectionnés',
+			'toast_notifications.selected_mails.description' => 'Cliquez ici pour effectuer une action.',
+			'email_domain_validation.title' => 'Mettre à jour l\'adresse e-mail',
+			'email_domain_validation.description' => ({required Object domains}) => 'Votre adresse e-mail actuelle ne provient pas d\'un domaine autorisé. Veuillez fournir une nouvelle adresse e-mail provenant de l\'un des domaines autorisés suivants : ${domains}',
+			'email_domain_validation.current_email' => 'E-mail actuel',
+			'email_domain_validation.new_email_label' => 'Nouvelle adresse e-mail',
+			'email_domain_validation.new_email_hint' => 'Entrez votre nouvelle adresse e-mail',
+			'email_domain_validation.backup_email_label' => 'E-mail de secours (optionnel)',
+			'email_domain_validation.backup_email_hint' => 'Entrez une adresse e-mail de secours',
+			'email_domain_validation.info' => 'L\'e-mail de secours sera utilisé pour la récupération du compte et les notifications importantes.',
+			'email_domain_validation.submit' => 'Mettre à jour l\'e-mail',
+			'email_domain_validation.submitting' => 'Mise à jour...',
+			'email_domain_validation.errors.empty_email' => 'Veuillez entrer une adresse e-mail.',
+			'email_domain_validation.errors.invalid_email_format' => 'Veuillez entrer une adresse e-mail valide.',
+			'email_domain_validation.errors.email_not_in_authorized_domain' => ({required Object domains}) => 'L\'adresse e-mail doit provenir de l\'un de ces domaines : ${domains}',
+			'email_domain_validation.errors.update_failed' => 'Échec de la mise à jour de l\'adresse e-mail. Veuillez réessayer.',
+			_ => null,
+		};
 	}
 }
-

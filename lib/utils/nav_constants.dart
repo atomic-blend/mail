@@ -1,14 +1,17 @@
 import 'package:ab_shared/blocs/auth/auth.bloc.dart';
 import 'package:ab_shared/components/app/ab_navbar.dart';
 import 'package:ab_shared/components/app/ab_header.dart';
+import 'package:ab_shared/components/app/window_layout/window_layout_controller.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mail/blocs/mail/mail_bloc.dart';
-import 'package:mail/pages/mails/mail_composer.dart';
+import 'package:mail/pages/mails/composer/mail_composer.dart';
 import 'package:ab_shared/utils/shortcuts.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:icons_plus/icons_plus.dart';
+import 'package:mail/pages/mails/composer/window_mail_composer.dart';
 import 'package:mail/services/sync.service.dart';
+import 'package:mail/utils/get_it.dart';
 
 final $navConstants = NavConstants();
 
@@ -30,9 +33,11 @@ class NavConstants {
           label: "New Mail",
           onTap: () {
             if (isDesktop(context)) {
-              showDialog(
-                  context: context,
-                  builder: (context) => const Dialog(child: MailComposer()));
+              getIt<WindowLayoutController>().addWindow(
+                WindowMailComposer(
+                  initiallyCollapsed: false,
+                ),
+              );
             } else {
               showModalBottomSheet(
                   isScrollControlled: true,
@@ -67,6 +72,22 @@ class NavConstants {
             label: "Archive",
             location: "/archive",
             header: _buildHeader(context, "Archive"),
+          ),
+          NavigationItem(
+            key: Key("spam"),
+            icon: LineAwesome.fire_alt_solid,
+            cupertinoIcon: CupertinoIcons.flame,
+            label: "Spam",
+            location: "/spam",
+            header: _buildHeader(context, "Spam"),
+          ),
+          NavigationItem(
+            key: Key("sent"),
+            icon: LineAwesome.envelope,
+            cupertinoIcon: CupertinoIcons.tray_arrow_up,
+            label: "Sent",
+            location: "/sent",
+            header: _buildHeader(context, "Sent"),
           ),
           NavigationItem(
             key: Key("trashed"),
@@ -142,21 +163,12 @@ class NavConstants {
       ),
       NavigationItem(
         key: const Key("account"),
-        icon: LineAwesome.user_solid,
-        cupertinoIcon: CupertinoIcons.person,
-        label: "Account",
-        location: "/account",
-        subItems: [],
-        header: _buildHeader(context, "Account"),
-      ),
-      NavigationItem(
-        key: const Key("settings"),
         icon: LineAwesome.cog_solid,
-        cupertinoIcon: CupertinoIcons.gear,
+        cupertinoIcon: CupertinoIcons.settings,
         label: "Settings",
-        location: "/settings",
-        subItems: [],
-        header: _buildHeader(context, "Settings"),
+        location: "/account",
+        subItems: const [],
+        header: _buildHeader(context, "Account & Settings"),
       ),
     ];
     return allItems;
