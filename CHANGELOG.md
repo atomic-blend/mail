@@ -2,6 +2,197 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## 0.4.0 - 2026-01-22
+#### Miscellaneous Chores
+- **(cicd)** disable ios and macos build [skip ci] - (fd3962e) - Brandon Guigo
+
+- - -
+
+## 0.4.0-rc-38006da - 2026-01-22
+#### Bug Fixes
+- initial sync was broken - (f27baed) - Brandon Guigo
+#### Features
+- ask the user to change their email when it's not a valid domain - (d920eac) - Brandon Guigo
+#### Miscellaneous Chores
+- update ab_shared version - (61a586d) - Brandon Guigo
+
+- - -
+
+## 0.4.0-rc-4a60ea7 - 2026-01-22
+#### Bug Fixes
+- rename to inbox since mail already taken - (b7d8fc9) - Brandon Guigo
+#### Miscellaneous Chores
+- update dependencies - (40d2270) - Brandon Guigo
+
+- - -
+
+## 0.4.0-rc-a399df9 - 2026-01-22
+#### Bug Fixes
+- add supertooltip - (f34e952) - Brandon Guigo
+- make some adjustments since the new calendar app - (289e908) - Brandon Guigo
+
+- - -
+
+## 0.4.0-rc-2c767e0 - 2026-01-22
+#### Bug Fixes
+- add lockfile to the repo - (2c767e0) - Brandon Guigo
+
+- - -
+
+## 0.4.0-rc-fd18deb - 2026-01-22
+#### Bug Fixes
+- linter - (2207847) - Brandon Guigo
+- thread ui on mobile - (52ee3c7) - Brandon Guigo
+- refactor and open mail detail on mobile in root navigator - (eaab5f3) - Brandon Guigo
+- mail reconstruction don't see email in future + mail detail not rebuild when changing selected thread in email - (03d76ee) - Brandon Guigo
+#### Features
+- collapsed interactions - (2c20408) - Brandon Guigo
+- display mail thread in mail details - (a9c6ee9) - Brandon Guigo
+- add thread reconstruction - (449c01c) - Brandon Guigo
+- add mail thread entity - (0ab079f) - Brandon Guigo
+#### Miscellaneous Chores
+- update to latest shared - (71e20cc) - Brandon Guigo
+
+- - -
+
+## 0.4.0-rc-3525c1f - 2026-01-22
+#### Bug Fixes
+- don't pop if in windowed mode - (3525c1f) - Brandon Guigo
+
+- - -
+
+## 0.4.0-rc-c268f52 - 2026-01-22
+#### Bug Fixes
+- error toast shown when mail send success + extract mail from header if in RFC format with name - (c268f52) - Brandon Guigo
+
+- - -
+
+## 0.4.0-rc-e67f155 - 2026-01-22
+#### Bug Fixes
+- refactor mail composer - (5b2e3ac) - Brandon Guigo
+- wrong return - (e35466c) - Brandon Guigo
+- issue with draft modal + set to and subject when responding to an email - (61e4afd) - Brandon Guigo
+- set the to and subejct field when replying to an email - (7b75aba) - Brandon Guigo
+#### Miscellaneous Chores
+- update shared - (7093865) - Brandon Guigo
+
+- - -
+
+## 0.4.0-rc-01a0df8 - 2026-01-22
+#### Bug Fixes
+- adapt the mail model to accept a map instead of old list of map - (ffadab7) - Brandon Guigo
+#### Features
+- add btn for replying to an email - (01a0df8) - Brandon Guigo
+- add in reply to field to mail entity - (c9d4be4) - Brandon Guigo
+
+- - -
+
+## 0.4.0-rc-a7b46c0 - 2026-01-22
+#### Features
+- add spam mail screen - (cdf9494) - Brandon Guigo
+
+- - -
+
+## 0.4.0-rc-b43ab66 - 2026-01-22
+#### Bug Fixes
+- linter - (d279c42) - Brandon Guigo
+- getSince got silent error which causes absence of refresh - (1ec9a2a) - Brandon Guigo
+- ui issues and crashed - (4ca8641) - Brandon Guigo
+- disable slidable when card is for a sent email - (2757918) - Brandon Guigo
+- bug with state erasing - (98fd48b) - Brandon Guigo
+#### Features
+- add status pill to mail card - (1fff71d) - Brandon Guigo
+- be able to open sent mail in sent page - (82dab3d) - Brandon Guigo
+- add sent page - (726ff8b) - Brandon Guigo
+- bloc for sent mail - (11a3f65) - Brandon Guigo
+- add get send mail and send mail since - (3241835) - Brandon Guigo
+- add sent mail to mail state - (bc319a9) - Brandon Guigo
+
+- - -
+
+## 0.4.0-rc-2c10c0f - 2026-01-22
+#### Bug Fixes
+- sheet didn't open in root navigator causing strange ui behavior - (b50b7d8) - Brandon Guigo
+- draft openning issue - (d3bd7d4) - Brandon Guigo
+- draft save - (55dd292) - Brandon Guigo
+- toolbar position - (2e82f89) - Brandon Guigo
+- linter - (23e14a3) - Brandon Guigo
+- closing an empty windowed composer pop the last page of the stack - (5b67936) - Brandon Guigo
+- initially open email composer - (5de9c54) - Brandon Guigo
+- add the rest of the validation when sending an email - (851d12f) - Brandon Guigo
+- add error when no to are provided - (7e118d8) - Brandon Guigo
+- add minilize button - (732a632) - Brandon Guigo
+- catch unfocus on to text field and store in to list - (359f9a0) - Brandon Guigo
+- to, from and subject ui + refactor - (5545242) - Brandon Guigo
+- refactor - (84ebf32) - Brandon Guigo
+- use a animated dropdown for from field - (3c4c918) - Brandon Guigo
+- send button ui - (43d4052) - Brandon Guigo
+- replace col per wrap to have a better UI - (de7df35) - Brandon Guigo
+#### Features
+- add send button on desktop + checks when sending email - (91af327) - Brandon Guigo
+- add windowMode for composer - (e0cf291) - Brandon Guigo
+- add windowed layout for mail composer - (455fa5e) - Brandon Guigo
+#### Miscellaneous Chores
+- update shared to latest - (66b8b28) - Brandon Guigo
+
+- - -
+
+## 0.3.1-rc-2e06793 - 2026-01-22
+#### Bug Fixes
+- const for sub items in new nav constant entry - (cb2fcf6) - Brandon Guigo
+- remove unused import - (1a56889) - Brandon Guigo
+- merge the account and settings into a single page - (65c1a14) - Brandon Guigo
+#### Miscellaneous Chores
+- update shared to latest - (188a8ec) - Brandon Guigo
+- rebuild router - (4d88ca4) - Brandon Guigo
+
+- - -
+
+## 0.3.1-rc-c969716 - 2026-01-22
+#### Bug Fixes
+- ability to manage subscription via stripe customer portal - (c969716) - Brandon Guigo
+
+- - -
+
+## 0.3.1-rc-7f966e4 - 2026-01-22
+#### Bug Fixes
+- add loading indicator - (5af04f6) - Brandon Guigo
+- don't close the mail-composer until the mail send have been a success - (4ee1c4d) - Brandon Guigo
+#### Miscellaneous Chores
+- update shared package to latest - (7c04c1a) - Brandon Guigo
+
+- - -
+
+## 0.3.1-rc-86a36c2 - 2026-01-22
+#### Bug Fixes
+- remove push commit in rc - (86a36c2) - Brandon Guigo
+- remove trailing space - (6caf57f) - Brandon Guigo
+- add quotes during creation of the release - (33734cb) - Brandon Guigo
+- typo - (338fcdd) - Brandon Guigo
+- wrong branch name in rc script - (f2a169d) - Brandon Guigo
+- rename workflows and fix the release logic - (cab46db) - Brandon Guigo
+- add checkout step - (8523fa5) - Brandon Guigo
+- add missing permissions - (2b6a7d7) - Brandon Guigo
+- push tag after generation - (182534d) - Brandon Guigo
+- cleanup and bug fix - (5fdda5e) - Brandon Guigo
+- bump_rc script when single project repo - (19e9997) - Brandon Guigo
+- normalize tag in bump script - (a6b8d40) - Brandon Guigo
+- bump script path - (6d73179) - Brandon Guigo
+- skip cocogitto install if already installed - (036b67a) - Brandon Guigo
+- update shared package - (b4cd642) - Brandon Guigo
+- update gh workflow to release rc docker image - (666c432) - Brandon Guigo
+- refresh user when syncing - (5042e2c) - Brandon Guigo
+- load all emails paginated if there's no emails too - (8cf4a38) - Brandon Guigo
+- add paywall route - (f753d3d) - Brandon Guigo
+#### Miscellaneous Chores
+- **(release)** 0.3.1-rc-1ae8828 [skip ci] - (3f32064) - GitHub Actions
+- **(release)** 0.3.1-rc-0cfa6bb [skip ci] - (0e72352) - GitHub Actions
+- **(release)** 0.3.1-rc-0491213 [skip ci] - (bb90c76) - GitHub Actions
+- **(release)** 0.3.1-rc-2ad0f60 [skip ci] - (27649f9) - GitHub Actions
+- **(release)** 0.3.0 [skip ci] - (31cc96a) - GitHub Actions
+
+- - -
+
 ## 0.3.0 - 2025-10-21
 #### Bug Fixes
 - docker image and windows build issues - (7824356) - Brandon Guigo
